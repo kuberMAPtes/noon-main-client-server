@@ -1,3 +1,14 @@
+## 폴더 구조
+>src  
+>├─assets // static 파일   
+>│  └─image  
+>├─Components  // 공통 모듈  
+>│  └─common  
+>├─context  
+>├─hooks  
+>├─lib  
+>└─pages  // 모듈별 View  
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
