@@ -1,0 +1,36 @@
+.app {
+    font-family: Arial, sans-serif;
+}
+
+.header {
+    background-color: #f1f1f1;
+    padding: 20px;
+    text-align: center;
+}
+
+.chatroom-list {
+    padding: 10px;
+}
+
+.chatroom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.chatroom-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.chatroom-name {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.chatroom-status {
+    font-size: 14px;
+    color: green;
+}
