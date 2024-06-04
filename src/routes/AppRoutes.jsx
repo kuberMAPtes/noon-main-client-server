@@ -13,10 +13,15 @@ import GetMember from '../pages/member/GetMember';
 import GetMemberProfile from '../pages/member/GetMemberProfile';
 import UpdateMember from '../pages/member/UpdateMember';
 import GetMemberRelationshipList from '../pages/member/GetMemberRelationshipList';
+
+import ChatRoomCreation from "../pages/Chat/ChatroomCreation";
+import Chatroom from "../pages/Chat/Chatroom";
+import MyChatroomList from "../pages/Chat/MyChatroomList";
+
 const AppRoutes = () => {
   return (
     <Routes>
-        <Route path="/member" element={<Member />}>
+        <Route path="member" element={<Member />}>
             <Route path="getAuthMain" element={<GetAuthMain />} />
             <Route path="getSignUpTermAgreement" element={<GetSignUpTermAgreement/>}/>
             <Route path="addPhoneNumberAuthentification" element={<AddPhoneNumberAuthentification />} />
@@ -30,8 +35,13 @@ const AppRoutes = () => {
             <Route path="getMemberProfile" element={<GetMemberProfile/>}/>
             <Route path="getMemberRelationshipList" element={<GetMemberRelationshipList />} />
         </Route>
+        <Route path="chat">
+            <Route path="chatroomCreation" element={<ChatRoomCreation />} />
+            <Route path="chatroom" element={<Chatroom />} />
+            <Route path="myChatroomList" element={<MyChatroomList />} />
+        </Route>
     </Routes>
-  );
+    )
 };
 
 export default AppRoutes;
