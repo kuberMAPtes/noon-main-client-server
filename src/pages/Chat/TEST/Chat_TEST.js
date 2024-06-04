@@ -9,7 +9,7 @@ function App() {
   const [chatInput, setChatInput] = useState('');
   const [chatInputSpecific, setChatInputSpecific] = useState('');
   const [makeChatRoomInput, setMakeChatRoomInput] = useState('');
-  const [currentChatRoomNames, setCurrentChatRoomNames] = useState([]);
+  const [currentChatRoomNames, setCurrentChatRoomNames] = useState([]); // 현재 채팅방 목록
   const [roomPersonnel, setRoomPersonnel] = useState([]);
   const [messages, setMessages] = useState([]);
   const [chatDisplay, setChatDisplay] = useState('');
@@ -20,7 +20,7 @@ function App() {
     socket.on('connect', () => {
       console.log('Connected to server');
 
-
+      // show opened publicRooms and its personnel 
       socket.emit('init_chatRoom', initSetting);
     });
 
@@ -41,6 +41,7 @@ function App() {
     });
   }, []);
 
+  // show opened publicRooms and its personnel 
   const initSetting = (currentChatRoomAndPersonnel) => {
     setCurrentChatRoomNames(currentChatRoomAndPersonnel.publicRooms);
     setRoomPersonnel(currentChatRoomAndPersonnel.Personnel.map(member => member[0]));
@@ -50,6 +51,7 @@ function App() {
     console.log('displayMyChatRoom(), ChatRoomList => ', currentChatRoomNames);
   };
 
+  // display user's current room list
   const displayCurrentChatRoom = (roomName) => {
     console.log('displayMyChatRoom(), currentChatRoomName => ', roomName);
   };
@@ -254,7 +256,7 @@ function App() {
     24.5.31(금) - 리액트전환 <br/>
     24.5.31(금) - 채팅방 CRUD 하기 (feat. 스프링) <br/>
     <li> Create : 채팅방 만들면 DB에 남기기 (Spring - mySQL) </li>
-    <li> Read   : 채팅방 찾아서 들어가서 채팅하기 (Node - mongoDB) </li>
+    <li> Read   : 채팅방 (목록띄우고) 찾아들어가서 채팅하기 (Node - mongoDB) </li>
     <li> Update : 채팅방 이름 바꾸기</li>
     <li> Delete : 채팅방 터뜨리거나 인원이 0명이면 자동 소멸되도록</li>
     24.5.31(토) - 채팅삭제 <br/> 
