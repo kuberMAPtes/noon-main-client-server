@@ -4,7 +4,7 @@ import { io } from 'socket.io-client';
 
 const socket = io('http://localhost:8081', { path: '/socket.io' });
 
-function App() {
+function ChatTest() {
   const [nickname, setNickname] = useState('');
   const [chatInput, setChatInput] = useState('');
   const [chatInputSpecific, setChatInputSpecific] = useState('');
@@ -277,4 +277,4 @@ function App() {
   );
 }
 
-export default App;
+export default ChatTest;
