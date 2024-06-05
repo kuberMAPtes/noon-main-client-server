@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './ChatRoomCreation.css';
-import axios from 'axios';
 import { useNavigate  } from 'react-router-dom';
+import { addChatroom } from '../../lib/axios_api'
 
 import { Link } from 'react-router-dom';
 
@@ -31,19 +31,11 @@ const ChatRoomCreation = () => {
 
         console.log(chatRoomData);
 
-        axios.post('http://localhost:8080/chatroom/addChatroom', chatRoomData, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
+        addChatroom(chatRoomData)
+        .then(data => {
+            navigate(`/chat/chatroom?chatroomID=${data.chatroomID}`);           
         })
-        .then(response => {
-            console.log('Chat room created:', response.data);
-            navigate(`/chatroom?chatroomID=${response.data.chatroomID}`);
-        })
-        .catch(error => {
-            console.error('There was an error fetching the chat rooms!', error);
-        })
+        .catch( error => console.log(error));
 
     };
 
@@ -71,8 +63,6 @@ const ChatRoomCreation = () => {
                 />
                 <button type="submit">채팅방 개설하기</button>
             </form>
-
-            <Link to='/myChatroomList'>내 채팅방 목록</Link>
         </div>
     );
 };

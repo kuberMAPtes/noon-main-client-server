@@ -1,39 +1,48 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import './MyChatroomList.css';
+import { getMyChatrooms } from '../../lib/axios_api'
+import { useNavigate } from 'react-router-dom';
 
 const MyChatroomList = () => {
     const [chatrooms, setChatrooms] = useState([]);
-    const memberId = "your-member-id"; // Replace with the actual member ID
+    const memberId = "12345"; // Replace with the actual member ID
+
+    const navigate = useNavigate();
+
 
     useEffect(() => {
-        const fetchChatrooms = async () => {
-            try {
-                const response = await axios.get('http://localhost:8080/chatroom/getMyChatrooms?userId=12345');
-                console.log(response.data);
 
-                setChatrooms(response.data);
-            } catch (error) {
-                console.error("Error fetching chat rooms", error);
-            }
-        };
+        getMyChatrooms(memberId)
+            .then(data => {
+                setChatrooms(data)
+            })
+            .catch(error => console.log(error));
 
-        fetchChatrooms();
     }, [memberId]);
+
+    const enterChatroom = (chatRoomID) => {
+        navigate(`/chat/chatroom?chatroomID=${chatRoomID}`);   
+    }
+
+    const addChatroom = () => {
+        navigate(`/chat/chatroomCreation    `);   
+    }
 
     return (
         <div className="app">
             <div className="header">
                 <h1>현준's room</h1>
                 <p>1024 members</p>
+                <button onClick={()=> addChatroom()}>채팅방 개설하기</button>
             </div>
             <div className="chatroom-list">
                 {chatrooms.map(chatroom => (
-                    <div key={chatroom.chatroomId} className="chatroom">
+                    <div key={chatroom.chatroomID} className="chatroom">
                         <div className="chatroom-info">
                             <p className="chatroom-name">{chatroom.chatroomName}</p>
                             <p className="chatroom-status">방장 : {chatroom.chatroomCreatorId} ({chatroom.chatroomMinTemp} 도 이상만)</p>
                         </div>
+                        <button onClick={()=> enterChatroom(chatroom.chatroomID)}>입장하기</button>
                     </div>
                 ))}
             </div>
