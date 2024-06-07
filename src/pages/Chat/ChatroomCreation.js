@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import './ChatRoomCreation.css';
 import { useNavigate  } from 'react-router-dom';
 import { addChatroom } from '../../lib/axios_api'
-
-import { Link } from 'react-router-dom';
+import { addChatroomData } from '../../store/store';
+import { useDispatch } from 'react-redux';
 
 const ChatRoomCreation = () => {
     const [dajungMinTemp, setDajungMinTemp] = useState('');
     const [dajungMaxTemp, setDajungMaxTemp] = useState('');
     const [chatroomName, setChatRoomName] = useState('');
+    const dispatch = useDispatch();
 
     const loggedInUserTestInfo = {
         userId: '12345',
@@ -33,7 +34,10 @@ const ChatRoomCreation = () => {
 
         addChatroom(chatRoomData)
         .then(data => {
-            navigate(`/chat/chatroom?chatroomID=${data.chatroomID}`);           
+            // 페이지 이동하기 전 채팅방 정보를 redux 에 저장해놓음
+            dispatch(addChatroomData(data));
+            console.log("[Redux] ChatroomCreation.js 디스패치할거 => ", data);
+            navigate(`/chat/chatroom?chatroomID=${data.ChatroomInfo.chatroomID}`);           
         })
         .catch( error => console.log(error));
 

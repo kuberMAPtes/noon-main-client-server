@@ -15,7 +15,7 @@ export const addChatroom = async(chatRoomData) => {
         console.log("addChatrom fetching 중....!")
 
         const response = await axios_api.post('/chatroom/addChatroom', chatRoomData);
-        console.log('addChatroom:', response.data);
+        console.log('addChatroom fetching 결과 :', response.data);
 
         return response.data;
     } catch (error) {
@@ -29,8 +29,8 @@ export const getMyChatrooms = async (memberId) => {
     try {
         console.log("addChatrom fetching 중....!")
 
-        const response = await axios_api.get(`/chatroom/getMyChatrooms?userId=${memberId}`);
-        console.log('getMyChatrooms:', response.data);
+        const response = await axios_api.get(`/chatroom/getMyChatrooms?memberId=${memberId}`);
+        console.log('getMyChatrooms fetching 결과 :', response.data);
 
         return response.data;
     } catch (error) {
@@ -45,7 +45,7 @@ export const getChatroom = async (chatRoomId) => {
         console.log("addChatrom fetching 중....!")
         
         const response = await axios_api.get(`/chatroom/getChatroom?roomId=${chatRoomId}`)
-        console.log('getChatroom:', response.data);
+        console.log('getChatroom fetching 결과 :', response.data);
 
         return response.data;
     } catch (error) {
