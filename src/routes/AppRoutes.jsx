@@ -18,6 +18,7 @@ import ChatRoomCreation from "../pages/Chat/ChatroomCreation";
 import Chatroom from "../pages/Chat/Chatroom";
 import MyChatroomList from "../pages/Chat/MyChatroomList";
 import BMap from "../pages/map/BMap";
+import Test from '../pages/Chat/Test';
 
 const AppRoutes = () => {
   return (
@@ -40,6 +41,7 @@ const AppRoutes = () => {
             <Route path="chatroomCreation" element={<ChatRoomCreation />} />
             <Route path="chatroom" element={<Chatroom />} />
             <Route path="myChatroomList" element={<MyChatroomList />} />
+            <Route path="test" element={<Test/>}/>
         </Route>
         <Route path="map" element={<BMap />} />
     </Routes>
