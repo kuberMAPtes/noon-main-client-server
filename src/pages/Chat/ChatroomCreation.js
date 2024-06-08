@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import './ChatRoomCreation.css';
-import axios from 'axios';
 import { useNavigate  } from 'react-router-dom';
-
-import { Link } from 'react-router-dom';
+import { addChatroom } from '../../lib/axios_api'
+import { addChatroomData } from '../../store/store';
+import { useDispatch } from 'react-redux';
 
 const ChatRoomCreation = () => {
     const [dajungMinTemp, setDajungMinTemp] = useState('');
     const [dajungMaxTemp, setDajungMaxTemp] = useState('');
     const [chatroomName, setChatRoomName] = useState('');
+    const dispatch = useDispatch();
 
     const loggedInUserTestInfo = {
         userId: '12345',
@@ -31,19 +32,14 @@ const ChatRoomCreation = () => {
 
         console.log(chatRoomData);
 
-        axios.post('http://localhost:8080/chatroom/addChatroom', chatRoomData, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            }
+        addChatroom(chatRoomData)
+        .then(data => {
+            // 페이지 이동하기 전 채팅방 정보를 redux 에 저장해놓음
+            dispatch(addChatroomData(data));
+            console.log("[Redux] ChatroomCreation.js 디스패치할거 => ", data);
+            navigate(`/chat/chatroom?chatroomID=${data.ChatroomInfo.chatroomID}`);           
         })
-        .then(response => {
-            console.log('Chat room created:', response.data);
-            navigate(`/chatroom?chatroomID=${response.data.chatroomID}`);
-        })
-        .catch(error => {
-            console.error('There was an error fetching the chat rooms!', error);
-        })
+        .catch( error => console.log(error));
 
     };
 
@@ -71,8 +67,6 @@ const ChatRoomCreation = () => {
                 />
                 <button type="submit">채팅방 개설하기</button>
             </form>
-
-            <Link to='/myChatroomList'>내 채팅방 목록</Link>
         </div>
     );
 };
