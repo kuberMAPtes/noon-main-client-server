@@ -25,6 +25,8 @@ import ChatisAccepted from '../pages/ChatApply/ChatisAccepted';
 import ChatisRejected from '../pages/ChatApply/ChatisRejected';
 import ChatReject from '../pages/ChatApply/ChatReject';
 import ChatRejected from '../pages/ChatApply/ChatRejected';
+import BMap from "../pages/map/BMap";
+// import Test from '../pages/Chat/Test';
 
 const AppRoutes = () => {
   return (
@@ -55,7 +57,9 @@ const AppRoutes = () => {
             <Route path="chatisRejected" element={<ChatisRejected/>}/>
             <Route path="chatReject" element={<ChatReject/>}/>
             <Route path="chatRejected" element={<ChatRejected/>}/>
+            {/* <Route path="test" element={<Test/>}/> */}
         </Route>
+        <Route path="map" element={<BMap />} />
     </Routes>
     )
 };
