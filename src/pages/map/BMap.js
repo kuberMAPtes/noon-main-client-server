@@ -7,6 +7,8 @@ const naver = window.naver;
 
 let map;
 
+let intervalId;
+
 export default function BMap() {
 
   useEffect(() => {
@@ -18,17 +20,18 @@ export default function BMap() {
       const latitude = e.latlng.y;
       const longitude = e.latlng.x;
       fetchBuildingInfo(latitude, longitude);
-
-      navigator.geolocation.getCurrentPosition( // Geolocation은 HTTPS일 때 구동한다.
-        (position) => {
-          // TODO: 회원 마커 찍기
-          console.log(position.coords);
-        },
-        () => {
-          // TODO: 어디에
-        }
-      )
     });
+
+    getCurrentPosition();
+    if (!intervalId) {
+      intervalId = window.setInterval(() => {
+        console.log()
+        getCurrentPosition();
+      }, 1000);
+    }
+    return () => {
+      clearInterval(intervalId);
+    }
   }, []);
   
   return (
@@ -38,6 +41,23 @@ export default function BMap() {
       <div id="map" style={{width: "400px", height: "400px", cursor: "none"}}></div>
     </>
   )
+}
+
+/**
+ * @param {(position: GeolocationPosition) => void} callback 
+ * @param {() => void} errorCallback 
+ */
+function getCurrentPosition() {
+  navigator.geolocation.getCurrentPosition( // Geolocation은 HTTPS일 때 구동한다.
+    (position) => {
+      // TODO: 회원 마커 찍기
+      console.log(position);
+    },
+    () => {
+      // 에러 핸들링
+      console.log("Geolocation API를 사용할 수 없습니다.");
+    }
+  );
 }
 
 /**
