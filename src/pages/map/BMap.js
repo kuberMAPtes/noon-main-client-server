@@ -92,7 +92,16 @@ function addBuildingMarker(marker) {
   </div>
   `
 
-  $(document).children().append($(contentHtmlText).addClass("temp"));
+  addMarker(contentHtmlText);
+}
+
+/**
+ * @param {string} html 
+ * @param {number} latitude 
+ * @param {number} longitude 
+ */
+function addMarker(html, latitude, longitude) {
+  $(document).children().append($(html).addClass("temp"));
   const width = $(".temp").width();
   const height = $(".temp").height();
   $(".temp").attr("width", width).attr("height", height);
@@ -100,12 +109,11 @@ function addBuildingMarker(marker) {
   $(document).find(".temp").remove();
 
   new naver.maps.Marker({
-    position: new naver.maps.LatLng(marker.latitude, marker.longitude),
+    position: new naver.maps.LatLng(latitude, longitude),
     map: map,
     icon: {
         content: contentHtml,
         size: new naver.maps.Size(width, height)
-
     }
   });
 }
