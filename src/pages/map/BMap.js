@@ -18,6 +18,16 @@ export default function BMap() {
       const latitude = e.latlng.y;
       const longitude = e.latlng.x;
       fetchBuildingInfo(latitude, longitude);
+
+      navigator.geolocation.getCurrentPosition( // Geolocation은 HTTPS일 때 구동한다.
+        (position) => {
+          // TODO: 회원 마커 찍기
+          console.log(position.coords);
+        },
+        () => {
+          // TODO: 어디에
+        }
+      )
     });
   }, []);
   
