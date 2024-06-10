@@ -11,6 +11,12 @@ export default function BMap() {
     const mapElement = document.getElementById("map");
     map = new naver.maps.Map(mapElement);
     fetchBuildingMarkers(); // TODO: 구독건물보기하고 인기건물보기 중 뭐가 디폴트였더라?
+
+    naver.maps.Event.addListener(map, "click", (e) => {
+      const latitude = e.latlng.y;
+      const longitude = e.latlng.x;
+      fetchBuildingInfo(latitude, longitude);
+    });
   }, []);
   
   return (
@@ -21,10 +27,20 @@ export default function BMap() {
 }
 
 /**
+ * @param {number} latitude 
+ * @param {number} longitude 
+ */
+function fetchBuildingInfo(latitude, longitude) {
+  // TODO: API 요청
+  console.log(`latitude=${latitude}`);
+  console.log(`longitude=${longitude}`);
+}
+
+/**
  * @param {"SUB" | "POPULAR"} type 
  */
 function fetchBuildingMarkers(type) {
-  // TODO
+  // TODO: API 요청
 }
 
 const liveliness = {
