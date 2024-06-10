@@ -17,7 +17,14 @@ import GetMemberRelationshipList from '../pages/member/GetMemberRelationshipList
 import ChatRoomCreation from "../pages/Chat/ChatroomCreation";
 import Chatroom from "../pages/Chat/Chatroom";
 import MyChatroomList from "../pages/Chat/MyChatroomList";
-import Test from '../pages/Chat/Test';
+import ChatApplyList from '../pages/Chat/ChatApplyList'
+
+import ChatAcceptRejectDecide from '../pages/ChatApply/ChatAcceptRejectDecide';
+import ChatApply from '../pages/ChatApply/ChatApply';
+import ChatisAccepted from '../pages/ChatApply/ChatisAccepted';
+import ChatisRejected from '../pages/ChatApply/ChatisRejected';
+import ChatReject from '../pages/ChatApply/ChatReject';
+import ChatRejected from '../pages/ChatApply/ChatRejected';
 
 const AppRoutes = () => {
   return (
@@ -40,7 +47,14 @@ const AppRoutes = () => {
             <Route path="chatroomCreation" element={<ChatRoomCreation />} />
             <Route path="chatroom" element={<Chatroom />} />
             <Route path="myChatroomList" element={<MyChatroomList />} />
-            <Route path="test" element={<Test/>}/>
+            <Route path="ChatApplyList" element={<ChatApplyList />} />
+            
+            <Route path="chatAcceptRejectDecide" element={<ChatAcceptRejectDecide/>}/>
+            <Route path="chatApply" element={<ChatApply/>}/>
+            <Route path="chatisAccepted" element={<ChatisAccepted/>}/>
+            <Route path="chatisRejected" element={<ChatisRejected/>}/>
+            <Route path="chatReject" element={<ChatReject/>}/>
+            <Route path="chatRejected" element={<ChatRejected/>}/>
         </Route>
     </Routes>
     )

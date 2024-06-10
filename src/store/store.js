@@ -18,6 +18,11 @@ export const addChatroomData = (data) => ({
   payload: data
 })
 
+export const addLoginUserData = (data) => ({
+  type: 'ADD_USER_DATA',
+  payload: data
+})
+
 // create a reducer
 const initialState = {
   chatroomData: null,
@@ -44,9 +49,24 @@ const chatroomReducer = (state = initialState, action) => {
   }
 }
 
+const loginUserReducer = (state = initialState, action) => {
+  switch (action.type){
+
+    case 'ADD_USER_DATA':
+      return {
+        ...state,
+        loginUserData : action.payload
+      };
+
+    default:
+      return state;
+  }
+} 
+
 // combine reducer
 const rootReducer = combineReducers({
   chatroom: chatroomReducer,
+  loginuser: loginUserReducer
 })
 
 // put reducer into store
