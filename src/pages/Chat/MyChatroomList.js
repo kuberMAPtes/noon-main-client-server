@@ -1,39 +1,64 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import './MyChatroomList.css';
+import { getMyChatrooms } from '../../lib/axios_api'
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { getChatroom } from '../../lib/axios_api';
+import { setChatroomData } from '../../store/store';
 
 const MyChatroomList = () => {
     const [chatrooms, setChatrooms] = useState([]);
-    const memberId = "your-member-id"; // Replace with the actual member ID
+    const dispatch = useDispatch();
+
+    const loginUser = {
+      userId : "24241", // Replace with the actual member ID
+      nickName : "현준잉",
+      dajungTemp : "36.5",
+    }
+
+    const navigate = useNavigate();
+
 
     useEffect(() => {
-        const fetchChatrooms = async () => {
-            try {
-                const response = await axios.get('http://localhost:8080/chatroom/getMyChatrooms?userId=12345');
-                console.log(response.data);
 
-                setChatrooms(response.data);
-            } catch (error) {
-                console.error("Error fetching chat rooms", error);
-            }
-        };
+        getMyChatrooms(loginUser.userId)
+            .then(data => {
+                setChatrooms(data)
+            })
+            .catch(error => console.log(error));
 
-        fetchChatrooms();
-    }, [memberId]);
+    }, [loginUser.userId]);
+
+    const enterChatroom = async (chatRoomID) => {
+
+        // 페이지 이동하기 전 채팅방 정보를 redux 에 저장해놓음
+        const chatroomData = await getChatroom(chatRoomID);
+        dispatch(setChatroomData(chatroomData));
+
+        navigate(`/chat/chatroom?chatroomID=${chatRoomID}`);   
+        
+    }
+
+    const addChatroom = () => {
+        navigate(`/chat/chatroomCreation`);   
+    }
 
     return (
         <div className="app">
             <div className="header">
-                <h1>현준's room</h1>
-                <p>1024 members</p>
+                <h1> {loginUser.nickName}'s room</h1>
+                <p>(userId : {loginUser.memberId}) </p>
+                <p>내 다정온도 : {loginUser.dajungTemp}도 </p>
+                <button onClick={()=> addChatroom()}>채팅방 개설하기</button>
             </div>
             <div className="chatroom-list">
                 {chatrooms.map(chatroom => (
-                    <div key={chatroom.chatroomId} className="chatroom">
+                    <div key={chatroom.chatroomID} className="chatroom">
                         <div className="chatroom-info">
                             <p className="chatroom-name">{chatroom.chatroomName}</p>
                             <p className="chatroom-status">방장 : {chatroom.chatroomCreatorId} ({chatroom.chatroomMinTemp} 도 이상만)</p>
                         </div>
+                        <button onClick={()=> enterChatroom(chatroom.chatroomID)}>입장하기</button>
                     </div>
                 ))}
             </div>

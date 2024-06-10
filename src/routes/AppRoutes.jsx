@@ -12,6 +12,13 @@ import GetMember from '../pages/member/GetMember';
 import GetMemberProfile from '../pages/member/GetMemberProfile';
 import UpdateMember from '../pages/member/UpdateMember';
 import GetMemberRelationshipList from '../pages/member/GetMemberRelationshipList';
+
+import ChatRoomCreation from "../pages/Chat/ChatroomCreation";
+import Chatroom from "../pages/Chat/Chatroom";
+import MyChatroomList from "../pages/Chat/MyChatroomList";
+import BMap from "../pages/map/BMap";
+// import Test from '../pages/Chat/Test';
+
 const AppRoutes = () => {
   return (
     <Routes>
@@ -29,8 +36,15 @@ const AppRoutes = () => {
             <Route path="getMemberProfile" element={<GetMemberProfile/>}/>
             <Route path="getMemberRelationshipList" element={<GetMemberRelationshipList />} />
         </Route>
+        <Route path="chat">
+            <Route path="chatroomCreation" element={<ChatRoomCreation />} />
+            <Route path="chatroom" element={<Chatroom />} />
+            <Route path="myChatroomList" element={<MyChatroomList />} />
+            {/* <Route path="test" element={<Test/>}/> */}
+        </Route>
+        <Route path="map" element={<BMap />} />
     </Routes>
-  );
+    )
 };
 
 export default AppRoutes;
