@@ -37,7 +37,6 @@ const ChatAcceptRejectDecide = () => {
         .then((data)=>{
           navigate(`/chat/chatisAccepted?chatroomID=${data.chatroomID}&fromID=${chatApply.fromId}`);
         })
-        
       // 거절할 경우 거절확정페이지로 이동하여 거절
       }else{
           navigate(`/chat/chatReject?fromID=${chatApply.fromId}&chatApplyID=${chatApply.chatApplyId}`);
