@@ -117,3 +117,29 @@ function addMarker(html, latitude, longitude) {
     }
   });
 }
+
+function getPositionRange() {
+  const bound = map.getBounds();
+
+  const mapNe = bound.getNE();
+  const mapSw = bound.getSW();
+
+  return {
+    ne: {
+      latitude: mapNe.y,
+      longitude: mapNe.x,
+    },
+    nw: {
+      latitude: mapNe.y,
+      longitude: mapSw.x
+    },
+    se: {
+      latitude: mapSw.y,
+      longitude: mapNe.x
+    },
+    sw: {
+      latitude: mapSw.y,
+      longitude: mapSw.x
+    }
+  };
+}
