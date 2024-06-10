@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import $ from "jquery";
 import SearchWindow from "../../components/map/SearchWindow";
+import FetchTypeToggle from "../../components/map/FetchTypeToggle";
 
 const naver = window.naver;
 
@@ -23,6 +24,7 @@ export default function BMap() {
   return (
     <>
       <SearchWindow />
+      <FetchTypeToggle />
       <div id="map" style={{width: "400px", height: "400px", cursor: "none"}}></div>
     </>
   )
