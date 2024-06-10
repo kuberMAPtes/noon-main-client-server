@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import $ from "jquery";
+import SearchWindow from "../../components/map/SearchWindow";
 
 const naver = window.naver;
 
@@ -21,6 +22,7 @@ export default function BMap() {
   
   return (
     <>
+      <SearchWindow />
       <div id="map" style={{width: "400px", height: "400px", cursor: "none"}}></div>
     </>
   )
