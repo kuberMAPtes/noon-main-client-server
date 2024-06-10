@@ -1,6 +1,5 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Member from '../pages/member/Member';
 import GetAuthMain from '../pages/member/GetAuthMain';
 import GetSignUpTermAgreement from '../pages/member/GetSignUpTermAgreement';
 import AddPhoneNumberAuthentification from '../pages/member/AddPhoneNumberAuthentification';
@@ -23,7 +22,7 @@ import BMap from "../pages/map/BMap";
 const AppRoutes = () => {
   return (
     <Routes>
-        <Route path="member" element={<Member />}>
+        <Route path="/member">
             <Route path="getAuthMain" element={<GetAuthMain />} />
             <Route path="getSignUpTermAgreement" element={<GetSignUpTermAgreement/>}/>
             <Route path="addPhoneNumberAuthentification" element={<AddPhoneNumberAuthentification />} />
