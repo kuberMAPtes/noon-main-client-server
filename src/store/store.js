@@ -72,4 +72,4 @@ const rootReducer = combineReducers({
 // put reducer into store
 const store = createStore(rootReducer);
 
-export default store;
+export default store

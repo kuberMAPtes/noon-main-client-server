@@ -25,6 +25,7 @@ import ChatisRejected from '../pages/ChatApply/ChatisRejected';
 import ChatReject from '../pages/ChatApply/ChatReject';
 import ChatRejected from '../pages/ChatApply/ChatRejected';
 import BMap from "../pages/map/BMap";
+import PrivateRoute from './PrivateRoute';
 // import Test from '../pages/Chat/Test';
 
 const AppRoutes = () => {
@@ -37,12 +38,36 @@ const AppRoutes = () => {
             <Route path="addMember" element={<AddMember />} />
             <Route path="addMemberResult" element={<AddMemberResult />} />
             <Route path="login" element={<Login/>}/>
-            <Route path="updatePassword" element={<UpdatePassword />} />
-            <Route path="updatePasswordResult" element={<UpdatePasswordResult />} />
-            <Route path="getMember" element={<GetMember />} />
-            <Route path="updateMember" element={<UpdateMember />} />
-            <Route path="getMemberProfile" element={<GetMemberProfile/>}/>
-            <Route path="getMemberRelationshipList" element={<GetMemberRelationshipList />} />
+            <Route path="updatePassword" element={
+              <PrivateRoute>
+                <UpdatePassword />
+              </PrivateRoute>
+            } />
+            <Route path="updatePasswordResult" element={
+              <PrivateRoute>
+                <UpdatePasswordResult />
+              </PrivateRoute>
+            } />
+            <Route path="getMember" element={
+              <PrivateRoute>
+                <GetMember />
+              </PrivateRoute>
+            } />
+            <Route path="updateMember" element={
+              <PrivateRoute>
+                <UpdateMember />
+              </PrivateRoute>
+            } />
+            <Route path="getMemberProfile" element={
+              <PrivateRoute>
+                <GetMemberProfile />
+              </PrivateRoute>
+            } />
+            <Route path="getMemberRelationshipList" element={
+              <PrivateRoute>
+                <GetMemberRelationshipList />
+              </PrivateRoute>
+            } />
         </Route>
         <Route path="chat">
             <Route path="chatroomCreation" element={<ChatRoomCreation />} />

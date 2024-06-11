@@ -9,7 +9,7 @@ import {Link} from 'react-router-dom';
 
 
 // express 서버의 socket.io 로 접속
-const socket = io('http://localhost:8081', { path: '/socket.io' });
+const socket = io(process.env.REACT_APP_NODE_SERVER_URL, { path: '/socket.io' });
 
 // 1. 닉네임을 만들어야댐
 

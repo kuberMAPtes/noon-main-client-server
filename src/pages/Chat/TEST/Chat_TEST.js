@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 // import '../App.css';
 
-const socket = io('http://localhost:8081', { path: '/socket.io' });
+const socket = io(process.env.REACT_APP_NODE_SERVER_URL, { path: '/socket.io' });
 
 function ChatTest() {
   const [nickname, setNickname] = useState('');
