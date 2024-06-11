@@ -1,13 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import userReducer from './slices/userSlice';
-import productReducer from './slices/productSlice';
-import memberReducer from './slices/memberSlice';
+import authReducer from './slices/authSlice';
 import chatroomReducer from './slices/chatRoomSlice';
 const store = configureStore({
   reducer: {
-    member: memberReducer,
-    user: userReducer,
-    product: productReducer,
+    auth: authReducer,
     chatroom: chatroomReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),

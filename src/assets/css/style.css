@@ -1,0 +1,37 @@
+.col .no-link-style {
+    text-decoration: none !important;
+    color: inherit !important;
+  }
+.feed-card img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.content-wrap {
+  flex: 1;
+  padding-bottom: 80px; /* Footer 높이만큼 패딩 추가 */
+}
+
+footer {
+  position: relative;
+  width: 100%;
+}
+/* .dropdown-menu-end {
+    right: +10%;
+    left: auto;
+    top: 50%;
+} */
+.dropdown-menu-custom {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: block !important; /* 드롭다운 메뉴를 항상 표시하도록 설정 */
+  }
+  
