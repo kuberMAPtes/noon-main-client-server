@@ -1,6 +1,7 @@
 import { useState } from "react";
 import SearchWindow from "../../components/common/SearchWindow";
 import SearchModeTab, { modes } from "../../components/search/SearchModeTab";
+import FeedSearchResult from "../../components/search/FeedSearchResult";
 
 export default function Search() {
   const [searchKeyword, setSearchKeyword] = useState("");
