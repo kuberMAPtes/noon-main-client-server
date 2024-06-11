@@ -1,3 +1,21 @@
+import { useEffect, useState } from "react";
+
+const SAMPLE_DATA = [];
+
+for (let i = 1; i <= 5; i++) {
+  SAMPLE_DATA.push({
+    writer: {
+      nickname: `nickname-${i}`,
+      profilePhotoUrl: `url-${i}`
+    },
+    writtenTime: new Date() - i * i * i,
+    title: `title-${i}`,
+    text: `text-${i}`,
+    buildingName: `buildingName-${i}`,
+    thumnailUrl: `thumbnailUrl-${i}`
+  });
+}
+
 const MINUTE = 60;
 const HOUR = MINUTE * 60;
 const DAY = HOUR * 24;
@@ -5,18 +23,47 @@ const TEXT_MAX_LENGTH = 30;
 
 /**
  * @param {{
- *   writer: {
- *     nickname: string;
- *     profilePhotoUrl: string;
- *   },
- *   writtenTime: Date;
- *   title: string;
- *   text: string;
- *   buildingName: string;
- *   thumnailUrl: string;
- * }} prop
+ *   searchResult: {}
+ * }} props
  */
 export default function FeedSearchResult({
+  searchResult
+}) {
+  const [feedData, setFeedData] = useState(SAMPLE_DATA);
+
+  return (
+    <div>
+      {
+        feedData.map((data, idx) => (
+          <FeedSearchResultItem
+            key={`feed-item-${idx}`}
+            writer={data.writer}
+            writtenTime={data.writtenTime}
+            title={data.title}
+            text={data.text}
+            buildingName={data.buildingName}
+            thumbnailUrl={data.thumbnailUrl}
+          />
+        ))
+      }
+    </div>
+  )
+}
+
+/**
+ * @param {{
+*   writer: {
+*     nickname: string;
+*     profilePhotoUrl: string;
+*   },
+*   writtenTime: Date;
+*   title: string;
+*   text: string;
+*   buildingName: string;
+*   thumbnailUrl: string;
+* }} prop
+*/
+function FeedSearchResultItem({
   writer, writtenTime, title, text, buildingName, thumbnailUrl
 }) {
   const periodInSeconds = (new Date() - writtenTime) / 1000;
