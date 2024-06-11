@@ -26,6 +26,7 @@ import ChatReject from '../pages/ChatApply/ChatReject';
 import ChatRejected from '../pages/ChatApply/ChatRejected';
 import BMap from "../pages/map/BMap";
 import PrivateRoute from './PrivateRoute';
+import Search from "../pages/search/Search";
 // import Test from '../pages/Chat/Test';
 
 const AppRoutes = () => {
@@ -83,7 +84,8 @@ const AppRoutes = () => {
             <Route path="chatRejected" element={<ChatRejected/>}/>
             {/* <Route path="test" element={<Test/>}/> */}
         </Route>
-        <Route path="map" element={<BMap />} />
+        <Route path="/map" element={<BMap />} />
+        <Route path="/search" element={<Search />} />
     </Routes>
     )
 };
