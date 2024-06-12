@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,14 +13,18 @@ const LogoutForm = () => {
 
   const handleLogout = async () => {
     try {
-      console.log(auth);
       dispatch(logout());
-      console.log(auth);
-      navigate('/member/getAuthMain');
     } catch (error) {
       console.error('Logout failed', error);
     }
   };
+
+  useEffect(() => {
+    console.log('LogoutForm useEffect 수행');
+    console.log('auth:', auth);
+    
+    if(!auth.authorization) navigate('/member/getAuthMain');
+  },[auth,navigate]);
 
   return <button onClick={handleLogout}>Logout</button>;
 };

@@ -1,12 +1,21 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { Navigate } from 'react-router-dom';
-import Footer from '../components/common/Footer';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
+import Footer from "../components/common/Footer";
 
 const PrivateRoute = ({ children }) => {
-    const token = useSelector((state) => state.auth.token);
-  
-    return token ? (
+  const auth = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    console.log("PrivateRoute 컴포넌트 마운트");
+    console.log(auth);
+    console.log("authorization 상태 변경:", auth.authorization);
+  }, [auth]);
+
+  if (auth.loading) {// 쿠키로부터 authorization을 가져오는 중이면 Loading...을 출력
+    return <div>Loading...</div>;
+  } else {
+    return auth.authorization ? (
       <>
         {children}
         <Footer /> {/* Footer 컴포넌트 추가 */}
@@ -14,6 +23,7 @@ const PrivateRoute = ({ children }) => {
     ) : (
       <Navigate to="/member/getAuthMain" />
     );
-  };
+  }
+};
 
 export default PrivateRoute;
