@@ -5,7 +5,6 @@ import BuildingSummary from './components/BuildingSummary';
 import WikiButton from './components/WikiButton';
 import TabNavigation from './components/TabNavigation';
 import Footer from '../../components/common/Footer';
-import WantBuildingProfile from './components/WantBuildingProfile';
 
 
 const Building = () => {
@@ -17,7 +16,6 @@ const Building = () => {
       <WikiButton />
       <TabNavigation />
       <Footer />
-      <WantBuildingProfile/>
     </div>
   );
 };
