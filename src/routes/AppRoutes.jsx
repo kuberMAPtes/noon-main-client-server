@@ -28,7 +28,7 @@ import BMap from "../pages/map/BMap";
 import PrivateRoute from './PrivateRoute';
 import Search from "../pages/search/Search";
 
-import Building from '../pages/building/Building';
+import Building from '../pages/building/building';
 import GetCustomerSupport from '../pages/CustomerSupport/GetCustomerSupport';
 import GetChatbot from '../pages/CustomerSupport/GetChatbot';
 import ListNotice from '../pages/CustomerSupport/ListNotice';
