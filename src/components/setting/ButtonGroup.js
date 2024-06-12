@@ -1,5 +1,6 @@
 /**
  * @param {{
+ *   currentSelectedId: string;
  *   buttonInfos: {
  *     id: string;
  *     title: string;
@@ -8,6 +9,7 @@
  * }} props
  */
 export default function ButtonGroup({
+  currentSelectedId,
   buttonInfos,
   onButtonClick
 }) {
@@ -15,8 +17,14 @@ export default function ButtonGroup({
     <div>
       {
         buttonInfos.map((data, idx) => (
-          <button type="button" key={`button-group-${data.id}-${idx}`}
-              onClick={() => onButtonClick(data.id)} />
+          <button type="button" key={`button-${data.id}-${idx}`}
+              onClick={() => onButtonClick(data.id)}
+          >
+            {data.title}
+            {
+              currentSelectedId === data.id ? "선택됨" : ""
+            }
+          </button>
         ))
       }
     </div>
