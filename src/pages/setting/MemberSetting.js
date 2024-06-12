@@ -1,5 +1,6 @@
 import { useState } from "react"
 import ButtonGroup from "../../components/setting/ButtonGroup";
+import { useParams } from "react-router-dom";
 
 const PUBLIC_RANGES = [
   {
@@ -25,6 +26,9 @@ export default function MemberSetting() {
   const [allFeedPublicRange, setAllFeedPublicRange] = useState("PUBLIC");
   const [receivingAllNotification, setReceivingAllNotification] = useState(true);
   const [buildingSubscriptionPublicRange, setBuildingSubscriptionPublicRange] = useState("PUBLIC");
+
+  const memberId = useParams().memberId;
+  console.log(memberId)
 
   const COMPONENT_INFOS = [
     {
@@ -70,9 +74,9 @@ export default function MemberSetting() {
     <div>
       {
         COMPONENT_INFOS.map((data, idx) => (
-          <div>
+          <div key={`button-group-${idx}`}>
             <h3>{data.header}</h3>
-            <ButtonGroup key={`button-group-${idx}`}
+            <ButtonGroup
               currentSelectedId={data.currentSelected}
               buttonInfos={data.buttonInfos}
               onButtonClick={data.callback}

@@ -87,7 +87,7 @@ const AppRoutes = () => {
         </Route>
         <Route path="/map" element={<BMap />} />
         <Route path="/search" element={<Search />} />
-        <Route path="/setting" element={<MemberSetting />} />
+        <Route path="/setting/:memberId" element={<MemberSetting />} />
     </Routes>
     )
 };
