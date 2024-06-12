@@ -26,6 +26,7 @@ import ChatReject from '../pages/ChatApply/ChatReject';
 import ChatRejected from '../pages/ChatApply/ChatRejected';
 import BMap from "../pages/map/BMap";
 import PrivateRoute from './PrivateRoute';
+import KakaoNav from '../pages/member/KakaoNav';
 import Search from "../pages/search/Search";
 // import Test from '../pages/Chat/Test';
 
@@ -39,6 +40,7 @@ const AppRoutes = () => {
             <Route path="addMember" element={<AddMember />} />
             <Route path="addMemberResult" element={<AddMemberResult />} />
             <Route path="login" element={<Login/>}/>
+            <Route path="kakaoNav" element={<KakaoNav/>}/>
             <Route path="updatePassword" element={
               <PrivateRoute>
                 <UpdatePassword />
@@ -59,7 +61,7 @@ const AppRoutes = () => {
                 <UpdateMember />
               </PrivateRoute>
             } />
-            <Route path="getMemberProfile" element={
+            <Route path="getMemberProfile/:toId" element={
               <PrivateRoute>
                 <GetMemberProfile />
               </PrivateRoute>
