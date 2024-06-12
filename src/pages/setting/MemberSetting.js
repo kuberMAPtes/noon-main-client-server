@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import ButtonGroup from "../../components/setting/ButtonGroup";
 import { useParams } from "react-router-dom";
 
@@ -28,7 +28,10 @@ export default function MemberSetting() {
   const [buildingSubscriptionPublicRange, setBuildingSubscriptionPublicRange] = useState("PUBLIC");
 
   const memberId = useParams().memberId;
-  console.log(memberId)
+
+  useEffect(() => {
+    fetchSettingInfo(memberId, () => console.log("Api 호출")); // TODO
+  }, []);
 
   const COMPONENT_INFOS = [
     {
@@ -84,6 +87,20 @@ export default function MemberSetting() {
           </div>
         ))
       }
+      <button type="button" onClick={() => console.log("업데이트 API 호출")}>변경사항 저장</button>
     </div>
   );
+}
+
+/**
+ * @param {string} memberId 
+ * @param {({
+ *   memberProfilePublicRange: string;
+ *   allFeedPublicRange: string;
+ *   buildingSubscriptionPublicRange: string;
+ *   receivingAllNotificationAllowed: boolean;
+ * }) => void} callback
+ */
+function fetchSettingInfo(memberId, callback) {
+
 }
