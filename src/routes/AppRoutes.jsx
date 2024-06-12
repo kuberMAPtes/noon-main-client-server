@@ -26,11 +26,8 @@ import ChatReject from '../pages/ChatApply/ChatReject';
 import ChatRejected from '../pages/ChatApply/ChatRejected';
 import BMap from "../pages/map/BMap";
 import PrivateRoute from './PrivateRoute';
-<<<<<<< HEAD
 import KakaoNav from '../pages/member/KakaoNav';
-=======
 import Search from "../pages/search/Search";
->>>>>>> 4a5166bf3f9b2c261756f18ddc4bc5c2dc03e338
 // import Test from '../pages/Chat/Test';
 
 const AppRoutes = () => {
