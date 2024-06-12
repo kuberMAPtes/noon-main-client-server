@@ -1,6 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import $ from "jquery";
-import SearchWindow from "../../components/map/SearchWindow";
+import SearchWindow from "../../components/common/SearchWindow";
 import FetchTypeToggle from "../../components/map/FetchTypeToggle";
 
 const naver = window.naver;
@@ -10,6 +10,7 @@ let map;
 let intervalId;
 
 export default function BMap() {
+  const [placeSearchKeyword, setPlaceSearchKeyword] = useState("");
 
   useEffect(() => {
     const mapElement = document.getElementById("map");
@@ -33,14 +34,31 @@ export default function BMap() {
       clearInterval(intervalId);
     }
   }, []);
+
+  function onFetchPlace() {
+
+  }
   
   return (
     <>
-      <SearchWindow />
+      <SearchWindow
+        typeCallback={(text) => setPlaceSearchKeyword(text)}
+        searchCallback={() => searchPlaceList(placeSearchKeyword, onFetchPlace)}
+      />
       <FetchTypeToggle />
       <div id="map" style={{width: "400px", height: "400px", cursor: "none"}}></div>
     </>
   )
+}
+
+/**
+ * 
+ * @param {string} searchKeyword 
+ * @param {() => void} callback 
+ */
+function searchPlaceList(searchKeyword, callback) {
+  // TODO: API 요청
+  console.log(searchKeyword);
 }
 
 /**

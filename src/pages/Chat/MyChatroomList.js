@@ -42,6 +42,9 @@ const MyChatroomList = () => {
     const addChatroom = () => {
         navigate(`/chat/chatroomCreation`);   
     }
+    const getChatApplyList = () => {
+        navigate(`/chat/chatApplyList`);   
+    }
 
     return (
         <div className="app">
@@ -50,6 +53,7 @@ const MyChatroomList = () => {
                 <p>(userId : {loginUser.memberId}) </p>
                 <p>내 다정온도 : {loginUser.dajungTemp}도 </p>
                 <button onClick={()=> addChatroom()}>채팅방 개설하기</button>
+                <button onClick={()=> getChatApplyList()}>새 대화신청 보기</button>
             </div>
             <div className="chatroom-list">
                 {chatrooms.map(chatroom => (
