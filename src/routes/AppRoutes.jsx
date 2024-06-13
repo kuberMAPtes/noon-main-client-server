@@ -31,6 +31,10 @@ import Search from "../pages/search/Search";
 import MemberSetting from "../pages/setting/MemberSetting";
 // import Test from '../pages/Chat/Test';
 
+import FeedList from "../pages/feed/FeedList";
+import FeedDetail from "../pages/feed/FeedDetail";
+import FeedForm from "../pages/feed/FeedForm";
+
 const AppRoutes = () => {
   return (
     <Routes>
@@ -90,6 +94,11 @@ const AppRoutes = () => {
         <Route path="/map" element={<BMap />} />
         <Route path="/search" element={<Search />} />
         <Route path="/setting/:memberId" element={<MemberSetting />} />
+        <Route path="/feed">
+            <Route path="feedList" element={<FeedList />} />
+            <Route path="feedDetail" element={<FeedDetail />} />
+            <Route path="feedForm" element={<FeedForm />} />
+        </Route>
     </Routes>
     )
 };

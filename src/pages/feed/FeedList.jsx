@@ -1,4 +1,4 @@
-import FeedItem from './FeedItem';
+import FeedItem from './component/FeedItem';
 import { Container, Row, Col } from 'react-bootstrap';
 import Footer from '../../components/common/Footer';
 
