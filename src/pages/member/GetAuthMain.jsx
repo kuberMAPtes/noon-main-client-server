@@ -1,35 +1,48 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../../redux/slices/authSlice';
+import { login, logout } from '../../redux/slices/authSlice';
 import LoginForm from './component/LoginForm';
 import styles from '../../assets/css/module/member/GetAuthMain.module.css';
 import { Container, Button, Row, Col, Spinner, Alert } from 'react-bootstrap';
+import { handleKakaoLogin } from './function/kakaoLogin';
+import { initializeFirebase } from '../../firebase';
+import { handleRedirectResult, setupAuthStateListener } from './function/googleLogin';
 
 const GetAuthMain = () => {
   const dispatch = useDispatch();
   const [showLoginForm, setShowLoginForm] = useState(false);
+  const [googleAuth, setGoogleAuth] = useState(null);
+  const [member, setMember] = useState(null);
   const loginStatus = useSelector((state) => state.loginStatus);
   const loginError = useSelector((state) => state.loginError);
-  const isAuthenticated = useSelector((state) => state.isAuthenticated);
+  const token = useSelector((state) => state.token);
 
-  const handleKakaoLogin = (event) => {
-    event.preventDefault();
-    console.log('카카오 로그인 버튼 클릭');
-    const redirectUri = process.env.REACT_APP_MEMBER_API_BASE_URL + '/kakaoLogin';
-    console.log('redirectUri :: ', redirectUri);
-    const encodedUri = encodeURIComponent(redirectUri);
-    console.log(encodedUri);
-    const clientId = process.env.REACT_APP_KAKAO_API_KEY;
-    window.location.href = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${encodedUri}`;
-  };
-
+  //일반 로그인 폼 보여주기
   const handleLoginClick = () => {
     setShowLoginForm(true);
   };
-
+  //일반 로그인 수행
   const handleLoginSubmit = (loginData) => {
     dispatch(login(loginData));
   };
+
+  ///구글 로그인
+  const handleGoogleLogin = async () => {
+    if (!googleAuth) {
+      const authInstance = await initializeFirebase();
+      setGoogleAuth(authInstance);
+      authInstance.languageCode = "ko";
+
+      const unsubscribe = setupAuthStateListener(authInstance, (loginData) => dispatch(login(loginData)), () => dispatch(logout()));
+      return () => unsubscribe();
+    }
+  };
+
+  useEffect(() => {
+    if (googleAuth) {
+      handleRedirectResult(googleAuth, setMember);
+    }
+  }, [googleAuth]);
 
   return (
     <Container className="mt-5">
@@ -47,6 +60,9 @@ const GetAuthMain = () => {
               className="img-fluid"
             />
           </Button>
+          <Button onClick={handleGoogleLogin} variant="danger" className="mb-3">
+            구글 로그인
+          </Button>
           <Button onClick={handleLoginClick} variant="primary" className="mb-3">
             일반 로그인
           </Button>
@@ -54,7 +70,7 @@ const GetAuthMain = () => {
           {loginStatus === 'failed' && (
             <Alert variant="danger">로그인 실패: {loginError}</Alert>
           )}
-          {isAuthenticated && <Alert variant="success">로그인 성공!</Alert>}
+          {token && <Alert variant="success">로그인 성공!</Alert>}
         </Col>
       </Row>
       {showLoginForm && <LoginForm onSubmit={handleLoginSubmit} />}
