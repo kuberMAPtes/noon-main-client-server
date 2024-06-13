@@ -26,6 +26,8 @@ export default function MemberSetting() {
   const [allFeedPublicRange, setAllFeedPublicRange] = useState("PUBLIC");
   const [receivingAllNotification, setReceivingAllNotification] = useState(true);
   const [buildingSubscriptionPublicRange, setBuildingSubscriptionPublicRange] = useState("PUBLIC");
+  const [opInfoMode, setOpInfoMode] = useState("termsAndPolicy");
+  const [opInfoModalVisible, setOpInfoModalVisible] = useState(false);
 
   const memberId = useParams().memberId;
 
@@ -88,6 +90,17 @@ export default function MemberSetting() {
         ))
       }
       <button type="button" onClick={() => console.log("업데이트 API 호출")}>변경사항 저장</button>
+      <button type="button" onClick={() => {
+        setOpInfoMode("termsAndPolicy");
+        setOpInfoModalVisible(true);
+      }}>약관 및 정책</button>
+      <button type="button" onClick={() => {
+        setOpInfoMode("termsOfUse");
+        setOpInfoModalVisible(true);
+      }}>이용규정</button>
+      {
+        opInfoModalVisible && <OpInfoDisplay opInfoMode={opInfoMode} onCancelClick={() => setOpInfoModalVisible(false)} />
+      }
     </div>
   );
 }
@@ -103,4 +116,24 @@ export default function MemberSetting() {
  */
 function fetchSettingInfo(memberId, callback) {
 
+}
+
+const operationInfoText = {
+  termsAndPolicy: "약관 및 정책",
+  termsOfUse: "이용규정"
+};
+
+/**
+ * @param {{
+ *   opInfoMode: "termsAndPolicy" | "termsOfUse",
+ *   onCancelClick: () => void
+ * }} props
+ */
+function OpInfoDisplay({opInfoMode, onCancelClick}) {
+  return (
+    <div>
+      {operationInfoText[opInfoMode]}
+      <button type="button" onClick={() => onCancelClick()}>닫기</button>
+    </div>
+  );
 }
