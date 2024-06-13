@@ -26,6 +26,7 @@ import ChatReject from '../pages/ChatApply/ChatReject';
 import ChatRejected from '../pages/ChatApply/ChatRejected';
 import BMap from "../pages/map/BMap";
 import PrivateRoute from './PrivateRoute';
+import KakaoNav from '../pages/member/KakaoNav';
 import Search from "../pages/search/Search";
 
 import Building from '../pages/building/Building';
@@ -41,6 +42,7 @@ import ListImages from '../pages/CustomerSupport/ListImages';
 import GetImage from '../pages/CustomerSupport/GetImage';
 import DeleteBadFeed from '../pages/CustomerSupport/DeleteBadFeed';
 
+import MemberSetting from "../pages/setting/MemberSetting";
 // import Test from '../pages/Chat/Test';
 
 const AppRoutes = () => {
@@ -53,6 +55,7 @@ const AppRoutes = () => {
             <Route path="addMember" element={<AddMember />} />
             <Route path="addMemberResult" element={<AddMemberResult />} />
             <Route path="login" element={<Login/>}/>
+            <Route path="kakaoNav" element={<KakaoNav/>}/>
             <Route path="updatePassword" element={
               <PrivateRoute>
                 <UpdatePassword />
@@ -73,7 +76,7 @@ const AppRoutes = () => {
                 <UpdateMember />
               </PrivateRoute>
             } />
-            <Route path="getMemberProfile" element={
+            <Route path="getMemberProfile/:toId" element={
               <PrivateRoute>
                 <GetMemberProfile />
               </PrivateRoute>
@@ -114,7 +117,7 @@ const AppRoutes = () => {
             <Route path="getImage" element={<GetImage />} />
             <Route path="deleteBadFeed" element={<DeleteBadFeed />} />
         </Route>
-
+        <Route path="/setting/:memberId" element={<MemberSetting />} />
     </Routes>
     )
 };
