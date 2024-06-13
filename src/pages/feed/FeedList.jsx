@@ -1,5 +1,6 @@
 import FeedItem from './FeedItem';
 import { Container, Row, Col } from 'react-bootstrap';
+import Footer from '../../components/common/Footer';
 
 // http://localhost:8080/feed/getFeedListByMember?memberId=member_1&page=1 의 데이터 중 5개를 가져옴
 const sampleData = [
@@ -70,6 +71,7 @@ const FeedList = () => {
                     </Col>
                 ))}
             </Row>
+            <Footer />
         </Container>
     );
 };

@@ -1,6 +1,8 @@
 import React from 'react';
 import FeedDetail from './FeedDetail';
+import Footer from '../../components/common/Footer';
 
+// 피드 상세 보기 시 가져오는 데이터
 const sampleData = {
     feedId: 10001,
     writerId: 'member_1',
@@ -248,6 +250,7 @@ const FeedDetailTestComponents = () => {
     return (
         <div>
             <FeedDetail data={sampleData} />
+            <Footer />
         </div>
     );
 };
