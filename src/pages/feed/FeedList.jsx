@@ -1,8 +1,9 @@
+import React from 'react';
 import FeedItem from './component/FeedItem';
-import { Container, Row, Col } from 'react-bootstrap';
 import Footer from '../../components/common/Footer';
+import './css/FeedList.css';
 
-// http://localhost:8080/feed/getFeedListByMember?memberId=member_1&page=1 의 데이터 중 5개를 가져옴
+// Sample Data
 const sampleData = [
     {
         feedId: 10000,
@@ -63,16 +64,16 @@ const sampleData = [
 
 const FeedList = () => {
     return (
-        <Container className="mt-4">
-            <Row>
+        <div className="container mt-4">
+            <div className="row">
                 {sampleData.map((sample) => (
-                    <Col key={sample.feedId} md={12} className="mb-4">
+                    <div key={sample.feedId} className="col-12 mb-4">
                         <FeedItem data={sample} />
-                    </Col>
+                    </div>
                 ))}
-            </Row>
+            </div>
             <Footer />
-        </Container>
+        </div>
     );
 };
 

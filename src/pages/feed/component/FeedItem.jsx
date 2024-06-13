@@ -1,4 +1,5 @@
-import { Card, Col, Container, Row, Image } from 'react-bootstrap';
+import React from 'react';
+import '../css/FeedItem.css';
 
 const FeedItem = ({ data }) => {
     const {
@@ -15,29 +16,22 @@ const FeedItem = ({ data }) => {
     const writtenTimeReplace = data.writtenTime.replace('T', ' ');
 
     return (
-        <Container>
-            <Row className="mt-3">
-                <Col>
-                    <Card>
-                        <Card.Body>
-                            <Card.Title>{title}</Card.Title>
-                            <Card.Subtitle class="mb-2 text-muted">
-                                {writerNickname} | {writtenTimeReplace} |{' '}
-                                {buildingName}
-                            </Card.Subtitle>
-                            <Card.Text>{feedText}</Card.Text>
-                        </Card.Body>
-                        <Card.Footer>
-                            <Image
-                                src={feedAttachmentURL}
-                                alt={`Attachment ${feedAttachmentURL}`}
-                                fluid
-                            />
-                        </Card.Footer>
-                    </Card>
-                </Col>
-            </Row>
-        </Container>
+        <div className="card">
+            <div className="card-body">
+                <h2 className="card-title">{title}</h2>
+                <h6 className="card-subtitle text-muted">
+                    {writerNickname} | {writtenTimeReplace} | {buildingName}
+                </h6>
+                <p className="card-text">{feedText}</p>
+            </div>
+            <div className="card-footer">
+                <img
+                    src={feedAttachmentURL}
+                    alt={`Attachment ${feedAttachmentURL}`}
+                    className="attachment-img"
+                />
+            </div>
+        </div>
     );
 };
 

@@ -1,15 +1,5 @@
 import React, { useState } from 'react';
-import {
-    Card,
-    Container,
-    Row,
-    Col,
-    ListGroup,
-    Image,
-    Badge,
-    Form,
-    Button,
-} from 'react-bootstrap';
+import '../css/FeedDetail.css';
 
 const FeedDetail = ({ data }) => {
     const {
@@ -47,85 +37,63 @@ const FeedDetail = ({ data }) => {
     };
 
     return (
-        <Container>
-            <Row className="mt-3">
-                <Col>
-                    <Card>
-                        <Card.Body>
-                            <Card.Title>{title}</Card.Title>
-                            <Card.Subtitle className="mb-2 text-muted">
-                                {writerNickname} | {writtenTimeReplace} |{' '}
-                                {buildingName}
-                            </Card.Subtitle>
-                            <Card.Subtitle className="mb-2 text-muted">
-                                {tags.map((tag) => (
-                                    <Badge key={tag.tagId} bg="primary">
-                                        {tag.tagText}
-                                    </Badge>
-                                ))}
-                            </Card.Subtitle>
-                            <Card.Text>{feedText}</Card.Text>
-                        </Card.Body>
-                    </Card>
-                </Col>
-            </Row>
+        <div className="container">
+            <div className="card">
+                <div className="card-body">
+                    <h2 className="card-title">{title}</h2>
+                    <h6 className="card-subtitle text-muted">
+                        {writerNickname} | {writtenTimeReplace} | {buildingName}
+                    </h6>
+                    <div className="tags">
+                        {tags.map((tag) => (
+                            <span key={tag.tagId} className="badge">
+                                {tag.tagText}
+                            </span>
+                        ))}
+                    </div>
+                    <p className="card-text">{feedText}</p>
+                </div>
+            </div>
 
-            <Row className="mt-3">
-                <Col>
-                    <Card>
-                        <Card.Body>
-                            {attachments.map((attachment) => (
-                                <div
-                                    key={attachment.attachmentId}
-                                    className="mb-3"
-                                >
-                                    <Image
-                                        src={attachment.fileUrl}
-                                        alt={`Attachment ${attachment.attachmentId}`}
-                                        fluid
-                                    />
-                                </div>
-                            ))}
-                        </Card.Body>
-                    </Card>
-                </Col>
-            </Row>
+            <div className="card mt-3">
+                <div className="card-body">
+                    {attachments.map((attachment) => (
+                        <div key={attachment.attachmentId} className="mb-3">
+                            <img
+                                src={attachment.fileUrl}
+                                alt={`Attachment ${attachment.attachmentId}`}
+                                className="attachment-img"
+                            />
+                        </div>
+                    ))}
+                </div>
+            </div>
 
-            <Row className="mt-3">
-                <Col>
-                    <Card>
-                        <Card.Header>Comments</Card.Header>
-                        <ListGroup variant="flush">
-                            {commentList.map((comment) => (
-                                <ListGroup.Item key={comment.commentId}>
-                                    <strong>{comment.memberId}</strong>:{' '}
-                                    {comment.commentText}
-                                </ListGroup.Item>
-                            ))}
-                        </ListGroup>
-                        <Card.Body>
-                            <Form onSubmit={handleCommentSubmit}>
-                                <Form.Group controlId="commentInput">
-                                    <Form.Control
-                                        type="text"
-                                        value={newComment}
-                                        onChange={handleCommentChange}
-                                        placeholder="Enter your comment"
-                                    />
-                                </Form.Group>
-                                <Button
-                                    variant="primary"
-                                    type="submit"
-                                    className="mt-2"
-                                >
-                                    Add Comment
-                                </Button>
-                            </Form>
-                        </Card.Body>
-                    </Card>
-                </Col>
-            </Row>
-        </Container>
+            <div className="card mt-3">
+                <div className="card-header">Comments</div>
+                <ul className="list-group">
+                    {commentList.map((comment) => (
+                        <li key={comment.commentId} className="list-group-item">
+                            <strong>{comment.memberId}</strong>: {comment.commentText}
+                        </li>
+                    ))}
+                </ul>
+                <div className="card-body">
+                    <form onSubmit={handleCommentSubmit}>
+                        <input
+                            type="text"
+                            value={newComment}
+                            onChange={handleCommentChange}
+                            placeholder="Enter your comment"
+                            className="form-control"
+                        />
+                        <button type="submit" className="btn btn-primary mt-2">
+                            Add Comment
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
     );
 };
 
