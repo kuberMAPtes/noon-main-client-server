@@ -1,6 +1,7 @@
 import Footer from "../../components/common/Footer";
 import FeedFormComponent from "./component/FeedFormComponent"
 import { useState } from 'react';
+import "./css/FeedForm.css";
 
 const FeedForm = () => {
     const [feeds, setFeeds] = useState([]);
@@ -23,7 +24,7 @@ const FeedForm = () => {
 
     return (
         <div className="container">
-            <h1>Feed Manager</h1>
+            <h1>피드 작성</h1>
             <FeedFormComponent existingFeed={selectedFeed} onSave={handleSave} />
             <div className="feed-list">
                 {feeds.map(feed => (
@@ -35,7 +36,10 @@ const FeedForm = () => {
                     </div>
                 ))}
             </div>
-            <Footer />
+            <div>
+            {/* <Footer /> */}
+            </div>
+            
         </div>
     );
 };

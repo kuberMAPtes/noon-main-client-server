@@ -39,6 +39,7 @@ input, textarea, select {
 }
 
 .form-buttons {
+    width: 100%;
     display: flex;
     justify-content: space-between;
 }
@@ -56,10 +57,37 @@ button:hover {
     background-color: #0056b3;
 }
 
-button[type="button"] {
+button[name="attachment"] {
     background-color: #6c757d;
+    margin-left: 20px;
+    width: 100px;
+
 }
 
-button[type="button"]:hover {
+button[name="attachment"]:hover {
     background-color: #5a6268;
+}
+
+button[name="accept"] {
+    background-color: #2ecf2e;
+    margin-left: 20px;
+    width: 100px;
+
+}
+
+button[name="accept"]:hover {
+    background-color: #288828;
+}
+
+.oneline {
+    display: flex;
+    align-items: center;
+}
+
+.file-list {
+    margin-top: 10px;
+}
+
+.file-list li {
+    margin-bottom: 5px;
 }

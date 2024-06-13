@@ -249,7 +249,9 @@ const FeedDetailTestComponents = () => {
     return (
         <div>
             <FeedDetailComponent data={sampleData} />
-            <Footer />
+            <div>
+                {/* <Footer /> */}
+            </div>
         </div>
     );
 };
