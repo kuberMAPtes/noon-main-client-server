@@ -28,6 +28,7 @@ import BMap from "../pages/map/BMap";
 import PrivateRoute from './PrivateRoute';
 import KakaoNav from '../pages/member/KakaoNav';
 import Search from "../pages/search/Search";
+import MemberSetting from "../pages/setting/MemberSetting";
 // import Test from '../pages/Chat/Test';
 
 const AppRoutes = () => {
@@ -88,6 +89,7 @@ const AppRoutes = () => {
         </Route>
         <Route path="/map" element={<BMap />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/setting/:memberId" element={<MemberSetting />} />
     </Routes>
     )
 };
