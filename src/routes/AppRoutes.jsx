@@ -28,6 +28,20 @@ import BMap from "../pages/map/BMap";
 import PrivateRoute from './PrivateRoute';
 import KakaoNav from '../pages/member/KakaoNav';
 import Search from "../pages/search/Search";
+
+import Building from '../pages/building/Building';
+import GetCustomerSupport from '../pages/CustomerSupport/GetCustomerSupport';
+import GetChatbot from '../pages/CustomerSupport/GetChatbot';
+import ListNotice from '../pages/CustomerSupport/ListNotice';
+import GetNotice from '../pages/CustomerSupport/GetNotice';
+import AddNoticeView from '../pages/CustomerSupport/AddNoticeView';
+import ListReport from '../pages/CustomerSupport/ListReport';
+import GetReport from '../pages/CustomerSupport/GetReport';
+import AddReport from '../pages/CustomerSupport/AddReport';
+import ListImages from '../pages/CustomerSupport/ListImages';
+import GetImage from '../pages/CustomerSupport/GetImage';
+import DeleteBadFeed from '../pages/CustomerSupport/DeleteBadFeed';
+
 import MemberSetting from "../pages/setting/MemberSetting";
 // import Test from '../pages/Chat/Test';
 
@@ -89,6 +103,20 @@ const AppRoutes = () => {
         </Route>
         <Route path="/map" element={<BMap />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/getBuildingProfile" element={<Building />} />
+        <Route path="/customerSupport">
+            <Route path="" element={<GetCustomerSupport />} />
+            <Route path="getChatbot" element={<GetChatbot />} />
+            <Route path="getNoticeList" element={<ListNotice />} />
+            <Route path="getNotice" element={<GetNotice />} />
+            <Route path="addNoticeView" element={<AddNoticeView />} />
+            <Route path="getReportList" element={<ListReport />} />
+            <Route path="getReport" element={<GetReport />} />
+            <Route path="addReport" element={<AddReport />} />
+            <Route path="listImages" element={<ListImages />} />
+            <Route path="getImage" element={<GetImage />} />
+            <Route path="deleteBadFeed" element={<DeleteBadFeed />} />
+        </Route>
         <Route path="/setting/:memberId" element={<MemberSetting />} />
     </Routes>
     )
