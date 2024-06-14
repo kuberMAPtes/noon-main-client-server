@@ -1,10 +1,10 @@
 import { useState } from "react";
 import SearchWindow from "../../components/common/SearchWindow";
-import SearchModeTab, { modes } from "../../components/search/SearchModeTab";
-import FeedSearchResult from "../../components/search/FeedSearchResult";
-import BuildingSearchResult from "../../components/search/BuildingSearchResult";
-import ChatroomSearchResult from "../../components/search/ChatroomSearchResult";
-import MemberSearchResult from "../../components/search/MemberSearchResult";
+import SearchModeTab, { modes } from "./component/SearchModeTab";
+import FeedSearchResult from "./component/FeedSearchResult";
+import BuildingSearchResult from "./component/BuildingSearchResult";
+import ChatroomSearchResult from "./component/ChatroomSearchResult";
+import MemberSearchResult from "./component/MemberSearchResult";
 
 export default function Search() {
   const [searchKeyword, setSearchKeyword] = useState("");
