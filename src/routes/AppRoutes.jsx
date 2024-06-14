@@ -30,7 +30,26 @@ import KakaoNav from '../pages/member/KakaoNav';
 import Search from "../pages/search/Search";
 import GuestRoute from './GuestRoute';
 import B from '../pages/member/function/B';
+
+import Building from '../pages/Building';
+import GetCustomerSupport from '../pages/CustomerSupport/GetCustomerSupport';
+import GetChatbot from '../pages/CustomerSupport/GetChatbot';
+import ListNotice from '../pages/CustomerSupport/ListNotice';
+import GetNotice from '../pages/CustomerSupport/GetNotice';
+import AddNoticeView from '../pages/CustomerSupport/AddNoticeView';
+import ListReport from '../pages/CustomerSupport/ListReport';
+import GetReport from '../pages/CustomerSupport/GetReport';
+import AddReport from '../pages/CustomerSupport/AddReport';
+import ListImages from '../pages/CustomerSupport/ListImages';
+import GetImage from '../pages/CustomerSupport/GetImage';
+import DeleteBadFeed from '../pages/CustomerSupport/DeleteBadFeed';
+
+import MemberSetting from "../pages/setting/MemberSetting";
 // import Test from '../pages/Chat/Test';
+
+import FeedList from "../pages/feed/FeedList";
+import FeedDetail from "../pages/feed/FeedDetail";
+import FeedForm from "../pages/feed/FeedForm";
 
 const AppRoutes = () => {
   return (
@@ -95,6 +114,26 @@ const AppRoutes = () => {
         </Route>
         <Route path="/map" element={<BMap />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/getBuildingProfile" element={<Building />} />
+        <Route path="/customerSupport">
+            <Route path="" element={<GetCustomerSupport />} />
+            <Route path="getChatbot" element={<GetChatbot />} />
+            <Route path="getNoticeList" element={<ListNotice />} />
+            <Route path="getNotice" element={<GetNotice />} />
+            <Route path="addNoticeView" element={<AddNoticeView />} />
+            <Route path="getReportList" element={<ListReport />} />
+            <Route path="getReport" element={<GetReport />} />
+            <Route path="addReport" element={<AddReport />} />
+            <Route path="listImages" element={<ListImages />} />
+            <Route path="getImage" element={<GetImage />} />
+            <Route path="deleteBadFeed" element={<DeleteBadFeed />} />
+        </Route>
+        <Route path="/setting/:memberId" element={<MemberSetting />} />
+        <Route path="/feed">
+            <Route path="feedList" element={<FeedList />} />
+            <Route path="feedDetail" element={<FeedDetail />} />
+            <Route path="feedForm" element={<FeedForm />} />
+        </Route>
     </Routes>
     )
 };
