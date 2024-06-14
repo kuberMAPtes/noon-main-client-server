@@ -31,7 +31,7 @@ import Search from "../pages/search/Search";
 import GuestRoute from './GuestRoute';
 import B from '../pages/member/function/B';
 
-import Building from '../pages/Building';
+import Building from '../pages/building/Building';
 import GetCustomerSupport from '../pages/CustomerSupport/GetCustomerSupport';
 import GetChatbot from '../pages/CustomerSupport/GetChatbot';
 import ListNotice from '../pages/CustomerSupport/ListNotice';
@@ -61,9 +61,21 @@ const AppRoutes = () => {
                   <GetAuthMain />
                 </GuestRoute>
                 } />
-            <Route path="getSignUpTermAgreement" element={<GetSignUpTermAgreement/>}/>
-            <Route path="addPhoneNumberAuthentification" element={<AddPhoneNumberAuthentification />} />
-            <Route path="addMember" element={<AddMember />} />
+            <Route path="getSignUpTermAgreement" element={
+                <GuestRoute>
+                <GetSignUpTermAgreement/>
+                </GuestRoute>
+                }/>
+            <Route path="addPhoneNumberAuthentification" element={
+                <GuestRoute>
+                <AddPhoneNumberAuthentification />
+                </GuestRoute>
+                } />
+            <Route path="addMember" element={
+                <GuestRoute>
+                <AddMember />
+                </GuestRoute>
+                } />
             <Route path="addMemberResult" element={<AddMemberResult />} />
             <Route path="login" element={<Login/>}/>
             <Route path="kakaoNav" element={<KakaoNav/>}/>
