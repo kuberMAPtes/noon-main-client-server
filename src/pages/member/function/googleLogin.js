@@ -1,69 +1,45 @@
-// authHelpers.js
-import axios from "axios";
-import {
-    GoogleAuthProvider,
-    getRedirectResult,
-    onAuthStateChanged,
-    signInWithRedirect,
-  } from "firebase/auth";
-import Cookies from "js-cookie";
-import axiosInstance from "./axiosInstance";
-  //사용자상태유지리스너
-  export const setupAuthStateListener = (auth, login, logout) => {
-    return onAuthStateChanged(auth, (user) => {
-      if (user) {
-        console.log("User is signed in with Google:", user);
-        login({ loginWay: 'google', user });
-      } else {
-        console.log("User is signed out.");
-        logout();
-      }
-    });
-  };
-  //결과가져오기메서드
-  export const handleRedirectResult = async (auth, dispatch) => {
-    try {
-        //리디렉션 결과 가져오기 메서드 이거로 사용자 정보와 토큰을 가져올 수 있다.
-      const result = await getRedirectResult(auth);
-      if (result) {
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        console.log("Google Access Token:", token);
-  
-        const member = result.member;
-        console.log("User Info:", member);
+import { GoogleAuthProvider, signInWithRedirect, getRedirectResult } from 'firebase/auth';
+import { auth } from '../../../firebase';
+import { setLoginStatus, setMember } from '../../../redux/slices/authSlice';
 
-        //서버에 사용자 정보랑 토큰을 보낸다
-        const response = await axiosInstance.post(`/member/googleLogin`,
-            {
-                authorizeCode: token,
-                memberId:  member.memberId
-            });
-        member = response.data.member;
-        console.log("Google Login Success:", member);
-        Cookies.set('token', token);
-        // dispatch(loginSuccess({token, member}))
+export const handleGoogleLogin = async (dispatch) => {
+  console.log("handleGoogleLogin 함수 시작");
+  const provider = new GoogleAuthProvider();
 
 
-      }
-    } catch (error) {
-      console.error("Error during Google Sign-In Redirect:", error);
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      const credential = GoogleAuthProvider.credentialFromError(error);
-      console.error("Error Code:", errorCode);
-      console.error("Error Message:", errorMessage);
-      console.error("Error Credential:", credential);
-    }
-  };
-  //구글로그인메서드
-  export const handleRedirectGoogleLogin = (auth) => {
-    const provider = new GoogleAuthProvider();
-    provider.addScope("https://www.googleapis.com/auth/contacts.readonly");
-    provider.setCustomParameters({
-      login_hint: "user@example.com",
-    });
+  console.log("GoogleAuthProvider 생성 완료");
+
+  try {
+    dispatch(setLoginStatus('loading'));
+    await signInWithRedirect(auth, provider);
+  } catch (error) {
+    dispatch(setLoginStatus('failed'));
+  }
+
+  console.log("signInWithRedirect 호출 완료");
+};
+
+export const checkRedirectResult = async (dispatch) => {
+  console.log("checkRedirectResult 함수 시작");
+  const result = await getRedirectResult(auth);
+  console.log("getRedirectResult 호출 완료:", result);
+
+  if (result) {
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    console.log("credential 생성 완료:", credential);
+    const token = credential.accessToken;
+    console.log("accessToken:", token);
+    const user = result.user;
+    console.log("user 정보:", user);
+    //여기서 바인딩 엄청나게 해야함 member에는. 그리고 스토어에 저장 거기에다가 axios googleLogin요청도 보냄.
+    console.log('------------------------------------');
+
+    console.log('------------------------------------');
+    dispatch(setMember({ token, user }));
+    dispatch(setLoginStatus('succeeded'));
+    return { token, user };
+  }
   
-    signInWithRedirect(auth, provider);
-  };
-  
+  console.log("result가 null입니다.");
+  return null;
+};

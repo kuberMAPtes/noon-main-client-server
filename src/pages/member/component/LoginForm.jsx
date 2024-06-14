@@ -6,7 +6,7 @@ import { login } from "../../../redux/slices/authSlice";
 const LoginForm = ({ onSubmit }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const auth = useSelector((state) => state.auth);
+  const storeMemberId = useSelector((state) => state.auth.member.memberId);
   const [memberId, setMemberId] = useState("");
   const [pwd, setPassword] = useState("");
 
@@ -14,24 +14,24 @@ const LoginForm = ({ onSubmit }) => {
     event.preventDefault();
     const loginData = { memberId, pwd };
     try {
-      console.log("로그인 하기전 store.auth :: ", auth); // store에 저장된 상태를 로그에 출력
-      const { member, authorization } = await dispatch(login(loginData)).unwrap();
+      console.log("로그인 하기전 store.auth.member :: ", memberId); // store에 저장된 상태를 로그에 출력
+      const { member } = await dispatch(login(loginData)).unwrap();
       console.log("멤버 :: ", member);
-      console.log("로그인 한 후 store.auth :: ", auth);
+      console.log("로그인 한 후 store.auth.member :: ", member);
     } catch (error) {
       console.error("Failed to login:", error);
     }
   };
 
   useEffect(() => {
-    console.log("store.auth :: ", auth); // store에 저장된 상태를 로그에 출력
-    if (auth?.authorization && auth?.member?.memberId) {
-      const toId = auth.member.memberId;
+    console.log("store.auth.member.memberId :: ", storeMemberId); // store에 저장된 상태를 로그에 출력
+    if (storeMemberId) {//truthy할때만 실행
+      const toId = storeMemberId;
       console.log("toId: ", toId);
       const navigateUri = `/member/getMemberProfile/${toId}`;
       navigate(navigateUri); // 로그인 성공 시 GetMemberProfile로 이동
     }
-  }, [auth, navigate]);
+  }, [storeMemberId, navigate]);
 
   return (
     <form onSubmit={handleSubmit}>

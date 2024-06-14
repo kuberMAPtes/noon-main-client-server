@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import GetAuthMain from '../pages/member/GetAuthMain';
 import GetSignUpTermAgreement from '../pages/member/GetSignUpTermAgreement';
 import AddPhoneNumberAuthentification from '../pages/member/AddPhoneNumberAuthentification';
@@ -28,13 +28,20 @@ import BMap from "../pages/map/BMap";
 import PrivateRoute from './PrivateRoute';
 import KakaoNav from '../pages/member/KakaoNav';
 import Search from "../pages/search/Search";
+import GuestRoute from './GuestRoute';
+import B from '../pages/member/function/B';
 // import Test from '../pages/Chat/Test';
 
 const AppRoutes = () => {
   return (
     <Routes>
+        <Route path="/b" element={<B/>}></Route>
         <Route path="/member">
-            <Route path="getAuthMain" element={<GetAuthMain />} />
+            <Route path="getAuthMain" element={
+                <GuestRoute>
+                  <GetAuthMain />
+                </GuestRoute>
+                } />
             <Route path="getSignUpTermAgreement" element={<GetSignUpTermAgreement/>}/>
             <Route path="addPhoneNumberAuthentification" element={<AddPhoneNumberAuthentification />} />
             <Route path="addMember" element={<AddMember />} />
@@ -61,7 +68,7 @@ const AppRoutes = () => {
                 <UpdateMember />
               </PrivateRoute>
             } />
-            <Route path="getMemberProfile/:toId" element={
+            <Route path="getMemberProfile/:encryptedToId/:IV" element={
               <PrivateRoute>
                 <GetMemberProfile />
               </PrivateRoute>
