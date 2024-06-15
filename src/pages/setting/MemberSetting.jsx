@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import ButtonGroup from "../../components/setting/ButtonGroup";
+import ButtonGroup from "./component/ButtonGroup";
 import { useParams } from "react-router-dom";
 
 const PUBLIC_RANGES = [

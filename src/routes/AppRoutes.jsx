@@ -29,7 +29,7 @@ import PrivateRoute from './PrivateRoute';
 import KakaoNav from '../pages/member/KakaoNav';
 import Search from "../pages/search/Search";
 
-import Building from '../pages/building/Building';
+import Building from '../pages/building/Building2';
 import GetCustomerSupport from '../pages/CustomerSupport/GetCustomerSupport';
 import GetChatbot from '../pages/CustomerSupport/GetChatbot';
 import ListNotice from '../pages/CustomerSupport/ListNotice';

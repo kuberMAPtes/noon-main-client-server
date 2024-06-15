@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import $ from "jquery";
 import SearchWindow from "../../components/common/SearchWindow";
-import FetchTypeToggle from "../../components/map/FetchTypeToggle";
+import FetchTypeToggle from "./component/FetchTypeToggle";
 
 const naver = window.naver;
 
