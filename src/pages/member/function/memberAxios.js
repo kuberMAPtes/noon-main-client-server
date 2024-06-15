@@ -23,7 +23,11 @@ export const confirmAuthentificationNumber = async (phoneNumber, authentificatio
         // const response = await axiosInstance.get(`/member/confirmAuthentificationNumber`, {
         //     params: { phoneNumber, authentificationNumber },
         // });
-        const response = { data : {info:true} };
+        // const response = { data : {info:true} };
+        if(authentificationNumber === "1234"){
+            return {info:true};
+        }
+        const response = {data : {info:false}};
         console.log('confirmAuthentificationNumber 응답:', response.data);
         
         return response.data;

@@ -1,29 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import styles from '../../assets/css/module/member/AddPhoneNumberAuthentification.module.css';
-import { sendAuthentificationNumber } from './function/memberAxios';
-import { validatePhoneNumber } from './function/memberValidator';
 import { checkAuthNumber, formatTime,handleAuthNumberChange, handleNavigate, handlePhoneNumberChange, handleSendClick } from './function/AddPhoneNumberAuthentificationUtil';
 import { useNavigate } from 'react-router-dom';
 
 const AddPhoneNumberAuthentification = () => {
     const [phoneNumber, setPhoneNumber] = useState('');//휴대폰번호
-    const [phoneNumberError, setPhoneNumberError] = useState('');//번호 형식 검사
-    const [resendDisabled, setResendDisabled] = useState(false);//전송 버튼 활성화 여부
+    const [phoneNumberValidationMessage, setPhoneNumberValidationMessage] = useState('');//번호 형식 검사 : 통과하면 "" 통과하지 못하면 메세지
     const [authNumber, setAuthNumber] = useState('');//인증번호
     const [certificationRequested, setCertificationRequested] = useState(false); // 인증번호 전송 여부 초기화만 false 그 이후 true
     const [timeLeft, setTimeLeft] = useState(0); // 타이머 3분 = 180초
     const [isPhoneNumberValid, setIsPhoneNumberValid] = useState(false);//번호 유효성 검사
     const [failCount, setFailCount] = useState(0); /// 인증번호 확인 실패 횟수
     const [isRunning, setIsRunning] = useState(false);// 타이머가 동작중인지 여부
-    const [isVerified, setIsVerified] = useState("pending"); // 인증 상태 pending,success,fail
+    const [verifiedState, setIsVerified] = useState("pending"); // 인증 상태 pending,success,fail
     
     const navigate = useNavigate();
 
     useEffect(() => {
         if (timeLeft === 0) return; // 타이머가 0이 되면 감소X
         if (!isRunning) return; // 타이머가 동작중이 아니면 감소X
-
+        if (verifiedState === `success`) return; // 인증 성공시 감소X
         const intervalId = setInterval(() => {
         setTimeLeft(timeLeft - 1);
         }, 1000); // 1초마다 타이머를 1씩 감소시킴
@@ -38,11 +35,10 @@ const AddPhoneNumberAuthentification = () => {
     },[authNumber])
 
     useEffect(()=> {
-        if(isVerified === "success"){
+        if(verifiedState === "success"){
             console.log("본인인증 성공");
-            setResendDisabled(true);
         }
-    }, [isVerified]);
+    }, [verifiedState]);
 
     return (
         <Container className="mt-5">
@@ -61,32 +57,33 @@ const AddPhoneNumberAuthentification = () => {
                             handlePhoneNumberChange(
                             e,
                             setPhoneNumber,
-                            setPhoneNumberError,
+                            setPhoneNumberValidationMessage,
                             setIsPhoneNumberValid
                             )
                         }
                         className={styles.inputUnderline}
                         maxLength={13} // 하이픈 포함 최대 13자
+                        disabled={verifiedState === "success"}
                         />
                         <Button
                         variant="outline-secondary"
                         onClick={() =>
                             handleSendClick(
                             phoneNumber,
-                            setPhoneNumberError,
+                            setPhoneNumberValidationMessage,
                             setCertificationRequested,
                             setTimeLeft,
                             setIsRunning
                             )
                         }
-                        disabled={!isPhoneNumberValid}
+                        disabled={!isPhoneNumberValid || verifiedState === "success"}
                         >
                         {certificationRequested ? '재전송' : '전송'}
                         </Button>
                     </div>
-                    {phoneNumberError && (
+                    {phoneNumberValidationMessage && (
                         <Form.Text className="text-danger">
-                        {phoneNumberError}
+                        {phoneNumberValidationMessage}
                         </Form.Text>
                     )}
                     </Form.Group>
@@ -101,6 +98,7 @@ const AddPhoneNumberAuthentification = () => {
                             onChange={(e) => handleAuthNumberChange(e, setAuthNumber)}
                             className={styles.inputUnderline}
                             maxLength={4}
+                            disabled={verifiedState === "success"}
                         />
                         {timeLeft !== 0 ? (
                             <span className="text-muted">{formatTime(timeLeft)}</span>
@@ -109,23 +107,21 @@ const AddPhoneNumberAuthentification = () => {
                         )}
                         </div>
                     )}
-                    <Form.Text className="text-muted">
-                        인증번호가 맞지 않습니다.
-                    </Form.Text>
                     </Form.Group>
                 </Form>
-                {isVerified === "success" && (
+                {verifiedState === "success" && (
                     <div>
-                    <h2>본인인증 완료</h2>
-                    <Button variant="primary" onClick={()=>handleNavigate(navigate)}>
+                    <h5>본인인증 완료</h5>
+                    <Button variant="primary" onClick={()=>handleNavigate(verifiedState,navigate)}>
                         회원가입
                     </Button>
                     </div>
                 )}
-                {isVerified === "fail" && (
+                {verifiedState === "fail" && (
                     <div>
-                    <h2>본인인증 실패</h2>
-                    <h2>실패 횟수 {failCount}</h2>
+                    <h6>본인인증 실패</h6>
+                    <h5>실패 횟수 {failCount}</h5>
+                    <span>20회 이상 실패 할 시 재전송을 하셔야합니다.</span>
                     </div>
                 )}
                 </Col>
