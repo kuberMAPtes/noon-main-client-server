@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
 import axiosInstance from "../../lib/axiosInstance";
-import setTokenCookie from "../../pages/member/function/memberFunc";
+import {setTokenCookie} from "../../pages/member/function/memberFunc";
 import { getCookie } from "../../util/cookies";
 
 // 비동기 로그인 액션 정의
@@ -16,41 +16,36 @@ export const login = createAsyncThunk(
       const { dispatch } = thunkAPI;
       let authorization, returnMember;
       
-      if (loginData.loginWay === "kakao") {
+      if (loginData?.loginWay === "kakao") {
         // 카카오 로그인 처리
         console.log("카카오 로그인 처리중 :: loginData:", loginData);
         const response = await axiosInstance.post(`/member/getMember`, loginData?.member);
-        if (!response || !response.data || !response.data.info)
-          throw new Error("Invalid response from server 반드시 값을 받아야하는데 값을 받지 못헀습니다.");
-        returnMember = response.data.info;
-        console.log("로그인처리중 response.data:", response.data);
-        console.log("로그인처리중 response.data.info:", response.data.info);
+        returnMember = response?.data?.info;
+        console.log("로그인처리중 response.data:", response?.data);
+        console.log("로그인처리중 response.data.info:", response?.data?.info);
         console.log("member :: ", returnMember);
         authorization = true;
 
-      } else if (loginData.loginWay === "google") {
+      } else if (loginData?.loginWay === "google") {
         // 구글 로그인 처리
         const response = await axiosInstance.post(
           `/member/googleLogin`,
           loginData
         );
-        console.log("login response:", response.data);
+        console.log("login response:", response?.data);
         dispatch(setAuthorization(true));
-        dispatch(setMember(response.data.member));
+        dispatch(setMember(response?.data?.member));
         // setTokenCookie(response.data.member);
-        if (!response || !response.data)
-          throw new Error("Invalid response from server");
-        returnMember = response.data.info;
-        console.log("login response:", response.data);
+        returnMember = response?.data?.info;
+        console.log("login response:", response?.data);
         authorization = true;
       } else {
         // 일반 로그인 처리
+        loginData.loginWay = "normal";
         const response = await axiosInstance.post(`/member/login`, loginData);
-        if (!response || !response.data)
-          throw new Error("Invalid response from server");
-        returnMember = response.data.info;
-        console.log("로그인처리중 response.data:", response.data);
-        console.log("로그인처리중 response.data.info:", response.data.info);
+        returnMember = response?.data?.info;
+        console.log("로그인처리중 response.data:", response?.data);
+        console.log("로그인처리중 response.data.info:", response?.data?.info);
         console.log("member :: ", returnMember);
         authorization = true;
       }
@@ -66,6 +61,12 @@ export const login = createAsyncThunk(
       const member = returnMember;
       return { member, authorization };
     } catch (error) {
+        console.log(error);
+        console.log(error.response)
+        console.log(error.message)
+        if(error.message=="Network Error"){
+            error.message="서버와의 통신이 원활하지 않습니다. 네트워크 에러입니다.";
+        }
       return thunkAPI.rejectWithValue(
         error.response ? error.response.data : error.message
       );
@@ -75,8 +76,8 @@ export const login = createAsyncThunk(
 
 export const logout = createAsyncThunk("auth/logout", async (dispatch) => {
   try {
-    //   await axiosInstance.post('/member/logout');
-    Cookies.remove("AuthToken");
+      Cookies.remove("AuthToken");
+      //   await axiosInstance.post('/member/logout');
   } catch (error) {
     console.error("Logout failed", error);
   }
@@ -142,14 +143,14 @@ const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
           console.log("State.member", action.payload.member);
-          state.authorization = action.payload.authorization;
+          state.authorization = true;
           console.log("State.authorization", action.payload.authorization);
           state.loginStatus = "succeeded";
           state.member = action.payload.member;
       })
       .addCase(login.rejected, (state, action) => {
         state.loginStatus = "failed";
-        state.loginError = action.payload;
+        state.loginError = action.payload;//에러메세지 저장
       })
       .addCase(logout.pending, (state) => {
         state.loginStatus = "loading";

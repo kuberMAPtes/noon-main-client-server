@@ -50,11 +50,13 @@ import MemberSetting from "../pages/setting/MemberSetting";
 import FeedList from "../pages/feed/FeedList";
 import FeedDetail from "../pages/feed/FeedDetail";
 import FeedForm from "../pages/feed/FeedForm";
+import TestComponent from '../pages/member/component/TestComponent';
 
 const AppRoutes = () => {
   return (
     <Routes>
         <Route path="/b" element={<B/>}></Route>
+        <Route path="/testComponent" element={<TestComponent/>}></Route>
         <Route path="/member">
             <Route path="getAuthMain" element={
                 <GuestRoute>

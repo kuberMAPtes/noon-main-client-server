@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { Container, Row, Col, Card, Spinner, Alert, Button } from 'react-bootstrap';
 import LogoutForm from "./component/LogoutForm";
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
-
 import { getMemberProfile } from "./function/memberAxios";
 import { useSelector } from "react-redux";
 import { decryptWithIv } from "../../util/crypto";
@@ -13,7 +13,6 @@ const GetMemberProfile = () => {
   const authorization = useSelector((state) => state.auth.authorization);
   const fromId = useSelector((state) => state.auth.member.memberId);
   const { encryptedToId, IV } = useParams();
-
 
   const [toId, setToId] = useState(null);
   const [profile, setProfile] = useState(null);
@@ -32,7 +31,6 @@ const GetMemberProfile = () => {
   };
 
   useEffect(() => {
-    
     console.log("URL Parameters - encryptedToId:", encryptedToId, "IV:", IV);
     if (encryptedToId && IV) {
       const decryptedToId = decryptToId(encryptedToId, IV);
@@ -63,67 +61,60 @@ const GetMemberProfile = () => {
   }, [authorization, toId, fromId]);
 
   return (
-    <div>
-        <LogoutForm />
-      <h1>Member Profile</h1>
+    <Container className="mt-5">
+      <LogoutForm />
+      <h1 className="text-center">Member Profile</h1>
       {loading ? (
-        <p>Loading profile...</p>
+        <Row className="justify-content-center">
+          <Spinner animation="border" />
+        </Row>
       ) : error ? (
-        <p>{error}</p>
+        <Alert variant="danger">{error}</Alert>
       ) : profile ? (
-        <div>
-          <p>Member ID: {profile.memberId}</p>
-          <p>Name: {profile.nickname}</p>
-          <p>DajungScore: {profile.dajungScore}</p>
-          <p>Profile photo URL: {profile.profilePhotoUrl}</p>
-          <p>Profile intro: {profile.profileIntro}</p>
-
-          <p>
-            feedDtoList:
-            {profile.feedDtoList &&
-              profile.feedDtoList.map((feed) => (
-                <div key={feed.feedId}>
-                  피드제목<h2>{feed.title}</h2>
-                  빌딩이름{feed.buildingName}
-                  <p>피드내용{feed.feedText}</p>
-                  <p>작성자: {feed.writerNickname}</p>
-                  <p>작성 시간: {feed.writtenTime}</p>
-                  {feed.feedAttachementURL && (
-                    <img src={feed.feedAttachementURL} alt="첨부 이미지" />
-                  )}
-                </div>
-              ))}
-          </p>
-          {/* 여기에 더 많은 프로필 정보를 추가할 수 있습니다 */}
-        </div>
+        <Card>
+          <Card.Body>
+            <Card.Title>{profile.nickname}</Card.Title>
+            <Card.Subtitle className="mb-2 text-muted">Member ID: {profile.memberId}</Card.Subtitle>
+            <Card.Text>
+              <p>DajungScore: {profile.dajungScore}</p>
+              <p>Profile intro: {profile.profileIntro}</p>
+              {profile.profilePhotoUrl && <img src={profile.profilePhotoUrl} alt="Profile" className="img-fluid mb-2" />}
+            </Card.Text>
+            <div>
+              <h2>feedDtoList:</h2>
+              {profile.feedDtoList &&
+                profile.feedDtoList.map((feed) => (
+                  <Card key={feed.feedId} className="mb-3">
+                    <Card.Body>
+                      <Card.Title>{feed.title}</Card.Title>
+                      <Card.Subtitle className="mb-2 text-muted">빌딩이름: {feed.buildingName}</Card.Subtitle>
+                      <Card.Text>
+                        <p>피드내용: {feed.feedText}</p>
+                        <p>작성자: {feed.writerNickname}</p>
+                        <p>작성 시간: {feed.writtenTime}</p>
+                        {feed.feedAttachementURL && <img src={feed.feedAttachementURL} alt="첨부 이미지" className="img-fluid" />}
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
+                ))}
+            </div>
+          </Card.Body>
+        </Card>
       ) : (
-        <p>No profile data available.</p>
+        <Alert variant="warning">No profile data available.</Alert>
       )}
-      <div>
-        <a
-          href="https://www.facebook.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+      <div className="text-center mt-4">
+        <Button variant="link" href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
           <FaFacebook size={30} />
-        </a>
-        <a
-          href="https://www.twitter.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        </Button>
+        <Button variant="link" href="https://www.twitter.com" target="_blank" rel="noopener noreferrer">
           <FaTwitter size={30} />
-        </a>
-        <a
-          href="https://www.instagram.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
+        </Button>
+        <Button variant="link" href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
           <FaInstagram size={30} />
-        </a>
+        </Button>
       </div>
-      
-    </div>
+    </Container>
   );
 };
 

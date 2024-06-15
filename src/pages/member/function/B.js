@@ -34,7 +34,7 @@ const B = () => {
 ////////////////////////////////////////////////////////////////////////////
 const A = () => {
     const a = decryptWithIv("8IJUIOQeTJF8VIvZ+l7mYg==","dyj8n7eNe4QSotOSIMki7w==")//데이터 IV 키
-    console.log("디코딩 결과"+a);
+    console.log("A렌더링 디코딩 결과"+a);
 
     const b = "wschoi809@naver.com";
     console.log("인코딩전",b);
@@ -42,10 +42,6 @@ const A = () => {
     console.log("인코딩후"+encryptedData, ivData);
     const d = decryptWithIv(encryptedData,ivData);
     console.log("디코딩후",d);
-
-
-
-  
   useEffect(() => {
     console.log('A component useEffect');
   });
