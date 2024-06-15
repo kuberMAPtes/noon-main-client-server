@@ -2,10 +2,12 @@ import Footer from "../../components/common/Footer";
 import FeedFormComponent from "./component/FeedFormComponent"
 import { useState } from 'react';
 import "./css/FeedForm.css";
+import SlideUpModal from "./component/SlideUpModal";
 
 const FeedForm = () => {
     const [feeds, setFeeds] = useState([]);
     const [selectedFeed, setSelectedFeed] = useState(null);
+    const [showModal, setShowModal] = useState(false);
 
     const handleSave = (feed) => {
         if (selectedFeed) {
@@ -22,9 +24,24 @@ const FeedForm = () => {
         setSelectedFeed(feed);
     };
 
+    const openModal = () => {
+        setShowModal(true);
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+        setSelectedFeed(null); // 모달 닫을 때 선택된 피드 초기화
+    };
+
     return (
         <div className="container">
             <h1>피드 작성</h1>
+
+            <button onClick={openModal}>특별한 게시판</button>
+            <SlideUpModal show={showModal} handleClose={closeModal}>
+                테스트 확인 {/*버튼 추가*/}
+            </SlideUpModal>
+
             <FeedFormComponent existingFeed={selectedFeed} onSave={handleSave} />
             <div className="feed-list">
                 {feeds.map(feed => (
