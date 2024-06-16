@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { decryptWithIv } from '../../util/crypto';
 import Cookies from 'js-cookie';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
@@ -7,14 +7,36 @@ import {
     handleNicknameChange,
     handleMemberIdChange,
     handlePasswordChange,
-    handleAddressChange,
     handleSubmit,
-    checkNicknameAvailability,
-    checkMemberIdAvailability
+    redirectToPostcode,
+    detailedAddressChangeHandler
 } from '../member/function/AddMemberUtil';
+import styles from '../../assets/css/module/member/AddMember.module.css';
 
 const AddMember = () => {
+    
+    // 각 필드의 상태와 유효성 메시지, 유효성 플래그 관리
+    const [nickname, setNickname] = useState('');
+    const [memberId, setMemberId] = useState('');
+    const [password, setPassword] = useState('');
+    const [address, setAddress] = useState('');
+    
+    const [nicknameValidationMessage, setNicknameValidationMessage] = useState('');
+    const [memberIdValidationMessage, setMemberIdValidationMessage] = useState('');
+    const [passwordValidationMessage, setPasswordValidationMessage] = useState('');
+    
+    const [isNicknameValid, setIsNicknameValid] = useState(false);
+    const [isMemberIdValid, setIsMemberIdValid] = useState(false);
+    const [isPasswordValid, setIsPasswordValid] = useState(false);
+    
+    const [zonecode, setZonecode] = useState('');
+    const [detailedAddress, setDetailedAddress] = useState('');
+    
+    const fullAddress = address + ' ' + detailedAddress;
+    const form = { nickname, memberId, password, fullAddress };
+    
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
         // 쿠키에서 인증 정보를 읽고, 본인인증을 완료했는지 확인
@@ -34,43 +56,21 @@ const AddMember = () => {
         }
     }, [navigate]);
 
-    // 각 필드의 상태와 유효성 메시지, 유효성 플래그 관리
-    const [nickname, setNickname] = useState('');
-    const [memberId, setMemberId] = useState('');
-    const [password, setPassword] = useState('');
-    const [address, setAddress] = useState('');
+    useEffect(() => {
+        if (location.state && location.state.zonecode && location.state.address){
+        setZonecode(location.state.zonecode);
+        setAddress(location.state.address);
+      }
+    }, [location.state]);
 
-    const [nicknameValidationMessage, setNicknameValidationMessage] = useState('');
-    const [memberIdValidationMessage, setMemberIdValidationMessage] = useState('');
-    const [passwordValidationMessage, setPasswordValidationMessage] = useState('');
-    const [addressValidationMessage, setAddressValidationMessage] = useState('');
 
-    const [isNicknameValid, setIsNicknameValid] = useState(false);
-    const [isMemberIdValid, setIsMemberIdValid] = useState(false);
-    const [isPasswordValid, setIsPasswordValid] = useState(false);
-    const [isAddressValid, setIsAddressValid] = useState(false);
-
-    const form = { nickname, memberId, password, address };
-
-    const checkNickname = useCallback(
-        async (nickname) => {
-            await checkNicknameAvailability(nickname, setNicknameValidationMessage, setIsNicknameValid);
-        },
-        [setNicknameValidationMessage, setIsNicknameValid]
-    );
-
-    const checkMemberId = useCallback(
-        async (memberId) => {
-            await checkMemberIdAvailability(memberId, setMemberIdValidationMessage, setIsMemberIdValid);
-        },
-        [setMemberIdValidationMessage, setIsMemberIdValid]
-    );
 
     return (
         <Container className="mt-5">
             <Row className="justify-content-center">
                 <Col xs={12} md={8} lg={6}>
                     <h1 className="mb-4 text-center">회원가입</h1>
+                    
                     <Form onSubmit={handleSubmit(form, navigate)}>
                         <Form.Group controlId="formNickname" className="mb-3">
                             <Form.Label>닉네임</Form.Label>
@@ -78,17 +78,20 @@ const AddMember = () => {
                                 type="text" 
                                 placeholder="닉네임을 입력하세요" 
                                 name="nickname" 
-                                value={nickname} 
-                                onChange={handleNicknameChange(setNickname, setNicknameValidationMessage, setIsNicknameValid, checkNickname)} 
+                                value={nickname}
+                                maxLength={20} 
+                                onChange={(e)=>handleNicknameChange(e,setNickname, setNicknameValidationMessage, setIsNicknameValid)} 
                                 required 
                                 isInvalid={!!nicknameValidationMessage}
                             />
+                            <Form.Text className="text-danger">
                             {nicknameValidationMessage && (
-                                <Form.Text className="text-danger">
-                                    {nicknameValidationMessage}
-                                </Form.Text>
+                                nicknameValidationMessage  
                             )}
+                            </Form.Text>
+
                         </Form.Group>
+
 
                         <Form.Group controlId="formMemberId" className="mb-3">
                             <Form.Label>계정</Form.Label>
@@ -97,7 +100,8 @@ const AddMember = () => {
                                 placeholder="계정을 입력하세요" 
                                 name="memberId" 
                                 value={memberId} 
-                                onChange={handleMemberIdChange(setMemberId, setMemberIdValidationMessage, setIsMemberIdValid, checkMemberId)} 
+                                maxLength={24}
+                                onChange={(e)=>handleMemberIdChange(e,setMemberId, setMemberIdValidationMessage, setIsMemberIdValid)} 
                                 required 
                                 isInvalid={!!memberIdValidationMessage}
                             />
@@ -114,8 +118,9 @@ const AddMember = () => {
                                 type="password" 
                                 placeholder="비밀번호를 입력하세요" 
                                 name="password" 
+                                maxLength={16}
                                 value={password} 
-                                onChange={handlePasswordChange(setPassword, setPasswordValidationMessage, setIsPasswordValid)} 
+                                onChange={(e)=>handlePasswordChange(e,setPassword, setPasswordValidationMessage, setIsPasswordValid)} 
                                 required 
                                 isInvalid={!!passwordValidationMessage}
                             />
@@ -128,23 +133,36 @@ const AddMember = () => {
 
                         <Form.Group controlId="formAddress" className="mb-3">
                             <Form.Label>주소</Form.Label>
-                            <Form.Control 
-                                type="text" 
-                                placeholder="주소를 입력하세요" 
-                                name="address" 
-                                value={address} 
-                                onChange={handleAddressChange(setAddress, setAddressValidationMessage, setIsAddressValid)} 
-                                required 
-                                isInvalid={!!addressValidationMessage}
-                            />
-                            {addressValidationMessage && (
-                                <Form.Text className="text-danger">
-                                    {addressValidationMessage}
-                                </Form.Text>
-                            )}
+                            <div className={styles.addressGroup}>
+                                <Form.Control 
+                                    type="text" 
+                                    placeholder="주소를 입력하세요" 
+                                    name="address" 
+                                    value={address} 
+                                    required
+                                    readOnly
+                                    className={styles.addressInput}
+                                />
+                                <Form.Control
+                                 className={styles.zonecodeText}
+                                 disabled
+                                 value={zonecode}
+                                />
+                            </div>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="상세주소를 입력하세요"
+                                    value={detailedAddress}
+                                    onChange={(e)=>detailedAddressChangeHandler(e,setDetailedAddress)}
+                                />
+
+                                <Button type="button" onClick={()=>redirectToPostcode(navigate,location)}>
+                                    주소 찾기
+                                </Button>
+                            
                         </Form.Group>
 
-                        <Button variant="primary" type="submit" className="w-100">
+                        <Button variant="primary" type="submit" className="w-100" disabled={!isNicknameValid || !isMemberIdValid || !isPasswordValid}>
                             회원가입
                         </Button>
                     </Form>

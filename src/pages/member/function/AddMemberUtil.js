@@ -1,84 +1,72 @@
+import { checkMemberId, checkNickname, checkPassword } from './memberAxios';
 import { validateNickname, validateMemberId, validatePassword } from './memberValidator';
-import { checkNickname, checkMemberId } from './memberAxios';
 import Cookies from 'js-cookie';
+export const handleNicknameChange = async (
+    e
+    ,setNickname
+    , setNicknameValidationMessage
+    , setIsNicknameValid)=>{
+        //닉네임이 변할때마다 검사를 해야지
+        const input = e.target.value;
+        setNickname(input);
+            if(validateNickname(input)){
+                const response = await checkNickname(input);
 
-// 닉네임 변경 핸들러
-export const handleNicknameChange = (setNickname, setNicknameValidationMessage, setIsNicknameValid, checkNicknameAvailability) => async (e) => {
-    const value = e.target.value;
-    setNickname(value);
-    const validationMessage = validateNickname(value);
-    setNicknameValidationMessage(validationMessage);
-    setIsNicknameValid(!validationMessage);
+                if(response.info===true){
+                    console.log("성공 response",response);
+                    setNicknameValidationMessage("");
+                    setIsNicknameValid(true);
+                }else{
+                    console.log("실패 resonse",response);
+                    setNicknameValidationMessage(response.message);
+                    setIsNicknameValid(false);
+                }
 
-    if (!validationMessage && value.length >= 2) {
-        await checkNicknameAvailability(value);
-    }
-};
-
-// 계정(ID) 변경 핸들러
-export const handleMemberIdChange = (setMemberId, setMemberIdValidationMessage, setIsMemberIdValid, checkMemberIdAvailability) => async (e) => {
-    const value = e.target.value;
-    setMemberId(value);
-    const validationMessage = validateMemberId(value);
-    setMemberIdValidationMessage(validationMessage);
-    setIsMemberIdValid(!validationMessage);
-
-    if (!validationMessage && value.length >= 6) {
-        await checkMemberIdAvailability(value);
-    }
-};
-
-// 비밀번호 변경 핸들러
-export const handlePasswordChange = (setPassword, setPasswordValidationMessage, setIsPasswordValid) => (e) => {
-    const value = e.target.value;
-    setPassword(value);
-    const validationMessage = validatePassword(value);
-    setPasswordValidationMessage(validationMessage);
-    setIsPasswordValid(!validationMessage);
-};
-
-// 주소 변경 핸들러
-export const handleAddressChange = (setAddress, setAddressValidationMessage, setIsAddressValid) => (e) => {
-    const value = e.target.value;
-    setAddress(value);
-    const validationMessage = value.trim() !== '' ? '' : '주소를 입력하세요.';
-    setAddressValidationMessage(validationMessage);
-    setIsAddressValid(!validationMessage);
-};
-
-// 서버로 닉네임 중복 체크 요청
-export const checkNicknameAvailability = async (nickname, setNicknameValidationMessage, setIsNicknameValid) => {
-    try {
-        const response = await checkNickname(nickname);
-        if (response.exists) {
-            setNicknameValidationMessage('이미 존재하는 닉네임입니다.');
+            }else{
+            setNicknameValidationMessage("닉네임 : 자음과 모음이 반드시 결합, 2~20자");
             setIsNicknameValid(false);
-        } else {
-            setNicknameValidationMessage('');
-            setIsNicknameValid(true);
         }
-    } catch (error) {
-        console.error('닉네임 중복 체크 에러:', error);
-    }
-};
+}
 
-// 서버로 계정(ID) 중복 체크 요청
-export const checkMemberIdAvailability = async (memberId, setMemberIdValidationMessage, setIsMemberIdValid) => {
-    try {
-        const response = await checkMemberId(memberId);
-        if (response.exists) {
-            setMemberIdValidationMessage('이미 존재하는 계정(ID)입니다.');
+export const handleMemberIdChange = async (
+    e
+    ,setMemberId
+    , setMemberIdValidationMessage
+    , setIsMemberIdValid)=>{
+        const input = e.target.value;
+        setMemberId(input);
+            if(validateMemberId(input)){
+                const response = await checkMemberId(input);
+                if(response.info===true){
+                    setMemberIdValidationMessage("");
+                    setIsMemberIdValid(true);
+                }else{
+                    setMemberIdValidationMessage(response.message);
+                    setIsMemberIdValid(false);
+                }
+
+            }else{
+            setMemberIdValidationMessage("계정ID : 영어와 숫자가 반드시 결합, 6~24자, 첫 글자가 영어로 시작");
             setIsMemberIdValid(false);
-        } else {
-            setMemberIdValidationMessage('');
-            setIsMemberIdValid(true);
         }
-    } catch (error) {
-        console.error('계정(ID) 중복 체크 에러:', error);
-    }
-};
+}
+ 
 
-// 폼 제출 핸들러
+export const handlePasswordChange = async (
+    e
+    ,setPassword
+    , setPasswordValidationMessage
+    , setIsPasswordValid)=>{
+        const input = e.target.value;
+        setPassword(input);
+        if(validatePassword(input)){
+            setPasswordValidationMessage("");
+            setIsPasswordValid(true);
+        }else{
+            setPasswordValidationMessage("비밀번호는 8자 이상 16자 이하로 입력하세요.");
+            setIsPasswordValid(false);
+        }
+    }
 export const handleSubmit = (form, navigate) => (e) => {
     e.preventDefault();
     const { nickname, memberId, password, address } = form;
@@ -95,20 +83,15 @@ export const handleSubmit = (form, navigate) => (e) => {
         alert('회원가입이 완료되었습니다.');
         Cookies.remove('addMemberKey'); // 쿠키 삭제
         Cookies.remove('addMemberOtherKey'); // 쿠키 삭제
-        navigate('/');
+        navigate('/addMemberResult');
     }
-    //  else {
-    //     setValidationMessages({
-    //         nickname: nicknameValidationMessage,
-    //         memberId: memberIdValidationMessage,
-    //         password: passwordValidationMessage,
-    //         address: addressValidationMessage
-    //     });
-    //     setIsValid({
-    //         nickname: !nicknameValidationMessage,
-    //         memberId: !memberIdValidationMessage,
-    //         password: !passwordValidationMessage,
-    //         address: !addressValidationMessage
-    //     });
-    // }
+};
+    
+export const detailedAddressChangeHandler = (e,setDetailedAddress) => {
+    setDetailedAddress(e.target.value);
+  };
+
+export const redirectToPostcode = (navigate,location) => {
+    //postcode컴포넌트의 location.state에 previousPage를 담음
+    navigate('/member/postcode', { state: { previousPage: location.pathname } });
 };

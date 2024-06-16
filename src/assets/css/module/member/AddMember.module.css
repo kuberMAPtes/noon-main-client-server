@@ -1,0 +1,14 @@
+.addressGroup {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* 자식 요소 사이에 여유 공간을 분배합니다. */
+}
+
+.addressInput {
+    flex-grow: 1; /* 입력 필드가 가능한 공간을 모두 차지하도록 합니다. */
+    margin-right: 10px; /* 입력 필드와 zonecode 텍스트 사이에 간격을 추가합니다. */
+}
+
+.zonecodeText {
+    white-space: nowrap; /* zonecode 텍스트가 줄바꿈되지 않도록 합니다. */
+}

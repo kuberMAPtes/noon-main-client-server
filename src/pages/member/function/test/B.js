@@ -1,6 +1,5 @@
 import React, { useState,useEffect } from 'react';
 import { encryptWithLv, decryptWithIv } from '../../../../util/crypto';
-import DaumPostcode from 'react-daum-postcode';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 
