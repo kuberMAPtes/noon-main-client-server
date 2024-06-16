@@ -3,10 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { login, setMember } from '../../redux/slices/authSlice';
 import LoginForm from './component/LoginForm';
 import styles from '../../assets/css/module/member/GetAuthMain.module.css';
-import { Container, Button, Row, Col, Spinner, Alert } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import { handleKakaoLogin } from './function/kakaoLogin';
 import { handleGoogleLogin, checkRedirectResult } from './function/googleLogin';
-import SignUpButton from './component/SignUpButton';
 import { useNavigate } from 'react-router-dom';
 import LoginButtons from './component/LoginButtons';
 
@@ -48,14 +47,18 @@ const GetAuthMain = () => {
   }, [dispatch]);
 
   return (
-    <Container className="mt-5">
+    <Container className={`mt-5 ${styles.container}`}>
       <h1 className="text-center">회원가입 / 로그인</h1>
       <Row className="justify-content-center">
-        <Col md={6} className="text-center">
-        <LoginButtons onLoginClick={handleLoginClick} />
+        <Col md={8} lg={6} className="text-center">
+          <LoginButtons onLoginClick={handleLoginClick} />
         </Col>
       </Row>
-      {showLoginForm && <LoginForm onSubmit={handleLoginSubmit} />}
+      <Row className="justify-content-center mt-3">
+        <Col md={8} lg={6}>
+          {showLoginForm && <LoginForm onSubmit={handleLoginSubmit} />}
+        </Col>
+      </Row>
     </Container>
   );
 };

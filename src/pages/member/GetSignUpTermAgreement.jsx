@@ -4,7 +4,7 @@ import { Container, Row, Col, Form, Button, Card } from 'react-bootstrap';
 import { useSwipeable } from 'react-swipeable';
 import { termsOfService, privacyPolicy, agePolicy, locationPolicy } from './function/terms'; // 약관 내용 파일 가져오기
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
-
+import styles from '../../assets/css/module/member/GetSignUpTermAgreement.module.css';
 const GetSignUpTermAgreement = () => {
   const [agreed, setAgreed] = useState(false);
   const [currentCard, setCurrentCard] = useState(0);//현재 페이지
@@ -43,7 +43,7 @@ const GetSignUpTermAgreement = () => {
   });
 
   return (
-    <Container className="mt-3" {...handlers}>
+    <Container className={styles['fullscreen-container']} {...handlers}>
       <Row className="justify-content-center">
         <Col md={8}>
           <Card>

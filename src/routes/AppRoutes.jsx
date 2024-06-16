@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import GetAuthMain from '../pages/member/GetAuthMain';
 import GetSignUpTermAgreement from '../pages/member/GetSignUpTermAgreement';
 import AddPhoneNumberAuthentification from '../pages/member/AddPhoneNumberAuthentification';
@@ -29,7 +29,7 @@ import PrivateRoute from './PrivateRoute';
 import KakaoNav from '../pages/member/KakaoNav';
 import Search from "../pages/search/Search";
 import GuestRoute from './GuestRoute';
-import B from '../pages/member/function/B';
+import B from '../pages/member/function/test/B';
 
 import Building from '../pages/building/Building';
 import GetCustomerSupport from '../pages/CustomerSupport/GetCustomerSupport';
@@ -50,11 +50,23 @@ import MemberSetting from "../pages/setting/MemberSetting";
 import FeedList from "../pages/feed/FeedList";
 import FeedDetail from "../pages/feed/FeedDetail";
 import FeedForm from "../pages/feed/FeedForm";
-import TestComponent from '../pages/member/component/TestComponent';
-
+import TestComponent from '../pages/member/component/test/TestComponent';
+import PostcodePage from '../pages/member/component/PostcodePage';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import '../assets/css/animation.css'
+import LoginForm from '../pages/member/component/LoginForm';
 const AppRoutes = () => {
+
+    const location = useLocation();
+
   return (
-    <Routes>
+    <TransitionGroup>
+    <CSSTransition
+      key={location.key}
+      timeout={300}
+      classNames="slide"
+    >
+    <Routes location={location}>
         <Route path="/b" element={<B/>}></Route>
         <Route path="/testComponent" element={<TestComponent/>}></Route>
         <Route path="/member">
@@ -78,9 +90,12 @@ const AppRoutes = () => {
                 <AddMember />
                 </GuestRoute>
                 } />
+            <Route path="postcode" element={<PostcodePage/>}/>
             <Route path="addMemberResult" element={<AddMemberResult />} />
             <Route path="login" element={<Login/>}/>
+            <Route path="loginForm" element={<LoginForm/>}/>
             <Route path="kakaoNav" element={<KakaoNav/>}/>
+            
             <Route path="updatePassword" element={
               <PrivateRoute>
                 <UpdatePassword />
@@ -149,6 +164,8 @@ const AppRoutes = () => {
             <Route path="feedForm" element={<FeedForm />} />
         </Route>
     </Routes>
+    </CSSTransition>
+    </TransitionGroup>
     )
 };
 
