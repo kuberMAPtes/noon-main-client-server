@@ -51,10 +51,11 @@ import FeedList from "../pages/feed/FeedList";
 import FeedDetail from "../pages/feed/FeedDetail";
 import FeedForm from "../pages/feed/FeedForm";
 import TestComponent from '../pages/member/component/test/TestComponent';
-import PostcodePage from '../pages/member/component/PostcodePage';
+import Postcode from '../pages/member/component/Postcode';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import '../assets/css/animation.css'
 import LoginForm from '../pages/member/component/LoginForm';
+import AuthLoader from '../components/common/AuthLoader'
 const AppRoutes = () => {
 
     const location = useLocation();
@@ -66,6 +67,7 @@ const AppRoutes = () => {
       timeout={300}
       classNames="slide"
     >
+        <AuthLoader>
     <Routes location={location}>
         <Route path="/b" element={<B/>}></Route>
         <Route path="/testComponent" element={<TestComponent/>}></Route>
@@ -90,7 +92,7 @@ const AppRoutes = () => {
                 <AddMember />
                 </GuestRoute>
                 } />
-            <Route path="postcode" element={<PostcodePage/>}/>
+            <Route path="postcode" element={<Postcode/>}/>
             <Route path="addMemberResult" element={<AddMemberResult />} />
             <Route path="login" element={<Login/>}/>
             <Route path="loginForm" element={<LoginForm/>}/>
@@ -164,6 +166,7 @@ const AppRoutes = () => {
             <Route path="feedForm" element={<FeedForm />} />
         </Route>
     </Routes>
+    </AuthLoader>
     </CSSTransition>
     </TransitionGroup>
     )

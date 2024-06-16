@@ -1,34 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { login, setMember } from '../../redux/slices/authSlice';
-import LoginForm from './component/LoginForm';
+import { useNavigate } from 'react-router-dom';
+import { setMember } from '../../redux/slices/authSlice';
 import styles from '../../assets/css/module/member/GetAuthMain.module.css';
 import { Container, Row, Col } from 'react-bootstrap';
-import { handleKakaoLogin } from './function/kakaoLogin';
-import { handleGoogleLogin, checkRedirectResult } from './function/googleLogin';
-import { useNavigate } from 'react-router-dom';
+import { checkRedirectResult } from './function/googleLogin';
 import LoginButtons from './component/LoginButtons';
 
 const GetAuthMain = () => {
   console.log("#### GetAuthMain 컴포넌트 초기화 시작");
 
   const dispatch = useDispatch();
-  const [showLoginForm, setShowLoginForm] = useState(false);
-  const loginStatus = useSelector((state) => state.auth.loginStatus);
-  const loginError = useSelector((state) => state.auth.loginError);
-
   const navigate = useNavigate();
-
-  console.log("초기 상태 - showLoginForm:", showLoginForm);
+  const loginError = useSelector((state) => state.auth.loginError);
 
   const handleLoginClick = () => {
     console.log("$$$$ 일반 로그인 버튼 클릭");
-    setShowLoginForm(true);
-  };
-
-  const handleLoginSubmit = (loginData) => {
-    console.log("$$$$ 일반 로그인 폼 제출 - loginData:", loginData);
-    dispatch(login(loginData));
+    navigate('/member/loginForm');
   };
 
   useEffect(() => {
@@ -52,11 +40,6 @@ const GetAuthMain = () => {
       <Row className="justify-content-center">
         <Col md={8} lg={6} className="text-center">
           <LoginButtons onLoginClick={handleLoginClick} />
-        </Col>
-      </Row>
-      <Row className="justify-content-center mt-3">
-        <Col md={8} lg={6}>
-          {showLoginForm && <LoginForm onSubmit={handleLoginSubmit} />}
         </Col>
       </Row>
     </Container>

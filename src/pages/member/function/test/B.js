@@ -8,12 +8,13 @@ const C = (props) => {
     const [zonecode, setZonecode] = useState('');
     const [address, setAddress] = useState('');
     const [detailedAddress, setDetailedAddress] = useState('');
+
   
     const navigate = useNavigate();
     const location = useLocation();
   
     useEffect(() => {
-      if (location.state) {
+        if (location.state && location.state.zonecode && location.state.address){
         setZonecode(location.state.zonecode);
         setAddress(location.state.address);
       }
@@ -24,8 +25,9 @@ const C = (props) => {
     };
   
     const redirectToPostcode = () => {
-      navigate('/member/postcode');
-    };
+        //postcode컴포넌트의 location.state에 previousPage를 담음
+        navigate('/member/postcode', { state: { previousPage: location.pathname } });
+      };
   
     return (
       <div>

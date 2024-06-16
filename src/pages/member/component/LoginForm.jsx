@@ -4,10 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { login } from "../../../redux/slices/authSlice";
 import { validateLoginForm } from "../function/memberValidator";
 import { renderLoginError } from "../function/memberFunc";
-import { Form, Button, Container, Row, Col, Alert, Spinner } from 'react-bootstrap';
+import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
 import SignUpButton from "./SignUpButton";
+import styles from '../../../assets/css/module/member/LoginForm.module.css';
 
-const LoginForm = ({ onSubmit }) => {
+const LoginForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const storeMemberId = useSelector((state) => state.auth.member.memberId);
@@ -17,7 +18,7 @@ const LoginForm = ({ onSubmit }) => {
   const [pwd, setPassword] = useState("");
   const [validationError, setValidationError] = useState("");
 
-  const handleSubmit = async (event) => {
+  const handleLoginSubmit = async (event) => {
     event.preventDefault();
     setValidationError("");
     const loginData = { memberId, pwd, loginWay: "normal" };
@@ -49,11 +50,11 @@ const LoginForm = ({ onSubmit }) => {
   }, [storeMemberId, navigate]);
 
   return (
-    <Container className="mt-5">
+    <Container className={`mt-5 ${styles.container}`}>
       <Row className="justify-content-center">
-        <Col md={6}>
+        <Col xs={12} sm={10} md={8} lg={6}>
           <h2 className="text-center">로그인</h2>
-          <Form onSubmit={handleSubmit}>
+          <Form onSubmit={handleLoginSubmit}>
             <Form.Group controlId="memberId">
               <Form.Label>Member ID</Form.Label>
               <Form.Control
@@ -61,6 +62,7 @@ const LoginForm = ({ onSubmit }) => {
                 value={memberId}
                 onChange={(e) => setMemberId(e.target.value)}
                 required
+                className={styles.formControl}
               />
             </Form.Group>
             <Form.Group controlId="password">
@@ -70,9 +72,10 @@ const LoginForm = ({ onSubmit }) => {
                 value={pwd}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                className={styles.formControl}
               />
             </Form.Group>
-            <Button variant="primary" type="submit" className="mt-3">
+            <Button variant="primary" type="submit" className={`mt-3 w-100 ${styles.btn}`}>
               로그인
             </Button>
             {validationError && (
