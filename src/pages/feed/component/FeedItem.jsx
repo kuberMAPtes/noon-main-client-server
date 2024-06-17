@@ -1,6 +1,8 @@
 import React from 'react';
 import '../css/FeedItem.css';
 
+import {Card, CardBody, CardImg, CardText, CardTitle} from 'reactstrap';
+
 const FeedItem = ({ data }) => {
     const {
         feedId,
@@ -15,22 +17,40 @@ const FeedItem = ({ data }) => {
     // 데이터 처리
     const writtenTimeReplace = data.writtenTime.replace('T', ' ');
 
+    // 상세보기 페이지로 이동
+    const handleCardClick = () => {
+        navigator('/feed/detail?feedId=' + feedId)
+    }
+
     return (
-        <div className="card">
-            <div className="card-body">
-                <h2 className="card-title">{title}</h2>
-                <h6 className="card-subtitle text-muted">
-                    {writerNickname} | {writtenTimeReplace} | {buildingName}
-                </h6>
-                <p className="card-text">{feedText}</p>
-            </div>
-            <div className="card-footer">
-                <img
+        <div>
+            <Card>
+                <CardBody>
+                    <CardTitle tag="h2" onClick={handleCardClick}>
+                            {title}
+                    </CardTitle>
+                    <CardText>{feedText}</CardText>
+                    <CardText>
+                        <small className="text-muted">
+                             {writtenTimeReplace}
+                        </small>
+                    </CardText>
+                    <CardText>
+                        <small className="text-muted">
+                            {writerNickname} | {buildingName}
+                        </small>
+                    </CardText>
+                </CardBody>
+                <CardImg
+                    alt={feedId}
+                    bottom
                     src={feedAttachmentURL}
-                    alt={`Attachment ${feedAttachmentURL}`}
-                    className="attachment-img"
+                    style={{
+                        height: 300
+                    }}
+                    width="100%"
                 />
-            </div>
+            </Card>
         </div>
     );
 };
