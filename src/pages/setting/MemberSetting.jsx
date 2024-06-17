@@ -3,6 +3,7 @@ import ButtonGroup from "./component/ButtonGroup";
 import { useParams } from "react-router-dom";
 import axios_api from "../../lib/axios_api";
 import { MAIN_API_URL } from "../../util/constants";
+import { is2xxStatus } from "../../util/statusCodeUtil";
 
 const PUBLIC_RANGES = [
   {
@@ -96,7 +97,20 @@ export default function MemberSetting() {
           </div>
         ))
       }
-      <button type="button" onClick={() => console.log("업데이트 API 호출")}>변경사항 저장</button>
+      <button type="button" onClick={() => {
+        axios_api.post(`${MAIN_API_URL}/setting/updateSetting/${memberId}`, {
+          memberProfilePublicRange,
+          allFeedPublicRange,
+          buildingSubscriptionPublicRange,
+          receivingAllNotification
+        }).then((response) => {
+          if (is2xxStatus(response.status)) {
+            alert("환경설정이 적용되었습니다");
+          }
+        }).catch((err) => {
+          console.error(err);
+        })
+      }}>변경사항 저장</button>
       <button type="button" onClick={() => {
         setOpInfoMode("termsAndPolicy");
         setOpInfoModalVisible(true);
