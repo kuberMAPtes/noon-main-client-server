@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import $ from "jquery";
 import SearchWindow from "../../components/common/SearchWindow";
 import FetchTypeToggle from "./component/FetchTypeToggle";
+import axios_api from "../../lib/axios_api";
+import { MAIN_API_URL } from "../../util/constants";
+import { is2xxStatus } from "../../util/statusCodeUtil";
 
 const naver = window.naver;
 
@@ -35,8 +38,19 @@ export default function BMap() {
     }
   }, []);
 
-  function onFetchPlace() {
-
+  /**
+   * @param {{
+   *   placeName: string;
+   *   roadAddress: string;
+   *   latitude: number;
+   *   longitude: number;
+   * }[]} places 
+   */
+  function onFetchPlace(places) {
+    places.forEach((place) => {
+      console.log(place);
+      addPlaceSearchMarker(place);
+    })
   }
   
   return (
@@ -54,11 +68,18 @@ export default function BMap() {
 /**
  * 
  * @param {string} searchKeyword 
- * @param {() => void} callback 
+ * @param {(places: any) => void} callback 
  */
 function searchPlaceList(searchKeyword, callback) {
-  // TODO: API 요청
-  console.log(searchKeyword);
+  axios_api.get(`${MAIN_API_URL}/places/search`, {
+    params: {
+      placeName: searchKeyword
+    }
+  }).then((response) => {
+    if (is2xxStatus(response.status)) {
+      callback(response.data)
+    }
+  })
 }
 
 /**
@@ -130,7 +151,31 @@ function addBuildingMarker(marker) {
   </div>
   `
 
-  addMarker(contentHtmlText);
+  addMarker(contentHtmlText, marker.latitude, marker.longitude);
+}
+
+/**
+ * @param {{
+*   latitude: number;
+*   longitude: number;
+*   roadAddress: string;
+*   placeName: string;
+* }} marker
+*/
+function addPlaceSearchMarker(marker) {
+  const contentHtmlText = `
+  <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; height: fit-content; margin: 0px; padding: 0px">
+    <div style="text-align: center;">
+      <p>${marker.placeName}</p>
+      <p>${marker.roadAddress}</p>
+    </div>
+    <div style="display: flex; justify-content: center; align-items: center; ">
+      <img src="./image/marker.png" style="width: 40px; height: 50px; margin: 0px; padding: 0px" />
+    </div>
+  </div>
+  `
+
+  addMarker(contentHtmlText, marker.latitude, marker.longitude);
 }
 
 /**
