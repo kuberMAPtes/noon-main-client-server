@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import ButtonGroup from "./component/ButtonGroup";
 import { useParams } from "react-router-dom";
+import axios_api from "../../lib/axios_api";
+import { MAIN_API_URL } from "../../util/constants";
 
 const PUBLIC_RANGES = [
   {
@@ -32,8 +34,13 @@ export default function MemberSetting() {
   const memberId = useParams().memberId;
 
   useEffect(() => {
-    fetchSettingInfo(memberId, () => console.log("Api 호출")); // TODO
-  }, []);
+    fetchSettingInfo(memberId, (setting) => {
+      setMemberProfilePublicRange(setting.memberProfilePublicRange);
+      setAllFeedPublicRange(setting.allFeedPublicRange);
+      setBuildingSubscriptionPublicRange(setting.buildingSubscriptionPublicRange);
+      setReceivingAllNotification(setting.receivingAllNotificationAllowed);
+    });
+  }, [memberId]);
 
   const COMPONENT_INFOS = [
     {
@@ -115,7 +122,9 @@ export default function MemberSetting() {
  * }) => void} callback
  */
 function fetchSettingInfo(memberId, callback) {
-
+  axios_api.get(`${MAIN_API_URL}/setting/getSetting/${memberId}`).then((response) => {
+    callback(response.data);
+  })
 }
 
 const operationInfoText = {
