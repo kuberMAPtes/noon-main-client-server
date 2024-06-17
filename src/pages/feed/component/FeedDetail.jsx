@@ -46,6 +46,7 @@ const FeedDetail = ({ data }) => {
                     <CardSubtitle>
                         {writerNickname} | {writtenTimeReplace} | {buildingName}
                     </CardSubtitle>
+                    <CardText>{feedText}</CardText>
                     <div className="tags">
                         {tags.map((tag) => (
                             <Badge key={tag.tagId} color="primary">
@@ -53,7 +54,6 @@ const FeedDetail = ({ data }) => {
                             </Badge>
                         ))}
                     </div>
-                    <CardText>{feedText}</CardText>
                 </CardBody>
             </Card>
 

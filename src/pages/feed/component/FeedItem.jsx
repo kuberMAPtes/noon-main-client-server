@@ -2,6 +2,7 @@ import React from 'react';
 import '../css/FeedItem.css';
 
 import {Card, CardBody, CardImg, CardText, CardTitle} from 'reactstrap';
+import { useNavigate } from 'react-router-dom';
 
 const FeedItem = ({ data }) => {
     const {
@@ -18,8 +19,9 @@ const FeedItem = ({ data }) => {
     const writtenTimeReplace = data.writtenTime.replace('T', ' ');
 
     // 상세보기 페이지로 이동
+    const navigate = useNavigate();
     const handleCardClick = () => {
-        navigator('/feed/detail?feedId=' + feedId)
+        navigate('/feed/detail?feedId=' + feedId)
     }
 
     return (
