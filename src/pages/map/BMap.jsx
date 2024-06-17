@@ -12,8 +12,26 @@ let map;
 
 let intervalId;
 
+let memberMarker;
+
 export default function BMap() {
   const [placeSearchKeyword, setPlaceSearchKeyword] = useState("");
+  const [currentPosition, setCurrentPosition] = useState(undefined);
+
+  /**
+   * 
+   * @param {GeolocationCoordinates} coords 
+   */
+  function onCurrentPositionAwared(coords) {
+    setCurrentPosition({
+      latitude: coords.latitude,
+      longitude: coords.longitude
+    });
+  }
+
+  function onFailedFetchingPosition() {
+    console.error("Geolocation API not supported");
+  }
 
   useEffect(() => {
     const mapElement = document.getElementById("map");
@@ -26,17 +44,29 @@ export default function BMap() {
       fetchBuildingInfo(latitude, longitude);
     });
 
-    getCurrentPosition();
+    getCurrentPosition(onCurrentPositionAwared, onFailedFetchingPosition);
     if (!intervalId) {
       intervalId = window.setInterval(() => {
-        console.log()
-        getCurrentPosition();
+        getCurrentPosition(onCurrentPositionAwared, onFailedFetchingPosition);
       }, 1000);
     }
     return () => {
       clearInterval(intervalId);
     }
   }, []);
+
+  useEffect(() => {
+    if (currentPosition) { 
+      if (!memberMarker) {
+        memberMarker = new naver.maps.Marker({
+          position: new naver.maps.LatLng(currentPosition.latitude, currentPosition.longitude),
+          map: map
+        })
+      } else {
+        memberMarker.setPosition(new naver.maps.LatLng(currentPosition.latitude, currentPosition.longitude));
+      }
+    }
+  }, [currentPosition]);
 
   /**
    * @param {{
@@ -48,7 +78,6 @@ export default function BMap() {
    */
   function onFetchPlace(places) {
     places.forEach((place) => {
-      console.log(place);
       addPlaceSearchMarker(place);
     })
   }
@@ -83,18 +112,16 @@ function searchPlaceList(searchKeyword, callback) {
 }
 
 /**
- * @param {(position: GeolocationPosition) => void} callback 
+ * @param {(position: GeolocationCoordinates) => void} callback 
  * @param {() => void} errorCallback 
  */
-function getCurrentPosition() {
+function getCurrentPosition(callback, errorCallback) {
   navigator.geolocation.getCurrentPosition( // Geolocation은 HTTPS일 때 구동한다.
     (position) => {
-      // TODO: 회원 마커 찍기
-      console.log(position);
+      callback(position.coords);
     },
     () => {
-      // 에러 핸들링
-      console.log("Geolocation API를 사용할 수 없습니다.");
+      errorCallback();
     }
   );
 }
@@ -104,9 +131,16 @@ function getCurrentPosition() {
  * @param {number} longitude 
  */
 function fetchBuildingInfo(latitude, longitude) {
-  // TODO: API 요청
-  console.log(`latitude=${latitude}`);
-  console.log(`longitude=${longitude}`);
+  axios_api.get(`${MAIN_API_URL}/places/search`, {
+    params: {
+      latitude,
+      longitude
+    }
+  }).then((response) => {
+    console.log(response);
+  }).catch((err) => {
+    console.error(err);
+  })
 }
 
 /**
@@ -191,7 +225,7 @@ function addMarker(html, latitude, longitude) {
   const contentHtml = $(".temp").html();
   $(document).find(".temp").remove();
 
-  new naver.maps.Marker({
+  const a = new naver.maps.Marker({
     position: new naver.maps.LatLng(latitude, longitude),
     map: map,
     icon: {
@@ -199,6 +233,7 @@ function addMarker(html, latitude, longitude) {
         size: new naver.maps.Size(width, height)
     }
   });
+  console.log(a);
 }
 
 function getPositionRange() {
