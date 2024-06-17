@@ -90,6 +90,9 @@ export default function BMap() {
       />
       <FetchTypeToggle />
       <div id="map" style={{width: "400px", height: "400px", cursor: "none"}}></div>
+      <button type="button" onClick={() => currentPosition && map && map.setCenter(new naver.maps.LatLng(currentPosition.latitude, currentPosition.longitude))}>
+        현재 위치 보기
+      </button>
     </>
   )
 }
