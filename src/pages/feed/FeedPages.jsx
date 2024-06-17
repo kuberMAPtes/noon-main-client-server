@@ -1,9 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import BasicNavbar from '../../components/common/BasicNavbar';
+import Footer from "../../components/common/Footer";
 
 const FeedPages = () => {
   return (
     <div className="content">
+      <BasicNavbar />
       <nav>
         <ul>
           <li>
@@ -17,6 +20,9 @@ const FeedPages = () => {
           </li>
         </ul>
       </nav>
+      <div>
+        <Footer />
+      </div>
     </div>
   );
 };

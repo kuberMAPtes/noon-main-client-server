@@ -46,6 +46,7 @@ const FeedDetailPage = () => {
 
     return (
         <div>
+            <BasicNavbar />
             <FeedDetail data={feed} />
             <div>
                 {/* <Footer /> */}

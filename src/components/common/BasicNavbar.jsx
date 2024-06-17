@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { IoNotifications, IoSettingsSharp  } from "react-icons/io5";
+import "../../assets/css/BasicNavbar.css";
+import "../../assets/css/font.css";
 
 import {
   Collapse,
@@ -6,8 +9,6 @@ import {
   NavbarToggler,
   NavbarBrand,
   Nav,
-  NavItem,
-  NavLink,
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
@@ -22,32 +23,27 @@ function BasicNavbar(args) {
 
   return (
     <div>
-      <Navbar color="dark" dark="true" full="false" expand="sm" container="fluid">
+      <Navbar color="primary" light="true" full="false" expand="sm" container="fluid" className='font'>
         <NavbarBrand href="/">Noon</NavbarBrand>
         <NavbarToggler onClick={toggle}/>
         <Collapse isOpen={isOpen} navbar>
           <Nav className="me-auto" navbar>
-            <NavItem>
-              <NavLink href="/">Components</NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink href="https://github.com/WinterHana">
-                GitHub
-              </NavLink>
-            </NavItem>
             <UncontrolledDropdown nav inNavbar>
               <DropdownToggle nav caret>
-                Options
+                (회원 이름)
               </DropdownToggle>
               <DropdownMenu right>
-                <DropdownItem>집에 가기</DropdownItem>
-                <DropdownItem>잠자기</DropdownItem>
+                <DropdownItem>Option1</DropdownItem>
+                <DropdownItem>Option2</DropdownItem>
                 <DropdownItem divider />
-                <DropdownItem>퇴근하기</DropdownItem>
+                <DropdownItem>Option3</DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
           </Nav>
-          <NavbarText>여기에 뭐 적음?</NavbarText>
+          <NavbarText className='navbar-icons'>
+            <IoNotifications size="32"/>
+            <IoSettingsSharp size="32"/>
+          </NavbarText>
         </Collapse>
       </Navbar>
     </div>
