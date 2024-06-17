@@ -1,10 +1,18 @@
+import { encryptWithLv } from "./crypto";
 
-export const navigateMainPage = (encryptedToId,IV,navigate) => {
+export const navigateMainPage = (memberId,navigate) => {
+    
+    const {encryptedData,ivData} = encryptWithLv(memberId);
+    const secretId = encodeURIComponent(encryptedData);
+    const secretIv = encodeURIComponent(ivData);
     const mainPageUri = process.env.REACT_APP_MAIN_PAGE_URI
-    console.log("mainPageUri :: ",mainPageUri);
-    console.log("mainPageUri :: encryptedToId :: ",encryptedToId);
-    console.log("mainPageUri :: IV :: ",IV);
+    console.log("네비게이트하기전 확인 :: uri인코딩,암호화된멤버아이디"
+        , secretId
+        ,"uri인코딩,암호화된Iv"
+        ,secretIv
+        ,"메인페이지URI"
+        ,mainPageUri);
 
-    const navigateUri = `${mainPageUri}/${encryptedToId}/${IV}`;
+    const navigateUri = `${mainPageUri}/${secretId}/${secretIv}`;
     navigate(navigateUri);
 }

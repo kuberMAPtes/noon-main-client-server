@@ -3,63 +3,67 @@ import Cookies from "js-cookie";
 import axiosInstance from "../../lib/axiosInstance";
 import {setTokenCookie} from "../../pages/member/function/memberFunc";
 import { getCookie } from "../../util/cookies";
+import { navigateMainPage } from "../../util/mainPageUri";
+import { getMember, googleLogin,Login } from "../../pages/member/function/memberAxios";
 
 // 비동기 로그인 액션 정의
 export const login = createAsyncThunk(
   "auth/login",
-  //일반로그인시 loginData :: {memberId: "test", pwd: "test"}
-  //구글로그인시 loginData :: {loginWay:"google", memberId: "test", nickname: "test" 등등..}
-  //카카오로그인시 loginData :: {loginWay:"kakao", memberId: "test"}
-  async (loginData, thunkAPI) => {
+  //일반로그인시 loginData :: {member : {memberId :  fullForm.memberId, pwd: fullForm.pwd}}
+  //구글로그인시 loginData :: {loginWay:"google", member : {memberId :  fullForm.memberId} , nickname: "test" 등등..}
+  //카카오로그인시 loginData :: {loginWay:"kakao", member : {memberId :  fullForm.memberId} }
+  async ({loginData,navigate}, thunkAPI) => {
     try {
       console.log("$$$login 함수 실행");
       const { dispatch } = thunkAPI;
-      let authorization, returnMember;
+      let returnMember;
       
       if (loginData?.loginWay === "kakao") {
         // 카카오 로그인 처리
+        //카카오 로그인 로직 시 아이디가 없다면 서버에서 회원가입을 해놓았음.
         console.log("카카오 로그인 처리중 :: loginData:", loginData);
-        const response = await axiosInstance.post(`/member/getMember`, loginData?.member);
-        returnMember = response?.data?.info;
-        console.log("로그인처리중 response.data:", response?.data);
-        console.log("로그인처리중 response.data.info:", response?.data?.info);
-        console.log("member :: ", returnMember);
-        authorization = true;
+        // const response = await axiosInstance.post(`/member/getMember`, loginData?.member);
+        const info = await getMember(loginData?.member);
+        console.log("카카오 로그인 처리중 response:", info);
+        returnMember = info;
 
       } else if (loginData?.loginWay === "google") {
         // 구글 로그인 처리
-        const response = await axiosInstance.post(
-          `/member/googleLogin`,
-          loginData
-        );
-        console.log("login response:", response?.data);
-        dispatch(setAuthorization(true));
-        dispatch(setMember(response?.data?.member));
-        // setTokenCookie(response.data.member);
-        returnMember = response?.data?.info;
-        console.log("login response:", response?.data);
-        authorization = true;
+        // 여기서 회원가입도 같이 함. 
+        console.log("구글 로그인 처리중 :: loginData:", loginData);
+        const info = await googleLogin(loginData?.member);//여기 member에는 authorizeCode도 있음
+        
+        console.log("구글 로그인 처리중 response:", info);
+        returnMember = info;
       } else {
         // 일반 로그인 처리
-        loginData.loginWay = "normal";
-        const response = await axiosInstance.post(`/member/login`, loginData);
-        returnMember = response?.data?.info;
-        console.log("로그인처리중 response.data:", response?.data);
-        console.log("로그인처리중 response.data.info:", response?.data?.info);
-        console.log("member :: ", returnMember);
-        authorization = true;
+        // 일반 로그인은 회원가입은 같이 하지 않는다.
+        const info = await Login(loginData?.member);
+        console.log("로그인처리중 response:", info);
+        returnMember = info;
       }
       //authorization은 true, false,null 값을 가짐
-      Cookies.remove("Member-ID");//로그인 성공했으면 쿠키 삭제 카카오로그인시 사용
-      Cookies.remove("IV");//로그인 성공했으면 쿠키 삭제 카카오로그인시 사용
+      if(returnMember?.memberId){
+        loginData.member = returnMember
+        dispatch(setAuthorization(true));
+        dispatch(setMember(returnMember));
+
+
+        Cookies.remove("Member-ID");//로그인 성공했으면 쿠키 삭제 카카오로그인시 사용
+        Cookies.remove("IV");//로그인 성공했으면 쿠키 삭제 카카오로그인시 사용
+
+        const result = { member: returnMember, authorization: true };
+        setTokenCookie(returnMember);
+        if(!(loginData?.loginWay==="signUp")){
+            navigateMainPage(returnMember?.memberId,navigate);
+        }
+        return result;
+        }
       console.log("56번째줄authSlice member"+returnMember);
-      setTokenCookie(returnMember);
       console.log(getCookie("AuthToken"));
-      dispatch(setAuthorization(authorization));
-      dispatch(setMember(returnMember));
+      return { member : null, authorization : false};
     //   dispatch(setAuthorizationAndMember(authorization));
-      const member = returnMember;
-      return { member, authorization };
+    //   return { member, authorization };
     } catch (error) {
         console.log(error);
         console.log(error.response)
@@ -115,10 +119,6 @@ const authSlice = createSlice({
     },
     setMember: (state, action) => {
       state.member = action.payload;
-    },
-    setAuthorizationAndMember : (state,action) => {
-        state.authorization = action.payload.authorization;
-        state.member = action.payload.member;
     }
     ,restoreAuthState: (state, action) => {
       state.authorization = action.payload.authorization;

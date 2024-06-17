@@ -35,7 +35,7 @@ export const checkRedirectResult = async (dispatch) => {
     console.log('------------------------------------');
 
     console.log('------------------------------------');
-    dispatch(setMember({ token, user }));
+    // dispatch(setMember({ token, user }));
     dispatch(setLoginStatus('succeeded'));
     return { token, user };
   }

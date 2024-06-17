@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import React, { useEffect, useRef, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation, useNavigationType } from "react-router-dom";
 import GetAuthMain from '../pages/member/GetAuthMain';
 import GetSignUpTermAgreement from '../pages/member/GetSignUpTermAgreement';
 import AddPhoneNumberAuthentification from '../pages/member/AddPhoneNumberAuthentification';
@@ -57,119 +57,170 @@ import '../assets/css/animation.css'
 import LoginForm from '../pages/member/component/LoginForm';
 import AuthLoader from '../components/common/AuthLoader'
 const AppRoutes = () => {
-
+    
     const location = useLocation();
+    const navigationType = useNavigationType();
+    const prevLocationRef = useRef(location); // 초기 위치를 저장
+    const [isBack, setIsBack] = useState(false);
+    
+    console.log('!@*#(&$^!@*&#^!*@&^#!#isNotReversing:', isBack);
+
+    useEffect(() => {
+        if (navigationType === 'POP') {
+          console.log('@@@@@@@@@@@@@@@@@@@POPPOPPOPPOPPOPPOP');
+          setIsBack(true);
+        } else{
+          setIsBack(false);
+          console.log('@@@@@@@@@@@@@@@@@@@@@@PUSHPUSHPUSHPUSHPUSHPUSH');
+        }
+        prevLocationRef.current = location; // 현재 위치를 저장하여 다음 렌더링 시 사용할 수 있도록 함
+
+      }, [location, navigationType]);
 
   return (
-    <TransitionGroup>
-    <CSSTransition
-      key={location.key}
-      timeout={300}
-      classNames="slide"
-    >
-        <AuthLoader>
-    <Routes location={location}>
-        <Route path="/b" element={<B/>}></Route>
-        <Route path="/testComponent" element={<TestComponent/>}></Route>
-        <Route path="/member">
-            <Route path="getAuthMain" element={
-                <GuestRoute>
-                  <GetAuthMain />
-                </GuestRoute>
-                } />
-            <Route path="getSignUpTermAgreement" element={
-                <GuestRoute>
-                <GetSignUpTermAgreement/>
-                </GuestRoute>
-                }/>
-            <Route path="addPhoneNumberAuthentification" element={
-                <GuestRoute>
-                <AddPhoneNumberAuthentification />
-                </GuestRoute>
-                } />
-            <Route path="addMember" element={
-                <GuestRoute>
-                <AddMember />
-                </GuestRoute>
-                } />
-            <Route path="postcode" element={<Postcode/>}/>
-            <Route path="addMemberResult" element={<AddMemberResult />} />
-            <Route path="login" element={<Login/>}/>
-            <Route path="loginForm" element={<LoginForm/>}/>
-            <Route path="kakaoNav" element={<KakaoNav/>}/>
+      <TransitionGroup className="transition-wrapper">
+        <CSSTransition
+          key={location.pathname}
+          timeout={300}
+          classNames={isBack ? "reverse-slide" :  "slide"}
+        >
             
-            <Route path="updatePassword" element={
-              <PrivateRoute>
-                <UpdatePassword />
-              </PrivateRoute>
-            } />
-            <Route path="updatePasswordResult" element={
-              <PrivateRoute>
-                <UpdatePasswordResult />
-              </PrivateRoute>
-            } />
-            <Route path="getMember" element={
-              <PrivateRoute>
-                <GetMember />
-              </PrivateRoute>
-            } />
-            <Route path="updateMember" element={
-              <PrivateRoute>
-                <UpdateMember />
-              </PrivateRoute>
-            } />
-            <Route path="getMemberProfile/:encryptedToId/:IV" element={
-              <PrivateRoute>
-                <GetMemberProfile />
-              </PrivateRoute>
-            } />
-            <Route path="getMemberRelationshipList" element={
-              <PrivateRoute>
-                <GetMemberRelationshipList />
-              </PrivateRoute>
-            } />
-        </Route>
-        <Route path="chat">
-            <Route path="chatroomCreation" element={<ChatRoomCreation />} />
-            <Route path="chatroom" element={<Chatroom />} />
-            <Route path="myChatroomList" element={<MyChatroomList />} />
-            <Route path="ChatApplyList" element={<ChatApplyList />} />
-            
-            <Route path="chatAcceptRejectDecide" element={<ChatAcceptRejectDecide/>}/>
-            <Route path="chatApply" element={<ChatApply/>}/>
-            <Route path="chatisAccepted" element={<ChatisAccepted/>}/>
-            <Route path="chatisRejected" element={<ChatisRejected/>}/>
-            <Route path="chatReject" element={<ChatReject/>}/>
-            <Route path="chatRejected" element={<ChatRejected/>}/>
-            {/* <Route path="test" element={<Test/>}/> */}
-        </Route>
-        <Route path="/map" element={<BMap />} />
-        <Route path="/search" element={<Search />} />
-        <Route path="/getBuildingProfile" element={<Building />} />
-        <Route path="/customerSupport">
-            <Route path="" element={<GetCustomerSupport />} />
-            <Route path="getChatbot" element={<GetChatbot />} />
-            <Route path="getNoticeList" element={<ListNotice />} />
-            <Route path="getNotice" element={<GetNotice />} />
-            <Route path="addNoticeView" element={<AddNoticeView />} />
-            <Route path="getReportList" element={<ListReport />} />
-            <Route path="getReport" element={<GetReport />} />
-            <Route path="addReport" element={<AddReport />} />
-            <Route path="listImages" element={<ListImages />} />
-            <Route path="getImage" element={<GetImage />} />
-            <Route path="deleteBadFeed" element={<DeleteBadFeed />} />
-        </Route>
-        <Route path="/setting/:memberId" element={<MemberSetting />} />
-        <Route path="/feed">
-            <Route path="feedList" element={<FeedList />} />
-            <Route path="feedDetail" element={<FeedDetail />} />
-            <Route path="feedForm" element={<FeedForm />} />
-        </Route>
-    </Routes>
-    </AuthLoader>
-    </CSSTransition>
-    </TransitionGroup>
-    )
+          <AuthLoader>
+            <Routes location={location}>
+              <Route path="/b" element={<B />}></Route>
+              <Route path="/testComponent" element={<TestComponent />}></Route>
+              <Route path="/member">
+                <Route
+                  path="getAuthMain"
+                  element={
+                    <GuestRoute>
+                      <GetAuthMain />
+                    </GuestRoute>
+                  }
+                />
+                <Route
+                  path="getSignUpTermAgreement"
+                  element={
+                    <GuestRoute>
+                      <GetSignUpTermAgreement />
+                    </GuestRoute>
+                  }
+                />
+                <Route
+                  path="addPhoneNumberAuthentification"
+                  element={
+                    <GuestRoute>
+                      <AddPhoneNumberAuthentification />
+                    </GuestRoute>
+                  }
+                />
+                <Route
+                  path="addMember"
+                  element={
+                    <GuestRoute>
+                      <AddMember />
+                    </GuestRoute>
+                  }
+                />
+                <Route path="postcode" element={<Postcode />} />
+                <Route path="addMemberResult" element={<AddMemberResult />} />
+                <Route path="login" element={<Login />} />
+                <Route path="loginForm" element={<LoginForm />} />
+                <Route path="kakaoNav" element={<KakaoNav />} />
+
+                <Route
+                  path="updatePassword"
+                  element={
+                    <PrivateRoute>
+                      <UpdatePassword />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="updatePasswordResult"
+                  element={
+                    <PrivateRoute>
+                      <UpdatePasswordResult />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="getMember"
+                  element={
+                    <PrivateRoute>
+                      <GetMember />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="updateMember"
+                  element={
+                    <PrivateRoute>
+                      <UpdateMember />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="getMemberProfile/:secretId/:secretIv"
+                  element={
+                    <PrivateRoute>
+                      <GetMemberProfile />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="getMemberRelationshipList"
+                  element={
+                    <PrivateRoute>
+                      <GetMemberRelationshipList />
+                    </PrivateRoute>
+                  }
+                />
+              </Route>
+              <Route path="chat">
+                <Route path="chatroomCreation" element={<ChatRoomCreation />} />
+                <Route path="chatroom" element={<Chatroom />} />
+                <Route path="myChatroomList" element={<MyChatroomList />} />
+                <Route path="ChatApplyList" element={<ChatApplyList />} />
+
+                <Route
+                  path="chatAcceptRejectDecide"
+                  element={<ChatAcceptRejectDecide />}
+                />
+                <Route path="chatApply" element={<ChatApply />} />
+                <Route path="chatisAccepted" element={<ChatisAccepted />} />
+                <Route path="chatisRejected" element={<ChatisRejected />} />
+                <Route path="chatReject" element={<ChatReject />} />
+                <Route path="chatRejected" element={<ChatRejected />} />
+                {/* <Route path="test" element={<Test/>}/> */}
+              </Route>
+              <Route path="/map" element={<BMap />} />
+              <Route path="/search" element={<Search />} />
+              <Route path="/getBuildingProfile" element={<Building />} />
+              <Route path="/customerSupport">
+                <Route path="" element={<GetCustomerSupport />} />
+                <Route path="getChatbot" element={<GetChatbot />} />
+                <Route path="getNoticeList" element={<ListNotice />} />
+                <Route path="getNotice" element={<GetNotice />} />
+                <Route path="addNoticeView" element={<AddNoticeView />} />
+                <Route path="getReportList" element={<ListReport />} />
+                <Route path="getReport" element={<GetReport />} />
+                <Route path="addReport" element={<AddReport />} />
+                <Route path="listImages" element={<ListImages />} />
+                <Route path="getImage" element={<GetImage />} />
+                <Route path="deleteBadFeed" element={<DeleteBadFeed />} />
+              </Route>
+              <Route path="/setting/:memberId" element={<MemberSetting />} />
+              <Route path="/feed">
+                <Route path="feedList" element={<FeedList />} />
+                <Route path="feedDetail" element={<FeedDetail />} />
+                <Route path="feedForm" element={<FeedForm />} />
+              </Route>
+            </Routes>
+          </AuthLoader>
+        </CSSTransition>
+      </TransitionGroup>
+  );
 };
 
 export default AppRoutes;

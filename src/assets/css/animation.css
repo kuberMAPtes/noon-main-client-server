@@ -1,20 +1,49 @@
 /* styles.css */
+
+.transition-wrapper{
+position: relative;
+width:100vw;
+}
 .slide-enter {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  .slide-enter-active {
-    transform: translateX(0%);
-    opacity: 1;
-    transition: transform 300ms, opacity 300ms;
-  }
-  .slide-exit {
-    transform: translateX(0%);
-    opacity: 1;
-  }
-  .slide-exit-active {
-    transform: translateX(0%);
-    opacity: 0;
-    transition: transform 0s, opacity 0ms;
-  }
-  
+transform: translateX(0%);
+opacity: 0;
+}
+.slide-enter-active {
+transform: translateX(0%);
+opacity: 1;
+transition: transform 300ms, opacity 300ms;
+}
+.slide-exit {
+transform: translateX(0%);
+opacity: 1;
+}
+.slide-exit-active {
+transform: translateX(0%);
+opacity: 0;
+transition: transform 300ms, opacity 0ms;
+}
+
+
+
+
+.reverse-slide-enter {
+transform: translateX(0%);
+opacity: 0;
+}
+
+.reverse-slide-enter-active {
+transform: translateX(0%);
+opacity: 1;
+transition: transform 300ms, opacity 300ms;
+}
+
+.reverse-slide-exit {
+transform: translateX(0%);
+opacity: 1;
+}
+
+.reverse-slide-exit-active {
+transform: translateX(0%);
+opacity: 0;
+transition: transform 300ms, opacity 0ms;
+}

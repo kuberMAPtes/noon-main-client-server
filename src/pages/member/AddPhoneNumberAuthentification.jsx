@@ -3,6 +3,7 @@ import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import styles from '../../assets/css/module/member/AddPhoneNumberAuthentification.module.css';
 import { checkAuthNumber, formatTime,handleAuthNumberChange, handleNavigate, handlePhoneNumberChange, handleSendClick } from './function/AddPhoneNumberAuthentificationUtil';
 import { useNavigate } from 'react-router-dom';
+import ForegroundTemplate from '../../components/common/ForegroundTemplate';
 
 const AddPhoneNumberAuthentification = () => {
     const [phoneNumber, setPhoneNumber] = useState('');//휴대폰번호
@@ -41,92 +42,99 @@ const AddPhoneNumberAuthentification = () => {
     }, [verifiedState]);
 
     return (
-        <Container className="mt-5">
-            <Row className="justify-content-center">
-                <Col md={6}>
-                <h2 className="mb-4">휴대폰 인증</h2>
-                <Form>
-                    <Form.Group controlId="formPhoneNumber">
-                    <Form.Label className={styles.labelBold}>휴대폰 번호</Form.Label>
-                    <div className="d-flex">
-                        <input
-                        type="text"
-                        placeholder="010-1234-5678"
-                        value={phoneNumber}
-                        onChange={(e) =>
-                            handlePhoneNumberChange(
-                            e,
-                            setPhoneNumber,
-                            setPhoneNumberValidationMessage,
-                            setIsPhoneNumberValid
-                            )
-                        }
-                        className={styles.inputUnderline}
-                        maxLength={13} // 하이픈 포함 최대 13자
-                        disabled={verifiedState === "success"}
-                        />
-                        <Button
-                        variant="outline-secondary"
-                        onClick={() =>
-                            handleSendClick(
-                            phoneNumber,
-                            setPhoneNumberValidationMessage,
-                            setCertificationRequested,
-                            setTimeLeft,
-                            setIsRunning
-                            )
-                        }
-                        disabled={!isPhoneNumberValid || verifiedState === "success"}
-                        >
-                        {certificationRequested ? '재전송' : '전송'}
-                        </Button>
-                    </div>
-                    {phoneNumberValidationMessage && (
-                        <Form.Text className="text-danger">
-                        {phoneNumberValidationMessage}
-                        </Form.Text>
-                    )}
-                    </Form.Group>
-                    <Form.Group controlId="formAuthNumber" className="mt-4">
-                    <Form.Label className={styles.labelBold}>인증번호</Form.Label>
-                    {certificationRequested && (
-                        <div className={`d-flex ${styles.timerText}`}>
-                        <input
+        <ForegroundTemplate>
+            <Container className="mt-5">
+                <Row className="justify-content-center">
+                    <Col md={6}>
+                    <h2 className="mb-4">휴대폰 인증</h2>
+                    <Form>
+                        <Form.Group controlId="formPhoneNumber">
+                        <Form.Label className={styles.labelBold}>휴대폰 번호</Form.Label>
+                        <div className="d-flex">
+                            <input
                             type="text"
-                            placeholder="1234"
-                            value={authNumber}
-                            onChange={(e) => handleAuthNumberChange(e, setAuthNumber)}
+                            placeholder="010-1234-5678"
+                            value={phoneNumber}
+                            onChange={(e) =>
+                                handlePhoneNumberChange(
+                                e,
+                                setPhoneNumber,
+                                setPhoneNumberValidationMessage,
+                                setIsPhoneNumberValid
+                                )
+                            }
                             className={styles.inputUnderline}
-                            maxLength={4}
+                            maxLength={13} // 하이픈 포함 최대 13자
                             disabled={verifiedState === "success"}
-                        />
-                        {timeLeft !== 0 ? (
-                            <span className="text-muted">{formatTime(timeLeft)}</span>
-                        ) : (
-                            <span className="text-muted">인증번호 만료</span>
+                            />
+                            <Button
+                            variant="outline-secondary"
+                            onClick={() =>
+                                handleSendClick(
+                                phoneNumber,
+                                setPhoneNumberValidationMessage,
+                                setCertificationRequested,
+                                setTimeLeft,
+                                setIsRunning
+                                )
+                            }
+                            disabled={!isPhoneNumberValid || verifiedState === "success"}
+                            >
+                            {certificationRequested ? '재전송' : '전송'}
+                            </Button>
+                        </div>
+                        {phoneNumberValidationMessage && (
+                            <Form.Text className="text-danger">
+                            {phoneNumberValidationMessage}
+                            </Form.Text>
                         )}
+                        {isPhoneNumberValid && (
+                            <Form.Text className="text-success">
+                            유효한 전화번호 형식입니다.
+                            </Form.Text>
+                        )}
+                        </Form.Group>
+                        <Form.Group controlId="formAuthNumber" className="mt-4">
+                        <Form.Label className={styles.labelBold}>인증번호</Form.Label>
+                        {certificationRequested && (
+                            <div className={`d-flex ${styles.timerText}`}>
+                            <input
+                                type="text"
+                                placeholder="1234"
+                                value={authNumber}
+                                onChange={(e) => handleAuthNumberChange(e, setAuthNumber)}
+                                className={styles.inputUnderline}
+                                maxLength={4}
+                                disabled={verifiedState === "success"}
+                            />
+                            {timeLeft !== 0 ? (
+                                <span className="text-muted">{formatTime(timeLeft)}</span>
+                            ) : (
+                                <span className="text-muted">인증번호 만료</span>
+                            )}
+                            </div>
+                        )}
+                        </Form.Group>
+                    </Form>
+                    {verifiedState === "success" && (
+                        <div>
+                        <h5>본인인증 완료</h5>
+                        <Button variant="primary" onClick={()=>handleNavigate(phoneNumber,verifiedState,navigate)}>
+                            회원가입
+                        </Button>
                         </div>
                     )}
-                    </Form.Group>
-                </Form>
-                {verifiedState === "success" && (
-                    <div>
-                    <h5>본인인증 완료</h5>
-                    <Button variant="primary" onClick={()=>handleNavigate(verifiedState,navigate)}>
-                        회원가입
-                    </Button>
-                    </div>
-                )}
-                {verifiedState === "fail" && (
-                    <div>
-                    <h6>본인인증 실패</h6>
-                    <h5>실패 횟수 {failCount}</h5>
-                    <span>20회 이상 실패 할 시 재전송을 하셔야합니다.</span>
-                    </div>
-                )}
-                </Col>
-            </Row>
-        </Container>
+                    {verifiedState === "fail" && (
+                        <div>
+                        <h6>본인인증 실패</h6>
+                        <h5>실패 횟수 {failCount}</h5>
+                        <span>20회 이상 실패 할 시 재전송을 하셔야합니다.</span>
+                        </div>
+                    )}
+                    </Col>
+                </Row>
+            </Container>
+        </ForegroundTemplate>
   );
 };
 

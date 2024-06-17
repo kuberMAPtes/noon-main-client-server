@@ -6,6 +6,13 @@ const Postcode = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const previousPage = location.state?.previousPage || '/'; // 기본값을 설정
+    const nickname = location.state?.nickname || {};
+    const memberId = location.state?.memberId || {};
+    const pwd = location.state?.pwd || {};
+
+    console.log('nickname:',nickname);
+    console.log('memberId:',memberId);
+    console.log('pwd:',pwd);
 
     const themeObj = {
       bgColor: '#FFFFFF', 
@@ -18,7 +25,11 @@ const Postcode = () => {
         const { address, zonecode, buildingName, roadAddress } = data;
         console.log(data);
         const fullAddress = `${roadAddress} ${buildingName ? `, ${buildingName}` : ''}`;
-        navigate(previousPage, { state: { address: fullAddress, zonecode } });  // 이전 페이지로 돌아가도록 경로 수정
+        console.log("핸들러"+nickname);
+        console.log("핸들러"+memberId);
+        console.log("핸들러"+pwd);
+
+        navigate(previousPage, { state: { nickname, memberId, pwd, address: fullAddress, zonecode } });  // 이전 페이지로 돌아가도록 경로 수정
       };
   
     return (

@@ -12,16 +12,16 @@ const GetMemberProfile = () => {
   
   const authorization = useSelector((state) => state.auth.authorization);
   const fromId = useSelector((state) => state.auth.member.memberId);
-  const { encryptedToId, IV } = useParams();
+  const { secretId, secretIv } = useParams();
 
   const [toId, setToId] = useState(null);
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const decryptToId = (encryptedToId, IV) => {
+  const decryptToId = (secretId, secretIv) => {
     try {
-      return decryptWithIv(decodeURIComponent(encryptedToId), decodeURIComponent(IV));
+      return decryptWithIv(decodeURIComponent(secretId), decodeURIComponent(secretIv));
     } catch (error) {
       console.error("Error decrypting toId: ", error);
       setError("Error decrypting toId");
@@ -31,13 +31,13 @@ const GetMemberProfile = () => {
   };
 
   useEffect(() => {
-    console.log("URL Parameters - encryptedToId:", encryptedToId, "IV:", IV);
-    if (encryptedToId && IV) {
-      const decryptedToId = decryptToId(encryptedToId, IV);
+    console.log("URL Parameters - encryptedToId:", secretId, "IV:", secretIv);
+    if (secretId && secretIv) {
+      const decryptedToId = decryptToId(secretId, secretIv);
       console.log("Decrypted toId: ", decryptedToId);
       setToId(decryptedToId);
     }
-  }, [encryptedToId, IV]);
+  }, [secretId, secretIv]);
 
   useEffect(() => {
     if (authorization && fromId && toId) {

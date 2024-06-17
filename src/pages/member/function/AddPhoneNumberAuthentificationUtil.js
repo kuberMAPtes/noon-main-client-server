@@ -1,5 +1,5 @@
 import { encryptWithLv } from "../../../util/crypto";
-import { confirmAuthentificationNumber, sendAuthentificationNumber } from "./memberAxios";
+import { checkPhoneNumber, confirmAuthentificationNumber, sendAuthentificationNumber } from "./memberAxios";
 import { validatePhoneNumber } from "./memberValidator";
 import Cookies from 'js-cookie';
 // utils.js
@@ -17,19 +17,27 @@ export const formatPhoneNumber = (input) => {
   };
   
   // 전화번호 입력
-  export const handlePhoneNumberChange = (e, setPhoneNumber, setPhoneNumberValidationMessage, setIsPhoneNumberValid) => {
+  export const handlePhoneNumberChange = async (e, setPhoneNumber, setPhoneNumberValidationMessage, setIsPhoneNumberValid) => {
     const input = e.target.value;
     const formattedPhoneNumber = formatPhoneNumber(input);
     setPhoneNumber(formattedPhoneNumber);
-  
+    
     if (formattedPhoneNumber.length === 13) {
-      if (!validatePhoneNumber(formattedPhoneNumber)) {
+
+        // const response = await checkPhoneNumber(formattedPhoneNumber);
+        const response = {info:true};
+
+    if (!validatePhoneNumber(formattedPhoneNumber)) {
         setPhoneNumberValidationMessage('유효하지 않은 전화번호 형식입니다.');
         setIsPhoneNumberValid(false);
-      } else {
-        setPhoneNumberValidationMessage("");
-        setIsPhoneNumberValid(true);
-      }
+    } else if(response.info!==true) {
+        console.log("response",response);
+        setPhoneNumberValidationMessage(response.message);
+        setIsPhoneNumberValid(false);
+    } else {
+    setPhoneNumberValidationMessage("");
+    setIsPhoneNumberValid(true);
+    }
     } else {
       setPhoneNumberValidationMessage("");
       setIsPhoneNumberValid(false);
@@ -47,8 +55,8 @@ export const formatPhoneNumber = (input) => {
   // 인증번호 전송
   export const handleSendClick = async (phoneNumber, setPhoneNumberValidated,setCertificationRequested,setTimeLeft,setIsRunning) => {
         const response = await sendAuthentificationNumber(phoneNumber);
-        if (validatePhoneNumber(phoneNumber)) {
-        }
+        // if (validatePhoneNumber(phoneNumber)) {
+        // }
         console.log("handleSendClick에서 response 좀 보자",response);
         if(response.info){
             setCertificationRequested(true);
@@ -85,11 +93,12 @@ export const formatPhoneNumber = (input) => {
   }
 
   // 인증 성공시 페이지 이동
-  export const handleNavigate = (verifiedState,navigate) => {
+  export const handleNavigate = (phoneNumber,verifiedState,navigate) => {
     if(verifiedState==="success"){
         const {encryptedData,ivData} = encryptWithLv("success");
         Cookies.set("addMemberKey",encryptedData);
         Cookies.set("addMemberOtherKey",ivData);
+        Cookies.set("user-data",phoneNumber)
         navigate("/member/addMember");
     }
   }

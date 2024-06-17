@@ -1,5 +1,6 @@
-import { checkMemberId, checkNickname, checkPassword } from './memberAxios';
-import { validateNickname, validateMemberId, validatePassword } from './memberValidator';
+import { login } from '../../../redux/slices/authSlice';
+import { addMember, checkMemberId, checkNickname, checkPwd, getMember } from './memberAxios';
+import { validateNickname, validateMemberId, validatePwd } from './memberValidator';
 import Cookies from 'js-cookie';
 export const handleNicknameChange = async (
     e
@@ -52,31 +53,31 @@ export const handleMemberIdChange = async (
 }
  
 
-export const handlePasswordChange = async (
+export const handlePwdChange = async (
     e
-    ,setPassword
-    , setPasswordValidationMessage
-    , setIsPasswordValid)=>{
+    ,setPwd
+    , setPwdValidationMessage
+    , setIsPwdValid)=>{
         const input = e.target.value;
-        setPassword(input);
-        if(validatePassword(input)){
-            setPasswordValidationMessage("");
-            setIsPasswordValid(true);
+        setPwd(input);
+        if(validatePwd(input)){
+            setPwdValidationMessage("");
+            setIsPwdValid(true);
         }else{
-            setPasswordValidationMessage("비밀번호는 8자 이상 16자 이하로 입력하세요.");
-            setIsPasswordValid(false);
+            setPwdValidationMessage("비밀번호는 8자 이상 16자 이하로 입력하세요.");
+            setIsPwdValid(false);
         }
     }
 export const handleSubmit = (form, navigate) => (e) => {
     e.preventDefault();
-    const { nickname, memberId, password, address } = form;
+    const { nickname, memberId, pwd, address } = form;
 
     const nicknameValidationMessage = validateNickname(nickname);
     const memberIdValidationMessage = validateMemberId(memberId);
-    const passwordValidationMessage = validatePassword(password);
-    const addressValidationMessage = address.trim() !== '' ? '' : '주소를 입력하세요.';
+    const pwdValidationMessage = validatePwd(pwd);
+    const addressValidationMessage = address?.trim() !== '' ? '' : '주소를 입력하세요.';
 
-    const isFormValid = !nicknameValidationMessage && !memberIdValidationMessage && !passwordValidationMessage && !addressValidationMessage;
+    const isFormValid = !nicknameValidationMessage && !memberIdValidationMessage && !pwdValidationMessage && !addressValidationMessage;
 
     if (isFormValid) {
         // 회원가입 처리 로직 추가
@@ -91,7 +92,39 @@ export const detailedAddressChangeHandler = (e,setDetailedAddress) => {
     setDetailedAddress(e.target.value);
   };
 
-export const redirectToPostcode = (navigate,location) => {
+export const redirectToPostcode = (memberId,nickname,pwd,navigate,location) => {
     //postcode컴포넌트의 location.state에 previousPage를 담음
-    navigate('/member/postcode', { state: { previousPage: location.pathname } });
+    navigate('/member/postcode', { state: { memberId, nickname, pwd, previousPage: location.pathname } });
 };
+
+export const handleAddMember = async (form, dispatch, navigate) => {
+
+    const phoneNumber = Cookies.get('user-data');
+    Cookies.remove('user-data');//휴대폰 번호
+    
+    const fullForm = { ...form, phoneNumber };
+    console.log('fullForm:',fullForm);
+
+    const info = await addMember(fullForm);
+    Cookies.remove('addMemberKey'); // 쿠키 삭제 휴대폰인증할때 받은 회원가입 권한 무효화
+    Cookies.remove('addMemberOtherKey'); // 쿠키 삭제
+    const loginData = {
+        member : {memberId :  fullForm.memberId, pwd: fullForm.pwd}
+        ,loginWay : "signUp"}
+
+    await dispatch(login({loginData,navigate}));
+    
+    
+
+    console.log('info:',info);
+    console.log('Cookies.get(AuthToken):',Cookies.get('AuthToken'));
+
+
+    if(info===true && Cookies.get('AuthToken')){
+        alert('회원가입이 완료되었습니다.');
+        navigate('/member/addMemberResult');
+    }else{
+        alert("오류가 발생하였습니다.")
+    }
+
+} 

@@ -11,9 +11,9 @@ import styles from '../../../assets/css/module/member/LoginForm.module.css';
 const LoginForm = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const storeMemberId = useSelector((state) => state.auth.member.memberId);
-  const loginError = useSelector((state) => state.auth.loginError);
-  console.log("로그인 에러:", JSON.stringify(loginError));
+  const storeMemberId = useSelector((state) => state?.auth?.member?.memberId);
+  const loginError = useSelector((state) => state?.auth?.loginError);
+  console.log("로그인 에러값 확인:", JSON.stringify(loginError));
   const [memberId, setMemberId] = useState("");
   const [pwd, setPassword] = useState("");
   const [validationError, setValidationError] = useState("");
@@ -21,7 +21,7 @@ const LoginForm = () => {
   const handleLoginSubmit = async (event) => {
     event.preventDefault();
     setValidationError("");
-    const loginData = { memberId, pwd, loginWay: "normal" };
+    const loginData = { member : { memberId: memberId, pwd: pwd} , loginWay: "normal" };
 
     const validationMessage = validateLoginForm(memberId, pwd);
     if (validationMessage) {
@@ -30,10 +30,8 @@ const LoginForm = () => {
     }
 
     try {
-      console.log("로그인 하기 전 store.auth.member :: ", memberId);
-      const { member } = await dispatch(login(loginData)).unwrap();
-      console.log("멤버 :: ", member);
-      console.log("로그인 한 후 store.auth.member :: ", member);
+      console.log("로그인 하기 전 store.auth.member :: ", storeMemberId);
+      await dispatch(login({loginData,navigate}));
     } catch (error) {
       console.error("Failed to login:", error);
     }
@@ -44,8 +42,6 @@ const LoginForm = () => {
     if (storeMemberId) {
       const toId = storeMemberId;
       console.log("toId: ", toId);
-      const navigateUri = `/member/getMemberProfile/${toId}`;
-      navigate(navigateUri);
     }
   }, [storeMemberId, navigate]);
 

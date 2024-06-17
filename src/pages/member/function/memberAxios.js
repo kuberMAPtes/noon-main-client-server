@@ -7,7 +7,7 @@ export const sendAuthentificationNumber = async (phoneNumber) => {
         // const response = await axiosInstance.get(`/member/sendAuthentificationNumber`, {
         //     params: { phoneNumber },
         // });
-        const response = { data : {info:1234} } ;
+        const response = { data : {info:1234} } ;//이거 지우고 아래 주석 풀자
         console.log('sendAuthentificationNumber 응답:', response.data);
         return response.data;
     } catch (error) {
@@ -23,11 +23,10 @@ export const confirmAuthentificationNumber = async (phoneNumber, authentificatio
         // const response = await axiosInstance.get(`/member/confirmAuthentificationNumber`, {
         //     params: { phoneNumber, authentificationNumber },
         // });
-        // const response = { data : {info:true} };
         if(authentificationNumber === "1234"){
             return {info:true};
         }
-        const response = {data : {info:false}};
+        const response = {data : {info:false}};//이거랑 위에 지우고 아래 주석 풀자
         console.log('confirmAuthentificationNumber 응답:', response.data);
         
         return response.data;
@@ -109,6 +108,30 @@ export const refreshToken = async () => {
         throw error;
     }
 };
+// 로그인
+export const Login = async (loginRequestDto) => {
+    try {
+        console.log('login 요청:', loginRequestDto);
+        const response = await axiosInstance.post(`/member/login`, loginRequestDto);
+        console.log('login 응답 response :', response);
+        return response.data.info;
+    } catch (error) {
+        console.error('login error:', error);
+        throw error;
+    }
+}
+// 구글 로그인
+export const googleLogin = async (googleLoginRequestDto) => {
+    try {
+        console.log('googleLogin 요청');
+        const response = await axiosInstance.post(`/member/googleLogin`,googleLoginRequestDto);
+        console.log('googleLogin 응답 response :', response);
+        return response.data.info;
+    } catch (error) {
+        console.error('googleLogin error:', error);
+        throw error;
+    }
+}
 
 // 로그아웃
 export const logout = async () => {
@@ -128,8 +151,8 @@ export const addMember = async (addMemberDto) => {
     try {
         console.log('addMember 요청:', addMemberDto);
         const response = await axiosInstance.post(`/member/addMember`, addMemberDto);
-        console.log('addMember 응답:', response.data);
-        return response.data;
+        console.log('addMember 응답:', response);
+        return response.data.info;
     } catch (error) {
         console.error('addMember error:', error);
         throw error;
@@ -193,7 +216,7 @@ export const getMember = async (member) => {
     try {
         console.log('getMember 요청:', member);
         const response = await axiosInstance.post(`/member/getMember`, member);
-        console.log('getMember 응답:', response.data);
+        console.log('getMember 응답 response:', response);
         return response.data.info;
     } catch (error) {
         console.error('getMember error:', error);
