@@ -2,7 +2,7 @@
 
 const PHONE_NUMBER_PATTERN = /^01(?:0|1|[6-9])-(?:\d{3}|\d{4})-\d{4}$/;
 const NICKNAME_PATTERN = /^[a-zA-Z0-9가-힣_ ]{2,20}$/;
-const MEMBER_ID_PATTERN = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z][a-zA -Z0-9_]{6,24}$/;
+const MEMBER_ID_PATTERN = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z][a-zA -Z0-9_]{6,40}$/;
 
 const PWD_PATTERN = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9!@#\$%\^&\*_]{8,16}$/;
 const SEQUENTIAL_PATTERN = /(abc|bcd|cde|def|efg|fgh|ghi|hij|ijk|jkl|klm|lmn|mno|nop|opq|pqr|qrs|rst|stu|tuv|uvw|vwx|wxy|xyz|cba|dcb|edc|fed|gfe|hgf|ihg|jih|kji|lkj|mlk|nml|onm|pon|qpo|rqp|srq|tsr|uts|vut|wvu|yxw|zyx|123|234|345|456|567|678|789|890|012|321|432|543|654|765|876|987|098|210)/;

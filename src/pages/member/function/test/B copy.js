@@ -9,7 +9,7 @@ import GoogleLogo from '../../component/GoogleLogo'; // SVG 컴포넌트 임포�
 import KakaoLogo from '../../component/KakaoLogo';
 const LoginPage = () => {
   return (
-    <Container className={styles.loginPage}>
+    <Container className={styles.loginButtons}>
       <Row className="justify-content-center">
         <Col xs={12} md={8} lg={6} className="text-center">
           <Button variant="link" className={styles.backButton}>
