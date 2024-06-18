@@ -1,0 +1,23 @@
+/* LoginForm.module.css */
+
+/* Responsive styles for mobile view */
+@media (max-width: 576px) {
+    .container {
+      margin-top: 2rem !important;
+    }
+  
+    .text-center {
+      text-align: center !important;
+    }
+  
+    .form-control {
+      font-size: 1rem;
+      padding: 0.75rem 1rem;
+    }
+  
+    .btn {
+      font-size: 1rem;
+      padding: 0.75rem 1rem;
+    }
+  }
+  
