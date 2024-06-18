@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import styles from '../../assets/css/module/member/AddPhoneNumberAuthentification.module.css';
 import { checkAuthNumber, formatTime,handleAuthNumberChange, handleNavigate, handlePhoneNumberChange, handleSendClick } from './function/AddPhoneNumberAuthentificationUtil';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import ForegroundTemplate from '../../components/common/ForegroundTemplate';
 
 const AddPhoneNumberAuthentification = () => {
@@ -16,6 +16,7 @@ const AddPhoneNumberAuthentification = () => {
     const [isRunning, setIsRunning] = useState(false);// 타이머가 동작중인지 여부
     const [verifiedState, setIsVerified] = useState("pending"); // 인증 상태 pending,success,fail
     
+    const {toUrl} = useParams();//addMember 또는 updateMember
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -60,7 +61,8 @@ const AddPhoneNumberAuthentification = () => {
                                 e,
                                 setPhoneNumber,
                                 setPhoneNumberValidationMessage,
-                                setIsPhoneNumberValid
+                                setIsPhoneNumberValid,
+                                toUrl
                                 )
                             }
                             className={styles.inputUnderline}
@@ -90,7 +92,9 @@ const AddPhoneNumberAuthentification = () => {
                         )}
                         {isPhoneNumberValid && (
                             <Form.Text className="text-success">
-                            유효한 전화번호 형식입니다.
+                            {toUrl==="addMember" &&  "유효한 전화번호 형식입니다."}
+                            {toUrl==="updateMember" && "아이디를 찾기 위해 메세지를 보냅니다."}
+                            
                             </Form.Text>
                         )}
                         </Form.Group>
@@ -119,7 +123,7 @@ const AddPhoneNumberAuthentification = () => {
                     {verifiedState === "success" && (
                         <div>
                         <h5>본인인증 완료</h5>
-                        <Button variant="primary" onClick={()=>handleNavigate(phoneNumber,verifiedState,navigate)}>
+                        <Button variant="primary" onClick={()=>handleNavigate(phoneNumber,verifiedState,navigate,toUrl)}>
                             회원가입
                         </Button>
                         </div>

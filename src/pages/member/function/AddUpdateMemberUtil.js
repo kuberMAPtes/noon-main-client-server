@@ -93,17 +93,16 @@ export const redirectToPostcode = (
 
 export const addMemberSubmit = async (
     form
+    , hasNavigated
     , dispatch
     , navigate) => {
   const phoneNumber = Cookies.get("user-data");
-  Cookies.remove("user-data"); //휴대폰 번호
+  
 
   const fullForm = { ...form, phoneNumber };
   console.log("fullForm:", fullForm);
 
   const info = await addMember(fullForm);
-  Cookies.remove("addMemberKey"); // 쿠키 삭제 휴대폰인증할때 받은 회원가입 권한 무효화
-  Cookies.remove("addMemberOtherKey"); // 쿠키 삭제
   const loginData = {
     member: { memberId: fullForm.memberId, pwd: fullForm.pwd },
     loginWay: "signUp",
@@ -115,8 +114,13 @@ export const addMemberSubmit = async (
   console.log("Cookies.get(AuthToken):", Cookies.get("AuthToken"));
 
   if (info === true && Cookies.get("AuthToken")) {
+    hasNavigated = true;
+    Cookies.remove("addMemberOtherKey"); // 쿠키 삭제
+    Cookies.remove("addMemberKey"); // 쿠키 삭제 휴대폰인증할때 받은 회원가입 권한 무효화
+    Cookies.remove("user-data"); //휴대폰 번호
     alert("회원가입이 완료되었습니다.");
     navigate("/member/addMemberResult");
+
   } else {
     alert("오류가 발생하였습니다.");
   }

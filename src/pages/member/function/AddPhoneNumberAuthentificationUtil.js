@@ -3,6 +3,7 @@ import {
   checkPhoneNumber,
   confirmAuthentificationNumber,
   sendAuthentificationNumber,
+  getMemberIdByPhoneNumber,
 } from "./memberAxios";
 import { validatePhoneNumber } from "./memberValidator";
 import Cookies from "js-cookie";
@@ -28,31 +29,61 @@ export const handlePhoneNumberChange = async (
   e,
   setPhoneNumber,
   setPhoneNumberValidationMessage,
-  setIsPhoneNumberValid
+  setIsPhoneNumberValid,
+  toUrl
 ) => {
   const input = e.target.value;
   const formattedPhoneNumber = formatPhoneNumber(input);
   setPhoneNumber(formattedPhoneNumber);
 
-  if (formattedPhoneNumber.length === 13) {
-    // const response = await checkPhoneNumber(formattedPhoneNumber);
-    const response = { info: true };
 
-    if (!validatePhoneNumber(formattedPhoneNumber)) {
-      setPhoneNumberValidationMessage("유효하지 않은 전화번호 형식입니다.");
-      setIsPhoneNumberValid(false);
-    } else if (response.info !== true) {
-      console.log("response", response);
-      setPhoneNumberValidationMessage(response.message);
-      setIsPhoneNumberValid(false);
-    } else {
-      setPhoneNumberValidationMessage("");
-      setIsPhoneNumberValid(true);
+if (formattedPhoneNumber.length === 13) {
+
+    if (toUrl === "addMember") {
+      // const response = await checkPhoneNumber(formattedPhoneNumber);
+      const response = { info: true };
+
+      if (!validatePhoneNumber(formattedPhoneNumber)) {
+        setPhoneNumberValidationMessage("유효하지 않은 전화번호 형식입니다.");
+        setIsPhoneNumberValid(false);
+      } else if (response.info !== true) {
+        console.log("response", response);
+        setPhoneNumberValidationMessage(response.message);
+        setIsPhoneNumberValid(false);
+      } else {
+        setPhoneNumberValidationMessage("");
+        setIsPhoneNumberValid(true);
+      }
+    } else if (toUrl === "updateMember") {
+
+      const response = await getMemberIdByPhoneNumber(formattedPhoneNumber);
+
+      if (!validatePhoneNumber(formattedPhoneNumber)) {
+
+        setPhoneNumberValidationMessage("유효하지 않은 전화번호 형식입니다.");
+        setIsPhoneNumberValid(false);
+
+      } else {
+        if (response !== false) {
+
+          console.log("response :: 휴대폰번호로 멤버Id 찾기 성공", response);
+          setPhoneNumberValidationMessage("");
+          setIsPhoneNumberValid(true);
+
+        } else {
+
+          console.log("response :: 휴대폰번호로 멤버Id 찾기 실패", response);
+          setPhoneNumberValidationMessage("가입하지 않은 전화번호입니다.");
+          setIsPhoneNumberValid(false);
+          
+        }
+      }
     }
-  } else {
+
+} else {
     setPhoneNumberValidationMessage("");
     setIsPhoneNumberValid(false);
-  }
+}
 };
 
 // 인증번호 입력
@@ -118,12 +149,12 @@ export const formatTime = (seconds) => {
 };
 
 // 인증 성공시 페이지 이동
-export const handleNavigate = (phoneNumber, verifiedState, navigate) => {
+export const handleNavigate = (phoneNumber, verifiedState, navigate,url) => {
   if (verifiedState === "success") {
     const { encryptedData, ivData } = encryptWithLv("success");
     Cookies.set("addMemberKey", encryptedData);
     Cookies.set("addMemberOtherKey", ivData);
     Cookies.set("user-data", phoneNumber);
-    navigate("/member/addMember");
+    navigate("/member/"+url);
   }
 };

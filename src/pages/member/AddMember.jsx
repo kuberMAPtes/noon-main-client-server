@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { decryptWithIv } from '../../util/crypto';
 import Cookies from 'js-cookie';
@@ -32,6 +32,8 @@ const AddMember = () => {
     
     const [zonecode, setZonecode] = useState('');
     const [detailedAddress, setDetailedAddress] = useState('');
+
+    const hasNavigated = useRef(false);
     
     const fullAddress = address + ' ' + detailedAddress;
     const form = { nickname, memberId, pwd, fullAddress };
@@ -42,34 +44,47 @@ const AddMember = () => {
 
     useEffect(() => {
         // 쿠키에서 인증 정보를 읽고, 휴대폰 본인인증을 완료했는지 확인
+        if(hasNavigated) return;
+        
         const encryptedData = Cookies.get('addMemberKey');
         const ivData = Cookies.get('addMemberOtherKey');
         console.log('당신은 휴대폰인증을 했습니다 encryptedData:', encryptedData);
         console.log('당신은 휴대폰인증을 했습니다 ivData:', ivData);
-        if (encryptedData && ivData) {
+        
+        if (encryptedData && ivData && Cookies.get("user-data")) {
             const isVerified = decryptWithIv(encryptedData, ivData);
             if (isVerified !== 'success') {
                 alert('본인인증을 완료해야 회원가입을 할 수 있습니다.');
+                hasNavigated = true;
                 navigate('/member/getAuthMain');
             }
         } else {
             alert('본인인증을 완료해야 회원가입을 할 수 있습니다.');
+            hasNavigated = true;
             navigate('/member/getAuthMain');
         }
+
     }, [navigate]);
 
     useEffect(() => {
         if (location.state && location.state.zonecode && location.state.address){
+
+        if(Object.keys(location.state.nickname).length === 0){
+          location.state.nickname = "";
+        }
+
         setZonecode(location.state.zonecode);
         setAddress(location.state.address);
         setMemberId(location.state.memberId);
+        
         setNickname(location.state.nickname);
+
         setPwd(location.state.pwd);
 
         handleNicknameChange({ target: { value: location.state.nickname } }, setNickname, setNicknameValidationMessage, setIsNicknameValid);
         handleMemberIdChange({ target: { value: location.state.memberId } }, setMemberId, setMemberIdValidationMessage, setIsMemberIdValid);
         handlePwdChange({ target: { value: location.state.pwd } }, setPwd, setPwdValidationMessage, setIsPwdValid);
-      }
+        }
     }, [location.state]);
 
 
@@ -176,7 +191,7 @@ const AddMember = () => {
                         type="submit"
                         className="w-100"
                         disabled={!isNicknameValid || !isMemberIdValid || !isPwdValid}
-                        onClick={()=>addMemberSubmit(form,dispatch, navigate)}>
+                        onClick={()=>addMemberSubmit(form,hasNavigated,dispatch, navigate)}>
                             회원가입
                         </Button>
                     </Form>

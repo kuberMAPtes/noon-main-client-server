@@ -11,6 +11,9 @@ const AuthLoader = ({ children }) => {
 
   useEffect(() => {
       console.log("@@@@ AuthLoader useEffect 시작");
+      React.Children.map(children, child => {
+        console.log("Child:", child);
+      });
     //인증이 안되어 있으면...
     if (!authorization) {
       const fetchMemberData = async () => {

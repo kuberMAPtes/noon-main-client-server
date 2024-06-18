@@ -224,6 +224,23 @@ export const getMember = async (member) => {
         return null;
     }
 };
+export const getMemberIdByPhoneNumber = async (phoneNumber) => {
+    try {
+        console.log('getMemberIdByPhoneNumber', phoneNumber);
+        const response = await axiosInstance.get(`/member/getMemberIdByPhoneNumber`, {
+            params : {phoneNumber}
+        });
+        console.log('getMemberIdByPhoneNumber 응답:', response);
+
+        if(response.data.message !== ""){
+            response.data.info = false;
+        }
+        return response.data.info;//info가 false면 없는 번호라고 하면 됨.
+    }catch(error){
+        console.error('getMemberByPhoneNumber error:', error);
+        return false;
+    }
+}
 
 // 회원 프로필 조회
 export const getMemberProfile = async (fromId, toId) => {

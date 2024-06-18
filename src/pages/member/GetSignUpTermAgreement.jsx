@@ -10,7 +10,7 @@ const GetSignUpTermAgreement = () => {
   const [agreed, setAgreed] = useState(false);
   const [currentCard, setCurrentCard] = useState(0);//현재 페이지
   const navigate = useNavigate();
-  const navigateUrl = `/member/AddPhoneNumberAuthentification`
+  const navigateUrl = `/member/AddPhoneNumberAuthentification/addMember`
 
   const terms = [
     { title: '이용 약관', content: termsOfService },

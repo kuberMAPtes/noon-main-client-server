@@ -54,17 +54,6 @@ export const handleChange = async (
     failureMessage = ""
 ) => {
     
-    console.log('handleChange called');
-    console.log("@@@@@@@@@@@@" + typeof setState);
-    console.log("@@@@@@@@@@@@" + typeof validateFunction);
-    console.log("@@@@@@@@@@@@" + typeof checkFunction);
-    console.log("@@@@@@@@@@@@" + typeof validationMessageSetter);
-    console.log("@@@@@@@@@@@@" + typeof validitySetter);
-    console.log("@@@@@@@@@@@@" + setState);
-    console.log("@@@@@@@@@@@@" + validateFunction);
-    console.log("@@@@@@@@@@@@" + checkFunction);//?
-    console.log("@@@@@@@@@@@@" + validationMessageSetter);//?
-    console.log("@@@@@@@@@@@@" + validitySetter);//?
 
 
         const input = e.target.value;

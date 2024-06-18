@@ -121,7 +121,7 @@ const AppRoutes = () => {
                 }
               />
               <Route
-                path="addPhoneNumberAuthentification"
+                path="addPhoneNumberAuthentification/:toUrl"
                 element={
                   <GuestRoute>
                     <AddPhoneNumberAuthentification />

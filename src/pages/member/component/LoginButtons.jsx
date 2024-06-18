@@ -9,6 +9,7 @@ import { FaArrowLeft } from 'react-icons/fa';
 import GoogleLogo from './GoogleLogo'; // SVG 컴포넌트 임포트
 import KakaoLogo from './KakaoLogo';
 import NoonLogo from '../../../assets/css/NoonLogo';
+import { Link } from 'react-router-dom';
 const LoginButtons = ({ onLoginClick }) => {
   const dispatch = useDispatch();
   const loginStatus = useSelector((state) => state.auth.loginStatus);
@@ -43,9 +44,16 @@ const LoginButtons = ({ onLoginClick }) => {
         </Button>
         <hr />
         <SignUpButton />
-        
-          
         <hr />
+        <Link 
+        to="/member/addPhoneNumberAuthentification/updateMember"
+        style={{ fontSize : '0.6rem'}}
+        >아이디 찾기</Link>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <Link 
+        to="/member/UpdatePassword"
+        style={{ fontSize : '0.6rem'}}
+        >비밀번호 재설정</Link>
       </Col>
     </Row>
     <Row className="justify-content-center">
