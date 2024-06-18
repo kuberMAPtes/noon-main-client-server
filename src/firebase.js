@@ -23,6 +23,7 @@ async function initializeFirebase() {
     if (!firebaseApp) {
       firebaseApp = initializeApp(firebaseConfig);
       firebaseAuth = getAuth(firebaseApp);
+      console.log("Firebase  : ", firebaseAuth);
     }
     return firebaseAuth;
   }
@@ -30,5 +31,6 @@ async function initializeFirebase() {
 initializeFirebase().then((auth) => {
   // You can now safely access auth
   console.log("Firebase Auth가 초기화 되었다! : ", auth);
+  firebaseAuth = auth;
 });
-export { initializeFirebase };
+export { initializeFirebase ,firebaseAuth as auth};

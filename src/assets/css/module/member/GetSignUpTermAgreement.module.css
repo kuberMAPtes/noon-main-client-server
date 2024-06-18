@@ -1,0 +1,9 @@
+.fullscreen-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh; /* 컨테이너를 전체 화면 높이로 설정 */
+    background-color: #f8f9fa;
+    padding: 20px;
+    transform-origin: center center; /* 확장의 기준점을 중앙으로 설정 */
+  }
