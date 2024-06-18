@@ -1,7 +1,7 @@
 import React from 'react';
-import '../css/FeedItem.css';
+import '../../css/FeedItem.css';
 
-import {Card, CardBody, CardImg, CardText, CardTitle} from 'reactstrap';
+import {Card, CardBody, CardImg, CardText, CardTitle} from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 const FeedItem = ({ data }) => {
