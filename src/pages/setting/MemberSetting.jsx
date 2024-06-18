@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react"
-import ButtonGroup from "./component/ButtonGroup";
-import { useParams } from "react-router-dom";
+import PublicRangeDropdown from "./component/PublicRangeDropdown";
 import axios_api from "../../lib/axios_api";
 import { MAIN_API_URL } from "../../util/constants";
 import { is2xxStatus } from "../../util/statusCodeUtil";
+import BasicNavbar from "../../components/common/BasicNavbar";
+import "./css/MemberSetting.css";
 
 const PUBLIC_RANGES = [
   {
@@ -24,6 +25,8 @@ const PUBLIC_RANGES = [
   }
 ]
 
+const SAMPLE_MEMBER_ID = "member_2";
+
 export default function MemberSetting() {
   const [memberProfilePublicRange, setMemberProfilePublicRange] = useState("PUBLIC");
   const [allFeedPublicRange, setAllFeedPublicRange] = useState("PUBLIC");
@@ -32,7 +35,7 @@ export default function MemberSetting() {
   const [opInfoMode, setOpInfoMode] = useState("termsAndPolicy");
   const [opInfoModalVisible, setOpInfoModalVisible] = useState(false);
 
-  const memberId = useParams().memberId;
+  const memberId = SAMPLE_MEMBER_ID;
 
   useEffect(() => {
     fetchSettingInfo(memberId, (setting) => {
@@ -85,43 +88,47 @@ export default function MemberSetting() {
 
   return (
     <div>
-      {
-        COMPONENT_INFOS.map((data, idx) => (
-          <div key={`button-group-${idx}`}>
-            <h3>{data.header}</h3>
-            <ButtonGroup
-              currentSelectedId={data.currentSelected}
-              buttonInfos={data.buttonInfos}
-              onButtonClick={data.callback}
-            />
-          </div>
-        ))
-      }
-      <button type="button" onClick={() => {
-        axios_api.post(`${MAIN_API_URL}/setting/updateSetting/${memberId}`, {
-          memberProfilePublicRange,
-          allFeedPublicRange,
-          buildingSubscriptionPublicRange,
-          receivingAllNotification
-        }).then((response) => {
-          if (is2xxStatus(response.status)) {
-            alert("환경설정이 적용되었습니다");
-          }
-        }).catch((err) => {
-          console.error(err);
-        })
-      }}>변경사항 저장</button>
-      <button type="button" onClick={() => {
-        setOpInfoMode("termsAndPolicy");
-        setOpInfoModalVisible(true);
-      }}>약관 및 정책</button>
-      <button type="button" onClick={() => {
-        setOpInfoMode("termsOfUse");
-        setOpInfoModalVisible(true);
-      }}>이용규정</button>
-      {
-        opInfoModalVisible && <OpInfoDisplay opInfoMode={opInfoMode} onCancelClick={() => setOpInfoModalVisible(false)} />
-      }
+      <BasicNavbar />
+      <main className="container">
+        <h1>환경설정</h1>
+        {
+          COMPONENT_INFOS.map((data, idx) => (
+            <div key={`button-group-${idx}`}>
+              <h3>{data.header}</h3>
+              <PublicRangeDropdown
+                currentSelectedId={data.currentSelected}
+                buttonInfos={data.buttonInfos}
+                onButtonClick={data.callback}
+              />
+            </div>
+          ))
+        }
+        <button type="button" onClick={() => {
+          axios_api.post(`${MAIN_API_URL}/setting/updateSetting/${memberId}`, {
+            memberProfilePublicRange,
+            allFeedPublicRange,
+            buildingSubscriptionPublicRange,
+            receivingAllNotification
+          }).then((response) => {
+            if (is2xxStatus(response.status)) {
+              alert("환경설정이 적용되었습니다");
+            }
+          }).catch((err) => {
+            console.error(err);
+          })
+        }}>변경사항 저장</button>
+        <button type="button" onClick={() => {
+          setOpInfoMode("termsAndPolicy");
+          setOpInfoModalVisible(true);
+        }}>약관 및 정책</button>
+        <button type="button" onClick={() => {
+          setOpInfoMode("termsOfUse");
+          setOpInfoModalVisible(true);
+        }}>이용규정</button>
+        {
+          opInfoModalVisible && <OpInfoDisplay opInfoMode={opInfoMode} onCancelClick={() => setOpInfoModalVisible(false)} />
+        }
+      </main>
     </div>
   );
 }
