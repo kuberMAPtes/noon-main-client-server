@@ -13,12 +13,17 @@ import {
   handleChange,
 } from "./memberValidator";
 import Cookies from "js-cookie";
+
+
 export const handleNicknameChange = (
   e,
   setNickname,
   setNicknameValidationMessage,
   setIsNicknameValid
 ) => {
+    console.log("setNickname2", typeof setNickname);
+    console.log("setNicknameValidationMessage2", typeof setNicknameValidationMessage);
+     
   handleChange(
     e,
     setNickname,
@@ -67,33 +72,7 @@ export const handlePwdChange = (
   );
 };
 
-export const handleSubmit = (
-    e
-    , form
-    , navigate) => {
-  e.preventDefault();
-  const { nickname, memberId, pwd, address } = form;
 
-  const nicknameValidationMessage = validateNickname(nickname);
-  const memberIdValidationMessage = validateMemberId(memberId);
-  const pwdValidationMessage = validatePwd(pwd);
-  const addressValidationMessage =
-    address?.trim() !== "" ? "" : "주소를 입력하세요.";
-
-  const isFormValid =
-    !nicknameValidationMessage &&
-    !memberIdValidationMessage &&
-    !pwdValidationMessage &&
-    !addressValidationMessage;
-
-  if (isFormValid) {
-    // 회원가입 처리 로직 추가
-    alert("회원가입이 완료되었습니다.");
-    Cookies.remove("addMemberKey"); // 쿠키 삭제
-    Cookies.remove("addMemberOtherKey"); // 쿠키 삭제
-    navigate("/addMemberResult");
-  }
-};
 
 export const detailedAddressChangeHandler = (e, setDetailedAddress) => {
   setDetailedAddress(e.target.value);
@@ -112,7 +91,7 @@ export const redirectToPostcode = (
   });
 };
 
-export const handleAddMember = async (
+export const addMemberSubmit = async (
     form
     , dispatch
     , navigate) => {
@@ -142,3 +121,10 @@ export const handleAddMember = async (
     alert("오류가 발생하였습니다.");
   }
 };
+
+export const updateMemberSubmit = async (
+    form
+    , dispatch
+    , navigate) => {
+
+    }
