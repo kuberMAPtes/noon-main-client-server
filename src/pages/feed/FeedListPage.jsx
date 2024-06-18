@@ -95,7 +95,7 @@ const FeedListPage = () => {
                             className="col-12 mb-4"
                             ref={feeds.length === index + 1 ? lastFeedElementRef : null}
                         >
-                            <FeedItem data={feed} />
+                            <FeedItem data={(feed, memberId)} />
                         </div>
                     ))}
                 </div>

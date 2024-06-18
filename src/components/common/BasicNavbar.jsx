@@ -1,5 +1,5 @@
 import React from 'react';
-import { IoNotifications, IoSettingsSharp  } from "react-icons/io5";
+// import { IoNotifications, IoSettingsSharp  } from "react-icons/io5";
 import "../../assets/css/BasicNavbar.css";
 import "../../assets/css/font.css";
 
