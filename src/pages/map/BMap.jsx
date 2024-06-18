@@ -17,9 +17,16 @@ let memberMarker;
 
 let popBuildingMarkers;
 
+let buildingSubscriptionMarkers;
+
 export default function BMap() {
   const [placeSearchKeyword, setPlaceSearchKeyword] = useState("");
   const [currentPosition, setCurrentPosition] = useState(undefined);
+  const [subscriptionChecked, setSubscriptionChecked] = useState(true);
+  const [popBuildingChecked, setPopBuildingChecked] = useState(true);
+
+  // TODO: Replace sample with real
+  const sampleMember = "member_1";
 
   /**
    * 
@@ -48,14 +55,12 @@ export default function BMap() {
     });
 
     naver.maps.Event.addListener(map, "dragend", (e) => {
-      fetchBuildingsInPositionRange();
+      fetchBuildingMarkers(subscriptionChecked, popBuildingChecked, sampleMember);
     });
 
     naver.maps.Event.addListener(map, "zoom_changed", (e) => {
-      fetchBuildingsInPositionRange();
+      fetchBuildingMarkers(subscriptionChecked, popBuildingChecked, sampleMember);
     });
-
-    fetchBuildingsInPositionRange();
     getCurrentPosition(onCurrentPositionAwared, onFailedFetchingPosition);
     if (!intervalId) {
       intervalId = window.setInterval(() => {
@@ -66,8 +71,13 @@ export default function BMap() {
       clearInterval(intervalId);
       memberMarker = undefined;
       popBuildingMarkers = undefined;
+      buildingSubscriptionMarkers = undefined;
     }
   }, []);
+
+  useEffect(() => {
+    fetchBuildingMarkers(popBuildingChecked, subscriptionChecked, sampleMember);
+  }, [popBuildingChecked, subscriptionChecked]);
 
   useEffect(() => {
     if (currentPosition) { 
@@ -88,7 +98,12 @@ export default function BMap() {
         typeCallback={(text) => setPlaceSearchKeyword(text)}
         searchCallback={() => searchPlaceList(placeSearchKeyword, onFetchPlace)}
       />
-      <FetchTypeToggle />
+      <FetchTypeToggle
+          subscriptionChecked={subscriptionChecked}
+          setSubscriptionChecked={setSubscriptionChecked}
+          popBuildingChecked={popBuildingChecked}
+          setPopBuildingChecked={setPopBuildingChecked}
+      />
       <div id="map" style={{width: "400px", height: "400px", cursor: "none"}}></div>
       <button type="button" onClick={() => currentPosition && map && map.setCenter(new naver.maps.LatLng(currentPosition.latitude, currentPosition.longitude))}>
         현재 위치 보기
@@ -165,10 +180,18 @@ function fetchBuildingInfo(latitude, longitude) {
 }
 
 /**
- * @param {"SUB" | "POPULAR"} type 
+ * @param {boolean} subscriptionChecked 
+ * @param {boolean} popBuildingChecked 
+ * @param {string} memberId
  */
-function fetchBuildingMarkers(type) {
-  // TODO: API 요청
+function fetchBuildingMarkers(subscriptionChecked, popBuildingChecked, memberId) {
+  if (subscriptionChecked) {
+    fetchSubscriptions(memberId);
+  }
+
+  if (popBuildingChecked) {
+    fetchBuildingsInPositionRange();
+  }
 }
 
 /**
@@ -191,6 +214,36 @@ function addMarker(html, latitude, longitude) {
         content: contentHtml,
         size: new naver.maps.Size(width, height)
     }
+  });
+}
+
+function fetchSubscriptions(memberId) {
+  if (buildingSubscriptionMarkers) {
+    buildingSubscriptionMarkers.forEach((b) => {
+      b.setMap(null);
+    });
+  }
+  axios_api.get(`${MAIN_API_URL}/buildingProfile/getMemberSubscriptionList`, {
+    params: {
+      memberId
+    }
+  }).then((response) => {
+    const data = response.data;
+    console.log(data);
+
+    // TODO: 샘플 데이터 변경
+    const sampleSubscriptionProviders = [ "sample" ];
+    const sampleLiveliestChatroom = {
+      "liveliness": 1,
+      "chatroomName": "sample-chatroom"
+    }
+
+    const buildingMarkersCache = [];
+    data.forEach((d) => {
+      const contenthtml = getBuildingMarkerHtml(sampleSubscriptionProviders, sampleLiveliestChatroom, d.buildingName);
+      buildingMarkersCache.push(addMarker(contenthtml, d.latitude, d.longitude));
+    });
+    popBuildingMarkers = buildingMarkersCache;
   });
 }
 
