@@ -4,7 +4,7 @@ import SearchWindow from "../../components/common/SearchWindow";
 import FetchTypeToggle from "./component/FetchTypeToggle";
 import axios_api from "../../lib/axios_api";
 import { MAIN_API_URL } from "../../util/constants";
-import { is2xxStatus } from "../../util/statusCodeUtil";
+import { is2xxStatus, is4xxStatus } from "../../util/statusCodeUtil";
 import { getBuildingMarkerHtml, getPlaceSearchMarkerHtml } from "./contant/markerHtml";
 
 const naver = window.naver;
@@ -149,15 +149,18 @@ function getCurrentPosition(callback, errorCallback) {
  * @param {number} longitude 
  */
 function fetchBuildingInfo(latitude, longitude) {
-  axios_api.get(`${MAIN_API_URL}/places/search`, {
+  axios_api.get(`${MAIN_API_URL}/buildingProfile/getBuildingProfile`, {
     params: {
       latitude,
       longitude
     }
   }).then((response) => {
+    // TODO: Do somthing later
     console.log(response);
   }).catch((err) => {
-    console.error(err);
+    if (is4xxStatus(err.response.status)) {
+      console.log("No building profile on it");
+    }
   })
 }
 
