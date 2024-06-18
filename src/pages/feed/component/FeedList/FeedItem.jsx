@@ -4,6 +4,7 @@ import '../../css/FeedItem.css';
 import {Card, CardBody, CardImg, CardText, CardTitle} from 'react-bootstrap';
 import { FaHeart, FaRegHeart, FaBookmark, FaRegBookmark } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import axios_api from '../../../../lib/axios_api';
 
 const FeedItem = ({ data, memberId }) => {
 
@@ -19,6 +20,7 @@ const FeedItem = ({ data, memberId }) => {
         writtenTime,        // 포멧팅 처리
         feedAttachmentURL,  // 일단 임시 이미지로 대체
     } = data;
+    const itemMemberId = memberId;
 
     const [liked, setLiked] = useState(like);
     const [bookmarked, setBookmarked] = useState(bookmark);
@@ -32,22 +34,39 @@ const FeedItem = ({ data, memberId }) => {
         navigate('/feed/detail?feedId=' + feedId)
     }
     
-    const toggleLike = () => {
+    const toggleLike = async () => {
         let url = ''
-        if(like) {
-            url = `http://localhost:8080/feed/addFeedLike/${feedId}/${memberId}`;
+        if(!liked) {
+            url = `/feed/addFeedLike/${feedId}/${itemMemberId}`;
         } else {
-            url = `http://localhost:8080/feed/deleteFeedLike/${feedId}/${memberId}`;
+            url = `/feed/deleteFeedLike/${feedId}/${itemMemberId}`;
         }
-        try {
 
+        try {
+            const response = await axios_api.post(url);
+            console.log("좋아요 추가 및 취소 완료 : " + response + " like : " + !liked);
         } catch (e) {
             console.error(e);
         } 
-        
+
+        setLiked(!liked);
     };
 
-    const toggleBookmark = () => {
+    const toggleBookmark = async () => {
+        let url = ''
+        if(!bookmarked) {
+            url = `/feed/addBookmark/${feedId}/${itemMemberId}`;
+        } else {
+            url = `/feed/deleteBookmark/${feedId}/${itemMemberId}`;
+        }
+
+        try {
+            const response = await axios_api.post(url);
+            console.log("북마크 추가 및 취소 완료 : " + response + " bookmark : " + !bookmarked);
+        } catch (e) {
+            console.error(e);
+        } 
+
         setBookmarked(!bookmarked);
     };
 

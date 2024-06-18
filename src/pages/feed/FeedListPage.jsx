@@ -41,6 +41,7 @@ const FeedListPage = () => {
         } catch (e) {
             console.log(e);
         }
+
         setLoading(false);
     };
 
@@ -49,7 +50,13 @@ const FeedListPage = () => {
         setFeeds([]);
         setPage(1);
         setHasMore(true);
-        setFetchUrl(url)
+        setFetchUrl(prevUrl => {
+            if (prevUrl === url) {
+                // 강제로 상태 변경을 트리거하기 위해 같은 URL이라도 setFetchUrl을 호출
+                fetchData(url, 1);
+            }
+            return url;
+        });
     }
 
     // 랜더링 될 때마다 실행
@@ -95,7 +102,7 @@ const FeedListPage = () => {
                             className="col-12 mb-4"
                             ref={feeds.length === index + 1 ? lastFeedElementRef : null}
                         >
-                            <FeedItem data={(feed, memberId)} />
+                            <FeedItem data={feed} memberId={memberId} />
                         </div>
                     ))}
                 </div>

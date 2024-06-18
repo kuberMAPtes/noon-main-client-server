@@ -1,27 +1,28 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Dropdown, DropdownButton } from 'react-bootstrap';
 
 const FeedDropdown = ({onSelect}) => {
 
     const handleSelect = (option) => {
-        let url = '';
+        let temp = '';
         switch (option) {
             case 'member':
-                url = 'http://localhost:8080/feed/getFeedListByMember';
+                temp = 'http://localhost:8080/feed/getFeedListByMember';
                 break;
             case 'subscriptionBuilding':
-                url = 'http://localhost:8080/feed/getFeedListByMemberSubscription';
+                temp = 'http://localhost:8080/feed/getFeedListByMemberSubscription';
                 break;
             case 'like':
-                url = 'http://localhost:8080/feed/getFeedListByMemberLike';
+                temp = 'http://localhost:8080/feed/getFeedListByMemberLike';
                 break;
             case 'bookmark':
-                url = 'http://localhost:8080/feed/getFeedListByMemberBookmark';
+                temp = 'http://localhost:8080/feed/getFeedListByMemberBookmark';
                 break;
             default:
-                url = 'http://localhost:8080/feed/getFeedListByMember';
+                temp = 'http://localhost:8080/feed/getFeedListByMember';
         }
-        onSelect(url);
+
+        onSelect(temp);
     }
 
     return (
