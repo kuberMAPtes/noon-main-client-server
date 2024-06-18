@@ -46,10 +46,10 @@ import DeleteBadFeed from '../pages/CustomerSupport/DeleteBadFeed';
 
 import MemberSetting from "../pages/setting/MemberSetting";
 // import Test from '../pages/Chat/Test';
-
-import FeedList from "../pages/feed/FeedList";
-import FeedDetail from "../pages/feed/FeedDetail";
-import FeedForm from "../pages/feed/FeedForm";
+import FeedPages from "../pages/feed/FeedPages";
+import FeedList from "../pages/feed/FeedListPage";
+import FeedDetail from "../pages/feed/FeedDetailPage";
+import FeedForm from "../pages/feed/FeedFormPage";
 import TestComponent from '../pages/member/component/test/TestComponent';
 import Postcode from '../pages/member/component/Postcode';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
@@ -218,5 +218,6 @@ const AppRoutes = () => {
         </CSSTransition>
       </TransitionGroup>
   );
+}
 
 export default AppRoutes;
