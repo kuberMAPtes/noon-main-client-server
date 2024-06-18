@@ -15,6 +15,8 @@ let intervalId;
 
 let memberMarker;
 
+let popBuildingMarkers;
+
 export default function BMap() {
   const [placeSearchKeyword, setPlaceSearchKeyword] = useState("");
   const [currentPosition, setCurrentPosition] = useState(undefined);
@@ -62,6 +64,8 @@ export default function BMap() {
     }
     return () => {
       clearInterval(intervalId);
+      memberMarker = undefined;
+      popBuildingMarkers = undefined;
     }
   }, []);
 
@@ -177,7 +181,7 @@ function addMarker(html, latitude, longitude) {
   const contentHtml = $(".temp").html();
   $(document).find(".temp").remove();
 
-  const a = new naver.maps.Marker({
+  return new naver.maps.Marker({
     position: new naver.maps.LatLng(latitude, longitude),
     map: map,
     icon: {
@@ -185,11 +189,15 @@ function addMarker(html, latitude, longitude) {
         size: new naver.maps.Size(width, height)
     }
   });
-  console.log(a);
 }
 
 function fetchBuildingsInPositionRange() {
   const positionRange = getPositionRange();
+  if (popBuildingMarkers) {
+    popBuildingMarkers.forEach((m) => {
+      m.setMap(null);
+    });
+  }
   axios_api.get(`${MAIN_API_URL}/buildingProfile/getBuildingsWithinRange`, {
     params: positionRange
   }).then((response) => {
@@ -203,10 +211,12 @@ function fetchBuildingsInPositionRange() {
       "chatroomName": "sample-chatroom"
     }
 
+    const buildingMarkersCache = [];
     data.forEach((d) => {
       const contenthtml = getBuildingMarkerHtml(sampleSubscriptionProviders, sampleLiveliestChatroom, d.buildingName);
-      addMarker(contenthtml, d.latitude, d.longitude);
+      buildingMarkersCache.push(addMarker(contenthtml, d.latitude, d.longitude));
     });
+    popBuildingMarkers = buildingMarkersCache;
   });
 }
 
