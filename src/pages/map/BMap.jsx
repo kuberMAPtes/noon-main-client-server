@@ -5,6 +5,7 @@ import FetchTypeToggle from "./component/FetchTypeToggle";
 import axios_api from "../../lib/axios_api";
 import { MAIN_API_URL } from "../../util/constants";
 import { is2xxStatus } from "../../util/statusCodeUtil";
+import { getPlaceSearchMarkerHtml } from "./contant/markerHtml";
 
 const naver = window.naver;
 
@@ -67,20 +68,6 @@ export default function BMap() {
       }
     }
   }, [currentPosition]);
-
-  /**
-   * @param {{
-   *   placeName: string;
-   *   roadAddress: string;
-   *   latitude: number;
-   *   longitude: number;
-   * }[]} places 
-   */
-  function onFetchPlace(places) {
-    places.forEach((place) => {
-      addPlaceSearchMarker(place);
-    })
-  }
   
   return (
     <>
@@ -111,6 +98,21 @@ function searchPlaceList(searchKeyword, callback) {
     if (is2xxStatus(response.status)) {
       callback(response.data)
     }
+  })
+}
+
+/**
+ * @param {{
+ *   placeName: string;
+ *   roadAddress: string;
+ *   latitude: number;
+ *   longitude: number;
+ * }[]} places 
+ */
+function onFetchPlace(places) {
+  places.forEach((place) => {
+    const contentHtml = getPlaceSearchMarkerHtml(place.roadAddress, place.placeName);
+    addMarker(contentHtml, place.latitude, place.longitude);
   })
 }
 
@@ -151,68 +153,6 @@ function fetchBuildingInfo(latitude, longitude) {
  */
 function fetchBuildingMarkers(type) {
   // TODO: API 요청
-}
-
-const liveliness = {
-  1: "#e03131",
-  2: "#f08c00",
-  3: "#ffd43b",
-  4: "#37b24d",
-  5: "#adb5bd",
-  6: "#212529"
-}
-
-/**
- * @param {{
- *   latitude: number;
- *   longitude: number;
- *   buildingName: string;
- *   livelistChatroom: {
- *     liveliness: number;
- *     chatroomName: string;
- *   };
- *   subscriptionProviders: string[];
- * }} marker
- */
-function addBuildingMarker(marker) {
-  const contentHtmlText = `
-  <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; height: fit-content; margin: 0px; padding: 0px">
-    <div style="text-align: center;">
-      <p>${marker.subscriptionProviders[0]}</p>
-      <p>${marker.livelistChatroom.chatroomName}</p>
-      <p>${marker.buildingName}</p>
-    </div>
-    <div style="display: flex; justify-content: center; align-items: center; ">
-      <img src="./image/marker.png" style="width: 40px; height: 50px; margin: 0px; padding: 0px" />
-    </div>
-  </div>
-  `
-
-  addMarker(contentHtmlText, marker.latitude, marker.longitude);
-}
-
-/**
- * @param {{
-*   latitude: number;
-*   longitude: number;
-*   roadAddress: string;
-*   placeName: string;
-* }} marker
-*/
-function addPlaceSearchMarker(marker) {
-  const contentHtmlText = `
-  <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; height: fit-content; margin: 0px; padding: 0px">
-    <div style="text-align: center;">
-      <p>${marker.placeName}</p>
-      <p>${marker.roadAddress}</p>
-    </div>
-    <div style="display: flex; justify-content: center; align-items: center; ">
-      <img src="./image/marker.png" style="width: 40px; height: 50px; margin: 0px; padding: 0px" />
-    </div>
-  </div>
-  `
-
-  addMarker(contentHtmlText, marker.latitude, marker.longitude);
 }
 
 /**
