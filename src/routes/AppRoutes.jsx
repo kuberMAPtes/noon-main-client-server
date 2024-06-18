@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import GetAuthMain from '../pages/member/GetAuthMain';
 import GetSignUpTermAgreement from '../pages/member/GetSignUpTermAgreement';
 import AddPhoneNumberAuthentification from '../pages/member/AddPhoneNumberAuthentification';
@@ -45,9 +45,10 @@ import DeleteBadFeed from '../pages/CustomerSupport/DeleteBadFeed';
 import MemberSetting from "../pages/setting/MemberSetting";
 // import Test from '../pages/Chat/Test';
 
-import FeedList from "../pages/feed/FeedList";
-import FeedDetail from "../pages/feed/FeedDetail";
-import FeedForm from "../pages/feed/FeedForm";
+import FeedList from "../pages/feed/FeedListPage";
+import FeedDetail from "../pages/feed/FeedDetailPage";
+import FeedForm from "../pages/feed/FeedFormPage";
+import FeedPages from '../pages/feed/FeedPages';
 
 const AppRoutes = () => {
   return (
@@ -123,9 +124,10 @@ const AppRoutes = () => {
         </Route>
         <Route path="/setting/:memberId" element={<MemberSetting />} />
         <Route path="/feed">
-            <Route path="feedList" element={<FeedList />} />
-            <Route path="feedDetail" element={<FeedDetail />} />
-            <Route path="feedForm" element={<FeedForm />} />
+            <Route path="list" element={<FeedList />} />
+            <Route path="detail" element={<FeedDetail />} />
+            <Route path="form" element={<FeedForm />} />
+            <Route path="" element={<FeedPages />} />
         </Route>
     </Routes>
     )
