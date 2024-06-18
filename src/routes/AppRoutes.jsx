@@ -31,7 +31,7 @@ import Search from "../pages/search/Search";
 import GuestRoute from './GuestRoute';
 import B from '../pages/member/function/test/B';
 
-import Building from '../pages/building/Building';
+import Building from '../pages/building/Building2';
 import GetCustomerSupport from '../pages/CustomerSupport/GetCustomerSupport';
 import GetChatbot from '../pages/CustomerSupport/GetChatbot';
 import ListNotice from '../pages/CustomerSupport/ListNotice';
@@ -84,7 +84,6 @@ const AppRoutes = () => {
           timeout={300}
           classNames={isBack ? "reverse-slide" :  "slide"}
         >
-            
           <AuthLoader>
             <Routes location={location}>
               <Route path="/b" element={<B />}></Route>
@@ -183,44 +182,41 @@ const AppRoutes = () => {
                 <Route path="myChatroomList" element={<MyChatroomList />} />
                 <Route path="ChatApplyList" element={<ChatApplyList />} />
 
-                <Route
-                  path="chatAcceptRejectDecide"
-                  element={<ChatAcceptRejectDecide />}
-                />
-                <Route path="chatApply" element={<ChatApply />} />
-                <Route path="chatisAccepted" element={<ChatisAccepted />} />
-                <Route path="chatisRejected" element={<ChatisRejected />} />
-                <Route path="chatReject" element={<ChatReject />} />
-                <Route path="chatRejected" element={<ChatRejected />} />
-                {/* <Route path="test" element={<Test/>}/> */}
-              </Route>
-              <Route path="/map" element={<BMap />} />
-              <Route path="/search" element={<Search />} />
-              <Route path="/getBuildingProfile" element={<Building />} />
-              <Route path="/customerSupport">
-                <Route path="" element={<GetCustomerSupport />} />
-                <Route path="getChatbot" element={<GetChatbot />} />
-                <Route path="getNoticeList" element={<ListNotice />} />
-                <Route path="getNotice" element={<GetNotice />} />
-                <Route path="addNoticeView" element={<AddNoticeView />} />
-                <Route path="getReportList" element={<ListReport />} />
-                <Route path="getReport" element={<GetReport />} />
-                <Route path="addReport" element={<AddReport />} />
-                <Route path="listImages" element={<ListImages />} />
-                <Route path="getImage" element={<GetImage />} />
-                <Route path="deleteBadFeed" element={<DeleteBadFeed />} />
-              </Route>
-              <Route path="/setting/:memberId" element={<MemberSetting />} />
-              <Route path="/feed">
-                <Route path="feedList" element={<FeedList />} />
-                <Route path="feedDetail" element={<FeedDetail />} />
-                <Route path="feedForm" element={<FeedForm />} />
-              </Route>
-            </Routes>
+            <Route path="chatAcceptRejectDecide" element={<ChatAcceptRejectDecide/>}/>
+            <Route path="chatApply" element={<ChatApply/>}/>
+            <Route path="chatisAccepted" element={<ChatisAccepted/>}/>
+            <Route path="chatisRejected" element={<ChatisRejected/>}/>
+            <Route path="chatReject" element={<ChatReject/>}/>
+            <Route path="chatRejected" element={<ChatRejected/>}/>
+            {/* <Route path="test" element={<Test/>}/> */}
+        </Route>
+        <Route path="/map" element={<BMap />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/getBuildingProfile" element={<Building />} />
+        <Route path="/customerSupport">
+            <Route path="" element={<GetCustomerSupport />} />
+            <Route path="getChatbot" element={<GetChatbot />} />
+            <Route path="getNoticeList" element={<ListNotice />} />
+            <Route path="getNotice" element={<GetNotice />} />
+            <Route path="addNoticeView" element={<AddNoticeView />} />
+            <Route path="getReportList" element={<ListReport />} />
+            <Route path="getReport" element={<GetReport />} />
+            <Route path="addReport" element={<AddReport />} />
+            <Route path="listImages" element={<ListImages />} />
+            <Route path="getImage" element={<GetImage />} />
+            <Route path="deleteBadFeed" element={<DeleteBadFeed />} />
+        </Route>
+        <Route path="/setting/:memberId" element={<MemberSetting />} />
+        <Route path="/feed">
+            <Route path="list" element={<FeedList />} />
+            <Route path="detail" element={<FeedDetail />} />
+            <Route path="form" element={<FeedForm />} />
+            <Route path="" element={<FeedPages />} />
+        </Route>
+    </Routes>
           </AuthLoader>
         </CSSTransition>
       </TransitionGroup>
   );
-};
 
 export default AppRoutes;

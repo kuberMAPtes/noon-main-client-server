@@ -1,0 +1,30 @@
+@font-face {
+    font-family: 'GyeonggiBatangBold';
+    src: url('../../fonts/Batang_Bold.woff');
+}
+
+@font-face {
+    font-family: 'GyeonggiBatangRegular';
+    src: url('../../fonts/Batang_Regular.woff');
+}
+
+@font-face {
+    font-family: 'GyeonggiTitleBold';
+    src: url('../../fonts/Title_Bold.woff');
+
+}
+
+@font-face {
+    font-family: 'GyeonggiTitleLight';
+    src: url('../../fonts/Title_Light.woff');
+}
+
+div {
+    font-family: 'GyeonggiTitleLight', sans-serif;
+}
+
+h1, h2, h3 {
+    font-family: 'GyeonggiBatangBold', sans-serif;
+    font-weight: bold;
+}
+  
