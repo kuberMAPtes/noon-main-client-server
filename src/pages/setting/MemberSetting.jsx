@@ -5,6 +5,7 @@ import { MAIN_API_URL } from "../../util/constants";
 import { is2xxStatus } from "../../util/statusCodeUtil";
 import BasicNavbar from "../../components/common/BasicNavbar";
 import "./css/MemberSetting.css";
+import OpInfoModal from "./component/OpInfoModal";
 
 const PUBLIC_RANGES = [
   {
@@ -127,9 +128,11 @@ export default function MemberSetting() {
           setOpInfoMode("termsOfUse");
           setOpInfoModalVisible(true);
         }}>이용규정</button>
-        {
-          opInfoModalVisible && <OpInfoDisplay opInfoMode={opInfoMode} onCancelClick={() => setOpInfoModalVisible(false)} />
-        }
+        <OpInfoModal
+            visible={opInfoModalVisible}
+            setVisible={setOpInfoModalVisible}
+            mode={opInfoMode}
+        />
       </main>
     </div>
   );
@@ -148,24 +151,4 @@ function fetchSettingInfo(memberId, callback) {
   axios_api.get(`${MAIN_API_URL}/setting/getSetting/${memberId}`).then((response) => {
     callback(response.data);
   })
-}
-
-const operationInfoText = {
-  termsAndPolicy: "약관 및 정책",
-  termsOfUse: "이용규정"
-};
-
-/**
- * @param {{
- *   opInfoMode: "termsAndPolicy" | "termsOfUse",
- *   onCancelClick: () => void
- * }} props
- */
-function OpInfoDisplay({opInfoMode, onCancelClick}) {
-  return (
-    <div>
-      {operationInfoText[opInfoMode]}
-      <button type="button" onClick={() => onCancelClick()}>닫기</button>
-    </div>
-  );
 }
