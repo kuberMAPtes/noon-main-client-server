@@ -1,17 +1,17 @@
-import { useState } from "react";
-
-export default function FetchTypeToggle() {
-  const [subscriptionChecked, setSubscriptionChecked] = useState(true);
-  const [popBuildingChecked, setPopBuildingChecked] = useState(true);
+/**
+ * @param props
+ * @returns JSX.Element
+ */
+export default function FetchTypeToggle({
+  subscriptionChecked, setSubscriptionChecked, popBuildingChecked, setPopBuildingChecked
+}) {
 
   function onSubscriptionDisplayCheckboxChange(e) {
     setSubscriptionChecked(e.target.checked);
-    
   }
   
   function onPopularDisplayCheckboxChange(e) {
     setPopBuildingChecked(e.target.checked);
-    // TODO: After API server implemented
   }
   
   return (
