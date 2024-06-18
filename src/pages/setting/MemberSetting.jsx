@@ -91,19 +91,21 @@ export default function MemberSetting() {
       <BasicNavbar />
       <main className="container">
         <h1>환경설정</h1>
-        {
-          COMPONENT_INFOS.map((data, idx) => (
-            <div key={`button-group-${idx}`}>
-              <h3>{data.header}</h3>
-              <PublicRangeDropdown
-                currentSelectedId={data.currentSelected}
-                buttonInfos={data.buttonInfos}
-                onButtonClick={data.callback}
-              />
-            </div>
-          ))
-        }
-        <button type="button" onClick={() => {
+        <div className="setting-content-wrapper">
+          {
+            COMPONENT_INFOS.map((data, idx) => (
+              <div className="setting-content" key={`button-group-${idx}`}>
+                <h3>{data.header}</h3>
+                <PublicRangeDropdown
+                  currentSelectedId={data.currentSelected}
+                  buttonInfos={data.buttonInfos}
+                  onButtonClick={data.callback}
+                />
+              </div>
+            ))
+          }
+        </div>
+        <button className="btn--apply-setting" type="button" onClick={() => {
           axios_api.post(`${MAIN_API_URL}/setting/updateSetting/${memberId}`, {
             memberProfilePublicRange,
             allFeedPublicRange,
@@ -117,11 +119,11 @@ export default function MemberSetting() {
             console.error(err);
           })
         }}>변경사항 저장</button>
-        <button type="button" onClick={() => {
+        <button className="btn--opinfo" type="button" onClick={() => {
           setOpInfoMode("termsAndPolicy");
           setOpInfoModalVisible(true);
         }}>약관 및 정책</button>
-        <button type="button" onClick={() => {
+        <button className="btn--opinfo" type="button" onClick={() => {
           setOpInfoMode("termsOfUse");
           setOpInfoModalVisible(true);
         }}>이용규정</button>

@@ -4,10 +4,49 @@ main {
   flex-direction: column;
 }
 
+main h1 {
+  margin-bottom: 48px;
+}
+
 .pg-dropdown {
   width: 128px;
 }
 
 .pg-dropdown button {
   width: 100%;
+}
+
+.setting-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 27px;
+}
+
+.setting-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.setting-content * {
+  margin: 0px;
+}
+
+.btn--apply-setting {
+  margin-top: 36px;
+  width: fit-content;
+  padding: 12px 36px;
+  border-radius: 5px;
+  margin-left: 18px;
+  margin-bottom: 18px;
+  font-size: 24px;
+}
+
+.btn--opinfo {
+  margin-top: 48px;
+  font-size: 20px;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 8px;
 }
