@@ -5,7 +5,7 @@ import FetchTypeToggle from "./component/FetchTypeToggle";
 import axios_api from "../../lib/axios_api";
 import { MAIN_API_URL } from "../../util/constants";
 import { is2xxStatus } from "../../util/statusCodeUtil";
-import { getPlaceSearchMarkerHtml } from "./contant/markerHtml";
+import { getBuildingMarkerHtml, getPlaceSearchMarkerHtml } from "./contant/markerHtml";
 
 const naver = window.naver;
 
@@ -45,6 +45,15 @@ export default function BMap() {
       fetchBuildingInfo(latitude, longitude);
     });
 
+    naver.maps.Event.addListener(map, "dragend", (e) => {
+      fetchBuildingsInPositionRange();
+    });
+
+    naver.maps.Event.addListener(map, "zoom_changed", (e) => {
+      fetchBuildingsInPositionRange();
+    });
+
+    fetchBuildingsInPositionRange();
     getCurrentPosition(onCurrentPositionAwared, onFailedFetchingPosition);
     if (!intervalId) {
       intervalId = window.setInterval(() => {
@@ -179,6 +188,28 @@ function addMarker(html, latitude, longitude) {
   console.log(a);
 }
 
+function fetchBuildingsInPositionRange() {
+  const positionRange = getPositionRange();
+  axios_api.get(`${MAIN_API_URL}/buildingProfile/getBuildingsWithinRange`, {
+    params: positionRange
+  }).then((response) => {
+    const data = response.data;
+    console.log(data);
+
+    // TODO: 샘플 데이터 변경
+    const sampleSubscriptionProviders = [ "sample" ];
+    const sampleLiveliestChatroom = {
+      "liveliness": 1,
+      "chatroomName": "sample-chatroom"
+    }
+
+    data.forEach((d) => {
+      const contenthtml = getBuildingMarkerHtml(sampleSubscriptionProviders, sampleLiveliestChatroom, d.buildingName);
+      addMarker(contenthtml, d.latitude, d.longitude);
+    });
+  });
+}
+
 function getPositionRange() {
   const bound = map.getBounds();
 
@@ -186,21 +217,9 @@ function getPositionRange() {
   const mapSw = bound.getSW();
 
   return {
-    ne: {
-      latitude: mapNe.y,
-      longitude: mapNe.x,
-    },
-    nw: {
-      latitude: mapNe.y,
-      longitude: mapSw.x
-    },
-    se: {
-      latitude: mapSw.y,
-      longitude: mapNe.x
-    },
-    sw: {
-      latitude: mapSw.y,
-      longitude: mapSw.x
-    }
+    lowerLatitude: mapSw.y,
+    lowerLongitude: mapSw.x,
+    upperLatitude: mapNe.y,
+    upperLongitude: mapNe.x
   };
 }
