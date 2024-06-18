@@ -7,7 +7,7 @@ import { getMember } from '../../pages/member/function/memberAxios';
 const AuthLoader = ({ children }) => {
   const dispatch = useDispatch();
   const authorization = useSelector((state)=>state.auth.authorization);
-  console.log("#### AuthLoader 렌더링");
+  console.log("#### AuthLoader 렌더링(authorization)구독", authorization);
 
   useEffect(() => {
       console.log("@@@@ AuthLoader useEffect 시작");
@@ -26,7 +26,7 @@ const AuthLoader = ({ children }) => {
             console.log("getMember :: " + apiMember);
 
             if (apiMember) {
-              console.log("2차 관문 ㄱㄱ :: " + apiMember);
+              console.log("2차 관문 통과 :: " + apiMember);
               dispatch(
                 restoreAuthState({ authorization: true, member: apiMember })
               );
@@ -37,12 +37,15 @@ const AuthLoader = ({ children }) => {
           } catch (error) {
             console.error("Error fetching member data:", error);
             Cookies.remove("AuthToken");
+            dispatch(setLoading(false));
           }
         } else {
           console.log("로그인 정보가 없습니다.");
           Cookies.remove("AuthToken");
         }
+
         dispatch(setLoading(false));
+        
       };
 
       fetchMemberData();

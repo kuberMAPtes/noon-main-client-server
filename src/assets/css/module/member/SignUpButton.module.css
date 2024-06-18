@@ -1,0 +1,9 @@
+.loginButton {
+width: 100%;
+margin-bottom: 10px;
+}
+.customButton {
+background-color: #91a7ff !important;
+border-color: #91a7ff !important;
+color: white !important;
+}

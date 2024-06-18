@@ -42,3 +42,36 @@ export const validateLoginForm = (memberId, pwd) => {
 
   return null;
 };
+
+export const handleChange = async (
+    e,
+    setState,
+    validateFunction,
+    checkFunction,
+    validationMessageSetter,
+    validitySetter,
+    successMessage = "",
+    failureMessage = ""
+) => {
+    const input = e.target.value;
+    setState(input);
+
+    if (validateFunction(input)) {
+        if (checkFunction) {
+            const response = await checkFunction(input);
+            if (response.info === true) {
+                validationMessageSetter(successMessage);
+                validitySetter(true);
+            } else {
+                validationMessageSetter(response.message);
+                validitySetter(false);
+            }
+        } else {
+            validationMessageSetter(successMessage);
+            validitySetter(true);
+        }
+    } else {
+        validationMessageSetter(failureMessage);
+        validitySetter(false);
+    }
+};

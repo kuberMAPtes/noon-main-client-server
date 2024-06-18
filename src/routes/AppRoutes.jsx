@@ -56,6 +56,7 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import '../assets/css/animation.css'
 import LoginForm from '../pages/member/component/LoginForm';
 import AuthLoader from '../components/common/AuthLoader'
+import ProfileView from '../pages/member/function/test/ProfileView';
 const AppRoutes = () => {
     
     const location = useLocation();
@@ -63,15 +64,17 @@ const AppRoutes = () => {
     const prevLocationRef = useRef(location); // 초기 위치를 저장
     const [isBack, setIsBack] = useState(false);
     
-    console.log('!@*#(&$^!@*&#^!*@&^#!#isNotReversing:', isBack);
+    console.log("#### AppRoutes 렌더링")
+    // console.log('!@*#(&$^!@*&#^!*@&^#!#isNotReversing:', isBack);
 
     useEffect(() => {
+        console.log("@@@@ AppRoutes useEffect ")
         if (navigationType === 'POP') {
-          console.log('@@@@@@@@@@@@@@@@@@@POPPOPPOPPOPPOPPOP');
+        //   console.log('POP');
           setIsBack(true);
         } else{
           setIsBack(false);
-          console.log('@@@@@@@@@@@@@@@@@@@@@@PUSHPUSHPUSHPUSHPUSHPUSH');
+        //   console.log('PUSH');
         }
         prevLocationRef.current = location; // 현재 위치를 저장하여 다음 렌더링 시 사용할 수 있도록 함
 
@@ -88,6 +91,12 @@ const AppRoutes = () => {
           <AuthLoader>
             <Routes location={location}>
               <Route path="/b" element={<B />}></Route>
+              <Route path="/profileView" element={
+                <PrivateRoute>
+                    <ProfileView />
+                </PrivateRoute>
+                }>
+                </Route>
               <Route path="/testComponent" element={<TestComponent />}></Route>
               <Route path="/member">
                 <Route

@@ -12,7 +12,10 @@ const LoginPage = () => {
     <Container className={styles.loginButtons}>
       <Row className="justify-content-center">
         <Col xs={12} md={8} lg={6} className="text-center">
-          <Button variant="link" className={styles.backButton}>
+          <Button
+          variant="link"
+          className={styles.backButton}
+          onClick={handleKakaoLogin}>
             <FaArrowLeft /> 로그인
           </Button>
           <div className={styles.logo}>
@@ -22,17 +25,23 @@ const LoginPage = () => {
             <KakaoLogo className="me-2"/> 카카오로 시작하기
           </Button>
           <hr />
-          <Button variant="light" className={styles.loginButton}>
+          <Button
+          variant="light"
+          className={styles.loginButton}
+          onClick={() => handleGoogleLogin(dispatch)}>
             <GoogleLogo className="me-2"/> nbsp; Google로 시작하기
           </Button>
           <hr />
-          <Button variant="success" className={`d-flex align-items-center justify-content-center ${styles.loginButton} ${styles.customButton}`}>
+          <Button
+          variant="success"
+          className={`d-flex align-items-center justify-content-center ${styles.loginButton} ${styles.customButton}`}
+          onClick={onLoginClick}>
             계정 ID로 시작하기
           </Button>
           <hr />
-          <Button variant="success" className={`d-flex align-items-center justify-content-center ${styles.loginButton} ${styles.customButton}`}>
-            회원가입하기
-          </Button>
+          <SignUpButton />
+          
+            {loginStatus === 'loading' && <Spinner animation="border" />}
           <hr />
         </Col>
       </Row>

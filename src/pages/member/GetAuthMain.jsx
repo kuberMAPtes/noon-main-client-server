@@ -8,6 +8,7 @@ import { checkRedirectResult } from './function/googleLogin';
 import LoginButtons from './component/LoginButtons';
 import BackgroundTemplate from '../../components/common/BackgroundTemplate';
 import ForegroundTemplate from '../../components/common/ForegroundTemplate';
+import NoonLogo from '../../assets/css/NoonLogo';
 
 const GetAuthMain = () => {
   console.log("#### GetAuthMain 컴포넌트 초기화 시작");
@@ -52,7 +53,6 @@ const GetAuthMain = () => {
   return (
     <ForegroundTemplate>
       <Container className={`mt-5 ${styles.container}`}>
-        <h1 className="text-center">회원가입 / 로그인</h1>
         <Row className="justify-content-center">
           <Col md={8} lg={6} className="text-center">
             <LoginButtons onLoginClick={handleLoginClick} />
