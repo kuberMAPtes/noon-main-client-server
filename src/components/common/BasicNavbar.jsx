@@ -1,52 +1,45 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { IoNotifications, IoSettingsSharp  } from "react-icons/io5";
 import "../../assets/css/BasicNavbar.css";
 import "../../assets/css/font.css";
 
-import {
-  Collapse,
-  Navbar,
-  NavbarToggler,
-  NavbarBrand,
-  Nav,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  NavbarText,
-} from 'reactstrap';
+import Container from 'react-bootstrap/Container';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import NavDropdown from 'react-bootstrap/NavDropdown';
+
 
 function BasicNavbar(args) {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggle = () => setIsOpen(!isOpen);
-
   return (
-    <div>
-      <Navbar color="primary" light="true" full="false" expand="sm" container="fluid" className='font'>
-        <NavbarBrand href="/">Noon</NavbarBrand>
-        <NavbarToggler onClick={toggle}/>
-        <Collapse isOpen={isOpen} navbar>
-          <Nav className="me-auto" navbar>
-            <UncontrolledDropdown nav inNavbar>
-              <DropdownToggle nav caret>
-                (회원 이름)
-              </DropdownToggle>
-              <DropdownMenu right>
-                <DropdownItem>Option1</DropdownItem>
-                <DropdownItem>Option2</DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem>Option3</DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown>
+    <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
+      <Container>
+        <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="me-auto">
+            <Nav.Link href="#features">Features</Nav.Link>
+            <Nav.Link href="#pricing">Pricing</Nav.Link>
+            <NavDropdown title="Dropdown" id="collapsible-nav-dropdown">
+              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.2">
+                Another action
+              </NavDropdown.Item>
+              <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item href="#action/3.4">
+                Separated link
+              </NavDropdown.Item>
+            </NavDropdown>
           </Nav>
-          <NavbarText className='navbar-icons'>
-            <IoNotifications size="32"/>
-            <IoSettingsSharp size="32"/>
-          </NavbarText>
-        </Collapse>
-      </Navbar>
-    </div>
+          <Nav>
+            <Nav.Link href="#deets">More deets</Nav.Link>
+            <Nav.Link eventKey={2} href="#memes">
+              Dank memes
+            </Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 }
 
