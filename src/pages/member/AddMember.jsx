@@ -7,11 +7,10 @@ import {
     handleNicknameChange,
     handleMemberIdChange,
     handlePwdChange,
-    handleSubmit,
     redirectToPostcode,
     detailedAddressChangeHandler,
-    handleAddMember
-} from '../member/function/AddMemberUtil';
+    addMemberSubmit
+} from './function/AddUpdateMemberUtil';
 import styles from '../../assets/css/module/member/AddMember.module.css';
 import { useDispatch } from 'react-redux';
 
@@ -42,7 +41,7 @@ const AddMember = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        // 쿠키에서 인증 정보를 읽고, 본인인증을 완료했는지 확인
+        // 쿠키에서 인증 정보를 읽고, 휴대폰 본인인증을 완료했는지 확인
         const encryptedData = Cookies.get('addMemberKey');
         const ivData = Cookies.get('addMemberOtherKey');
         console.log('당신은 휴대폰인증을 했습니다 encryptedData:', encryptedData);
@@ -81,7 +80,7 @@ const AddMember = () => {
                 <Col xs={12} md={8} lg={6}>
                     <h1 className="mb-4 text-center">회원가입</h1>
                     
-                    <Form onSubmit={handleSubmit(form, navigate)}>
+                    <Form>
                         <Form.Group controlId="formNickname" className="mb-3">
                             <Form.Label>닉네임</Form.Label>
                             <Form.Control 
@@ -177,7 +176,7 @@ const AddMember = () => {
                         type="submit"
                         className="w-100"
                         disabled={!isNicknameValid || !isMemberIdValid || !isPwdValid}
-                        onClick={()=>handleAddMember(form,dispatch, navigate)}>
+                        onClick={()=>addMemberSubmit(form,dispatch, navigate)}>
                             회원가입
                         </Button>
                     </Form>

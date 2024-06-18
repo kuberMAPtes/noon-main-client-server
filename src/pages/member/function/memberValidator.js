@@ -53,25 +53,40 @@ export const handleChange = async (
     successMessage = "",
     failureMessage = ""
 ) => {
-    const input = e.target.value;
-    setState(input);
+    
+    console.log('handleChange called');
+    console.log("@@@@@@@@@@@@" + typeof setState);
+    console.log("@@@@@@@@@@@@" + typeof validateFunction);
+    console.log("@@@@@@@@@@@@" + typeof checkFunction);
+    console.log("@@@@@@@@@@@@" + typeof validationMessageSetter);
+    console.log("@@@@@@@@@@@@" + typeof validitySetter);
+    console.log("@@@@@@@@@@@@" + setState);
+    console.log("@@@@@@@@@@@@" + validateFunction);
+    console.log("@@@@@@@@@@@@" + checkFunction);//?
+    console.log("@@@@@@@@@@@@" + validationMessageSetter);//?
+    console.log("@@@@@@@@@@@@" + validitySetter);//?
 
-    if (validateFunction(input)) {
-        if (checkFunction) {
-            const response = await checkFunction(input);
-            if (response.info === true) {
+
+        const input = e.target.value;
+        setState(input);
+
+        if (validateFunction(input)) {
+            if (checkFunction) {
+                const response = await checkFunction(input);
+                if (response.info === true) {
+                    validationMessageSetter(successMessage);
+                    validitySetter(true);
+                } else {
+                    validationMessageSetter(response.message);
+                    validitySetter(false);
+                }
+            } else {
                 validationMessageSetter(successMessage);
                 validitySetter(true);
-            } else {
-                validationMessageSetter(response.message);
-                validitySetter(false);
             }
         } else {
-            validationMessageSetter(successMessage);
-            validitySetter(true);
+            validationMessageSetter(failureMessage);
+            validitySetter(false);
         }
-    } else {
-        validationMessageSetter(failureMessage);
-        validitySetter(false);
-    }
+
 };
