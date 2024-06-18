@@ -25,7 +25,7 @@ const FeedDropdown = ({onSelect}) => {
     }
 
     return (
-        <div class="row justify-content-center">
+        <div className="row justify-content-center">
             <DropdownButton
                 id="dropdown-basic-button"
                 title="피드 목록"

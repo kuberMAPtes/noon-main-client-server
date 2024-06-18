@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../../css/FeedItem.css';
 
 import {Card, CardBody, CardImg, CardText, CardTitle} from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 const FeedItem = ({ data }) => {
+
     const {
         feedId,
         title,
