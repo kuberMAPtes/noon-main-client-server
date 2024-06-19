@@ -10,7 +10,7 @@ const Footer = () => {
       <Container>
         <Row className={`text-center ${styles['row-no-link-style']}`}>
           <Col>
-            <Link to="/Footer1">
+            <Link to="/feed/main">
               <FaHome size={24} />
               <div>홈</div>
             </Link>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../css/FeedDetail.css';
+import '../../css/FeedDetail.css';
 
 import { Badge, Button, Card, CardBody, CardSubtitle, CardText, CardTitle, Form, Input, ListGroup, ListGroupItem } from 'react-bootstrap';
 
@@ -53,6 +53,18 @@ const FeedDetail = ({ data }) => {
                                 {tag.tagText}
                             </Badge>
                         ))}
+                    </div>
+                    <div className="feed-actions">
+                        <Button onClick={null}>👍 좋아요 0</Button>
+                        <Button onClick={null}>
+                            {null ? '🔖 북마크 취소' : '🔖 북마크'}
+                        </Button>
+                    </div>
+                    <div className="feed-stats">
+                        <p>좋아요 수: 0</p>
+                        <p>댓글 수: {commentList.length}</p>
+                        <p>조회수: 0</p>
+                        <p>인기도: 0</p>
                     </div>
                 </CardBody>
             </Card>

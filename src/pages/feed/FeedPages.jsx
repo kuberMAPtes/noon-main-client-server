@@ -24,7 +24,7 @@ const FeedPages = () => {
             <Link to="detail?feedId=10001">Feed Detail</Link>
           </li>
           <li>
-            <Link to="feedForm">Feed Form</Link>
+            <Link to="form">Feed Form</Link>
           </li>
           <li>
             <Link to="main?memberId=member_1&page=1">Feed Main Page</Link>
