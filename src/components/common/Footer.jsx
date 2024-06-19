@@ -22,7 +22,7 @@ const Footer = () => {
             </Link>
           </Col>
           <Col>
-            <Link to="/Footer3">
+            <Link to="/map">
               <FaMap size={24} />
               <div>지도</div>
             </Link>
