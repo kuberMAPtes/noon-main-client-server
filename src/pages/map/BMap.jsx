@@ -99,12 +99,6 @@ export default function BMap() {
         typeCallback={(text) => setPlaceSearchKeyword(text)}
         searchCallback={() => searchPlaceList(placeSearchKeyword, onFetchPlace)}
       />
-      {/* <FetchTypeToggle
-          subscriptionChecked={subscriptionChecked}
-          setSubscriptionChecked={setSubscriptionChecked}
-          popBuildingChecked={popBuildingChecked}
-          setPopBuildingChecked={setPopBuildingChecked}
-      /> */}
       <div id="map">
         <button
             type="button"
@@ -113,6 +107,12 @@ export default function BMap() {
           <img src="./image/my-location.png" alt="my-location" /> 
         </button>
       </div>
+      <FetchTypeToggle
+          subscriptionChecked={subscriptionChecked}
+          setSubscriptionChecked={setSubscriptionChecked}
+          popBuildingChecked={popBuildingChecked}
+          setPopBuildingChecked={setPopBuildingChecked}
+      />
     </div>
   )
 }

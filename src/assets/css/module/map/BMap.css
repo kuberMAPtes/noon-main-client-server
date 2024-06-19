@@ -27,3 +27,36 @@
   height: 100%;
   z-index: 98;
 }
+
+.fetch-type-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.check-container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 24px;
+  background-color: #ced4da;
+  border: 1px solid #adb5bd;
+  border-radius: 8px;
+  width: 45%;
+}
+
+.unchecked {
+  background-color: #fff;
+}
+
+.check-container input[type="checkbox"] {
+  height: 20px;
+  width: 20px;
+  border: none;
+}
+
+.check-container {
+  font-size: 14px;
+}
