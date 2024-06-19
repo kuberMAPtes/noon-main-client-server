@@ -13,7 +13,18 @@ for (let i = 0; i <= 5; i++) {
 
 /**
  * @param {{
- *   searchResult: {}
+ *   searchResult: {
+ *     totalPages: number;
+ *     totalElements: number;
+ *     size: number;
+ *     content: {
+ *       chatroomID: number;
+ *       chatroomMinTemp: number;
+ *       chatroomName: string;
+ *       chatroomCreatorId: string;
+ *       chatroomType: string;
+ *     }[]
+ *   }
  * }} props
  */
 export default function ChatroomSearchResult({

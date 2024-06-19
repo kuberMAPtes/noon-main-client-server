@@ -25,7 +25,15 @@ const SAMPLE_DATA = [
 
 /**
  * @param {{
- *   searchResult: {}
+ *   searchResult: {
+ *     buildingName: "string",
+ *     roadAddr: "string",
+ *     feedAiSummary: "string",
+ *     liveliestChatroomDto: {
+ *       chatroomName: "string",
+ *       liveliness: "string"
+ *     }
+ *   }[]
  * }} props
  */
 export default function BuildingSearchResult({

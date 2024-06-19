@@ -23,7 +23,20 @@ const TEXT_MAX_LENGTH = 30;
 
 /**
  * @param {{
- *   searchResult: {}
+ *   searchResult: {
+ *     feedId: number;
+ *     writerId: string;
+ *     writerNickname: string;
+ *     title: string;
+ *     feedText: string;
+ *     buildingId: number;
+ *     buildingName: string;
+ *     writtenTime: string;
+ *     feedAttachementURL: string;
+ *     like: boolean;
+ *     bookmark: boolean;
+ *     mainActivated: boolean;
+ *   }[]
  * }} props
  */
 export default function FeedSearchResult({
