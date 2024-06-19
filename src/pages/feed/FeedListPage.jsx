@@ -5,11 +5,13 @@ import { useSearchParams } from 'react-router-dom';
 import FeedItem from './component/FeedList/FeedItem';
 import Dropdown from './component/FeedList/FeedDropdown';
 import FeedNotFound from './component/FeedNotFound';
+import Loading from './component/FeedList/FeedLoading';
 
 import Footer from '../../components/common/Footer';
 import BasicNavbar from '../../components/common/BasicNavbar';
 
 import './css/FeedList.css';
+import axios_api from '../../lib/axios_api';
 
 const FeedListPage = () => {
     const [searchParams] = useSearchParams();
@@ -20,7 +22,7 @@ const FeedListPage = () => {
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [page, setPage] = useState(Number(initialPage));
-    const [fetchUrl, setFetchUrl] = useState('http://localhost:8080/feed/getFeedListByMember')
+    const [fetchUrl, setFetchUrl] = useState('/feed/getFeedListByMember')
     const observer = useRef();
 
     // 기본적으로 볼 수 있는 피드 목록 가져오기
@@ -32,7 +34,7 @@ const FeedListPage = () => {
 
         // axios 실행
         try {
-            const response = await axios.get(url + queryString);
+            const response = await axios_api.get(url + queryString);
             if (response.data.length === 0) {
                 setHasMore(false);
             } else {
@@ -77,7 +79,12 @@ const FeedListPage = () => {
 
     // 피드 실행 대기중
     if (loading && feeds.length === 0) {
-        return "대기중...";
+        return (
+            <div>
+                <Loading />
+            </div>
+            
+        );
     }
 
     // NotFount 페이지

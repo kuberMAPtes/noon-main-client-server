@@ -7,19 +7,19 @@ const FeedDropdown = ({onSelect}) => {
         let temp = '';
         switch (option) {
             case 'member':
-                temp = 'http://localhost:8080/feed/getFeedListByMember';
+                temp = '/feed/getFeedListByMember';
                 break;
             case 'subscriptionBuilding':
-                temp = 'http://localhost:8080/feed/getFeedListByMemberSubscription';
+                temp = '/feed/getFeedListByMemberSubscription';
                 break;
             case 'like':
-                temp = 'http://localhost:8080/feed/getFeedListByMemberLike';
+                temp = '/feed/getFeedListByMemberLike';
                 break;
             case 'bookmark':
-                temp = 'http://localhost:8080/feed/getFeedListByMemberBookmark';
+                temp = '/feed/getFeedListByMemberBookmark';
                 break;
             default:
-                temp = 'http://localhost:8080/feed/getFeedListByMember';
+                temp = '/feed/getFeedListByMember';
         }
 
         onSelect(temp);

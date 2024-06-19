@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import BasicNavbar from '../../components/common/BasicNavbar';
 import FeedNotFound from './component/FeedNotFound'
 import axios from 'axios';
+import axios_api from '../../lib/axios_api';
 
 const FeedDetailPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -17,8 +18,7 @@ const FeedDetailPage = () => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(
-                    'http://localhost:8080/feed/detail?feedId=' + feedId);
+                const response = await axios_api.get('/feed/detail?feedId=' + feedId);
                 console.log(response);
                 setFeed(response.data);
             } catch (e) {
