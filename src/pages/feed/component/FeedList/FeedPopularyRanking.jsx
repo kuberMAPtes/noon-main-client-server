@@ -10,7 +10,7 @@ const FeedPopularyRanking = ({feeds}) => {
             </Row>
             <ListGroup as="ol" numbered>
                 {feeds.map((feed, index) => (
-                    <ListGroup.Item as="li">{feed.title} / 작성자 : {feed.nickname} / 인기 : {feed.popularity}</ListGroup.Item>
+                    <ListGroup.Item key={feed.feedId} as="li">{feed.title} / 작성자 : {feed.nickname} / 인기 : {feed.popularity}</ListGroup.Item>
                 ))}
             </ListGroup>
         </Container>

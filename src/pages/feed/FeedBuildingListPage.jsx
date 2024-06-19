@@ -51,8 +51,6 @@ const FeedBuildingListPage = () => {
             console.log(e);
         }
 
-        rankingData();
-        
         setLoading(false);
     };
 
@@ -78,6 +76,11 @@ const FeedBuildingListPage = () => {
         fetchData(fetchUrl, page);
     }, [page, fetchUrl]);
 
+    // 처음에만 실행
+    useEffect(() => {
+        rankingData();
+    }, []);
+    
     // 무한스크롤 구현 (IntersectionObserver)
     const lastFeedElementRef = useCallback((node) => {
         if (observer.current) observer.current.disconnect();
