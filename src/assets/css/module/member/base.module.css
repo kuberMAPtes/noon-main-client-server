@@ -16,3 +16,10 @@
 .miniFont {
     font-size : 8rem;
 }
+
+.hoverStyle {
+    opacity:0.7;
+}
+.hoverStyle:hover {
+    opacity:1;
+}

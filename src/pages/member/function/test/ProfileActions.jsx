@@ -5,19 +5,32 @@ import { MdMoreHoriz } from "react-icons/md";
 import AnimatedDiv from '../../component/AnimatedDiv';
 import profile from '../../../../assets/css/module/member/GetMemberProfile.module.css';
 import { useNavigate } from "react-router-dom";
+import base from '../../../../assets/css/module/member/base.module.css';
 
-const ProfileActions = ({ showMenu, handleToggle }) => {
+const ProfileActions = () => {
+
+    const [showMenu, setShowMenu] = React.useState(false);
+
     const navigate = useNavigate();
+
+    const handleToggle = (e) => {
+        e.preventDefault();
+        setShowMenu(!showMenu);
+    };
 
     return (
         <Row className="text-center mt-3">
             <Col>
-                <div className={profile.memberCircle} onClick={() => navigate('/member/updateMember')}>
+                <div
+                className={`${profile.memberCircle} ${base.hoverStyle}` }
+                onClick={() => navigate('/member/updateMember')}>
                     <div className={profile["circle-profile-icon"]}><FaUserEdit /></div>
                 </div>
             </Col>
             <Col>
-                <div className={profile.circle} onClick={() => navigate('/map')}>
+                <div 
+                className={`${profile.circle} ${base.hoverStyle}`}
+                onClick={() => navigate('/map')} >
                     <div className={profile["circle-map-icon"]}><FaMapMarkedAlt /></div>
                 </div>
             </Col>

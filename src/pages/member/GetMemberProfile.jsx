@@ -1,15 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Card, Spinner, Alert, Button } from 'react-bootstrap';
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Spinner,
+  Alert,
+  Button,
+} from "react-bootstrap";
 import LogoutForm from "./component/LogoutForm";
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 import { getMemberProfile } from "./function/memberAxios";
 import { useSelector } from "react-redux";
-import { decryptWithIv } from "../../util/crypto";
+import { decryptWithLv, decryptWithLvWithUri } from "../../util/crypto";
 import { useParams } from "react-router-dom";
 
 const GetMemberProfile = () => {
   console.log("#### GetMemberProfile 렌더링");
-  
+
   const authorization = useSelector((state) => state.auth.authorization);
   const fromId = useSelector((state) => state.auth.member.memberId);
   const { secretId, secretIv } = useParams();
@@ -19,29 +27,19 @@ const GetMemberProfile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const decryptToId = (secretId, secretIv) => {
-    try {
-      return decryptWithIv(decodeURIComponent(secretId), decodeURIComponent(secretIv));
-    } catch (error) {
-      console.error("Error decrypting toId: ", error);
-      setError("Error decrypting toId");
-      setLoading(false);
-      return null;
-    }
-  };
-
   useEffect(() => {
-    console.log("URL Parameters - encryptedToId:", secretId, "IV:", secretIv);
+    // console.log("URL Parameters - encryptedToId:", secretId, "IV:", secretIv);
     if (secretId && secretIv) {
-      const decryptedToId = decryptToId(secretId, secretIv);
-      console.log("Decrypted toId: ", decryptedToId);
+      const decryptedToId = decryptWithLvWithUri(secretId, secretIv);
+    //   console.log("Decrypted toId: ", decryptedToId);
       setToId(decryptedToId);
     }
   }, [secretId, secretIv]);
 
   useEffect(() => {
     if (authorization && fromId && toId) {
-      console.log("Fetching member profile data", "Authorization:", authorization, "From ID:", fromId, "To ID:", toId);
+      console.log("Fetching member profile data","Authorization:",authorization,"From ID:",fromId,"To ID:",toId);
+      
       const fetchMemberProfile = async () => {
         setLoading(true);
         setError(null);
@@ -74,11 +72,19 @@ const GetMemberProfile = () => {
         <Card>
           <Card.Body>
             <Card.Title>{profile.nickname}</Card.Title>
-            <Card.Subtitle className="mb-2 text-muted">Member ID: {profile.memberId}</Card.Subtitle>
+            <Card.Subtitle className="mb-2 text-muted">
+              Member ID: {profile.memberId}
+            </Card.Subtitle>
             <Card.Text>
               <p>DajungScore: {profile.dajungScore}</p>
               <p>Profile intro: {profile.profileIntro}</p>
-              {profile.profilePhotoUrl && <img src={profile.profilePhotoUrl} alt="Profile" className="img-fluid mb-2" />}
+              {profile.profilePhotoUrl && (
+                <img
+                  src={profile.profilePhotoUrl}
+                  alt="Profile"
+                  className="img-fluid mb-2"
+                />
+              )}
             </Card.Text>
             <div>
               <h2>feedDtoList:</h2>
@@ -87,12 +93,20 @@ const GetMemberProfile = () => {
                   <Card key={feed.feedId} className="mb-3">
                     <Card.Body>
                       <Card.Title>{feed.title}</Card.Title>
-                      <Card.Subtitle className="mb-2 text-muted">빌딩이름: {feed.buildingName}</Card.Subtitle>
+                      <Card.Subtitle className="mb-2 text-muted">
+                        빌딩이름: {feed.buildingName}
+                      </Card.Subtitle>
                       <Card.Text>
                         <p>피드내용: {feed.feedText}</p>
                         <p>작성자: {feed.writerNickname}</p>
                         <p>작성 시간: {feed.writtenTime}</p>
-                        {feed.feedAttachementURL && <img src={feed.feedAttachementURL} alt="첨부 이미지" className="img-fluid" />}
+                        {feed.feedAttachementURL && (
+                          <img
+                            src={feed.feedAttachementURL}
+                            alt="첨부 이미지"
+                            className="img-fluid"
+                          />
+                        )}
                       </Card.Text>
                     </Card.Body>
                   </Card>
@@ -104,13 +118,28 @@ const GetMemberProfile = () => {
         <Alert variant="warning">No profile data available.</Alert>
       )}
       <div className="text-center mt-4">
-        <Button variant="link" href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
+        <Button
+          variant="link"
+          href="https://www.facebook.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <FaFacebook size={30} />
         </Button>
-        <Button variant="link" href="https://www.twitter.com" target="_blank" rel="noopener noreferrer">
+        <Button
+          variant="link"
+          href="https://www.twitter.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <FaTwitter size={30} />
         </Button>
-        <Button variant="link" href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
+        <Button
+          variant="link"
+          href="https://www.instagram.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <FaInstagram size={30} />
         </Button>
       </div>

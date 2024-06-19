@@ -13,7 +13,7 @@ const UseProfileInfiniteScroll = (hasMore, setPage) => {
         if (node) observer.current.observe(node);
     }, [hasMore]);
 
-    return lastFeedElementRef;
+    return {lastFeedElementRef};
 };
 
 export default UseProfileInfiniteScroll;

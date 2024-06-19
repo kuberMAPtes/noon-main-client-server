@@ -1,32 +1,36 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import  axiosInstance  from '../../../../lib/axiosInstance';
+// http://localhost:8080/feed/getFeedListByMember
+const UseProfileFetchFeeds = (toId, initialPage) => {
 
-const UseProfileFetchFeeds = (fetchUrl, toId, initialPage) => {
+    const fetchUrl = "/feed/getFeedListByMember";
+
     const [feeds, setFeeds] = useState([]);
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [page, setPage] = useState(Number(initialPage));
 
-    const fetchData = async (url, page) => {
+    const fetchData = useCallback(async (toId, page) => {
         setLoading(true);
-        let queryString = `?memberId=${toId}&page=${page}`;
-
+        const queryString = `?memberId=${toId}&page=${page}`;
         try {
-            const response = await axios.get(url + queryString);
+            const response = await axiosInstance.get(fetchUrl + queryString);
             if (response.data.length === 0) {
                 setHasMore(false);
             } else {
                 setFeeds((prevFeeds) => [...prevFeeds, ...response.data]);
             }
-        } catch (e) {
-            console.log(e);
+        } catch (error) {
+            console.error('Error fetching feeds:', error);
+        } finally {
+            setLoading(false);
         }
-        setLoading(false);
-    };
+    }, [fetchUrl]);
 
     useEffect(() => {
         fetchData(fetchUrl, page);
-    }, [page, fetchUrl]);
+    }, [page, fetchUrl, fetchData]);
 
     return { feeds, loading, hasMore, setPage };
 };

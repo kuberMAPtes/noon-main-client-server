@@ -61,7 +61,6 @@ import "../assets/css/animation.css";
 import LoginForm from "../pages/member/component/LoginForm";
 import GetMemberId from "../pages/member/GetMemberId";
 import IdFormToUpdatePwd from "../pages/member/IdFormToUpdatePwd";
-import ProfileView from "../pages/member/function/test/ProfileView";
 import AuthLoader from '../components/common/AuthLoader'
 import FeedChartPage from '../pages/feed/FeedChartPage';
 import FeedBuildingListPage from '../pages/feed/FeedBuildingListPage';
@@ -96,10 +95,10 @@ const AppRoutes = () => {
         <Routes location={location}>
           <Route path="/b" element={<B />}></Route>
           <Route
-            path="/profileView"
+            path="/GetMemberProfile"
             element={
               <GuestRoute>
-                <ProfileView />
+                <GetMemberProfile />
               </GuestRoute>
             }
           ></Route>
