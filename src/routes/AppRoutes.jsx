@@ -238,7 +238,11 @@ const AppRoutes = () => {
           <Route path="/getBuildingProfile" element={<Building />} />
           <Route path="/customerSupport">
             <Route path="" element={<GetCustomerSupport />} />
-            <Route path="getChatbot" element={<GetChatbot />} />
+            <Route path="getChatbot" element={
+                <PrivateRoute>
+                    <GetChatbot />
+                </PrivateRoute>
+                } />
             <Route path="getNoticeList" element={<ListNotice />} />
             <Route path="getNotice" element={<GetNotice />} />
             <Route path="addNoticeView" element={<AddNoticeView />} />

@@ -108,7 +108,8 @@ const FeedItemByMember = ({ data, memberId }) => {
                     alt={feedId}
                     src="https://picsum.photos/200/300?grayscale​"  // 임시 사진
                     style={{
-                        height: 300
+                        height: 300,
+                        width: "auto",
                     }}
                     width="100%"
                 />
