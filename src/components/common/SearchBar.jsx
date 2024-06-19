@@ -5,7 +5,7 @@
  * }} prop
  * @returns JSX.Element
  */
-export default function SearchWindow({typeCallback, searchCallback}) {
+export default function SearchBar({typeCallback, searchCallback}) {
 
   return (
     <div style={{ display: "flex" }}>

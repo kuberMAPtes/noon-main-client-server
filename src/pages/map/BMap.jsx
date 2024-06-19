@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import $ from "jquery";
-import SearchWindow from "../../components/common/SearchWindow";
+import SearchBar from "../../components/common/SearchBar";
 import FetchTypeToggle from "./component/FetchTypeToggle";
 import axios_api from "../../lib/axios_api";
 import { MAIN_API_URL } from "../../util/constants";
 import { is2xxStatus, is4xxStatus } from "../../util/statusCodeUtil";
 import { getBuildingMarkerHtml, getPlaceSearchMarkerHtml } from "./contant/markerHtml";
+import "../../assets/css/module/map/BMap.css";
 
 const naver = window.naver;
 
@@ -94,7 +95,7 @@ export default function BMap() {
   
   return (
     <>
-      <SearchWindow
+      <SearchBar
         typeCallback={(text) => setPlaceSearchKeyword(text)}
         searchCallback={() => searchPlaceList(placeSearchKeyword, onFetchPlace)}
       />
