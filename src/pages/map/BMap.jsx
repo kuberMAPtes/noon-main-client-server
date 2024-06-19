@@ -21,11 +21,19 @@ let popBuildingMarkers;
 
 let buildingSubscriptionMarkers;
 
+const buildingFetchChecked = {
+  popBuildingChecked: true,
+  subscriptionChecked: true
+}
+
 export default function BMap() {
   const [placeSearchKeyword, setPlaceSearchKeyword] = useState("");
   const [currentPosition, setCurrentPosition] = useState(undefined);
   const [subscriptionChecked, setSubscriptionChecked] = useState(true);
   const [popBuildingChecked, setPopBuildingChecked] = useState(true);
+
+  buildingFetchChecked.popBuildingChecked = popBuildingChecked;
+  buildingFetchChecked.subscriptionChecked = subscriptionChecked;
 
   // TODO: Replace sample with real
   const sampleMember = "member_1";
@@ -48,7 +56,6 @@ export default function BMap() {
   useEffect(() => {
     const mapElement = document.getElementById("map");
     map = new naver.maps.Map(mapElement);
-    fetchBuildingMarkers(); // TODO: 구독건물보기하고 인기건물보기 중 뭐가 디폴트였더라?
 
     naver.maps.Event.addListener(map, "click", (e) => {
       const latitude = e.latlng.y;
@@ -57,11 +64,11 @@ export default function BMap() {
     });
 
     naver.maps.Event.addListener(map, "dragend", (e) => {
-      fetchBuildingMarkers(subscriptionChecked, popBuildingChecked, sampleMember);
+      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, buildingFetchChecked.popBuildingChecked, sampleMember);
     });
 
     naver.maps.Event.addListener(map, "zoom_changed", (e) => {
-      fetchBuildingMarkers(subscriptionChecked, popBuildingChecked, sampleMember);
+      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, buildingFetchChecked.popBuildingChecked, sampleMember);
     });
     getCurrentPosition(onCurrentPositionAwared, onFailedFetchingPosition);
     if (!intervalId) {
@@ -69,6 +76,7 @@ export default function BMap() {
         getCurrentPosition(onCurrentPositionAwared, onFailedFetchingPosition);
       }, 1000);
     }
+
     return () => {
       clearInterval(intervalId);
       memberMarker = undefined;
@@ -192,6 +200,9 @@ function fetchBuildingInfo(latitude, longitude) {
  * @param {string} memberId
  */
 function fetchBuildingMarkers(subscriptionChecked, popBuildingChecked, memberId) {
+  clearMarker(buildingSubscriptionMarkers);
+  clearMarker(popBuildingMarkers);
+
   if (subscriptionChecked) {
     fetchSubscriptions(memberId);
   }
@@ -225,11 +236,6 @@ function addMarker(html, latitude, longitude) {
 }
 
 function fetchSubscriptions(memberId) {
-  if (buildingSubscriptionMarkers) {
-    buildingSubscriptionMarkers.forEach((b) => {
-      b.setMap(null);
-    });
-  }
   axios_api.get(`${MAIN_API_URL}/buildingProfile/getMemberSubscriptionList`, {
     params: {
       memberId
@@ -250,17 +256,12 @@ function fetchSubscriptions(memberId) {
       const contenthtml = getBuildingMarkerHtml(sampleSubscriptionProviders, sampleLiveliestChatroom, d.buildingName);
       buildingMarkersCache.push(addMarker(contenthtml, d.latitude, d.longitude));
     });
-    popBuildingMarkers = buildingMarkersCache;
+    buildingSubscriptionMarkers = buildingMarkersCache;
   });
 }
 
 function fetchBuildingsInPositionRange() {
   const positionRange = getPositionRange();
-  if (popBuildingMarkers) {
-    popBuildingMarkers.forEach((m) => {
-      m.setMap(null);
-    });
-  }
   axios_api.get(`${MAIN_API_URL}/buildingProfile/getBuildingsWithinRange`, {
     params: positionRange
   }).then((response) => {
@@ -295,4 +296,12 @@ function getPositionRange() {
     upperLatitude: mapNe.y,
     upperLongitude: mapNe.x
   };
+}
+
+function clearMarker(markers) {
+  if (markers) {
+    markers.forEach((b) => {
+      b.setMap(null);
+    });
+  }
 }
