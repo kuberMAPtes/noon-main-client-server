@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Container, Row, Col, Image, Button, Card, ProgressBar, CardImg } from 'react-bootstrap';
+import { Container, Row, Col, Image, Button, Card, ProgressBar, CardImg, Dropdown } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link, useParams, useNavigate, useSearchParams } from "react-router-dom";
 import profile from "../../../../assets/css/module/member/GetMemberProfile.module.css";
@@ -8,17 +8,21 @@ import { MdMoreHoriz  } from "react-icons/md";
 import FeedSearchResult from '../../../search/component/FeedSearchResult';
 import axios from 'axios';
 import FeedItemByMember from '../../component/FeedItemByMember';
+import {motion} from 'framer-motion';
+import AnimatedDiv from '../../component/AnimatedDiv';
 const ProfileView = () => {
     const [searchParams] = useSearchParams();
     const initialPage = searchParams.get('page') || 1;
 
-    const memberId = "member_1"
+    const fromId = "member_1";
+    const toId = "member_1";
 
     const [feeds, setFeeds] = useState([]);
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [page, setPage] = useState(Number(initialPage));
-    const [fetchUrl, setFetchUrl] = useState('http://localhost:8080/feed/getFeedListByMember')
+    const [fetchUrl, setFetchUrl] = useState('http://localhost:8080/feed/getFeedListByMember');
+    const [showMenu, setShowMenu] = useState(false);
 
     
     const navigate = useNavigate();
@@ -30,7 +34,7 @@ const ProfileView = () => {
         setLoading(true);
     
         // QueryString 설정
-        let queryString = `?memberId=${memberId}&page=${page}`;
+        let queryString = `?memberId=${toId}&page=${page}`;
 
         // axios 실행
         try {
@@ -46,21 +50,27 @@ const ProfileView = () => {
         setLoading(false);
     };
 
-        
-        useEffect(() => {
-            fetchData(fetchUrl, page);
-        }, [page, fetchUrl]);
     
-        // 무한스크롤 구현 (IntersectionObserver)
-        const lastFeedElementRef = useCallback((node) => {
-            if (observer.current) observer.current.disconnect();
-            observer.current = new IntersectionObserver((entries) => {
-                if (entries[0].isIntersecting && hasMore) {
-                    setPage((prevPage) => prevPage + 1);
-                }
-            });
-            if (node) observer.current.observe(node);
-        }, [hasMore]);
+    useEffect(() => {
+        fetchData(fetchUrl, page);
+    }, [page, fetchUrl]);
+
+    // 무한스크롤 구현 (IntersectionObserver)
+    const lastFeedElementRef = useCallback((node) => {
+        if (observer.current) observer.current.disconnect();
+        observer.current = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && hasMore) {
+                setPage((prevPage) => prevPage + 1);
+            }
+        });
+        if (node) observer.current.observe(node);
+    }, [hasMore]);
+
+
+    const handleToggle = (e) => {
+        e.preventDefault();
+        setShowMenu(!showMenu);
+    };
 
     return (
         <Container fluid className="vh-100 w-100 d-flex flex-column justify-content-start align-items-center" style={{ paddingTop: '50px', maxWidth:'100%'}}>
@@ -128,19 +138,44 @@ const ProfileView = () => {
                             
                             <Row className="text-center mt-3">
                                 <Col>
-                                    <div className={profile.memberCircle}>
+                                    <div className={profile.memberCircle} onClick={()=>navigate('/member/updateMember')}>
                                         <div className={profile["circle-profile-icon"]}><FaUserEdit /></div>
                                     </div>
                                 </Col>
                                 <Col>
-                                    <div className={profile.circle}>
+                                    <div className={profile.circle} onClick={()=>navigate('/map')}>
                                         <div className={profile["circle-map-icon"]}><FaMapMarkedAlt/></div>
                                     </div>
                                 </Col>
                                 <Col>
-                                    <div className={profile.moreCircle}>
-                                        <div className={profile["circle-icon"]}><MdMoreHoriz /></div>
-                                    </div>
+                                    <Row>
+                                        <Col xs={8}>
+                                            <div 
+                                            className={profile["circle-icon"]} 
+                                            onClick={handleToggle}>
+                                                <MdMoreHoriz />
+                                            </div>
+                                        </Col>
+                                        {showMenu && (
+                                        <Col xs={4}>
+                                            <AnimatedDiv>
+                                            환경설정으로..
+                                            </AnimatedDiv>
+                                            <AnimatedDiv>
+                                            고객지원
+                                            </AnimatedDiv>
+                                            <AnimatedDiv>
+                                            차단하기
+                                            </AnimatedDiv>
+                                            <AnimatedDiv>
+                                            신고하기
+                                            </AnimatedDiv>
+                                            <AnimatedDiv>
+                                            연락처 등록하기
+                                            </AnimatedDiv>
+                                        </Col>
+                                        )}
+                                    </Row>
                                 </Col>
                             </Row>
                             <Button variant="primary" className="mt-3">미정</Button>
@@ -153,7 +188,6 @@ const ProfileView = () => {
                             ref={feeds.length === index + 1 ? lastFeedElementRef : null}
                         >
                             <FeedItemByMember data={feed} />
-                        <pre>{JSON.stringify(feed, null, 2)}</pre>
                         </div>
                     ))}
                 </Col>

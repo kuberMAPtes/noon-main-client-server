@@ -1,11 +1,14 @@
 import FeedDetail from './component/FeedDetail';
-import Footer from '../../components/common/Footer';
 import { useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import BasicNavbar from '../../components/common/BasicNavbar';
 import FeedNotFound from './component/FeedNotFound'
-import axios from 'axios';
+import axios_api from '../../lib/axios_api';
 
+/**
+ * 피드 하나에 대한 상세보기를 진행한다.
+ * @returns 
+ */
 const FeedDetailPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const feedId = searchParams.get('feedId');
@@ -17,8 +20,7 @@ const FeedDetailPage = () => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(
-                    'http://localhost:8080/feed/detail?feedId=' + feedId);
+                const response = await axios_api.get('/feed/detail?feedId=' + feedId);
                 console.log(response);
                 setFeed(response.data);
             } catch (e) {

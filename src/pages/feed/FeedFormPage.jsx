@@ -4,6 +4,10 @@ import { useState } from 'react';
 import "./css/FeedForm.css";
 import SlideUpModal from "./component/SlideUpModal";
 
+/**
+ * 피드를 추가 및 수정한다.
+ * @returns 
+ */
 const FeedFormPage = () => {
     const [feeds, setFeeds] = useState([]);
     const [selectedFeed, setSelectedFeed] = useState(null);

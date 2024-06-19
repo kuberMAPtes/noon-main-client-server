@@ -62,6 +62,9 @@ import LoginForm from "../pages/member/component/LoginForm";
 import GetMemberId from "../pages/member/GetMemberId";
 import IdFormToUpdatePwd from "../pages/member/IdFormToUpdatePwd";
 import ProfileView from "../pages/member/function/test/ProfileView";
+import AuthLoader from '../components/common/AuthLoader'
+import FeedChartPage from '../pages/feed/FeedChartPage';
+import FeedBuildingListPage from '../pages/feed/FeedBuildingListPage';
 const AppRoutes = () => {
   const location = useLocation();
   const navigationType = useNavigationType();
@@ -249,8 +252,10 @@ const AppRoutes = () => {
           <Route path="/setting/:memberId" element={<MemberSetting />} />
           <Route path="/feed">
             <Route path="list" element={<FeedList />} />
+            <Route path="list/building" element={<FeedBuildingListPage/>}/>
             <Route path="detail" element={<FeedDetail />} />
             <Route path="form" element={<FeedForm />} />
+            <Route path="chart" element={<FeedChartPage/>}/>
             <Route path="" element={<FeedPages />} />
           </Route>
         </Routes>
