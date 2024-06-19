@@ -1,0 +1,38 @@
+.image-grid-container {
+    display: grid;
+    gap: 10px;
+    padding: 10px;
+  }
+  
+  .image-grid-item {
+    padding: 5px;
+  }
+  
+  .image-grid-img {
+    width: 100%;
+    height: 150px; /* 원하는 고정 높이 설정 */
+    display: block;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    object-fit: cover; /* 이미지를 비율에 맞게 자름 */
+  }
+  
+  /* 기본 3열 그리드 */
+  .image-grid-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  /* 화면이 작아질 때 2열 그리드 */
+  @media (max-width: 768px) {
+    .image-grid-container {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  /* 화면이 더 작아질 때 1열 그리드 */
+  @media (max-width: 480px) {
+    .image-grid-container {
+      grid-template-columns: 1fr;
+    }
+  }
+  

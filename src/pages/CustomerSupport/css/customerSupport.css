@@ -1,0 +1,47 @@
+/* customerSupport.css */
+.clickable-col {
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+/* 기본 마진 설정 */
+.clickable-col {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+/* 작은 모바일 기기 (예: iPhone 5, SE) */
+@media (max-width: 576px) {
+  .clickable-col {
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+}
+
+/* 중간 모바일 기기 (예: iPhone 6, 7, 8, X) */
+@media (min-width: 577px) and (max-width: 768px) {
+  .clickable-col {
+    margin-left: 7px;
+    margin-right: 7px;
+  }
+}
+
+/* 큰 모바일 기기 (예: iPhone Plus, 작은 태블릿) */
+@media (min-width: 769px) and (max-width: 992px) {
+  .clickable-col {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+}
+
+/* 태블릿 및 데스크탑 */
+@media (min-width: 993px) {
+  .clickable-col {
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+}
+
+.clickable-col:hover {
+  transform: scale(1.05);
+}

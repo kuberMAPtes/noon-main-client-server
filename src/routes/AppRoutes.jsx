@@ -29,7 +29,7 @@ import PrivateRoute from './PrivateRoute';
 import KakaoNav from '../pages/member/KakaoNav';
 import Search from "../pages/search/Search";
 
-import Building from '../pages/building/Building2';
+import GetBuilding from '../pages/building/GetBuilding';
 import GetCustomerSupport from '../pages/CustomerSupport/GetCustomerSupport';
 import GetChatbot from '../pages/CustomerSupport/GetChatbot';
 import ListNotice from '../pages/CustomerSupport/ListNotice';
@@ -107,7 +107,7 @@ const AppRoutes = () => {
         </Route>
         <Route path="/map" element={<BMap />} />
         <Route path="/search" element={<Search />} />
-        <Route path="/getBuildingProfile" element={<Building />} />
+        <Route path="/getBuildingProfile/:buildingId" element={<GetBuilding />} />
         <Route path="/customerSupport">
             <Route path="" element={<GetCustomerSupport />} />
             <Route path="getChatbot" element={<GetChatbot />} />
