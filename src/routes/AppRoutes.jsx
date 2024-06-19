@@ -84,7 +84,7 @@ const AppRoutes = () => {
   }, [location, navigationType]);
 
   return (
-    <TransitionGroup className="transition-wrapper">
+    <TransitionGroup className="transition-wrapper" fluid>
       <CSSTransition
         key={location.pathname}
         timeout={300}
@@ -95,9 +95,10 @@ const AppRoutes = () => {
           <Route
             path="/profileView"
             element={
-            <GuestRoute>
-                <ProfileView/>
-            </GuestRoute>}
+              <GuestRoute>
+                <ProfileView />
+              </GuestRoute>
+            }
           ></Route>
           <Route path="/testComponent" element={<TestComponent />}></Route>
           <Route path="/member">
