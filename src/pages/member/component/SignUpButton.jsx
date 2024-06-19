@@ -1,6 +1,6 @@
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom"
-import styles from "../../../assets/css/module/member/SignUpButton.module.css";
+import styles from "../../../assets/css/module/member/color.module.css";
 import SignUpButtonView from "./SignUpButtonView";
 const SignUpButton = () => {
 

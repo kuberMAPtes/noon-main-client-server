@@ -4,7 +4,7 @@ import styles from '../../assets/css/module/member/AddPhoneNumberAuthentificatio
 import { checkAuthNumber, formatTime,handleAuthNumberChange, handleNavigate, handlePhoneNumberChange, handleSendClick } from './function/AddPhoneNumberAuthentificationUtil';
 import { useNavigate, useParams } from 'react-router-dom';
 import ForegroundTemplate from '../../components/common/ForegroundTemplate';
-
+import styles2 from '../../assets/css/module/member/color.module.css';
 const AddPhoneNumberAuthentification = () => {
     const [phoneNumber, setPhoneNumber] = useState('');//휴대폰번호
     const [phoneNumberValidationMessage, setPhoneNumberValidationMessage] = useState('');//번호 형식 검사 : 통과하면 "" 통과하지 못하면 메세지
@@ -16,7 +16,9 @@ const AddPhoneNumberAuthentification = () => {
     const [isRunning, setIsRunning] = useState(false);// 타이머가 동작중인지 여부
     const [verifiedState, setIsVerified] = useState("pending"); // 인증 상태 pending,success,fail
     
-    const {toUrl} = useParams();//addMember 또는 updateMember
+    const {toUrl} = useParams();//addMember 또는 getMemberId
+
+    //toUrl이 getMemberId면 getMemberId/memberId로 바꿔져야함. 인증하면
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -32,7 +34,7 @@ const AddPhoneNumberAuthentification = () => {
 
     useEffect( ()=> {
         if(authNumber.length === 4){
-            checkAuthNumber(phoneNumber, authNumber, setIsVerified, setFailCount);
+            checkAuthNumber(phoneNumber, authNumber, setIsVerified, setFailCount,toUrl);
         }
     },[authNumber])
 
@@ -47,7 +49,13 @@ const AddPhoneNumberAuthentification = () => {
             <Container className="mt-5">
                 <Row className="justify-content-center">
                     <Col md={6}>
-                    <h2 className="mb-4">휴대폰 인증</h2>
+                        <h2 className="mb-4">휴대폰 인증
+                                <span className="inline-text" style={{fontSize:"15px"}}>(
+                                {toUrl === "addMember" && "회원가입"}
+                                {toUrl === "getMemberId" && "아이디 찾기"}
+                                {toUrl === "updatePwd" && "비밀번호 찾기"})
+                            </span>
+                        </h2>                    
                     <Form>
                         <Form.Group controlId="formPhoneNumber">
                         <Form.Label className={styles.labelBold}>휴대폰 번호</Form.Label>
@@ -93,7 +101,8 @@ const AddPhoneNumberAuthentification = () => {
                         {isPhoneNumberValid && (
                             <Form.Text className="text-success">
                             {toUrl==="addMember" &&  "유효한 전화번호 형식입니다."}
-                            {toUrl==="updateMember" && "아이디를 찾기 위해 메세지를 보냅니다."}
+                            {toUrl==="getMemberId" && "아이디를 찾기 위해 메세지를 보냅니다."}
+                            {toUrl==="updatePwd" && "비밀번호를 찾기 위해 메세지를 보냅니다."}
                             
                             </Form.Text>
                         )}
@@ -120,11 +129,39 @@ const AddPhoneNumberAuthentification = () => {
                         )}
                         </Form.Group>
                     </Form>
-                    {verifiedState === "success" && (
+                    {(verifiedState === "success" && toUrl === "addMember") && (
                         <div>
                         <h5>본인인증 완료</h5>
-                        <Button variant="primary" onClick={()=>handleNavigate(phoneNumber,verifiedState,navigate,toUrl)}>
+                        <Button
+                        variant="info"
+                        type="button"
+                        className={`${styles2.typicalButtonColor} ${styles2.miniFont}`}
+                        onClick={()=>handleNavigate(phoneNumber,verifiedState,navigate,toUrl)}>
                             회원가입
+                        </Button>
+                        </div>
+                    )}
+                    {(verifiedState === "success" && toUrl === "getMemberId") && (
+                        <div>
+                        <h5>본인인증 완료</h5>
+                        <Button
+                        variant="info"
+                        type="button"
+                        className={`${styles2.typicalButtonColor} ${styles2.miniFont}`}
+                        onClick={()=>handleNavigate(phoneNumber,verifiedState,navigate,toUrl)}>
+                            아이디 찾기
+                        </Button>
+                        </div>
+                    )}
+                    {(verifiedState === "success" && toUrl === "updatePwd") && (
+                        <div>
+                        <h5>본인인증 완료</h5>
+                        <Button
+                        variant="info"
+                        type="button"
+                        className={`${styles2.typicalButtonColor} ${styles2.miniFont}`}
+                        onClick={()=>handleNavigate(phoneNumber,verifiedState,navigate,toUrl)}>
+                            비밀번호 재설정
                         </Button>
                         </div>
                     )}

@@ -9,7 +9,6 @@ import LoginButtons from './component/LoginButtons';
 import BackgroundTemplate from '../../components/common/BackgroundTemplate';
 import ForegroundTemplate from '../../components/common/ForegroundTemplate';
 import NoonLogo from '../../assets/css/NoonLogo';
-
 const GetAuthMain = () => {
   console.log("#### GetAuthMain 컴포넌트 초기화 시작");
 

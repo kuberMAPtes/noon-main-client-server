@@ -1,6 +1,7 @@
 import { encryptWithLv } from "../../../util/crypto";
 import {
   checkPhoneNumber,
+  checkPhoneNumberAndMemberId,
   confirmAuthentificationNumber,
   sendAuthentificationNumber,
   getMemberIdByPhoneNumber,
@@ -36,9 +37,7 @@ export const handlePhoneNumberChange = async (
   const formattedPhoneNumber = formatPhoneNumber(input);
   setPhoneNumber(formattedPhoneNumber);
 
-
-if (formattedPhoneNumber.length === 13) {
-
+  if (formattedPhoneNumber.length === 13) {
     if (toUrl === "addMember") {
       // const response = await checkPhoneNumber(formattedPhoneNumber);
       const response = { info: true };
@@ -54,36 +53,43 @@ if (formattedPhoneNumber.length === 13) {
         setPhoneNumberValidationMessage("");
         setIsPhoneNumberValid(true);
       }
-    } else if (toUrl === "updateMember") {
-
+    } else if (toUrl === "getMemberId") {
       const response = await getMemberIdByPhoneNumber(formattedPhoneNumber);
 
       if (!validatePhoneNumber(formattedPhoneNumber)) {
-
         setPhoneNumberValidationMessage("유효하지 않은 전화번호 형식입니다.");
         setIsPhoneNumberValid(false);
-
       } else {
         if (response !== false) {
-
           console.log("response :: 휴대폰번호로 멤버Id 찾기 성공", response);
           setPhoneNumberValidationMessage("");
           setIsPhoneNumberValid(true);
-
         } else {
-
           console.log("response :: 휴대폰번호로 멤버Id 찾기 실패", response);
           setPhoneNumberValidationMessage("가입하지 않은 전화번호입니다.");
           setIsPhoneNumberValid(false);
-          
         }
       }
+    } else if (toUrl === "updatePwd") {
+      const memberId = sessionStorage.getItem("w");
+      const response = await checkPhoneNumberAndMemberId(
+        memberId,
+        formattedPhoneNumber
+      );
+      if (response.info === true) {
+        setPhoneNumberValidationMessage("");
+        setIsPhoneNumberValid(true);
+      } else {
+        setPhoneNumberValidationMessage(
+          "회원정보에 등록한 휴대전화번호와 다릅니다."
+        );
+        setIsPhoneNumberValid(false);
+      }
     }
-
-} else {
+  } else {
     setPhoneNumberValidationMessage("");
     setIsPhoneNumberValid(false);
-}
+  }
 };
 
 // 인증번호 입력
@@ -149,12 +155,30 @@ export const formatTime = (seconds) => {
 };
 
 // 인증 성공시 페이지 이동
-export const handleNavigate = (phoneNumber, verifiedState, navigate,url) => {
+export const handleNavigate = (phoneNumber, verifiedState, navigate, url) => {
   if (verifiedState === "success") {
-    const { encryptedData, ivData } = encryptWithLv("success");
-    Cookies.set("addMemberKey", encryptedData);
-    Cookies.set("addMemberOtherKey", ivData);
-    Cookies.set("user-data", phoneNumber);
-    navigate("/member/"+url);
+    if (url === "addMember") {
+      const { encryptedData, ivData } = encryptWithLv("success");
+      Cookies.set("addMemberKey", encryptedData);
+      Cookies.set("addMemberOtherKey", ivData);
+      Cookies.set("user-data", phoneNumber);
+    }
+    //getMemberId라면 memberId를 가져와서 url에 붙여준다.
+    const getMemberIdByPhoneNum = async () => {
+      if (url === "addMember") {
+      } else if (url === "getMemberId") {
+        const response = await getMemberIdByPhoneNumber(phoneNumber);
+        if (response) {
+          url = url + "/" + response; //getMemberId/:memberId
+        } else {
+          url = url + "/fail";
+        }
+      } else if (url === "updatePwd") {
+      }
+      //alert("네비게이션 합니다 " + url);
+      navigate("/member/" + url);
+    };
+
+    getMemberIdByPhoneNum();
   }
 };

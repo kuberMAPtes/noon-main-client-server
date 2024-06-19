@@ -21,6 +21,10 @@
     border-color: #91a7ff !important;
     color: white !important;
   }
+  .customButton:hover {
+    background-color: #759aff !important;
+    border-color: #759aff !important;
+}
   .recentLoginText {
     margin: 10px 0;
   }

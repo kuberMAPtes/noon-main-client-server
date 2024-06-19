@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { login } from "../../../redux/slices/authSlice";
 import { validateLoginForm } from "../function/memberValidator";
 import { renderLoginError } from "../function/memberFunc";
 import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
 import SignUpButton from "./SignUpButton";
 import styles from '../../../assets/css/module/member/LoginForm.module.css';
+import styles2 from '../../../assets/css/module/member/color.module.css';
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -37,6 +38,13 @@ const LoginForm = () => {
     }
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault(); // 엔터 키의 기본 동작(폼 제출)을 막음
+      // 아무 동작도 하지 않음
+    }
+  };
+
   useEffect(() => {
     console.log("store.auth.member.memberId :: ", storeMemberId);
     if (storeMemberId) {
@@ -57,6 +65,7 @@ const LoginForm = () => {
                 type="text"
                 value={memberId}
                 onChange={(e) => setMemberId(e.target.value)}
+                onKeyDown={handleKeyDown}
                 required
                 className={styles.formControl}
               />
@@ -67,11 +76,15 @@ const LoginForm = () => {
                 type="password"
                 value={pwd}
                 onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={handleKeyDown}
                 required
                 className={styles.formControl}
               />
             </Form.Group>
-            <Button variant="primary" type="submit" className={`mt-3 w-100 ${styles.btn}`}>
+            <Button
+            variant="primary"
+            type="submit"
+            className={`mt-3 w-100 ${styles.btn} ${styles2.typicalButtonColor}`}>
               로그인
             </Button>
             {validationError && (
@@ -85,6 +98,11 @@ const LoginForm = () => {
               </Alert>
             )}
           </Form>
+          <Link to="/member/getAuthMain">
+            <Button
+            variant="primary"
+            className={`${styles2.typicalButtonColor} me-2`}>메인으로..</Button>
+          </Link>
         </Col>
       </Row>
     </Container>
