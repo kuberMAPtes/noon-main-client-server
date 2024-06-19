@@ -206,7 +206,7 @@ const AppRoutes = () => {
             <Route path="getImage" element={<GetImage />} />
             <Route path="deleteBadFeed" element={<DeleteBadFeed />} />
         </Route>
-        <Route path="/setting/:memberId" element={<MemberSetting />} />
+        <Route path="/setting" element={<MemberSetting />} />
         <Route path="/feed">
             <Route path="list" element={<FeedList />} />
             <Route path="detail" element={<FeedDetail />} />
