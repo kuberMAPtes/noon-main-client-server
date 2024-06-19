@@ -25,3 +25,5 @@ yarn-error.log*
 
 # 그냥
 /src/pages/Chat/Test.js
+
+.vscode
