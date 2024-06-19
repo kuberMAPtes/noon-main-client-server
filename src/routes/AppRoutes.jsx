@@ -57,6 +57,7 @@ import '../assets/css/animation.css'
 import LoginForm from '../pages/member/component/LoginForm';
 import AuthLoader from '../components/common/AuthLoader'
 import FeedChartPage from '../pages/feed/FeedChartPage';
+import FeedBuildingListPage from '../pages/feed/FeedBuildingListPage';
 const AppRoutes = () => {
     
     const location = useLocation();
@@ -210,6 +211,7 @@ const AppRoutes = () => {
         <Route path="/setting" element={<MemberSetting />} />
         <Route path="/feed">
             <Route path="list" element={<FeedList />} />
+            <Route path="list/building" element={<FeedBuildingListPage/>}/>
             <Route path="detail" element={<FeedDetail />} />
             <Route path="form" element={<FeedForm />} />
             <Route path="chart" element={<FeedChartPage/>}/>

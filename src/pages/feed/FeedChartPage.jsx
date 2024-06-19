@@ -8,7 +8,7 @@ import FeedCntByTag from './component/FeedChart/FeedCntByTag';
 
 /**
  * 피드에 대한 통계를 보여줍니다.
- * @returns 
+ * @returns 피드 관련 통계
  */
 const FeedChartPage = () => {
     const feedCntByTag = FeedCntByTag();

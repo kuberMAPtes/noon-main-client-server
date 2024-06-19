@@ -34,6 +34,7 @@ const FeedItem = ({ data, memberId }) => {
         navigate('/feed/detail?feedId=' + feedId)
     }
     
+    // 좋아요 추가 및 삭제
     const toggleLike = async () => {
         let url = ''
         if(!liked) {
@@ -52,6 +53,7 @@ const FeedItem = ({ data, memberId }) => {
         setLiked(!liked);
     };
 
+    // 북마크 추가 및 삭제
     const toggleBookmark = async () => {
         let url = ''
         if(!bookmarked) {
@@ -104,7 +106,6 @@ const FeedItem = ({ data, memberId }) => {
                 </CardBody>
                 <CardImg
                     alt={feedId}
-                    bottom
                     src="https://picsum.photos/200/300?grayscale​"  // 임시 사진
                     style={{
                         height: 300
