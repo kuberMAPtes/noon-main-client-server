@@ -33,7 +33,7 @@ const FeedListHomePage = () => {
         setLoading(true);
     
         // QueryString 설정
-        let paging = `/${page}`;
+        let paging = `?memberId=${memberId}&page=${page}`;
 
         // axios 실행
         try {

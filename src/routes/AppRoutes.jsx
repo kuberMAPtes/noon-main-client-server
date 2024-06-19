@@ -216,8 +216,8 @@ const AppRoutes = () => {
             <Route path="detail" element={<FeedDetail />} />
             <Route path="form" element={<FeedForm />} />
             <Route path="chart" element={<FeedChartPage/>}/>
-            <Route path="" element={<FeedListHomePage />}/>
-            <Route path="test" element={<FeedPages />} />
+            <Route path="main" element={<FeedListHomePage />}/>
+            <Route path="" element={<FeedPages />} />
         </Route>
     </Routes>
           </AuthLoader>
