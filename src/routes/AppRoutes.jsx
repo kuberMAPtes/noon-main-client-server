@@ -39,9 +39,8 @@ import B from '../pages/member/function/test/B';
 import GetBuilding from '../pages/building/GetBuilding';
 import GetCustomerSupport from '../pages/CustomerSupport/GetCustomerSupport';
 import GetChatbot from '../pages/CustomerSupport/GetChatbot';
-import ListNotice from '../pages/CustomerSupport/ListNotice';
 import GetNotice from '../pages/CustomerSupport/GetNotice';
-import AddNoticeView from '../pages/CustomerSupport/AddNoticeView';
+import AddNotice from '../pages/CustomerSupport/AddNotice';
 import GetReport from '../pages/CustomerSupport/GetReport';
 import AddReport from '../pages/CustomerSupport/AddReport';
 import ListImages from '../pages/CustomerSupport/ListImages';
@@ -66,6 +65,7 @@ import LoginForm from '../pages/member/component/LoginForm';
 import AuthLoader from '../components/common/AuthLoader'
 import FeedChartPage from '../pages/feed/FeedChartPage';
 import FeedBuildingListPage from '../pages/feed/FeedBuildingListPage';
+import GetNoticeList from "../pages/CustomerSupport/GetNoticeList";
 const AppRoutes = () => {
   const location = useLocation();
   const navigationType = useNavigationType();
@@ -239,9 +239,9 @@ const AppRoutes = () => {
         <Route path="/customerSupport">
             <Route path="" element={<GetCustomerSupport />} />
             <Route path="getChatbot" element={<GetChatbot />} />
-            <Route path="getNoticeList" element={<ListNotice />} />
-            <Route path="getNotice" element={<GetNotice />} />
-            <Route path="addNoticeView" element={<AddNoticeView />} />
+            <Route path="getNoticeList" element={<GetNoticeList />} />
+            <Route path="getNotice/:noticeId" element={<GetNotice />} />
+            <Route path="addNotice" element={<AddNotice />} />
             <Route path="getReportList" element={<GetListReport />} />
             <Route path="getReport/:reportId" element={<GetReport />} />
             <Route path="addReport/:reporterId/:reporteeId" element={<AddReport />} />

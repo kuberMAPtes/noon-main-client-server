@@ -1,33 +1,76 @@
-import React from 'react';
+import React, { useState } from 'react';
 import CustomerSupportHeader from './components/CustomerSupportHeader';
 import Footer from '../../components/common/Footer';
+import '../CustomerSupport/css/customerSupport.css'
+import axiosInstance from '../../lib/axiosInstance';
 
 const GetChatbot = () => {
+
+  const [messages, setMessages] = useState([
+    { id: 1, type: 'response', text: '안녕하세요 NOON챗봇이에요! 무엇을 도와드릴까요?', timestamp: '' }
+  ]); 
+
+  const [userQuestion, setUserQuestion] = useState();
+  const [questionTimeNDate, setQuestionTimeNDate] = useState();
+
+  //질문 보내고 응답 받기                             
+  const getChatbotConversation = async (e) => {
+
+    try {
+      const currentTime = new Date().toISOString();
+      const newMessage = { id: messages.length + 1, type: 'question', text: userQuestion, timestamp: currentTime };
+      setMessages(prevMessages => [...prevMessages, newMessage]);
+
+      console.log(newMessage);
+      
+      const response = await axiosInstance.post(`/customersupport/getChatbotConversation`, {
+        userQuestion : userQuestion,
+        questionTimeNDate : questionTimeNDate
+      });
+      console.log("질문 및 응답 결과: "+JSON.stringify(response.data));
+
+      const serverResponse = { id: messages.length + 1, type: 'response', text: response.data.chatbotAnswer, timestamp: new Date().toISOString() };
+      setMessages(prevMessages => [...prevMessages, serverResponse]);
+      setUserQuestion('');
+
+    } catch (error) {
+      console.error("Error fetching ChatbotConversation details:", error);
+    }
+
+  };
+
+
+
   return (
-    <div className="customer-support-chat">
-
-      <CustomerSupportHeader title="NOON Chatbot" />
-
       <div className="chat-container">
-        <div className="chat-messages">
-          <div className="message received">
-            <span>운영중인가요?</span>
-            <div className="message-time">2024-05-20 17:36:19</div>
+
+        <CustomerSupportHeader title="NOON 챗봇" />
+
+          <div className="chat-container">
+              <div className="chat-body">
+                  {messages.map(message => (
+                      <div key={message.id} className={`chat-message ${message.type}`}>
+                          <div className="message-text">{message.text}</div>
+                          <div className="message-timestamp">{message.timestamp}</div>
+                      </div>
+                  ))}
+              </div>
           </div>
-          <div className="message sent">
-            <span>지금 영업중입니다. 영업시간은 09:00~18:00입니다.</span>
-            <div className="message-time">2024-05-20 17:36:19</div>
+          
+          <div className="chat-footer">
+              <input 
+                  type="text" 
+                  value={userQuestion} 
+                  onChange={(e) =>  setUserQuestion(e.target.value)} 
+                  placeholder="질문을 입력하세요" 
+              />
+              <button onClick={getChatbotConversation}>전송</button>
           </div>
-        </div>
-        <div className="chat-input">
-          <input type="text" placeholder="질문을 입력하세요" />
-          <button>전송</button>
-        </div>
+
+          <Footer/>
+
       </div>
 
-      <Footer />
-
-    </div>
   );
 };
 

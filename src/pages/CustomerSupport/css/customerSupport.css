@@ -57,3 +57,94 @@
   max-width: 400px; /* 모달의 최대 너비 설정 */
   margin: 0 auto; /* 중앙 정렬 */
 }
+
+
+
+
+
+
+/* ChatApp.css */
+.chat-container {
+    width: 400px;
+    height: 600px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background-color: #e5ddd5;
+}
+
+.chat-body {
+    flex: 1;
+    padding: 10px;
+    background-color:#D9D9D9;
+    overflow-y: auto;
+}
+
+.chat-message {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.chat-message.question {
+    align-items: flex-end;
+}
+
+.chat-message.response {
+    align-items: flex-start;
+}
+
+.chat-message.response .message-text {
+  background-color: #ffffff;
+  text-align: left;
+  align-self: flex-start;
+}
+
+.message-text {
+    padding: 10px 15px;
+    border-radius: 10px;
+    display: inline-block;
+    max-width: 70%;
+    word-wrap: break-word;
+}
+
+.chat-message.question .message-text {
+    background-color: #9BAAF8 ;
+    text-align: right;
+}
+
+.message-timestamp {
+    font-size: 0.8em;
+    color: #888;
+    text-align: right;
+    margin-top: 2px;
+}
+
+.chat-footer {
+    display: flex;
+    padding: 10px;
+    background-color: #f2f2f2;
+}
+
+.chat-footer input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.chat-footer button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+.chat-footer button:hover {
+    background-color: #0056b3;
+}

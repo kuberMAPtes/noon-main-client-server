@@ -11,9 +11,13 @@ const messages = {
       title: '공지 등록 안내',
       description: '공지사항을 성공적으로 등록하였습니다.',
     },
+    deleteNotice: {
+      title: '공지 삭제 안내',
+      description: '공지가 삭제되었습니다.',
+  },
     addReport: {
         title: '신고 등록 안내',
-        description: '신고를 성공적으로 등록하였습니다. 관리자 확인 후 알림을 드립니다.',
+        description: '신고가 등록되었습니다. 관리자 확인 후 알림을 드립니다.',
     },
     reportProcessing: {
         title: '신고 처리 안내',
