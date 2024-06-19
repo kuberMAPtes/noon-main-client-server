@@ -1,3 +1,5 @@
+import { Button, Form, InputGroup } from "react-bootstrap";
+
 /**
  * @param {{
  *   typeCallback: (text: string) => void
@@ -8,9 +10,11 @@
 export default function SearchBar({typeCallback, searchCallback}) {
 
   return (
-    <div style={{ display: "flex" }}>
-      <input type="text" onChange={(e) => typeCallback(e.target.value)} />
-      <button type="button" onClick={() => searchCallback()}>검색</button>
-    </div>
+    <InputGroup className="mb-3">
+      <Form.Control
+          onChange={(e) => typeCallback(e.target.value)}
+      />
+      <Button type="button" onClick={() => searchCallback()}>검색</Button>
+    </InputGroup>
   );
 }
