@@ -56,6 +56,7 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import '../assets/css/animation.css'
 import LoginForm from '../pages/member/component/LoginForm';
 import AuthLoader from '../components/common/AuthLoader'
+import FeedChartPage from '../pages/feed/FeedChartPage';
 const AppRoutes = () => {
     
     const location = useLocation();
@@ -211,6 +212,7 @@ const AppRoutes = () => {
             <Route path="list" element={<FeedList />} />
             <Route path="detail" element={<FeedDetail />} />
             <Route path="form" element={<FeedForm />} />
+            <Route path="chart" element={<FeedChartPage/>}/>
             <Route path="" element={<FeedPages />} />
         </Route>
     </Routes>

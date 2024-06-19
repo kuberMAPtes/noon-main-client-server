@@ -7,6 +7,7 @@ const FeedPages = () => {
   return (
     <div className="content">
       <BasicNavbar />
+      <h2>태스트용 페이지입니다.</h2>
       <nav>
         <ul>
           <li>

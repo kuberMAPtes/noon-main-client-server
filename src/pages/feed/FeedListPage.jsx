@@ -13,6 +13,10 @@ import BasicNavbar from '../../components/common/BasicNavbar';
 import './css/FeedList.css';
 import axios_api from '../../lib/axios_api';
 
+/**
+ * 회원 아이디를 통해서 개인으로 관련이 있는 피드 목록을 가져온다.
+ * @returns 자신이 작성한 피드, 좋아요와 북마크를 누른 피드, 구독한 건물에 대한 피드(총 4가지)를 가져온다
+ */
 const FeedListPage = () => {
     const [searchParams] = useSearchParams();
     const memberId = searchParams.get('memberId');
@@ -38,7 +42,7 @@ const FeedListPage = () => {
             if (response.data.length === 0) {
                 setHasMore(false);
             } else {
-                setFeeds((prevFeeds) => [...prevFeeds, ...response.data]);
+                setFeeds((prevFeeds) => [...prevFeeds, ...response.data]); // 기존의 끝에 추가
             }
         } catch (e) {
             console.log(e);
@@ -83,7 +87,6 @@ const FeedListPage = () => {
             <div>
                 <Loading />
             </div>
-            
         );
     }
 
