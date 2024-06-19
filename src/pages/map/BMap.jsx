@@ -94,22 +94,26 @@ export default function BMap() {
   }, [currentPosition]);
   
   return (
-    <>
+    <div className="container map-container">
       <SearchBar
         typeCallback={(text) => setPlaceSearchKeyword(text)}
         searchCallback={() => searchPlaceList(placeSearchKeyword, onFetchPlace)}
       />
-      <FetchTypeToggle
+      {/* <FetchTypeToggle
           subscriptionChecked={subscriptionChecked}
           setSubscriptionChecked={setSubscriptionChecked}
           popBuildingChecked={popBuildingChecked}
           setPopBuildingChecked={setPopBuildingChecked}
-      />
-      <div id="map" style={{width: "400px", height: "400px", cursor: "none"}}></div>
-      <button type="button" onClick={() => currentPosition && map && map.setCenter(new naver.maps.LatLng(currentPosition.latitude, currentPosition.longitude))}>
-        현재 위치 보기
-      </button>
-    </>
+      /> */}
+      <div id="map">
+        <button
+            type="button"
+            className="btn--my-location"
+            onClick={() => currentPosition && map && map.setCenter(new naver.maps.LatLng(currentPosition.latitude, currentPosition.longitude))}>
+          <img src="./image/my-location.png" alt="my-location" /> 
+        </button>
+      </div>
+    </div>
   )
 }
 
