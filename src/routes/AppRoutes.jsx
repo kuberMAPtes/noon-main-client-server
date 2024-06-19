@@ -47,6 +47,7 @@ import AddReport from '../pages/CustomerSupport/AddReport';
 import ListImages from '../pages/CustomerSupport/ListImages';
 import GetImage from '../pages/CustomerSupport/GetImage';
 import DeleteBadFeed from '../pages/CustomerSupport/DeleteBadFeed';
+import GetListReport from '../pages/CustomerSupport/GetReportList';
 
 import MemberSetting from "../pages/setting/MemberSetting";
 // import Test from '../pages/Chat/Test';
@@ -63,7 +64,6 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import '../assets/css/animation.css'
 import LoginForm from '../pages/member/component/LoginForm';
 import AuthLoader from '../components/common/AuthLoader'
-import GetListReport from '../pages/CustomerSupport/GetReportList';
 import FeedChartPage from '../pages/feed/FeedChartPage';
 import FeedBuildingListPage from '../pages/feed/FeedBuildingListPage';
 const AppRoutes = () => {

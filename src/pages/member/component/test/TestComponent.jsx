@@ -9,7 +9,7 @@ import {
   refreshToken,
   logout,
   addMember,
-  updatePassword,
+  updatePwd,
   updateProfilePhoto,
   updateProfileIntro,
   updateDajungScore,
@@ -98,7 +98,7 @@ const TestComponent = () => {
         <button onClick={() => handleTest(getMember, { memberId })}>
           Get Member
         </button>
-        <button onClick={() => handleTest(updatePassword, memberId, password)}>
+        <button onClick={() => handleTest(updatePwd, memberId, password)}>
           Update Password
         </button>
       </div>

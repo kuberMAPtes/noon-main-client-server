@@ -5,12 +5,18 @@ import { useSearchParams } from 'react-router-dom';
 import FeedItem from './component/FeedList/FeedItem';
 import Dropdown from './component/FeedList/FeedDropdown';
 import FeedNotFound from './component/FeedNotFound';
+import Loading from './component/FeedList/FeedLoading';
 
 import Footer from '../../components/common/Footer';
 import BasicNavbar from '../../components/common/BasicNavbar';
 
 import './css/FeedList.css';
+import axios_api from '../../lib/axios_api';
 
+/**
+ * 회원 아이디를 통해서 개인으로 관련이 있는 피드 목록을 가져온다.
+ * @returns 자신이 작성한 피드, 좋아요와 북마크를 누른 피드, 구독한 건물에 대한 피드(총 4가지)를 가져온다
+ */
 const FeedListPage = () => {
     const [searchParams] = useSearchParams();
     const memberId = searchParams.get('memberId');
@@ -20,7 +26,7 @@ const FeedListPage = () => {
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [page, setPage] = useState(Number(initialPage));
-    const [fetchUrl, setFetchUrl] = useState('http://localhost:8080/feed/getFeedListByMember')
+    const [fetchUrl, setFetchUrl] = useState('/feed/getFeedListByMember')
     const observer = useRef();
 
     // 기본적으로 볼 수 있는 피드 목록 가져오기
@@ -32,15 +38,16 @@ const FeedListPage = () => {
 
         // axios 실행
         try {
-            const response = await axios.get(url + queryString);
+            const response = await axios_api.get(url + queryString);
             if (response.data.length === 0) {
                 setHasMore(false);
             } else {
-                setFeeds((prevFeeds) => [...prevFeeds, ...response.data]);
+                setFeeds((prevFeeds) => [...prevFeeds, ...response.data]); // 기존의 끝에 추가
             }
         } catch (e) {
             console.log(e);
         }
+
         setLoading(false);
     };
 
@@ -49,7 +56,13 @@ const FeedListPage = () => {
         setFeeds([]);
         setPage(1);
         setHasMore(true);
-        setFetchUrl(url)
+        setFetchUrl(prevUrl => {
+            if (prevUrl === url) {
+                // 강제로 상태 변경을 트리거하기 위해 같은 URL이라도 setFetchUrl을 호출
+                fetchData(url, 1);
+            }
+            return url;
+        });
     }
 
     // 랜더링 될 때마다 실행
@@ -70,7 +83,11 @@ const FeedListPage = () => {
 
     // 피드 실행 대기중
     if (loading && feeds.length === 0) {
-        return "대기중...";
+        return (
+            <div>
+                <Loading />
+            </div>
+        );
     }
 
     // NotFount 페이지
@@ -95,7 +112,7 @@ const FeedListPage = () => {
                             className="col-12 mb-4"
                             ref={feeds.length === index + 1 ? lastFeedElementRef : null}
                         >
-                            <FeedItem data={feed} />
+                            <FeedItem data={feed} memberId={memberId} />
                         </div>
                     ))}
                 </div>
