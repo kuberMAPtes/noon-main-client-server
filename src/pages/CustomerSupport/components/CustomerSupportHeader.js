@@ -5,7 +5,6 @@ const CustomerSupportHeader = ({ title }) => {
     <div className="customerSupportHeader">
       <button className="back-button">{"<"}</button>
       <h1>{title}</h1>
-      <button className="menu-button">{"..."}</button>
     </div>
   );
 };

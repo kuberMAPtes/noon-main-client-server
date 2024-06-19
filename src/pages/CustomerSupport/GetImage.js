@@ -4,6 +4,7 @@ import Footer from '../../components/common/Footer';
 
 
 const GetImage = () => {
+  
   const handleBlur = () => {
     console.log('블러 처리');
     // 블러 처리 로직 추가
