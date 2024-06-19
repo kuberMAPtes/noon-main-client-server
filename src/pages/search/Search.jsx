@@ -1,5 +1,5 @@
 import { useState } from "react";
-import SearchWindow from "../../components/common/SearchWindow";
+import SearchBar from "../../components/common/SearchBar";
 import SearchModeTab, { modes } from "./component/SearchModeTab";
 import FeedSearchResult from "./component/FeedSearchResult";
 import BuildingSearchResult from "./component/BuildingSearchResult";
@@ -36,7 +36,7 @@ export default function Search() {
 
   return (
     <div>
-      <SearchWindow typeCallback={(text) => setSearchKeyword(text)} searchCallback={onSearch} />
+      <SearchBar typeCallback={(text) => setSearchKeyword(text)} searchCallback={onSearch} />
       <SearchModeTab currentSearchMode={currentSearchMode} onModeChange={(mode) => setCurrentSearchMode(mode)} />
       {component}
     </div>

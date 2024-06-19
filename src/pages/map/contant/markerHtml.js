@@ -23,9 +23,9 @@ export function getBuildingMarkerHtml(
     markerImage = "./image/marker.png"
 ) {
   const content = `
-    <p>${subscriptionProviderList[0]}</p>
-    <p>${liveliestChatroom.chatroomName}</p>
-    <p>${buildingName}</p>
+    <div>${subscriptionProviderList[0]}</div>
+    <div>${liveliestChatroom.chatroomName}</div>
+    <div>${buildingName}</div>
   `;
   return getCommonHtml(content, markerImage);
 }
@@ -41,8 +41,8 @@ export function getPlaceSearchMarkerHtml(
     markerImage = "./image/marker.png"
 ) {
   const content = `
-    <p>${placeName}</p>
-    <p>${roadAddress}</p>
+    <div>${placeName}</div>
+    <div>${roadAddress}</div>
   `;
 
   return getCommonHtml(content, markerImage)
@@ -59,7 +59,7 @@ function getCommonHtml(content, markerImage) {
         ${content}
       </div>
       <div style="display: flex; justify-content: center; align-items: center; ">
-        <img src="${markerImage}" style="width: 40px; height: 50px; margin: 0px; padding: 0px" />
+        <img src="${markerImage}" style="width: 20px; height: 25px; margin: 0px; padding: 0px" />
       </div>
     </div>
   `
