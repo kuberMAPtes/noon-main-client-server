@@ -86,7 +86,7 @@ export default function BMap() {
   }, []);
 
   useEffect(() => {
-    fetchBuildingMarkers(popBuildingChecked, subscriptionChecked, sampleMember);
+    fetchBuildingMarkers(subscriptionChecked, popBuildingChecked, sampleMember);
   }, [popBuildingChecked, subscriptionChecked]);
 
   useEffect(() => {
@@ -262,6 +262,7 @@ function fetchSubscriptions(memberId) {
 
 function fetchBuildingsInPositionRange() {
   const positionRange = getPositionRange();
+  console.log(positionRange);
   axios_api.get(`${MAIN_API_URL}/buildingProfile/getBuildingsWithinRange`, {
     params: positionRange
   }).then((response) => {
