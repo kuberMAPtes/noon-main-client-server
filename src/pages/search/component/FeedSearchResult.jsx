@@ -36,11 +36,13 @@ const TEXT_MAX_LENGTH = 30;
  *     like: boolean;
  *     bookmark: boolean;
  *     mainActivated: boolean;
- *   }[]
+ *   }[],
+ *   pageCallback: () => void
  * }} props
  */
 export default function FeedSearchResult({
-  searchResult
+  searchResult,
+  pageCallback
 }) {
   const [feedData, setFeedData] = useState(SAMPLE_DATA);
 

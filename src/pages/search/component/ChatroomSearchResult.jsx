@@ -24,11 +24,13 @@ for (let i = 0; i <= 5; i++) {
  *       chatroomCreatorId: string;
  *       chatroomType: string;
  *     }[]
- *   }
+ *   },
+ *   pageCallback: () => void;
  * }} props
  */
 export default function ChatroomSearchResult({
-  searchResult
+  searchResult,
+  pageCallback
 }) {
   const [chatroomData, setChatroomData] = useState(SAMPLE_DATA);
 

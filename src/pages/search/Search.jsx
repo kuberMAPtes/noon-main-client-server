@@ -23,19 +23,19 @@ export default function Search() {
   let component;
   switch (currentSearchMode) {
     case modes.FEED:
-      component = <FeedSearchResult key="feed-search-result" />;
+      component = <FeedSearchResult key="feed-search-result" pageCallback={() => setPage(page + 1)} searchResult={searchResult} />;
       searchFunction = searchFeed;
       break;
     case modes.BUILDING:
-      component = <BuildingSearchResult key="building-search-result" />;
+      component = <BuildingSearchResult key="building-search-result" pageCallback={() => setPage(page + 1)} searchResult={searchResult} />;
       searchFunction = searchBuilding;
       break;
     case modes.CHATROOM:
-      component = <ChatroomSearchResult key="chatroom-search-result" />;
+      component = <ChatroomSearchResult key="chatroom-search-result" pageCallback={() => setPage(page + 1)} searchResult={searchResult} />;
       searchFunction = searchChatroom
       break;
     case modes.MEMBER:
-      component = <MemberSearchResult key="member-search-result" />;
+      component = <MemberSearchResult key="member-search-result" pageCallback={() => setPage(page + 1)} searchResult={searchResult} />;
       searchFunction = searchMember;
       break;
     default:

@@ -15,23 +15,25 @@ for (let i = 0; i < 5; i++) {
 /**
  * @param {{
  *   searchResult: {
-*     totalPages: number;
-*     totalElements: number;
-*     size: number;
-*     content: {
-*       memberId: string;
-*       nickname: string;
-*       phoneNumber: string;
-*       profilePhotoUrl: string;
-*       profileIntro: string;
-*       follower: boolean;
-*       following: boolean;
-*     }[]
-*   }
+ *     totalPages: number;
+ *     totalElements: number;
+ *     size: number;
+ *     content: {
+ *       memberId: string;
+ *       nickname: string;
+ *       phoneNumber: string;
+ *       profilePhotoUrl: string;
+ *       profileIntro: string;
+ *       follower: boolean;
+ *       following: boolean;
+ *     }[]
+ *   },
+ *   pageCallback: () => void;
  * }} props
  */
 export default function MemberSearchResult({
-  searchResult
+  searchResult,
+  pageCallback
 }) {
   const [memberData, setMemberData] = useState(SAMPLE_DATA);
 

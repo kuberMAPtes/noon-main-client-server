@@ -33,11 +33,13 @@ const SAMPLE_DATA = [
  *       chatroomName: "string",
  *       liveliness: "string"
  *     }
- *   }[]
+ *   }[],
+ *   pageCallback: () => void
  * }} props
  */
 export default function BuildingSearchResult({
-  searchResult
+  searchResult,
+  pageCallback
 }) {
   const [buildingData, setBuildingData] = useState(SAMPLE_DATA);
 
