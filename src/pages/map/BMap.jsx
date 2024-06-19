@@ -7,6 +7,7 @@ import { MAIN_API_URL } from "../../util/constants";
 import { is2xxStatus, is4xxStatus } from "../../util/statusCodeUtil";
 import { getBuildingMarkerHtml, getPlaceSearchMarkerHtml } from "./contant/markerHtml";
 import "../../assets/css/module/map/BMap.css";
+import Footer from "../../components/common/Footer";
 
 const naver = window.naver;
 
@@ -113,6 +114,7 @@ export default function BMap() {
           popBuildingChecked={popBuildingChecked}
           setPopBuildingChecked={setPopBuildingChecked}
       />
+      <Footer />
     </div>
   )
 }
