@@ -44,7 +44,10 @@ export default function Search() {
   }
 
   function onSearch() {
-    searchFunction(searchKeyword, page, (searchResult) => setSearchResult(searchResult), SAMPLE_MEMBER);
+    searchFunction(searchKeyword, page, (searchResult) => {
+      console.log(searchResult);
+      setSearchResult(searchResult)
+    }, SAMPLE_MEMBER);
   }
 
   return (
