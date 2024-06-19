@@ -1,6 +1,5 @@
 import React from 'react';
-import { IoNotifications, IoSettingsSharp  } from "react-icons/io5";
-import "../../assets/css/BasicNavbar.css";
+// import { IoNotifications, IoSettingsSharp  } from "react-icons/io5";
 import "../../assets/css/font.css";
 
 import Container from 'react-bootstrap/Container';
@@ -13,11 +12,11 @@ function BasicNavbar(args) {
   return (
     <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
       <Container>
-        <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+        <Navbar.Brand href="/">React-Bootstrap</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="#features">Features</Nav.Link>
+            <Nav.Link href="/feed/chart">Feed Chart</Nav.Link>
             <Nav.Link href="#pricing">Pricing</Nav.Link>
             <NavDropdown title="Dropdown" id="collapsible-nav-dropdown">
               <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>

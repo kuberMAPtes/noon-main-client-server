@@ -1,27 +1,29 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Dropdown, DropdownButton } from 'react-bootstrap';
 
 const FeedDropdown = ({onSelect}) => {
 
+    // Dropdown을 클릭할 때마다 다른 목록으로 이동
     const handleSelect = (option) => {
-        let url = '';
+        let temp = '';
         switch (option) {
             case 'member':
-                url = 'http://localhost:8080/feed/getFeedListByMember';
+                temp = '/feed/getFeedListByMember';
                 break;
             case 'subscriptionBuilding':
-                url = 'http://localhost:8080/feed/getFeedListByMemberSubscription';
+                temp = '/feed/getFeedListByMemberSubscription';
                 break;
             case 'like':
-                url = 'http://localhost:8080/feed/getFeedListByMemberLike';
+                temp = '/feed/getFeedListByMemberLike';
                 break;
             case 'bookmark':
-                url = 'http://localhost:8080/feed/getFeedListByMemberBookmark';
+                temp = '/feed/getFeedListByMemberBookmark';
                 break;
             default:
-                url = 'http://localhost:8080/feed/getFeedListByMember';
+                temp = '/feed/getFeedListByMember';
         }
-        onSelect(url);
+
+        onSelect(temp);
     }
 
     return (
