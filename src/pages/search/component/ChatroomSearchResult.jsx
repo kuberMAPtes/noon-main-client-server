@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "../../../assets/css/module/search/component/BuildingSearchResult.css";
+import "../../../assets/css/module/search/component/ChatroomSearchResult.css";
 
 const SAMPLE_DATA = []
 
@@ -19,11 +19,14 @@ for (let i = 0; i <= 5; i++) {
  *     totalElements: number;
  *     size: number;
  *     content: {
- *       chatroomID: number;
- *       chatroomMinTemp: number;
+ *       chatroomId: number;
  *       chatroomName: string;
+ *       participantCount: number;
+ *       buildingName: string;
+ *       roadAddr: string;
  *       chatroomCreatorId: string;
  *       chatroomType: string;
+ *       chatroomMinTemp: number;
  *     }[]
  *   },
  *   pageCallback: () => void;
@@ -42,9 +45,12 @@ export default function ChatroomSearchResult({
             key={`chatroom-item-${idx}`}
             chatroomId={data.chatroomID}
             chatroomName={data.chatroomName}
-            chatroomMinTemp={data.chatroomMinTemp}
+            participantCount={data.participantCount}
+            buildingName={data.buildingName}
+            roadAddr={data.roadAddr}
             chatroomCreatorId={data.chatroomCreatorId}
             chatroomType={data.chatroomType}
+            chatroomMinTemp={data.chatroomMinTemp}
           />
         ))
       }
@@ -56,19 +62,37 @@ export default function ChatroomSearchResult({
  * @param {{
  *   chatroomId: number;
  *   chatroomName: string;
- *   chatroomMinTemp: number;
+ *   participantCount: number;
+ *   buildingName: string;
+ *   roadAddr: string;
  *   chatroomCreatorId: string;
  *   chatroomType: string;
+ *   chatroomMinTemp: number;
  * }} props
  */
 function CharoomSearchResultItem({
-  chatroomId, chatroomName, chatroomMinTemp, chatroomCreatorId, chatroomType
+  chatroomId,
+  chatroomName,
+  participantCount,
+  buildingName,
+  roadAddr,
+  chatroomCreatorId,
+  chatroomType,
+  chatroomMinTemp
 }) {
   return (
     <div className="item-container chatroom-item-container">
       <div className="info">
         <h3>{chatroomName}</h3>
-        <div className="txt">{chatroomCreatorId}</div>
+        <div className="icon-title">
+          <img src="./image/chat-participants.png" alt="chat participants" />
+          <div>{participantCount}</div>
+        </div>
+      </div>
+      <div className="info">
+        <div>{buildingName}</div>
+        <div>{roadAddr}</div>
+        <div>{chatroomCreatorId}</div>
       </div>
     </div>
   );
