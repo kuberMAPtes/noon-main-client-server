@@ -6,14 +6,6 @@
   margin-top: 12px;
 }
 
-.item-container {
-  display: flex;
-  flex-direction: column;
-  background-color: #dee2e6;
-  padding: 6px 12px;
-  border-radius: 5px;
-}
-
 .icon-title {
   display: flex;
   gap: 4px;
