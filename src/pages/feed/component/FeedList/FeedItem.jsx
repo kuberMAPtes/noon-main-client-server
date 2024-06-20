@@ -4,7 +4,7 @@ import '../../css/FeedItem.css';
 import { Card, CardBody, CardImg, CardText, CardTitle } from 'react-bootstrap';
 import { FaHeart, FaRegHeart, FaBookmark, FaRegBookmark } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { toggleLike, toggleBookmark } from '../../axios/FeedAxios';
+import { toggleLike, toggleBookmark, viewCutUp } from '../../axios/FeedAxios';
 
 const FeedItem = ({ data, memberId }) => {
 
@@ -30,6 +30,7 @@ const FeedItem = ({ data, memberId }) => {
     // 상세보기 페이지로 이동
     const navigate = useNavigate();
     const handleCardClick = () => {
+        viewCutUp(feedId) // 조회수 증가
         navigate(`/feed/detail?memberId=${memberId}&feedId=${feedId}`);
     }
 
