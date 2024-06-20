@@ -14,6 +14,7 @@ import Footer from '../../components/common/Footer';
 const FeedDetailPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const feedId = searchParams.get('feedId');
+    const memberId = searchParams.get('memberId');
 
     const [feed, setFeed] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -22,7 +23,7 @@ const FeedDetailPage = () => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const response = await axios_api.get('/feed/detail?feedId=' + feedId);
+                const response = await axios_api.get(`/feed/detail?memberId=${memberId}&feedId=${feedId}`);
                 console.log(response);
                 setFeed(response.data);
             } catch (e) {

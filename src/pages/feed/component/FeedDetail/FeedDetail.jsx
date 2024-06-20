@@ -2,18 +2,27 @@ import React, { useState } from 'react';
 import '../../css/FeedDetail.css';
 
 import { Badge, Button, Card, CardBody, CardSubtitle, CardText, CardTitle, Form, Input, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { toggleBookmark, toggleLike } from '../../axios/FeedAxios';
+import { FaBookmark, FaHeart, FaRegBookmark, FaRegHeart } from 'react-icons/fa';
 
-const FeedDetail = ({ data }) => {
+const FeedDetail = ({ data, memberId }) => {
     const {
+        feedId,
         title,
         writerNickname,
         writtenTime,
         feedText,
         buildingName,
+        like,
+        bookmark,
+        mainActivated,
         attachments = [],
         tags = [],
         comments = [],
     } = data;
+
+    const [liked, setLiked] = useState(like);
+    const [bookmarked, setBookmarked] = useState(bookmark);
 
     const writtenTimeReplace = data.writtenTime.replace('T', ' ');
 
@@ -38,14 +47,37 @@ const FeedDetail = ({ data }) => {
         setNewComment('');
     };
 
+    const handleLikeClick = () => {
+        toggleLike(liked, setLiked, feedId, memberId);
+    }
+    
+    const handleBookmarkClick = () => {
+        toggleBookmark(bookmarked, setBookmarked, feedId, memberId);
+    }
+
     return (
         <div className="container">
             <Card>
                 <CardBody>
-                    <CardTitle tag="h3">{title}</CardTitle>
+                    {/* Header */}
+                    <div className="d-flex justify-content-between align-items-center">
+                        <CardTitle tag="h2">
+                            {title}
+                        </CardTitle>
+                        <div>
+                            <span onClick={handleLikeClick} style={{ cursor: 'pointer', marginRight: '10px' }}>
+                                {liked ? <FaHeart color="red" size='32'/> : <FaRegHeart size='32'/>}
+                            </span>
+                            <span onClick={handleBookmarkClick} style={{ cursor: 'pointer' }}>
+                                {bookmarked ? <FaBookmark color="gold" size='32' /> : <FaRegBookmark size='32' />}
+                            </span>
+                        </div>
+                    </div>
                     <CardSubtitle>
                         {writerNickname} | {writtenTimeReplace} | {buildingName}
                     </CardSubtitle>
+
+                    {/* Body */}
                     <CardText>{feedText}</CardText>
                     <div className="tags">
                         {tags.map((tag) => (
@@ -53,12 +85,6 @@ const FeedDetail = ({ data }) => {
                                 {tag.tagText}
                             </Badge>
                         ))}
-                    </div>
-                    <div className="feed-actions">
-                        <Button onClick={null}>👍 좋아요 0</Button>
-                        <Button onClick={null}>
-                            {null ? '🔖 북마크 취소' : '🔖 북마크'}
-                        </Button>
                     </div>
                     <div className="feed-stats">
                         <p>좋아요 수: 0</p>
