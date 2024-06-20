@@ -201,7 +201,7 @@ const AppRoutes = () => {
             <Route path="addNoticeView" element={<AddNoticeView />} />
             <Route path="getReportList" element={<GetListReport />} />
             <Route path="getReport/:reportId" element={<GetReport />} />
-            <Route path="addReport" element={<AddReport />} />
+            <Route path="addReport/:reporterId/:reporteeId" element={<AddReport />} />
             <Route path="listImages" element={<ListImages />} />
             <Route path="getImage" element={<GetImage />} />
             <Route path="deleteBadFeed" element={<DeleteBadFeed />} />

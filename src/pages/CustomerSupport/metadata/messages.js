@@ -11,8 +11,8 @@ const messages = {
       title: '공지 등록 안내',
       description: '공지사항을 성공적으로 등록하였습니다.',
     },
-    uploadReport: {
-        title: '신고 안내',
+    addReport: {
+        title: '신고 등록 안내',
         description: '신고를 성공적으로 등록하였습니다. 관리자 확인 후 알림을 드립니다.',
     },
     reportProcessing: {
