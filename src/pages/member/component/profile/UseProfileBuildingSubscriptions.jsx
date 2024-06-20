@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-const useProfileBuildingSubscriptions = ({ toId }) => {
+const UseProfileBuildingSubscriptions = ({ toId }) => {
   const fromId = useSelector((state) => state.auth.member.memberId);
 
   const [buildingSubscriptionCount, setBuildingSubscriptionCount] = useState(0);
@@ -27,4 +27,4 @@ const useProfileBuildingSubscriptions = ({ toId }) => {
   return { buildingSubscriptionCount };
 };
 
-export default useProfileBuildingSubscriptions;
+export default UseProfileBuildingSubscriptions;
