@@ -65,14 +65,8 @@ import AuthLoader from '../components/common/AuthLoader'
 import FeedChartPage from '../pages/feed/FeedChartPage';
 import FeedBuildingListPage from '../pages/feed/FeedBuildingListPage';
 import FeedListHomePage from '../pages/feed/FeedListHomePage';
-import TestComponent from "../pages/member/component/test/TestComponent";
-import Postcode from "../pages/member/component/Postcode";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
-import "../assets/css/animation.css";
-import LoginForm from "../pages/member/component/LoginForm";
-import FeedChartPage from "../pages/feed/FeedChartPage";
-import FeedBuildingListPage from "../pages/feed/FeedBuildingListPage";
 import GetMemberProfile from "../pages/member/GetMemberProfile";
+
 const AppRoutes = () => {
   const location = useLocation();
   const navigationType = useNavigationType();
