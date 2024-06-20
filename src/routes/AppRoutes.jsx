@@ -55,7 +55,7 @@ import FeedDetail from "../pages/feed/FeedDetailPage";
 import FeedForm from "../pages/feed/FeedFormPage";
 import GetMemberId from "../pages/member/GetMemberId";
 import IdFormToUpdatePwd from "../pages/member/IdFormToUpdatePwd";
-import ProfileView from "../pages/member/function/test/ProfileView";
+
 import TestComponent from '../pages/member/component/test/TestComponent';
 import Postcode from '../pages/member/component/Postcode';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
