@@ -9,6 +9,7 @@ import searchFeed from "./axios/searchFeed";
 import searchBuilding from "./axios/searchBuilding";
 import searchChatroom from "./axios/searchChatroom";
 import searchMember from "./axios/searchMember";
+import "../../assets/css/module/search/Search.css";
 
 export default function Search() {
   const [searchKeyword, setSearchKeyword] = useState("");
@@ -51,7 +52,7 @@ export default function Search() {
   }
 
   return (
-    <div>
+    <div className="container">
       <SearchBar typeCallback={(text) => setSearchKeyword(text)} searchCallback={onSearch} />
       <SearchModeTab currentSearchMode={currentSearchMode} onModeChange={(mode) => setCurrentSearchMode(mode)} />
       {component}
