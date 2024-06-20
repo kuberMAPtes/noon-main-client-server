@@ -33,20 +33,21 @@ import BMap from "../pages/map/BMap";
 import PrivateRoute from "./PrivateRoute";
 import KakaoNav from "../pages/member/KakaoNav";
 import Search from "../pages/search/Search";
-import GuestRoute from "./GuestRoute";
-import B from "../pages/member/function/test/B";
-import Building from "../pages/building/Building2";
-import GetCustomerSupport from "../pages/CustomerSupport/GetCustomerSupport";
-import GetChatbot from "../pages/CustomerSupport/GetChatbot";
-import ListNotice from "../pages/CustomerSupport/ListNotice";
-import GetNotice from "../pages/CustomerSupport/GetNotice";
-import AddNoticeView from "../pages/CustomerSupport/AddNoticeView";
-import ListReport from "../pages/CustomerSupport/ListReport";
-import GetReport from "../pages/CustomerSupport/GetReport";
-import AddReport from "../pages/CustomerSupport/AddReport";
-import ListImages from "../pages/CustomerSupport/ListImages";
-import GetImage from "../pages/CustomerSupport/GetImage";
-import DeleteBadFeed from "../pages/CustomerSupport/DeleteBadFeed";
+import GuestRoute from './GuestRoute';
+import B from '../pages/member/function/test/B';
+
+import GetBuilding from '../pages/building/GetBuilding';
+import GetCustomerSupport from '../pages/CustomerSupport/GetCustomerSupport';
+import GetChatbot from '../pages/CustomerSupport/GetChatbot';
+import GetNotice from '../pages/CustomerSupport/GetNotice';
+import AddNotice from '../pages/CustomerSupport/AddNotice';
+import GetReport from '../pages/CustomerSupport/GetReport';
+import AddReport from '../pages/CustomerSupport/AddReport';
+import ListImages from '../pages/CustomerSupport/ListImages';
+import GetImage from '../pages/CustomerSupport/GetImage';
+import DeleteBadFeed from '../pages/CustomerSupport/DeleteBadFeed';
+import GetListReport from '../pages/CustomerSupport/GetReportList';
+import GetNoticeList from "../pages/CustomerSupport/GetNoticeList";
 
 import MemberSetting from "../pages/setting/MemberSetting";
 // import Test from '../pages/Chat/Test';
@@ -65,9 +66,10 @@ import LoginForm from '../pages/member/component/LoginForm';
 import AuthLoader from '../components/common/AuthLoader'
 import FeedChartPage from '../pages/feed/FeedChartPage';
 import FeedBuildingListPage from '../pages/feed/FeedBuildingListPage';
+import FeedChartPage from '../pages/feed/FeedChartPage';
+import FeedBuildingListPage from '../pages/feed/FeedBuildingListPage';
 import FeedListHomePage from '../pages/feed/FeedListHomePage';
 import GetMemberProfile from "../pages/member/GetMemberProfile";
-
 const AppRoutes = () => {
   const location = useLocation();
   const navigationType = useNavigationType();
@@ -228,30 +230,23 @@ const AppRoutes = () => {
             <Route path="chatReject" element={<ChatReject />} />
             <Route path="chatRejected" element={<ChatRejected />} />
             {/* <Route path="test" element={<Test/>}/> */}
-          </Route>
-          <Route path="/map" element={<BMap />} />
-          <Route path="/search" element={<Search />} />
-          <Route path="/getBuildingProfile" element={<Building />} />
-          <Route path="/customerSupport">
+        </Route>
+        <Route path="/map" element={<BMap />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/getBuildingProfile/:buildingId" element={<GetBuilding />} />
+         <Route path="/customerSupport">
             <Route path="" element={<GetCustomerSupport />} />
-            <Route
-              path="getChatbot"
-              element={
-                <PrivateRoute>
-                  <GetChatbot />
-                </PrivateRoute>
-              }
-            />
-            <Route path="getNoticeList" element={<ListNotice />} />
-            <Route path="getNotice" element={<GetNotice />} />
-            <Route path="addNoticeView" element={<AddNoticeView />} />
-            <Route path="getReportList" element={<ListReport />} />
-            <Route path="getReport" element={<GetReport />} />
-            <Route path="addReport" element={<AddReport />} />
+            <Route path="getChatbot" element={<GetChatbot />} />
+            <Route path="getNoticeList" element={<GetNoticeList />} />
+            <Route path="getNotice/:noticeId" element={<GetNotice />} />
+            <Route path="addNotice" element={<AddNotice />} />
+            <Route path="getReportList" element={<GetListReport />} />
+            <Route path="getReport/:reportId" element={<GetReport />} />
+            <Route path="addReport/:reporterId/:reporteeId" element={<AddReport />} />
             <Route path="listImages" element={<ListImages />} />
             <Route path="getImage" element={<GetImage />} />
             <Route path="deleteBadFeed" element={<DeleteBadFeed />} />
-          </Route>
+        </Route>
           <Route path="/setting" element={<MemberSetting />} />
           <Route path="/feed">
             <Route path="list" element={<FeedList />} />
