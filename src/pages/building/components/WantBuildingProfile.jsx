@@ -1,5 +1,8 @@
 import React from 'react';
 
+
+//모달로 변경 후 axios로 건물 등록 신청할 예정
+
 const WantBuildingProfile = () => {
   return (
     <div style={styles.popupContainer}>
