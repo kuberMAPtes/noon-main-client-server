@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { decryptWithIv } from "../../util/crypto";
+import { decryptWithLv } from "../../util/crypto";
 import Cookies from "js-cookie";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import {
@@ -13,7 +13,7 @@ import {
   handleKeyDown,
 } from "./function/AddUpdateMemberUtil";
 import styles from "../../assets/css/module/member/AddMember.module.css";
-import styles2 from "../../assets/css/module/member/color.module.css";
+import styles2 from "../../assets/css/module/member/base.module.css";
 import { useDispatch } from "react-redux";
 import BackgroundTemplate from "../../components/common/BackgroundTemplate";
 import {
@@ -66,7 +66,7 @@ const AddMember = () => {
     console.log("당신은 휴대폰인증을 했습니다 ivData:", ivData);
 
     if (encryptedData && ivData && Cookies.get("user-data")) {
-      const isVerified = decryptWithIv(encryptedData, ivData);
+      const isVerified = decryptWithLv(encryptedData, ivData);
       if (isVerified !== "success") {
         //alert('본인인증을 완료해야 회원가입을 할 수 있습니다.');
         hasNavigated = true;

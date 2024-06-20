@@ -1,3 +1,5 @@
+import "../../../assets/css/module/search/component/SearchModeTab.css";
+
 export const modes = {
   INTEGRATION: 1,
   FEED: 2,
@@ -20,33 +22,16 @@ const tabTitles = {
 export default function SearchModeTab({currentSearchMode: currentMode, onModeChange}) {
 
   return (
-    <div>
+    <div className="search-mode-tab">
       {Object.keys(modes).map((key) => (
-        <button type="button" key={key}
+        <button
+            className={`btn--search-mode${currentMode === modes[key] ? " mode-selected" : ""}`}
+            type="button"
+            key={key}
             onClick={() => onModeChange(modes[key])}>
           {tabTitles[modes[key]]}
-          {
-            currentMode === modes[key]
-            ? <span>선택됨</span>
-            : ""
-          }
         </button>
       ))}
-      {/* <button type="button" onClick={() => onModeChange(modes.INTEGRATION)}>
-        통합
-      </button>
-      <button type="button" onClick={() => onModeChange(modes.FEED)}>
-        피드
-      </button>
-      <button type="button" onClick={() => onModeChange(modes.BUILDING)}>
-        건물
-      </button>
-      <button type="button" onClick={() => onModeChange(modes.CHATROOM)}>
-        채팅방
-      </button>
-      <button type="button" onClick={() => onModeChange(modes.MEMBER)}>
-        회원
-      </button> */}
     </div>
   )
 }

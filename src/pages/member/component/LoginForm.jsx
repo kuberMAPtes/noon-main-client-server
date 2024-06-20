@@ -4,10 +4,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { login } from "../../../redux/slices/authSlice";
 import { validateLoginForm } from "../function/memberValidator";
 import { renderLoginError } from "../function/memberFunc";
-import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
+import { Form, Button, Container, Row, Col, Alert } from "react-bootstrap";
 import SignUpButton from "./SignUpButton";
-import styles from '../../../assets/css/module/member/LoginForm.module.css';
-import styles2 from '../../../assets/css/module/member/color.module.css';
+import styles from "../../../assets/css/module/member/LoginForm.module.css";
+import styles2 from "../../../assets/css/module/member/base.module.css";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -19,27 +19,30 @@ const LoginForm = () => {
   const [pwd, setPassword] = useState("");
   const [validationError, setValidationError] = useState("");
 
-  const handleLoginSubmit = async (event) => {
+  const handleLoginClick = async (event) => {
     event.preventDefault();
-    setValidationError("");
-    const loginData = { member : { memberId: memberId, pwd: pwd} , loginWay: "normal" };
+    // setValidationError("");
+    const loginData = {
+      member: { memberId: memberId, pwd: pwd },
+      loginWay: "normal",
+    };
 
-    const validationMessage = validateLoginForm(memberId, pwd);
-    if (validationMessage) {
-      setValidationError(validationMessage);
-      return;
-    }
+    // const validationMessage = validateLoginForm(memberId, pwd);
+    // if (validationMessage) {
+    //   setValidationError(validationMessage);
+    //   return;
+    // }
 
     try {
       console.log("로그인 하기 전 store.auth.member :: ", storeMemberId);
-      await dispatch(login({loginData,navigate}));
+      await dispatch(login({ loginData, navigate }));
     } catch (error) {
       console.error("Failed to login:", error);
     }
   };
 
   const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       event.preventDefault(); // 엔터 키의 기본 동작(폼 제출)을 막음
       // 아무 동작도 하지 않음
     }
@@ -58,7 +61,7 @@ const LoginForm = () => {
       <Row className="justify-content-center">
         <Col xs={12} sm={10} md={8} lg={6}>
           <h2 className="text-center">로그인</h2>
-          <Form onSubmit={handleLoginSubmit}>
+          <Form>
             <Form.Group controlId="memberId">
               <Form.Label>Member ID</Form.Label>
               <Form.Control
@@ -82,9 +85,11 @@ const LoginForm = () => {
               />
             </Form.Group>
             <Button
-            variant="primary"
-            type="submit"
-            className={`mt-3 w-100 ${styles.btn} ${styles2.typicalButtonColor}`}>
+              variant="primary"
+              type="button"
+              onClick={handleLoginClick}
+              className={`mt-3 w-100 ${styles.btn} ${styles2.typicalButtonColor}`}
+            >
               로그인
             </Button>
             {validationError && (
@@ -100,8 +105,11 @@ const LoginForm = () => {
           </Form>
           <Link to="/member/getAuthMain">
             <Button
-            variant="primary"
-            className={`${styles2.typicalButtonColor} me-2`}>메인으로..</Button>
+              variant="primary"
+              className={`${styles2.typicalButtonColor} me-2`}
+            >
+              메인으로..
+            </Button>
           </Link>
         </Col>
       </Row>

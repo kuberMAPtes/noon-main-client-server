@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Cookies from 'js-cookie';
-import { restoreAuthState, setLoading } from '../../redux/slices/authSlice';
+import { restoreAuthState, setAuthorization, setLoading } from '../../redux/slices/authSlice';
 import { getMember } from '../../pages/member/function/memberAxios';
 
 const AuthLoader = ({ children }) => {
@@ -15,7 +15,7 @@ const AuthLoader = ({ children }) => {
         console.log("Child:", child);
       });
     //인증이 안되어 있으면...
-    if (!authorization) {
+    if (authorization===undefined) {
       const fetchMemberData = async () => {
         //쿠키에 인증이 남아있는지 확인한다.
         const loginData = Cookies.get("AuthToken");
@@ -36,6 +36,7 @@ const AuthLoader = ({ children }) => {
             } else {
               console.log("로그인정보가 없습니다2");
               Cookies.remove("AuthToken");
+              dispatch(setAuthorization(false));
             }
           } catch (error) {
             console.error("Error fetching member data:", error);
@@ -45,6 +46,7 @@ const AuthLoader = ({ children }) => {
         } else {
           console.log("로그인 정보가 없습니다.");
           Cookies.remove("AuthToken");
+          dispatch(setAuthorization(false));
         }
 
         dispatch(setLoading(false));

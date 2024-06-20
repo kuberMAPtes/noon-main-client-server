@@ -84,10 +84,11 @@ export const login = createAsyncThunk(
   }
 );
 
-export const logout = createAsyncThunk("auth/logout", async (dispatch) => {
+export const logout = createAsyncThunk("auth/logout", async (navigate) => {
   try {
     Cookies.remove("AuthToken");
     //   await axiosInstance.post('/member/logout');
+    navigate("/member/getAuthMain");
   } catch (error) {
     console.error("Logout failed", error);
   }
@@ -110,7 +111,7 @@ const initialState = {
     memberProfilePublicRange: "PUBLIC",
     receivingAllNotificationAllowed: false,
   },
-  authorization: null, // true or false
+  authorization: undefined, // true or false
   isRedirect: true, // 리다이렉트 한번 하면 > false
   loginStatus: "idle",
   loginError: null,

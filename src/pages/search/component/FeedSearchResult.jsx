@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "../../../assets/css/module/search/component/FeedSearchResult.css";
 
 const SAMPLE_DATA = [];
 
@@ -44,20 +45,22 @@ export default function FeedSearchResult({
   searchResult,
   pageCallback
 }) {
-  const [feedData, setFeedData] = useState(SAMPLE_DATA);
-
+  console.log(searchResult);
   return (
-    <div>
+    <div className="list-container">
       {
-        feedData.map((data, idx) => (
+        searchResult.map((data, idx) => (
           <FeedSearchResultItem
-            key={`feed-item-${idx}`}
-            writer={data.writer}
-            writtenTime={data.writtenTime}
-            title={data.title}
-            text={data.text}
-            buildingName={data.buildingName}
-            thumbnailUrl={data.thumbnailUrl}
+              key={`feed-search-${idx}`}
+              feedId={data.feedId}
+              writer={{
+                nickname: data.writerNickname
+              }}
+              writtenTime={new Date(data.writtenTime)}
+              title={data.title}
+              text={data.feedText}
+              buildingName={data.buildingName}
+              thumbnailUrl={data.feedAttachementURL}
           />
         ))
       }
@@ -67,46 +70,58 @@ export default function FeedSearchResult({
 
 /**
  * @param {{
-*   writer: {
-*     nickname: string;
-*     profilePhotoUrl: string;
-*   },
-*   writtenTime: Date;
-*   title: string;
-*   text: string;
-*   buildingName: string;
-*   thumbnailUrl: string;
+ *  feedId: number;
+ *  writer: {
+ *    nickname: string;
+ *  },
+ *  writtenTime: Date;
+ *  title: string;
+ *  text: string;
+ *  buildingName: string;
+ *  thumbnailUrl: string;
 * }} prop
 */
 function FeedSearchResultItem({
-  writer, writtenTime, title, text, buildingName, thumbnailUrl
+  feedId, writer, writtenTime, title, text, buildingName, thumbnailUrl
 }) {
   const periodInSeconds = (new Date() - writtenTime) / 1000;
-  let display;
-  console.log("thumbnailUrl:", thumbnailUrl);
+  let timeDisplay;
 
   if (periodInSeconds < MINUTE) {
-    display = `${Math.round(periodInSeconds)}초 전`
+    timeDisplay = `${Math.round(periodInSeconds)}초 전`
   } else if (periodInSeconds < HOUR) {
-    display = `${Math.round(periodInSeconds / MINUTE)}분 전`
+    timeDisplay = `${Math.round(periodInSeconds / MINUTE)}분 전`
   } else if (periodInSeconds < DAY) {
-    display = `${Math.round(periodInSeconds / HOUR)}시간 전`
+    timeDisplay = `${Math.round(periodInSeconds / HOUR)}시간 전`
   } else {
-    display = `${writtenTime.getFullYear()}/${writtenTime.getMonth() + 1}/${writtenTime.getDate()}`
+    timeDisplay = `${writtenTime.getFullYear()}/${writtenTime.getMonth() + 1}/${writtenTime.getDate()}`
   }
 
   return (
-    <div>
-      <img src={writer.profilePhotoUrl} alt="Profile" />
-      <p>{writer.nickname}</p>
-      <p>{display}</p>
-      <p>{buildingName}</p>
-      <p>{title}</p>
-      <p>
-        {text.length > TEXT_MAX_LENGTH
-          ? `${text.substring(0, TEXT_MAX_LENGTH)}...`
-          : text}
-      </p>
+    <div className="item-container">
+      <div className="feed-info">
+        <div className="feed-metadata">
+          <div className="sub-info">
+            <div className="icon-title">
+              <img src="./image/write.png" alt="write" />
+              <div>{writer.nickname}</div>
+            </div>
+            <div className="icon-title">
+              <img src="./image/clock.png" alt="clock" />
+              <div>{timeDisplay}</div>
+            </div>
+          </div>
+          <div>{buildingName}</div>
+        </div>
+        <div className="feed-content">
+          <h4>{title}</h4>
+          <p>
+            {text.length > TEXT_MAX_LENGTH
+              ? `${text.substring(0, TEXT_MAX_LENGTH)}...`
+              : text}
+          </p>
+        </div>
+      </div>
       {thumbnailUrl && <img src={thumbnailUrl} alt="thumbnail"/>}
     </div>
   )
