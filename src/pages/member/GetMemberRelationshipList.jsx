@@ -1,13 +1,13 @@
 import React from "react";
-import useInfiniteScroll from "./component/common/useInfiniteScroll";
+import useInfiniteScroll from "./component/common/UseInfiniteScroll";
 import useFetchMemberRelationshipList from "./component/common/useFetchMemberRelationshipList";
 import { useSelector } from "react-redux";
-import useGetMemberRelationshipList from "./component/memberRelationshipList/useGetMemberRelationshipList";
+import UseGetMemberRelationshipLists from "./component/memberRelationshipList/UseGetMemberRelationshipLists";
 
 const GetMemberRelationshipList = () => {
   //팔로잉 수 가져와야해
   //팔로워 수 가져와야해
-  const { fromId, toId, initialPage } = useGetMemberRelationshipList();
+  const { fromId, toId, initialPage } = UseGetMemberRelationshipLists();
   const {
     memberRelationshipList,
     setMemberRelationshipList,
@@ -15,8 +15,11 @@ const GetMemberRelationshipList = () => {
     followingCount,
   } = useFetchMemberRelationshipList(fromId, toId, initialPage);
 
-  const {lastElementRef} = useInfiniteScroll(memberRelationshipList, setMemberRelationshipList, initialPage);
-
+  const { lastElementRef } = useInfiniteScroll(
+    memberRelationshipList,
+    setMemberRelationshipList,
+    initialPage
+  );
 
   //가져온거 무한스크롤 해야해
 
@@ -35,7 +38,10 @@ const GetMemberRelationshipList = () => {
       {followingCount}
       {memberRelationshipList.map((memberRelationship, index) => (
         <div
-          key={memberRelationship.memberRelationshipId ?? `memberRelationship-${index}`}
+          key={
+            memberRelationship.memberRelationshipId ??
+            `memberRelationship-${index}`
+          }
           className="col-12 mb-4"
           ref={
             memberRelationshipList.length === index + 1 ? lastElementRef : null
