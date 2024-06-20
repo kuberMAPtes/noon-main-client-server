@@ -9,6 +9,7 @@ const AddMemberResult = () => {
 
     const navigate = useNavigate();
 
+
     return (
         <div>
             <h1>Add Member Result</h1>

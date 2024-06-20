@@ -1,6 +1,7 @@
 import { Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom"
-
+import styles from "../../../assets/css/module/member/color.module.css";
+import SignUpButtonView from "./SignUpButtonView";
 const SignUpButton = () => {
 
     const navigate = useNavigate();
@@ -9,7 +10,7 @@ const SignUpButton = () => {
     }
 
     return (
-        <Button onClick={handleSignUp} variant="secondary" className="mb-3">회원가입</Button>
+        <SignUpButtonView onClick={handleSignUp} />
     )
 }
 export default SignUpButton;
