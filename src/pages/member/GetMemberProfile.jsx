@@ -1,93 +1,120 @@
 import React, { useEffect, useState } from "react";
+import { Container, Row, Col, Card, Spinner, Alert, Button } from 'react-bootstrap';
 import LogoutForm from "./component/LogoutForm";
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
-import { useLocation, useParams } from "react-router-dom";
 import { getMemberProfile } from "./function/memberAxios";
 import { useSelector } from "react-redux";
+import { decryptWithIv } from "../../util/crypto";
+import { useParams } from "react-router-dom";
 
-// 누군가 http://127.0.0.1:3000/member/getMemberProfile/{toId}로 요청해야함.
 const GetMemberProfile = () => {
+  console.log("#### GetMemberProfile 렌더링");
+  
   const authorization = useSelector((state) => state.auth.authorization);
   const fromId = useSelector((state) => state.auth.member.memberId);
-  const { toId } = useParams(); // :3000/member/getMemberProfile/{toId}URL 파라미터 가져오기
-  
+  const { secretId, secretIv } = useParams();
+
+  const [toId, setToId] = useState(null);
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    console.log("Authorization:", authorization);
-    console.log("From ID:", fromId);
-    console.log("To ID:", toId);
-    getMemberProfileData(authorization, fromId, toId);
-  }, [authorization, fromId, toId]);
-
-  const getMemberProfileData = async (authorization, fromId, toId) => {
-    console.log("Fetching member profile with:");
-    console.log("Authorization:", authorization);
-    console.log("From ID:", fromId);
-    console.log("To ID:", toId);
-    setLoading(true);
-    setError(null);
+  const decryptToId = (secretId, secretIv) => {
     try {
-      const response = await getMemberProfile(authorization, fromId, toId);
-      console.log("Profile data:", response.data.info);
-      setProfile(response.data.info);
+      return decryptWithIv(decodeURIComponent(secretId), decodeURIComponent(secretIv));
     } catch (error) {
-      console.error("Error fetching member profile:", error);
-      setError("Error fetching member profile: " + error.message);
-    } finally {
+      console.error("Error decrypting toId: ", error);
+      setError("Error decrypting toId");
       setLoading(false);
+      return null;
     }
   };
 
-  return (
-    <div>
-      <h1>Member Profile</h1>
-      {loading ? (
-        <p>Loading profile for member ID: {toId}</p>
-      ) : error ? (
-        <p>{error}</p>
-      ) : profile ? (
-        <div>
-          <p>Member ID: {profile.memberId}</p>
-          <p>Name: {profile.nickname}</p>
-          <p>DajungScore : {profile.dajungScore}</p>
-            <p>Profile photo URL: {profile.profilePhotoUrl}</p>
-            <p>Profile intro: {profile.profileIntro}</p>
-        <p>feedDtoList : {profile.feedDtoList}</p>
-          {/* 여기에 더 많은 프로필 정보를 추가할 수 있습니다 */}
-        </div>
-      ) : (
-        <p>No profile data available.</p>
-      )}
-      <div>
-        <a
-          href="https://www.facebook.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <FaFacebook size={30} />
-        </a>
-        <a
-          href="https://www.twitter.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <FaTwitter size={30} />
-        </a>
-        <a
-          href="https://www.instagram.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <FaInstagram size={30} />
-        </a>
-      </div>
-      {/* 다른 프로필 내용들... */}
+  useEffect(() => {
+    console.log("URL Parameters - encryptedToId:", secretId, "IV:", secretIv);
+    if (secretId && secretIv) {
+      const decryptedToId = decryptToId(secretId, secretIv);
+      console.log("Decrypted toId: ", decryptedToId);
+      setToId(decryptedToId);
+    }
+  }, [secretId, secretIv]);
 
+  useEffect(() => {
+    if (authorization && fromId && toId) {
+      console.log("Fetching member profile data", "Authorization:", authorization, "From ID:", fromId, "To ID:", toId);
+      const fetchMemberProfile = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+          const response = await getMemberProfile(fromId, toId);
+          console.log("Profile data:", response);
+          setProfile(response);
+        } catch (error) {
+          console.error("Error fetching member profile:", error);
+          setError("Error fetching member profile: " + error.message);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchMemberProfile();
+    }
+  }, [authorization, toId, fromId]);
+
+  return (
+    <Container className="mt-5">
       <LogoutForm />
-    </div>
+      <h1 className="text-center">Member Profile</h1>
+      {loading ? (
+        <Row className="justify-content-center">
+          <Spinner animation="border" />
+        </Row>
+      ) : error ? (
+        <Alert variant="danger">{error}</Alert>
+      ) : profile ? (
+        <Card>
+          <Card.Body>
+            <Card.Title>{profile.nickname}</Card.Title>
+            <Card.Subtitle className="mb-2 text-muted">Member ID: {profile.memberId}</Card.Subtitle>
+            <Card.Text>
+              <p>DajungScore: {profile.dajungScore}</p>
+              <p>Profile intro: {profile.profileIntro}</p>
+              {profile.profilePhotoUrl && <img src={profile.profilePhotoUrl} alt="Profile" className="img-fluid mb-2" />}
+            </Card.Text>
+            <div>
+              <h2>feedDtoList:</h2>
+              {profile.feedDtoList &&
+                profile.feedDtoList.map((feed) => (
+                  <Card key={feed.feedId} className="mb-3">
+                    <Card.Body>
+                      <Card.Title>{feed.title}</Card.Title>
+                      <Card.Subtitle className="mb-2 text-muted">빌딩이름: {feed.buildingName}</Card.Subtitle>
+                      <Card.Text>
+                        <p>피드내용: {feed.feedText}</p>
+                        <p>작성자: {feed.writerNickname}</p>
+                        <p>작성 시간: {feed.writtenTime}</p>
+                        {feed.feedAttachementURL && <img src={feed.feedAttachementURL} alt="첨부 이미지" className="img-fluid" />}
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
+                ))}
+            </div>
+          </Card.Body>
+        </Card>
+      ) : (
+        <Alert variant="warning">No profile data available.</Alert>
+      )}
+      <div className="text-center mt-4">
+        <Button variant="link" href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
+          <FaFacebook size={30} />
+        </Button>
+        <Button variant="link" href="https://www.twitter.com" target="_blank" rel="noopener noreferrer">
+          <FaTwitter size={30} />
+        </Button>
+        <Button variant="link" href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
+          <FaInstagram size={30} />
+        </Button>
+      </div>
+    </Container>
   );
 };
 
