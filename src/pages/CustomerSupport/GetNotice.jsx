@@ -131,12 +131,14 @@ const GetNotice = () => {
             </Col>
           </Row>
         </div>
+=
 
       <Footer />
 
     </div>
   );
 };
+
 
 
 const styles = {
@@ -155,6 +157,5 @@ const styles = {
     marginTop: '20px',
   },
 };
-
 
 export default GetNotice;
