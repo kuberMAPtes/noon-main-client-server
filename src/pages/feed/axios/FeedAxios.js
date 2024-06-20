@@ -49,15 +49,3 @@ export const toggleBookmark = async (
 
   setBookmarked(!bookmarked);
 };
-
-// 조회수 증가
-export const viewCutUp = async (feedId) => {
-  let url = "/feed/viewCutUp/" + feedId;
-
-  try {
-    const response = await axios_api.post(url);
-    console.log(response.data);
-  } catch (e) {
-    console.error(e);
-  }
-};
