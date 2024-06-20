@@ -39,12 +39,11 @@ const ProfileBody = ({
         </Col>
         <Col xs={8}>
           <Row>
-            <Col xs={3}>다정 온도</Col>
+            <Col xs={3}>다정 온도 : {dajungTemperature}</Col>
             <Col xs={9}>
               <div className="d-flex flex-column align-items-center">
                 <ProgressBar
                   now={profile.dajungScore}
-                  label={dajungTemperature}
                   style={{ width: "100%", height: "1rem" }}
                 />
               </div>

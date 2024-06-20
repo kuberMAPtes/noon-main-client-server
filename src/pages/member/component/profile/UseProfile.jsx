@@ -14,7 +14,8 @@ const UseProfile = () => {
     dajungScore : 0,
     profilePhotoUrl: "",
     profileIntro : "",
-    nickname : ""
+    nickname : "",
+    feedDtoList : [],
     });
   const [isDenied, setIsDenied] = useState(false);
 
@@ -35,12 +36,12 @@ const UseProfile = () => {
 
       const fetchMemberProfile = async () => {
         const response = await getMemberProfile(fromId, toId); //관계를 다 따져볼거임. info에 뭐가 있을까...
-        alert("fetchMemberProfile"+JSON.stringify(response));
+        // alert("fetchMemberProfile"+JSON.stringify(response));
         if (response?.memberId) {
-          alert("setIsDenied false");
+        //   alert("setIsDenied false");
           setIsDenied(false);
         } else {
-            alert("setIsDenied true");
+            // alert("setIsDenied true");
           setIsDenied(true);
         }
         console.log("Profile data:", response);
@@ -51,7 +52,7 @@ const UseProfile = () => {
     }
   }, [authorization, toId, fromId, isDenied]);
 
-  return { profile, toId, initialPage };
+  return { profile, toId, fromId, initialPage,isDenied };
 };
 
 export default UseProfile;

@@ -12,12 +12,12 @@ import UseProfileBuildingSubscriptions from "./component/profile/UseProfileBuild
 import UseProfile from "./component/profile/UseProfile";
 import LogoutForm from "./component/LogoutForm";
 const GetMemberProfile = () => {
-  const { profile, toId, initialPage, isDenied } = UseProfile();
-  const { feeds, hasMore, setPage } = UseProfileFetchFeeds(toId, initialPage);
+  const { profile, toId, fromId, initialPage, isDenied } = UseProfile();
+  const { feeds, hasMore, setPage } = UseProfileFetchFeeds(profile.feedDtoList,toId, initialPage);
   const { buildingSubscriptionCount } = UseProfileBuildingSubscriptions({
     toId,
   });
-  const { followerCount, followingCount } = UseProfileMemberRelationshipList();
+  const { followerCount, followingCount } = UseProfileMemberRelationshipList(fromId, toId);
   const lastFeedElementRef = UseProfileInfiniteScroll(hasMore, setPage);
 
   return (
