@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import '../../css/FeedDetail.css';
 
-import { Badge, Button, Card, CardBody, CardSubtitle, CardText, CardTitle, Form, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { Image, Badge, Button, Card, CardBody, CardSubtitle, CardText, CardTitle, Form, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { toggleBookmark, toggleLike } from '../../axios/FeedAxios';
-import { FaBookmark, FaHeart, FaRegBookmark, FaRegHeart, FaCommentAlt, FaRegEye, FaFireAlt } from 'react-icons/fa';
+import { FaBookmark, FaHeart, FaRegBookmark, FaRegHeart, FaCommentAlt, FaRegEye, FaFireAlt, FaExchangeAlt } from 'react-icons/fa';
+import { MdDelete } from "react-icons/md";
 import LikedUsersList from './LikedUsersList';
+import axios_api from '../../../../lib/axios_api';
 
 const FeedDetail = ({ data, memberId }) => {
     const {
         feedId,
         title,
         writerNickname,
+        writerProfile,
         writtenTime,
         feedText,
         buildingName,
@@ -31,26 +34,43 @@ const FeedDetail = ({ data, memberId }) => {
 
     const writtenTimeReplace = data.writtenTime.replace('T', ' '); // 날짜 포멧팅
 
+    // 댓글 추가 관리
     const [newComment, setNewComment] = useState('');
     const [commentList, setCommentList] = useState(comments);
 
     const [likedCount, setLikeCount] = useState(likeCount); // 좋아요 개수
     const [showLikedUsers, setShowLikedUsers] = useState(false); // 리스트 표시 여부
 
+    // 댓글 추가 내용 만들기
     const handleCommentChange = (e) => {
         setNewComment(e.target.value);
     };
 
-    const handleCommentSubmit = (e) => {
+
+    const handleCommentSubmit = async (e) => {
         e.preventDefault();
+
         const newCommentEntity = {
-            feedId: 10001,
-            commentId: commentList.length + 1,
-            memberId: 'empty_user',
+            feedId: feedId,
+            memberId: memberId,
+            commentId : 0,
             commentText: newComment,
             writtenTime: new Date().toISOString(),
             activated: true,
         };
+
+        let url = "/feed/addFeedComment";
+
+        // 댓글 추가 axios
+        try {
+            const response = await axios_api.post(url, newCommentEntity)
+            console.log(response.data);
+
+            newCommentEntity.commentId = response.data;
+        } catch (e) {
+            console.log(e);
+        }
+
         setCommentList([...commentList, newCommentEntity]);
         setNewComment('');
     };
@@ -68,15 +88,33 @@ const FeedDetail = ({ data, memberId }) => {
         setShowLikedUsers(!showLikedUsers); // 리스트 표시 여부 토글
     }
 
+    // 댓글 삭제
+    const handleDeleteComment = async (commentId) => {
+        setCommentList(commentList.filter(comment => comment.commentId !== commentId));
+
+        // 댓글 삭제 axios
+        let url = "/feed/deleteFeedComment/" + commentId;
+
+        // 댓글 추가 axios
+        try {
+            const response = await axios_api.post(url)
+            console.log(response.data);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+
     return (
         <div className="container">
             <Card>
                 <CardBody>
                     {/* Header */}
                     <div className="d-flex justify-content-between align-items-center">
-                        <CardTitle tag="h2">
-                            {title}
-                        </CardTitle>
+                        <div className="d-flex align-items-center">
+                            <Image src={writerProfile || 'https://via.placeholder.com/50'} roundedCircle width="50" height="50" className="mr-3" />
+                            <div>&nbsp; {writerNickname}</div>
+                        </div>
                         <div>
                             <span onClick={handleLikeClick} style={{ cursor: 'pointer', marginRight: '10px' }}>
                                 {liked ? <FaHeart color="red" size='32'/> : <FaRegHeart size='32'/>}
@@ -86,9 +124,14 @@ const FeedDetail = ({ data, memberId }) => {
                             </span>
                         </div>
                     </div>
+                    <br/>
                     <CardSubtitle>
-                        {writerNickname} | {writtenTimeReplace} | {buildingName}
+                        {writtenTimeReplace} | {buildingName}  
                     </CardSubtitle>
+                    <br/>
+                    <CardTitle tag="h2">
+                            {title}
+                        </CardTitle>
                     <CardText>{feedText}</CardText>
                     <div className="tags">
                         {tags.map((tag) => (
@@ -130,8 +173,18 @@ const FeedDetail = ({ data, memberId }) => {
                     <CardTitle tag="h3">댓글</CardTitle>
                     <ListGroup>
                         {commentList.map((comment) => (
-                            <ListGroupItem key={comment.commentId}>
-                                <strong>{comment.memberId}</strong>: {comment.commentText}
+                            <ListGroupItem key={comment.commentId} className="d-flex justify-content-between align-items-center">
+                                <div className='d-flex align-items-center'>
+                                    <Image src={comment.memberProfile || 'https://via.placeholder.com/50'} roundedCircle width="50" height="50" className="mr-3" />
+                                    <div>
+                                        <strong>&nbsp; {comment.memberId}</strong> &nbsp;
+                                        <span className="text-muted" style={{ fontSize: '0.9em' }}>{new Date(comment.writtenTime).toLocaleString()}</span>
+                                        <div>&nbsp; {comment.commentText}</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <MdDelete style={{ cursor: 'pointer' }} onClick={() => handleDeleteComment(comment.commentId)} />
+                                </div>
                             </ListGroupItem>
                         ))}
                     </ListGroup>
@@ -151,6 +204,7 @@ const FeedDetail = ({ data, memberId }) => {
                     </Form>
                 </CardBody>
             </Card>
+            <br/><br/><br/><br/>
         </div>
     );
 };

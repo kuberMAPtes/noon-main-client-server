@@ -9,7 +9,6 @@ const LikedUsersList = (props) => {
     const likedUser = async () => {
         try {
             const response = await axios_api.get(`/feed/getFeedLikeList?feedId=${props.feedId}`)
-            console.log("실행");
             setLikeUserList(response.data);
         } catch (e) {
             console.log(e);
