@@ -67,6 +67,8 @@ import FeedChartPage from '../pages/feed/FeedChartPage';
 import FeedBuildingListPage from '../pages/feed/FeedBuildingListPage';
 import GetNoticeList from "../pages/CustomerSupport/GetNoticeList";
 import GetListReport from '../pages/CustomerSupport/GetReportList';
+import FeedChartPage from '../pages/feed/FeedChartPage';
+import FeedBuildingListPage from '../pages/feed/FeedBuildingListPage';
 const AppRoutes = () => {
   const location = useLocation();
   const navigationType = useNavigationType();
