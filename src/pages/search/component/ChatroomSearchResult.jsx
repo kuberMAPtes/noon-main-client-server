@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "../../../assets/css/module/search/component/BuildingSearchResult.css";
 
 const SAMPLE_DATA = []
 
@@ -32,18 +33,18 @@ export default function ChatroomSearchResult({
   searchResult,
   pageCallback
 }) {
-  const [chatroomData, setChatroomData] = useState(SAMPLE_DATA);
-
+  console.log(searchResult);
   return (
-    <div>
+    <div className="list-container">
       {
-        chatroomData.map((data, idx) => (
+        searchResult && searchResult.content && searchResult.content.map((data, idx) => (
           <CharoomSearchResultItem
             key={`chatroom-item-${idx}`}
-            chatroomData={data.chatroomData}
-            participantCount={data.participantCount}
-            buildingName={data.buildingName}
-            roadAddress={data.roadAddress}
+            chatroomId={data.chatroomID}
+            chatroomName={data.chatroomName}
+            chatroomMinTemp={data.chatroomMinTemp}
+            chatroomCreatorId={data.chatroomCreatorId}
+            chatroomType={data.chatroomType}
           />
         ))
       }
@@ -53,21 +54,22 @@ export default function ChatroomSearchResult({
 
 /**
  * @param {{
+ *   chatroomId: number;
  *   chatroomName: string;
- *   participantCount: number;
- *   buildingName: string;
- *   roadAddress: string;
+ *   chatroomMinTemp: number;
+ *   chatroomCreatorId: string;
+ *   chatroomType: string;
  * }} props
  */
 function CharoomSearchResultItem({
-  chatroomName, participantCount, buildingName, roadAddress
+  chatroomId, chatroomName, chatroomMinTemp, chatroomCreatorId, chatroomType
 }) {
   return (
-    <div>
-      <p>{chatroomName}</p>
-      <p>{participantCount}</p>
-      <p>{buildingName}</p>
-      <p>{roadAddress}</p>
+    <div className="item-container chatroom-item-container">
+      <div className="info">
+        <h3>{chatroomName}</h3>
+        <div className="txt">{chatroomCreatorId}</div>
+      </div>
     </div>
   );
 }

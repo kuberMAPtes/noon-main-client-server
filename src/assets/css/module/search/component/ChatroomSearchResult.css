@@ -1,0 +1,11 @@
+.chatroom-item-container {
+  display: flex;
+  flex-direction: row;
+
+}
+
+.chatroom-item-container .info {
+  display: flex;
+  flex-direction: column;
+  
+}
