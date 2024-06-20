@@ -7,6 +7,7 @@ import ProfileActions from "./ProfileActions";
 //> setProfile등등..필요
 //> 상위컴포넌트의 커스텀 훅에서 하고 여기서는 받아쓰자.
 const ProfileBody = ({
+  toId,
   profile,
   feeds,
   buildingSubscriptionCount,
@@ -14,6 +15,7 @@ const ProfileBody = ({
   followingCount,
 }) => {
   const [dajungTemperature, setDajungTemperature] = useState("");
+  const defaultPhotoUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSg3ya9qxUA7YtK-RHIkePuc-IhSgFlOf_7YA&s"
 
   useEffect(() => {
     if (profile.dajungScore >= 80) {
@@ -33,7 +35,9 @@ const ProfileBody = ({
     <Card.Body>
       <Row className="mb-3">
         <Col xs={4}>
-          <Image src={profile.profilePhotoUrl} roundedCircle className="mb-3" />
+          
+          <Image src={profile.profilePhotoUrl || defaultPhotoUrl} roundedCircle className="mb-3" />
+
           <Card.Title>{profile.nickname}</Card.Title>
           <Card.Subtitle className="mb-2 text-muted"></Card.Subtitle>
         </Col>
@@ -63,6 +67,7 @@ const ProfileBody = ({
         </Col>
       </Row>
       <ProfileStats
+        toId={toId}
         feeds={feeds}
         buildingSubscriptionCount={buildingSubscriptionCount}
         followerCount={followerCount}

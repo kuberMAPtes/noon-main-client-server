@@ -19,17 +19,17 @@ const ProfileActions = () => {
 
   const handleBlock = (e) => {
     e.preventDefault();
-    alert("유저를 차단합니다.");
+    // alert("유저를 차단합니다.");
   };
 
   const handleReport = (e) => {
     e.preventDefault();
-    alert("유저를 신고합니다.");
+    // alert("유저를 신고합니다.");
   };
 
   const handleUpdatePhoneNumber = (e) => {
     e.preventDefault();
-    alert("연락처를 등록합니다.");
+    // alert("연락처를 등록합니다.");
   };
 
   return (

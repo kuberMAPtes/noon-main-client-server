@@ -1,26 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
-const UseProfileBuildingSubscriptions = ({toId}) => {
+const useProfileBuildingSubscriptions = ({ toId }) => {
+  const fromId = useSelector((state) => state.auth.member.memberId);
 
-    const fromId = useSelector((state) => state.auth.member.memberId);
-    
-    const [buildingSubscriptionCount,setBuildingSubscriptionCount] = useState(0);
-    
-    useEffect(()=>{
-        const fetchBuildingSubscriptions = async () => {
-            console.log("Fetching building subscriptions","From ID:",fromId,"To ID:",toId);
-            // const response = await getBuildingSubscriptionList(fromId, toId);
-            // console.log("Building subscriptions:", response);
-            // const receivedBuildingSubscriptionCount = response.length;
-            const receivedBuildingSubscriptionCount = 100;
-            setBuildingSubscriptionCount(receivedBuildingSubscriptionCount);
-        }   
-        fetchBuildingSubscriptions();
+  const [buildingSubscriptionCount, setBuildingSubscriptionCount] = useState(0);
 
-    },[buildingSubscriptionCount, fromId, toId])
+  useEffect(() => {
+    const fetchBuildingSubscriptions = async () => {
+      console.log(
+        "Fetching building subscriptions",
+        "From ID:",
+        fromId,
+        "To ID:",
+        toId
+      );
+      // const response = await getBuildingSubscriptionList(fromId, toId);
+      // console.log("Building subscriptions:", response);
+      // const receivedBuildingSubscriptionCount = response.length;
+      const receivedBuildingSubscriptionCount = 100;
+      setBuildingSubscriptionCount(receivedBuildingSubscriptionCount);
+    };
+    fetchBuildingSubscriptions();
+  }, [buildingSubscriptionCount, fromId, toId]);
 
-    return {buildingSubscriptionCount};
+  return { buildingSubscriptionCount };
 };
 
-export default UseProfileBuildingSubscriptions;
+export default useProfileBuildingSubscriptions;

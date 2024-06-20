@@ -5,6 +5,7 @@ import {
   Route,
   useLocation,
   useNavigationType,
+  Navigate,
 } from "react-router-dom";
 import GetAuthMain from "../pages/member/GetAuthMain";
 import GetSignUpTermAgreement from "../pages/member/GetSignUpTermAgreement";
@@ -96,6 +97,7 @@ const AppRoutes = () => {
         classNames={isBack ? "reverse-slide" : "slide"}
       >
         <Routes location={location}>
+          <Route path="/" element={<Navigate to="/member/getAuthMain" />} />
           <Route path="/b" element={<B />}></Route>
           <Route path="/testComponent" element={<TestComponent />}></Route>
           <Route path="/member">
@@ -203,7 +205,7 @@ const AppRoutes = () => {
               }
             />
             <Route
-              path="getMemberRelationshipList"
+              path="getMemberRelationshipList/:secretId/:secretIv"
               element={
                 <PrivateRoute>
                   <GetMemberRelationshipList />

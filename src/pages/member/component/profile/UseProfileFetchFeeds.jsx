@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 import  axiosInstance  from '../../../../lib/axiosInstance';
 // http://localhost:8080/feed/getFeedListByMember
-const UseProfileFetchFeeds = (feedDtoList,toId, initialPage) => {
+const useProfileFetchFeeds = (feedDtoList,toId, initialPage) => {
 
     const [feeds, setFeeds] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -11,9 +11,13 @@ const UseProfileFetchFeeds = (feedDtoList,toId, initialPage) => {
 
     const fetchData = useCallback(() => {
         setLoading(true);
-    
         // alert("피드 response" + JSON.stringify(feedDtoList));
-        if (feedDtoList.length === 0) {
+        if(feedDtoList===null){
+            setHasMore(false);
+            return;
+        }
+
+        if (feedDtoList?.length === 0) {
             setHasMore(false);
         } else {
             setFeeds((prevFeeds) => [...prevFeeds, ...feedDtoList]);
@@ -28,4 +32,4 @@ const UseProfileFetchFeeds = (feedDtoList,toId, initialPage) => {
     return { feeds, loading, hasMore, setPage };
 };
 
-export default UseProfileFetchFeeds;
+export default useProfileFetchFeeds;

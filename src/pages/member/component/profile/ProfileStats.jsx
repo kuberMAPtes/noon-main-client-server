@@ -1,22 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import profile from '../../../../assets/css/module/member/GetMemberProfile.module.css';
 import { useNavigate } from 'react-router-dom';
+import { encryptWithLvWithUri } from '../../../../util/crypto';
+import useEncryptId from '../common/useEncryptId';
 
-const ProfileStats = ({feeds,buildingSubscriptionCount,followerCount,followingCount}) => {
+const ProfileStats = ({toId,feeds,buildingSubscriptionCount,followerCount,followingCount}) => {
 
+
+    const { encryptedData, ivData } = useEncryptId(toId);  // 커스텀 훅 사용
     const feedCount = feeds.length;
-    // const followerCount = memberRelationshipList.filter((relationship)=> relationship.relationshipType === "FOLLOWER").length;
-    // const followingCount = memberRelationshipList.filter((relationship)=> relationship.relationshipType === "FOLLOWING").length;
 
     const navigate = useNavigate();
 
     const handleFollowerClick = () => {
-        navigate(`/member/GetMemberRelationshipList?relationshipType=follower`);
+
+      const secretId = encryptedData;
+      const secretIv = ivData;
+
+      //페이지 0은 안줘도 됨
+      navigate(`/member/getMemberRelationshipList/${secretId}/${secretIv}?relationshipType=follower`);
     };
 
     const handleFollowingClick = () => {
-        navigate(`/member/GetMemberRelationshipList?relationshipType=following`);
+      
+      const secretId = encryptedData;
+      const secretIv = ivData;
+
+      navigate(`/member/getMemberRelationshipList/${secretId}/${secretIv}?relationshipType=following`);
     }
 
     return (
