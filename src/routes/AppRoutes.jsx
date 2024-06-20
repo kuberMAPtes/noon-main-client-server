@@ -37,7 +37,6 @@ import GetChatbot from '../pages/CustomerSupport/GetChatbot';
 import ListNotice from '../pages/CustomerSupport/ListNotice';
 import GetNotice from '../pages/CustomerSupport/GetNotice';
 import AddNoticeView from '../pages/CustomerSupport/AddNoticeView';
-import ListReport from '../pages/CustomerSupport/ListReport';
 import GetReport from '../pages/CustomerSupport/GetReport';
 import AddReport from '../pages/CustomerSupport/AddReport';
 import ListImages from '../pages/CustomerSupport/ListImages';
@@ -56,6 +55,7 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import '../assets/css/animation.css'
 import LoginForm from '../pages/member/component/LoginForm';
 import AuthLoader from '../components/common/AuthLoader'
+import GetListReport from '../pages/CustomerSupport/GetReportList';
 const AppRoutes = () => {
     
     const location = useLocation();
@@ -199,8 +199,8 @@ const AppRoutes = () => {
             <Route path="getNoticeList" element={<ListNotice />} />
             <Route path="getNotice" element={<GetNotice />} />
             <Route path="addNoticeView" element={<AddNoticeView />} />
-            <Route path="getReportList" element={<ListReport />} />
-            <Route path="getReport" element={<GetReport />} />
+            <Route path="getReportList" element={<GetListReport />} />
+            <Route path="getReport/:reportId" element={<GetReport />} />
             <Route path="addReport" element={<AddReport />} />
             <Route path="listImages" element={<ListImages />} />
             <Route path="getImage" element={<GetImage />} />
