@@ -66,8 +66,6 @@ import LoginForm from '../pages/member/component/LoginForm';
 import AuthLoader from '../components/common/AuthLoader'
 import FeedChartPage from '../pages/feed/FeedChartPage';
 import FeedBuildingListPage from '../pages/feed/FeedBuildingListPage';
-import FeedChartPage from '../pages/feed/FeedChartPage';
-import FeedBuildingListPage from '../pages/feed/FeedBuildingListPage';
 import FeedListHomePage from '../pages/feed/FeedListHomePage';
 import GetMemberProfile from "../pages/member/GetMemberProfile";
 const AppRoutes = () => {
