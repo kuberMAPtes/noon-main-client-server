@@ -15,7 +15,7 @@ for (let i = 0; i < 5; i++) {
 
 /**
  * @param {{
- *   data: {
+ *   searchResult: {
  *     totalPages: number;
  *     totalElements: number;
  *     size: number;
