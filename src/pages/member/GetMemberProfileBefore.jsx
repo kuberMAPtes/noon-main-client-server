@@ -94,6 +94,7 @@ const GetMemberProfileBefore = () => {
                 />
               )}
             </Card.Text>
+            
             <div>
               <h2>feedDtoList:</h2>
               {profile.feedDtoList &&

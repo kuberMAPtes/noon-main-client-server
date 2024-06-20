@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { Container, Row, Col, Button, Card } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useSearchParams } from "react-router-dom";
 import useProfileFetchFeeds from "./component/profile/useProfileFetchFeeds";
@@ -10,7 +10,6 @@ import ProfileBody from "./component/profile/ProfileBody";
 import useFetchMemberRelationshipList from "./component/common/useFetchMemberRelationshipList";
 import useProfileBuildingSubscriptions from "./component/profile/useProfileBuildingSubscriptions";
 import useProfile from "./component/profile/useProfile";
-import LogoutForm from "./component/LogoutForm";
 const GetMemberProfile = () => {
   const { profile, toId, fromId, initialPage, isDenied } = useProfile();
   const { feeds, hasMore, setPage } = useProfileFetchFeeds(
@@ -35,6 +34,8 @@ const GetMemberProfile = () => {
     >
       <Row className="justify-content-center w-100">
         <Col xs={12} sm={8} md={6} lg={8}>
+        
+          <Card className="text-center mb-4">
           <ProfileHeader />
           {isDenied ? (
             <div>
@@ -54,13 +55,13 @@ const GetMemberProfile = () => {
                 followerCount={followerCount}
                 followingCount={followingCount}
               />
-              <LogoutForm />
               <ProfileFeedList
                 feeds={feeds}
                 lastFeedElementRef={lastFeedElementRef}
               />
             </div>
           )}
+          </Card>
         </Col>
       </Row>
       {/* Footer Component */}

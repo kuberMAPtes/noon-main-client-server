@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Card, Row, Col, Image, ProgressBar } from "react-bootstrap";
 import ProfileStats from "./ProfileStats";
 import ProfileActions from "./ProfileActions";
+import LogoutForm from "../LogoutForm";
 
 //4가지 파라미터 다 WAS에서 받아야함
 //> setProfile등등..필요
@@ -32,49 +33,54 @@ const ProfileBody = ({
   }, [profile.dajungScore]);
 
   return (
-    <Card.Body>
-      <Row className="mb-3">
-        <Col xs={4}>
-          
-          <Image src={profile.profilePhotoUrl || defaultPhotoUrl} roundedCircle className="mb-3" />
+    <Card>
+      <Card.Body>
+        <Row className="mb-3">
+          <Col xs={4}>
+            <Image src={profile.profilePhotoUrl || defaultPhotoUrl} roundedCircle className="mb-3" />
 
-          <Card.Title>{profile.nickname}</Card.Title>
-          <Card.Subtitle className="mb-2 text-muted"></Card.Subtitle>
-        </Col>
-        <Col xs={8}>
-          <Row>
-            <Col xs={3}>다정 온도 : {dajungTemperature}</Col>
-            <Col xs={9}>
-              <div className="d-flex flex-column align-items-center">
-                <ProgressBar
-                  now={profile.dajungScore}
-                  style={{ width: "100%", height: "1rem" }}
-                />
-              </div>
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={12}>
-              <hr />
-            </Col>
-            <Col xs={12}>
-              <br />
-            </Col>
-          </Row>
-          <Row>
-            <Col xs={12}>{profile.profileIntro}</Col>
-          </Row>
-        </Col>
-      </Row>
-      <ProfileStats
-        toId={toId}
-        feeds={feeds}
-        buildingSubscriptionCount={buildingSubscriptionCount}
-        followerCount={followerCount}
-        followingCount={followingCount}
-      />
-      <ProfileActions />
-    </Card.Body>
+            <Card.Title>{profile.nickname}</Card.Title>
+            <LogoutForm />
+          </Col>
+          <Col xs={8}>
+            <Row>
+              <Col xs={3}>다정 온도 : {dajungTemperature}</Col>
+              <Col xs={9}>
+                <div className="d-flex flex-column align-items-center">
+                  <ProgressBar
+                    now={profile.dajungScore}
+                    style={{ width: "100%", height: "1rem" }}
+                  />
+                </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12}>
+                <hr />
+              </Col>
+              <Col xs={12}>
+                <br />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12}>{profile.profileIntro}</Col>
+            </Row>
+          </Col>
+          <Col xs={12}>
+          <hr/>
+          </Col>
+        </Row>
+        <ProfileStats
+          toId={toId}
+          feeds={feeds}
+          buildingSubscriptionCount={buildingSubscriptionCount}
+          followerCount={followerCount}
+          followingCount={followingCount}
+        />
+        
+        <ProfileActions />
+      </Card.Body>
+    </Card>
   );
 };
 

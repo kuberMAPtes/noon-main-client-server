@@ -77,6 +77,8 @@ const ProfileActions = () => {
             </Col>
           )}
         </Row>
+        <Row>
+        </Row>
       </Col>
     </Row>
   );
