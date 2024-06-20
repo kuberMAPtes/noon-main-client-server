@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "../../../assets/css/module/search/component/FeedSearchResult.css";
 
 const SAMPLE_DATA = [];
 
@@ -46,7 +47,7 @@ export default function FeedSearchResult({
 }) {
   console.log(searchResult);
   return (
-    <div className="feed-container">
+    <div className="list-container">
       {
         searchResult.map((data, idx) => (
           <FeedSearchResultItem
@@ -97,7 +98,7 @@ function FeedSearchResultItem({
   }
 
   return (
-    <div className="feed-item-container">
+    <div className="item-container">
       <div className="feed-info">
         <div className="feed-metadata">
           <div className="sub-info">

@@ -1,4 +1,4 @@
-.feed-container {
+.list-container {
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -6,51 +6,12 @@
   margin-top: 12px;
 }
 
-.feed-item-container {
+.item-container {
   display: flex;
   flex-direction: column;
   background-color: #dee2e6;
   padding: 6px 12px;
   border-radius: 5px;
-}
-
-.feed-metadata {
-  display: flex;
-  justify-content: space-between;
-}
-
-.feed-metadata img {
-  width: 12px;
-  height: 12px;
-}
-
-.feed-info {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.feed-content {
-  display: flex;
-  flex-direction: column;
-  margin-left: 12px;
-}
-
-.feed-content h4 {
-  font-size: 18px;
-}
-
-.feed-content p {
-  margin: 0px;
-  padding: 0px;
-  font-size: 14px;
-  color: #868e96;
-}
-
-.sub-info {
-  display: flex;
-  gap: 12px;
-  font-size: 12px;
 }
 
 .icon-title {
