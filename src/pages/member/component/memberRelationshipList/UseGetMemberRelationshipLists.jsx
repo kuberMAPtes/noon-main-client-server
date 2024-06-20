@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import useDecryptId from "../common/useDecryptId";
 import useGetInitialPage from "../common/useGetInitialPage";
 
-const useGetMemberRelationshipList = () => {
+const UseGetMemberRelationshipLists = () => {
   const { initialPage } = useGetInitialPage();
   const { toId } = useDecryptId(); //두가지 파람 필요
   const fromId = useSelector((state) => state.auth.member.memberId);
@@ -11,4 +11,4 @@ const useGetMemberRelationshipList = () => {
   return { fromId, toId, initialPage };
 };
 
-export default useGetMemberRelationshipList;
+export default UseGetMemberRelationshipLists;

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Container, Row, Col, Button, Card } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useSearchParams } from "react-router-dom";
-import useProfileFetchFeeds from "./component/profile/useProfileFetchFeeds";
+import UseProfileFetchFeeds from "./component/profile/UseProfileFetchFeeds";
 import useProfileInfiniteScroll from "./component/profile/useProfileInfiniteScroll";
 import ProfileFeedList from "./component/profile/ProfileFeedList";
 import ProfileHeader from "./component/profile/ProfileHeader";
@@ -12,7 +12,7 @@ import useProfileBuildingSubscriptions from "./component/profile/useProfileBuild
 import useProfile from "./component/profile/useProfile";
 const GetMemberProfile = () => {
   const { profile, toId, fromId, initialPage, isDenied } = useProfile();
-  const { feeds, hasMore, setPage } = useProfileFetchFeeds(
+  const { feeds, hasMore, setPage } = UseProfileFetchFeeds(
     profile.feedDtoList,
     toId,
     initialPage
@@ -34,33 +34,32 @@ const GetMemberProfile = () => {
     >
       <Row className="justify-content-center w-100">
         <Col xs={12} sm={8} md={6} lg={8}>
-        
           <Card className="text-center mb-4">
-          <ProfileHeader />
-          {isDenied ? (
-            <div>
-              <ProfileBody />
-              <Button variant="primary" className="mt-3">
-                미정
-              </Button>
-              <ProfileFeedList lastFeedElementRef={lastFeedElementRef} />
-            </div>
-          ) : (
-            <div>
-              <ProfileBody
-                toId={toId}
-                profile={profile}
-                feeds={feeds}
-                buildingSubscriptionCount={buildingSubscriptionCount}
-                followerCount={followerCount}
-                followingCount={followingCount}
-              />
-              <ProfileFeedList
-                feeds={feeds}
-                lastFeedElementRef={lastFeedElementRef}
-              />
-            </div>
-          )}
+            <ProfileHeader />
+            {isDenied ? (
+              <div>
+                <ProfileBody />
+                <Button variant="primary" className="mt-3">
+                  미정
+                </Button>
+                <ProfileFeedList lastFeedElementRef={lastFeedElementRef} />
+              </div>
+            ) : (
+              <div>
+                <ProfileBody
+                  toId={toId}
+                  profile={profile}
+                  feeds={feeds}
+                  buildingSubscriptionCount={buildingSubscriptionCount}
+                  followerCount={followerCount}
+                  followingCount={followingCount}
+                />
+                <ProfileFeedList
+                  feeds={feeds}
+                  lastFeedElementRef={lastFeedElementRef}
+                />
+              </div>
+            )}
           </Card>
         </Col>
       </Row>

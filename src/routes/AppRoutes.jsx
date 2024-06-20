@@ -97,6 +97,7 @@ const AppRoutes = () => {
         classNames={isBack ? "reverse-slide" : "slide"}
       >
         <Routes location={location}>
+          {/* <Route path="/" element={<Navigate to="/member/getAuthMain" />} /> */}
           <Route path="/" element={<Navigate to="/member/getAuthMain" />} />
           <Route path="/b" element={<B />}></Route>
           <Route path="/testComponent" element={<TestComponent />}></Route>
