@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "../../../assets/css/module/search/component/ChatroomSearchResult.css";
 
 const SAMPLE_DATA = []
 
@@ -18,11 +19,14 @@ for (let i = 0; i <= 5; i++) {
  *     totalElements: number;
  *     size: number;
  *     content: {
- *       chatroomID: number;
- *       chatroomMinTemp: number;
+ *       chatroomId: number;
  *       chatroomName: string;
+ *       participantCount: number;
+ *       buildingName: string;
+ *       roadAddr: string;
  *       chatroomCreatorId: string;
  *       chatroomType: string;
+ *       chatroomMinTemp: number;
  *     }[]
  *   },
  *   pageCallback: () => void;
@@ -32,18 +36,21 @@ export default function ChatroomSearchResult({
   searchResult,
   pageCallback
 }) {
-  const [chatroomData, setChatroomData] = useState(SAMPLE_DATA);
-
+  console.log(searchResult);
   return (
-    <div>
+    <div className="list-container">
       {
-        chatroomData.map((data, idx) => (
+        searchResult && searchResult.content && searchResult.content.map((data, idx) => (
           <CharoomSearchResultItem
             key={`chatroom-item-${idx}`}
-            chatroomData={data.chatroomData}
+            chatroomId={data.chatroomID}
+            chatroomName={data.chatroomName}
             participantCount={data.participantCount}
             buildingName={data.buildingName}
-            roadAddress={data.roadAddress}
+            roadAddr={data.roadAddr}
+            chatroomCreatorId={data.chatroomCreatorId}
+            chatroomType={data.chatroomType}
+            chatroomMinTemp={data.chatroomMinTemp}
           />
         ))
       }
@@ -53,21 +60,40 @@ export default function ChatroomSearchResult({
 
 /**
  * @param {{
+ *   chatroomId: number;
  *   chatroomName: string;
  *   participantCount: number;
  *   buildingName: string;
- *   roadAddress: string;
+ *   roadAddr: string;
+ *   chatroomCreatorId: string;
+ *   chatroomType: string;
+ *   chatroomMinTemp: number;
  * }} props
  */
 function CharoomSearchResultItem({
-  chatroomName, participantCount, buildingName, roadAddress
+  chatroomId,
+  chatroomName,
+  participantCount,
+  buildingName,
+  roadAddr,
+  chatroomCreatorId,
+  chatroomType,
+  chatroomMinTemp
 }) {
   return (
-    <div>
-      <p>{chatroomName}</p>
-      <p>{participantCount}</p>
-      <p>{buildingName}</p>
-      <p>{roadAddress}</p>
+    <div className="item-container chatroom-item-container">
+      <div className="info">
+        <h3>{chatroomName}</h3>
+        <div className="icon-title">
+          <img src="./image/chat-participants.png" alt="chat participants" />
+          <div>{participantCount}</div>
+        </div>
+      </div>
+      <div className="info">
+        <div>{buildingName}</div>
+        <div>{roadAddr}</div>
+        <div>{chatroomCreatorId}</div>
+      </div>
     </div>
   );
 }
