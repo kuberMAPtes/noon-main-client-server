@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import axios from 'axios';
 import { useSearchParams } from 'react-router-dom';
 
 import FeedItem from './component/FeedList/FeedItem';
@@ -12,29 +11,33 @@ import BasicNavbar from '../../components/common/BasicNavbar';
 
 import './css/FeedList.css';
 import axios_api from '../../lib/axios_api';
+import FeedPopularyRanking from './component/FeedList/FeedPopularyRanking';
 
 /**
- * 회원 아이디를 통해서 개인으로 관련이 있는 피드 목록을 가져온다.
- * @returns 자신이 작성한 피드, 좋아요와 북마크를 누른 피드, 구독한 건물에 대한 피드(총 4가지)를 가져온다
+ * 건물별 피드 목록을 보여준다. FeedListPage와 그 성질이 달라서 분리하였다.
+ * @returns 건물별 피드 목록
  */
-const FeedListPage = () => {
+
+const FeedBuildingListPage = () => {
     const [searchParams] = useSearchParams();
     const memberId = searchParams.get('memberId');
+    const buildingId = searchParams.get('buildingId');
     const initialPage = searchParams.get('page') || 1;
 
     const [feeds, setFeeds] = useState([]);
+    const [ranking, setRanking] = useState([]);
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [page, setPage] = useState(Number(initialPage));
-    const [fetchUrl, setFetchUrl] = useState('/feed/getFeedListByMember')
+    const [fetchUrl, setFetchUrl] = useState('/feed/getFeedListByBuilding')
     const observer = useRef();
 
-    // 기본적으로 볼 수 있는 피드 목록 가져오기
+    // 건물별 피드 목록 가져오기
     const fetchData = async (url, page) => {
         setLoading(true);
     
         // QueryString 설정
-        let queryString = `?memberId=${memberId}&page=${page}`;
+        let queryString = `?memberId=${memberId}&buildingId=${buildingId}&page=${page}`;
 
         // axios 실행
         try {
@@ -51,18 +54,21 @@ const FeedListPage = () => {
         setLoading(false);
     };
 
-    // 콜백 함수 정의 : 실행될 때마다 상태 초기화
-    const handleSelect = (url) => {
-        setFeeds([]);
-        setPage(1);
-        setHasMore(true);
-        setFetchUrl(prevUrl => {
-            if (prevUrl === url) {
-                // 강제로 상태 변경을 트리거하기 위해 같은 URL이라도 setFetchUrl을 호출
-                fetchData(url, 1);
+    // 건물 내 인기 피드 목록 가져오기
+    const rankingData = async () => {
+        let url = `/feed/FeedPopularity?buildingId=${buildingId}`;
+
+        // axios 실행
+        try {
+            const response = await axios_api.get(url);
+            if (response.data.length === 0) {
+                setRanking([]);
+            } else {
+                setRanking((prevFeeds) => [...prevFeeds, ...response.data]); // 기존의 끝에 추가
             }
-            return url;
-        });
+        } catch (e) {
+            console.log(e);
+        }    
     }
 
     // 랜더링 될 때마다 실행
@@ -70,6 +76,11 @@ const FeedListPage = () => {
         fetchData(fetchUrl, page);
     }, [page, fetchUrl]);
 
+    // 처음에만 실행
+    useEffect(() => {
+        rankingData();
+    }, []);
+    
     // 무한스크롤 구현 (IntersectionObserver)
     const lastFeedElementRef = useCallback((node) => {
         if (observer.current) observer.current.disconnect();
@@ -103,8 +114,9 @@ const FeedListPage = () => {
     return (
         <div>
             <BasicNavbar />
+            <br/>
+            <FeedPopularyRanking feeds={ranking} />
             <div className='container'>
-            <Dropdown onSelect={handleSelect} />
                 <div className="row">
                     {feeds.map((feed, index) => (
                         <div
@@ -123,4 +135,4 @@ const FeedListPage = () => {
     );
 };
 
-export default FeedListPage;
+export default FeedBuildingListPage;
