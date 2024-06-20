@@ -1,6 +1,6 @@
 import { useRef, useCallback, useState, useEffect } from "react";
 
-const useInfiniteScroll = (dataList, setDataList, initialPage) => {
+const useInfiniteScrolls = (dataList, setDataList, initialPage) => {
   const observer = useRef();
 
   const [loading, setLoading] = useState(false);
@@ -34,10 +34,10 @@ const useInfiniteScroll = (dataList, setDataList, initialPage) => {
       });
       if (node) observer.current.observe(node);
     },
-    [loading,hasMore]
+    [loading, hasMore]
   );
 
-  return { lastElementRef, loading};
+  return { lastElementRef, loading };
 };
 
-export default useInfiniteScroll;
+export default useInfiniteScrolls;
