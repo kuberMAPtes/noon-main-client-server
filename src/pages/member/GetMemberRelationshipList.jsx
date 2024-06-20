@@ -1,5 +1,5 @@
 import React from "react";
-import useInfiniteScroll from "./component/common/UseInfiniteScroll";
+import useInfiniteScrolls from "./component/common/useInfiniteScrolls";
 import useFetchMemberRelationshipList from "./component/common/useFetchMemberRelationshipList";
 import { useSelector } from "react-redux";
 import UseGetMemberRelationshipLists from "./component/memberRelationshipList/UseGetMemberRelationshipLists";
@@ -15,7 +15,7 @@ const GetMemberRelationshipList = () => {
     followingCount,
   } = useFetchMemberRelationshipList(fromId, toId, initialPage);
 
-  const { lastElementRef } = useInfiniteScroll(
+  const { lastElementRef } = useInfiniteScrolls(
     memberRelationshipList,
     setMemberRelationshipList,
     initialPage
