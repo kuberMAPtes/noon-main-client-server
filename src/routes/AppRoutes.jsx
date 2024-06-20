@@ -54,14 +54,13 @@ import FeedPages from "../pages/feed/FeedPages";
 import FeedList from "../pages/feed/FeedListPage";
 import FeedDetail from "../pages/feed/FeedDetailPage";
 import FeedForm from "../pages/feed/FeedFormPage";
-import TestComponent from "../pages/member/component/test/TestComponent";
-import Postcode from "../pages/member/component/Postcode";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
-import "../assets/css/animation.css";
-import LoginForm from "../pages/member/component/LoginForm";
 import GetMemberId from "../pages/member/GetMemberId";
 import IdFormToUpdatePwd from "../pages/member/IdFormToUpdatePwd";
-import AuthLoader from '../components/common/AuthLoader'
+import TestComponent from '../pages/member/component/test/TestComponent';
+import Postcode from '../pages/member/component/Postcode';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import '../assets/css/animation.css'
+import LoginForm from '../pages/member/component/LoginForm';
 import FeedChartPage from '../pages/feed/FeedChartPage';
 import FeedBuildingListPage from '../pages/feed/FeedBuildingListPage';
 const AppRoutes = () => {
@@ -251,9 +250,9 @@ const AppRoutes = () => {
             <Route path="listImages" element={<ListImages />} />
             <Route path="getImage" element={<GetImage />} />
             <Route path="deleteBadFeed" element={<DeleteBadFeed />} />
-          </Route>
-          <Route path="/setting/:memberId" element={<MemberSetting />} />
-          <Route path="/feed">
+        </Route>
+        <Route path="/setting" element={<MemberSetting />} />
+        <Route path="/feed">
             <Route path="list" element={<FeedList />} />
             <Route path="list/building" element={<FeedBuildingListPage/>}/>
             <Route path="detail" element={<FeedDetail />} />
