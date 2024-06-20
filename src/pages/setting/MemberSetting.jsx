@@ -10,29 +10,32 @@ import OpInfoModal from "./component/OpInfoModal";
 const PUBLIC_RANGES = [
   {
     id: "PUBLIC",
-    title: "전체공개"
+    title: "전체공개",
   },
   {
     id: "FOLLOWER_ONLY",
-    title: "팔로워 공개"
+    title: "팔로워 공개",
   },
   {
     id: "MUTUAL_ONLY",
-    title: "맞팔 공개"
+    title: "맞팔 공개",
   },
   {
     id: "PRIVATE",
-    title: "비공개"
-  }
-]
+    title: "비공개",
+  },
+];
 
 const SAMPLE_MEMBER_ID = "member_2";
 
 export default function MemberSetting() {
-  const [memberProfilePublicRange, setMemberProfilePublicRange] = useState("PUBLIC");
+  const [memberProfilePublicRange, setMemberProfilePublicRange] =
+    useState("PUBLIC");
   const [allFeedPublicRange, setAllFeedPublicRange] = useState("PUBLIC");
-  const [receivingAllNotification, setReceivingAllNotification] = useState(true);
-  const [buildingSubscriptionPublicRange, setBuildingSubscriptionPublicRange] = useState("PUBLIC");
+  const [receivingAllNotification, setReceivingAllNotification] =
+    useState(true);
+  const [buildingSubscriptionPublicRange, setBuildingSubscriptionPublicRange] =
+    useState("PUBLIC");
   const [opInfoMode, setOpInfoMode] = useState("termsAndPolicy");
   const [opInfoModalVisible, setOpInfoModalVisible] = useState(false);
 
@@ -42,7 +45,9 @@ export default function MemberSetting() {
     fetchSettingInfo(memberId, (setting) => {
       setMemberProfilePublicRange(setting.memberProfilePublicRange);
       setAllFeedPublicRange(setting.allFeedPublicRange);
-      setBuildingSubscriptionPublicRange(setting.buildingSubscriptionPublicRange);
+      setBuildingSubscriptionPublicRange(
+        setting.buildingSubscriptionPublicRange
+      );
       setReceivingAllNotification(setting.receivingAllNotificationAllowed);
     });
   }, [memberId]);
@@ -53,14 +58,14 @@ export default function MemberSetting() {
       header: "마이 프로필 공개 설정",
       buttonInfos: PUBLIC_RANGES,
       currentSelected: memberProfilePublicRange,
-      callback: (id) => setMemberProfilePublicRange(id)
+      callback: (id) => setMemberProfilePublicRange(id),
     },
     {
       type: "ALL_FEED",
       header: "모든 피드 공개 설정",
       buttonInfos: PUBLIC_RANGES,
       currentSelected: allFeedPublicRange,
-      callback: (id) => setAllFeedPublicRange(id)
+      callback: (id) => setAllFeedPublicRange(id),
     },
     {
       type: "RECEIVING_ALL_NOTIFICATION",
@@ -68,24 +73,24 @@ export default function MemberSetting() {
       buttonInfos: [
         {
           id: "true",
-          title: "수신"
+          title: "수신",
         },
         {
           id: "false",
-          title: "수신하지 않음"
-        }
+          title: "수신하지 않음",
+        },
       ],
       currentSelected: receivingAllNotification + "",
-      callback: (id) => setReceivingAllNotification(id !== "false")
+      callback: (id) => setReceivingAllNotification(id !== "false"),
     },
     {
       type: "BUILDING_SUBSCRIPTION",
       header: "건물 구독 목록 공개 설정",
       buttonInfos: PUBLIC_RANGES,
       currentSelected: buildingSubscriptionPublicRange,
-      callback: (id) => setBuildingSubscriptionPublicRange(id)
-    }
-  ]
+      callback: (id) => setBuildingSubscriptionPublicRange(id),
+    },
+  ];
 
   return (
     <div>
@@ -139,7 +144,7 @@ export default function MemberSetting() {
 }
 
 /**
- * @param {string} memberId 
+ * @param {string} memberId
  * @param {({
  *   memberProfilePublicRange: string;
  *   allFeedPublicRange: string;
@@ -148,7 +153,9 @@ export default function MemberSetting() {
  * }) => void} callback
  */
 function fetchSettingInfo(memberId, callback) {
-  axios_api.get(`${MAIN_API_URL}/setting/getSetting/${memberId}`).then((response) => {
-    callback(response.data);
-  })
+  axios_api
+    .get(`${MAIN_API_URL}/setting/getSetting/${memberId}`)
+    .then((response) => {
+      callback(response.data);
+    });
 }

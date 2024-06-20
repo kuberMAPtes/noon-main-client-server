@@ -31,7 +31,6 @@ export const setTokenCookie = (member) => {
         expires: expiresDate,
         path: '/',
         secure: false, // HTTPS 연결이 아닌 경우에도 쿠키 전송 허용
-        domain: '127.0.0.1', // 도메인 설정
         // HttpOnly 옵션은 js-cookie 라이브러리로 설정할 수 없음 (서버 측에서 설정 필요)
     });
     console.log("만약 쿠키에 데이터가 너무 많다면 쿠키를세팅했습니다 메세지가 뜨지 않고 세팅이 안됩니다.");

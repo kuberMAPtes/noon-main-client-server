@@ -1,0 +1,43 @@
+.loginPage {
+    margin-top: 50px;
+  }
+  
+  .backButton {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+  }
+  
+  .logo {
+    margin-bottom: 20px;
+  }
+  
+  .loginButton {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  .customButton {
+    background-color: #91a7ff !important;
+    border-color: #91a7ff !important;
+    color: white !important;
+  }
+  .customButton:hover {
+    background-color: #759aff !important;
+    border-color: #759aff !important;
+}
+  .recentLoginText {
+    margin: 10px 0;
+  }
+  
+  .emailLogin {
+    display: block;
+    margin: 20px 0;
+  }
+  
+  .welcomeBanner {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+  }
+  

@@ -1,0 +1,18 @@
+.typicalButtonColor {
+    background-color: #91a7ff !important;
+    border-color: #91a7ff !important;
+    color: white !important;
+}
+
+.typicalButtonColor:hover {
+    background-color: #759aff !important;
+    border-color: #759aff !important;
+}
+
+.typicalColor {
+    color: #91a7ff !important;
+}
+
+.miniFont {
+    font-size : 8rem;
+}
