@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../css/FeedDetail.css';
 
-import { Badge, Button, Card, CardBody, CardSubtitle, CardText, CardTitle, Input, ListGroup, ListGroupItem } from 'reactstrap';
+import { Badge, Button, Card, CardBody, CardSubtitle, CardText, CardTitle, Form, Input, ListGroup, ListGroupItem } from 'react-bootstrap';
 
 const FeedDetail = ({ data }) => {
     const {
@@ -83,7 +83,7 @@ const FeedDetail = ({ data }) => {
                     </ListGroup>
                     <CardBody>
                         <form onSubmit={handleCommentSubmit}>
-                            <Input
+                            <Form.Control
                                 type="text"
                                 value={newComment}
                                 onChange={handleCommentChange}

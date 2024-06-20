@@ -8,23 +8,23 @@ import { useNavigate } from 'react-router-dom';
 
 const LogoutForm = () => {
   const dispatch = useDispatch();
-  const auth = useSelector((state) => state.auth);
+//   const authorization = useSelector((state) => state.auth.authorization);
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
-      dispatch(logout());
+      dispatch(logout(navigate));
     } catch (error) {
       console.error('Logout failed', error);
     }
   };
 
-  useEffect(() => {
-    console.log('LogoutForm useEffect 수행');
-    console.log('auth:', auth);
+//   useEffect(() => {
+//     console.log('LogoutForm useEffect 수행');
+//     console.log('auth:', authorization);
     
-    if(!auth.authorization) navigate('/member/getAuthMain');
-  },[auth,navigate]);
+//     if(!authorization) navigate('/member/getAuthMain');
+//   },[authorization,navigate]);
 
   return <button onClick={handleLogout}>Logout</button>;
 };

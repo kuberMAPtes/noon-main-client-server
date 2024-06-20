@@ -1,21 +1,31 @@
-export default function FetchTypeToggle() {
-
-  function onSubscriptionDisplayCheckboxChange(e) {
-    const checked = e.target.checked;
-    // TODO: API 요청
-  }
-  
-  function onPopularDisplayCheckboxChange(e) {
-    const checked = e.target.checked;
-    // TODO: API 요청
-  }
+/**
+ * @param props
+ * @returns JSX.Element
+ */
+export default function FetchTypeToggle({
+  subscriptionChecked, setSubscriptionChecked, popBuildingChecked, setPopBuildingChecked
+}) {
   
   return (
-    <div style={{ display: "flex" }}>
-      <p>구독한 건물 보기</p>
-      <input type="checkbox" onChange={(e) => onSubscriptionDisplayCheckboxChange(e)} />
-      <p>인기건물보기</p>
-      <input type="checkbox" onChange={(e) => onPopularDisplayCheckboxChange(e)} />
+    <div className="fetch-type-container">
+      <div
+          className={`check-container${subscriptionChecked ? "" : " unchecked"}`}
+          onClick={() => setSubscriptionChecked((prevState) => !prevState)}
+      >
+        <input
+            type="checkbox"
+            checked={subscriptionChecked} />
+        <div>구독한 건물 보기</div>
+      </div>
+      <div
+          className={`check-container${popBuildingChecked ? "" : " unchecked"}`}
+          onClick={() => setPopBuildingChecked((prevState) => !prevState)}
+      >
+        <input
+            type="checkbox"
+            checked={popBuildingChecked} />
+        <div>인기건물보기</div>
+      </div>
     </div>
   );
 }

@@ -1,85 +1,22 @@
-// import React, { useEffect, useState } from 'react';
-// import FeedItem from './component/FeedItem';
-// import Footer from '../../components/common/Footer';
-// import './css/FeedList.css';
-// import BasicNavbar from '../../components/common/BasicNavbar';
-// import axios from 'axios';
-// import { useSearchParams } from 'react-router-dom';
-// import FeedNotFound from './component/FeedNotFound'
-
-// const FeedListPage = () => {
-//     const [searchParams, setSearchParams] = useSearchParams();
-//     const memberId = searchParams.get('memberId')
-//     const page = searchParams.get('page')
-
-//     const [feeds, setFeeds] = useState(null);
-//     const [loading, setLoading] = useState(false);
-
-//     const fetchData = async () => {
-//         setLoading(true);
-//         try {
-//             const response = await axios.get(
-//                 'http://localhost:8080/feed/getFeedListByMember?memberId=' + memberId + '&page=' + page);
-//             console.log(response);
-//             setFeeds(response.data);
-//         } catch (e) {
-//             console.log(e);
-//         }
-
-//         setLoading(false);
-//     }
-
-
-//     useEffect(()=> {
-//         fetchData();
-//     }, []);
-
-    
-//     if(loading) {
-//         return "대기중..."
-//     }
-
-//     if(!feeds) {
-//         return (
-//             <div>
-//             <BasicNavbar />
-//             <FeedNotFound/>
-//             </div>
-//         );
-//     }
-
-//     return (
-//         <div>
-//         <BasicNavbar />
-//             <div className="container mt-4">
-                
-//                 <div className="row">
-//                     {feeds.map((feed) => (
-//                         <div key={feed.feedId} className="col-12 mb-4">
-//                             <FeedItem data={feed} />
-//                         </div>
-//                     ))}
-//                 </div>
-//                 <div>
-//                     {/* <Footer /> */}
-//                 </div>
-                
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default FeedListPage;
-
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import FeedItem from './component/FeedItem';
-import Footer from '../../components/common/Footer';
-import './css/FeedList.css';
-import BasicNavbar from '../../components/common/BasicNavbar';
 import axios from 'axios';
 import { useSearchParams } from 'react-router-dom';
-import FeedNotFound from './component/FeedNotFound';
 
+import FeedItem from './component/FeedList/FeedItem';
+import Dropdown from './component/FeedList/FeedDropdown';
+import FeedNotFound from './component/FeedNotFound';
+import Loading from './component/FeedList/FeedLoading';
+
+import Footer from '../../components/common/Footer';
+import BasicNavbar from '../../components/common/BasicNavbar';
+
+import './css/FeedList.css';
+import axios_api from '../../lib/axios_api';
+
+/**
+ * 회원 아이디를 통해서 개인으로 관련이 있는 피드 목록을 가져온다.
+ * @returns 자신이 작성한 피드, 좋아요와 북마크를 누른 피드, 구독한 건물에 대한 피드(총 4가지)를 가져온다
+ */
 const FeedListPage = () => {
     const [searchParams] = useSearchParams();
     const memberId = searchParams.get('memberId');
@@ -89,29 +26,51 @@ const FeedListPage = () => {
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [page, setPage] = useState(Number(initialPage));
+    const [fetchUrl, setFetchUrl] = useState('/feed/getFeedListByMember')
     const observer = useRef();
 
-    const fetchData = async (page) => {
+    // 기본적으로 볼 수 있는 피드 목록 가져오기
+    const fetchData = async (url, page) => {
         setLoading(true);
+    
+        // QueryString 설정
+        let queryString = `?memberId=${memberId}&page=${page}`;
+
+        // axios 실행
         try {
-            const response = await axios.get(
-                `http://localhost:8080/feed/getFeedListByMember?memberId=${memberId}&page=${page}`
-            );
+            const response = await axios_api.get(url + queryString);
             if (response.data.length === 0) {
                 setHasMore(false);
             } else {
-                setFeeds((prevFeeds) => [...prevFeeds, ...response.data]);
+                setFeeds((prevFeeds) => [...prevFeeds, ...response.data]); // 기존의 끝에 추가
             }
         } catch (e) {
             console.log(e);
         }
+
         setLoading(false);
     };
 
-    useEffect(() => {
-        fetchData(page);
-    }, [page]);
+    // 콜백 함수 정의 : 실행될 때마다 상태 초기화
+    const handleSelect = (url) => {
+        setFeeds([]);
+        setPage(1);
+        setHasMore(true);
+        setFetchUrl(prevUrl => {
+            if (prevUrl === url) {
+                // 강제로 상태 변경을 트리거하기 위해 같은 URL이라도 setFetchUrl을 호출
+                fetchData(url, 1);
+            }
+            return url;
+        });
+    }
 
+    // 랜더링 될 때마다 실행
+    useEffect(() => {
+        fetchData(fetchUrl, page);
+    }, [page, fetchUrl]);
+
+    // 무한스크롤 구현 (IntersectionObserver)
     const lastFeedElementRef = useCallback((node) => {
         if (observer.current) observer.current.disconnect();
         observer.current = new IntersectionObserver((entries) => {
@@ -122,10 +81,16 @@ const FeedListPage = () => {
         if (node) observer.current.observe(node);
     }, [hasMore]);
 
+    // 피드 실행 대기중
     if (loading && feeds.length === 0) {
-        return "대기중...";
+        return (
+            <div>
+                <Loading />
+            </div>
+        );
     }
 
+    // NotFount 페이지
     if (!loading && feeds.length === 0) {
         return (
             <div>
@@ -138,7 +103,8 @@ const FeedListPage = () => {
     return (
         <div>
             <BasicNavbar />
-            <div className="container mt-4">
+            <div className='container'>
+            <Dropdown onSelect={handleSelect} />
                 <div className="row">
                     {feeds.map((feed, index) => (
                         <div
@@ -146,7 +112,7 @@ const FeedListPage = () => {
                             className="col-12 mb-4"
                             ref={feeds.length === index + 1 ? lastFeedElementRef : null}
                         >
-                            <FeedItem data={feed} />
+                            <FeedItem data={feed} memberId={memberId} />
                         </div>
                     ))}
                 </div>

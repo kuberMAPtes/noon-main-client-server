@@ -1,0 +1,26 @@
+.btn-opinfo-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.btn-opinfo-pagination button {
+  color: #343a40;
+  background-color: #fff;
+}
+
+.btn-opinfo-pagination button:hover {
+  color: #868e96;
+  background-color: #fff;
+}
+
+.btn-opinfo-pagination button:active {
+  color: #212529;
+  background-color: #fff;
+}
+
+.btn-opinfo-pagination button:disabled {
+  color: #adb5bd;
+  background-color: #fff;
+  cursor: default;
+}

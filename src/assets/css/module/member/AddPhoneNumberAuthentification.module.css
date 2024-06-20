@@ -1,0 +1,36 @@
+.inputUnderline {
+    border: none;
+    border-bottom: 2px solid black;
+    outline: none;
+    width: 100%;
+    font-size: 1.5rem;
+    padding: 0.5rem 0; /* padding을 추가하여 텍스트가 너무 가까이 붙지 않도록 함 */
+    box-sizing: border-box; /* padding을 포함하여 전체 크기를 계산 */
+  }
+  
+  .inputUnderline:focus {
+    border-bottom: 2px solid black;
+    outline: none;
+  }
+  
+  .labelBold {
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+  
+  .timerText {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%; /* 전체 너비를 차지하도록 함 */
+  }
+  
+  .timerText .textMuted {
+    margin-left: auto;
+    margin-top: 1rem;
+  }
+  
+  .buttonSpacing {
+    margin-left: 1rem;
+  }
+  
