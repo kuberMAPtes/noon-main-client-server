@@ -3,11 +3,18 @@ import axios from 'axios';
 import CustomerSupportHeader from './components/CustomerSupportHeader';
 import ImageGrid from './components/OneImage';
 import '../CustomerSupport/css/image-grid.css';
+import axiosInstance from '../../lib/axiosInstance';
+import Footer from '../../components/common/Footer';
+
+
+
 
 const getImageList = async (currentPage, filterTab, setAttachmentList, setLoading) => {
+
   setLoading(true);
   try {
-    const response = await axios.get(`http://localhost:8080/customersupport/${filterTab === "bad" ? 'getFilteredListByAI' : 'getImageList'}`, {
+    
+    const response = await axiosInstance.get(`/customersupport/${filterTab === "bad" ? 'getFilteredListByAI' : 'getImageList'}`, {
       params: { currentPage: currentPage }  
     });
     
@@ -20,15 +27,17 @@ const getImageList = async (currentPage, filterTab, setAttachmentList, setLoadin
   }
 }
 
-const ListImages = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [filterTab, setFilterTab] = useState("all");
-  const [attachmentList, setAttachmentList] = useState([]);
-  const [loading, setLoading] = useState(false);
 
-  const handleTabChange = (tab) => {
-    setFilterTab(tab);
-  };
+
+const ListImages = () => {
+    const [currentPage, setCurrentPage] = useState(1);
+    const [filterTab, setFilterTab] = useState("all");
+    const [attachmentList, setAttachmentList] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    const handleTabChange = (tab) => {
+      setFilterTab(tab);
+    };
 
   useEffect(() => {
     getImageList(currentPage, filterTab, setAttachmentList, setLoading);
@@ -53,12 +62,16 @@ const ListImages = () => {
       </div>
       <div style={styles.grid}>
         {loading ? (
-          <div style={styles.loading}>유해 이미지 필터링 중...</div> 
+          <div style={styles.loading}>이미지 로딩 중...</div> 
         ) : (
-          <ImageGrid images={attachmentList} />
+          <ImageGrid attachmentList={attachmentList} />
         )}
       </div>
+    
+      <Footer/>
     </div>
+
+    
   );
 };
 
