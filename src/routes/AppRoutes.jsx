@@ -55,14 +55,18 @@ import FeedDetail from "../pages/feed/FeedDetailPage";
 import FeedForm from "../pages/feed/FeedFormPage";
 import GetMemberId from "../pages/member/GetMemberId";
 import IdFormToUpdatePwd from "../pages/member/IdFormToUpdatePwd";
-import TestComponent from "../pages/member/component/test/TestComponent";
-import Postcode from "../pages/member/component/Postcode";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
-import "../assets/css/animation.css";
-import LoginForm from "../pages/member/component/LoginForm";
-import FeedChartPage from "../pages/feed/FeedChartPage";
-import FeedBuildingListPage from "../pages/feed/FeedBuildingListPage";
+
+import TestComponent from '../pages/member/component/test/TestComponent';
+import Postcode from '../pages/member/component/Postcode';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import '../assets/css/animation.css'
+import LoginForm from '../pages/member/component/LoginForm';
+import AuthLoader from '../components/common/AuthLoader'
+import FeedChartPage from '../pages/feed/FeedChartPage';
+import FeedBuildingListPage from '../pages/feed/FeedBuildingListPage';
+import FeedListHomePage from '../pages/feed/FeedListHomePage';
 import GetMemberProfile from "../pages/member/GetMemberProfile";
+
 const AppRoutes = () => {
   const location = useLocation();
   const navigationType = useNavigationType();
@@ -253,6 +257,7 @@ const AppRoutes = () => {
             <Route path="detail" element={<FeedDetail />} />
             <Route path="form" element={<FeedForm />} />
             <Route path="chart" element={<FeedChartPage />} />
+            <Route path="main" element={<FeedListHomePage />}/>
             <Route path="" element={<FeedPages />} />
           </Route>
         </Routes>

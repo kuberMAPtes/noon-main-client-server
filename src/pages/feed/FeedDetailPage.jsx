@@ -1,9 +1,11 @@
-import FeedDetail from './component/FeedDetail';
+import FeedDetail from './component/FeedDetail/FeedDetail';
 import { useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import BasicNavbar from '../../components/common/BasicNavbar';
 import FeedNotFound from './component/FeedNotFound'
 import axios_api from '../../lib/axios_api';
+import Loading from './component/FeedList/FeedLoading';
+import Footer from '../../components/common/Footer';
 
 /**
  * 피드 하나에 대한 상세보기를 진행한다.
@@ -12,6 +14,7 @@ import axios_api from '../../lib/axios_api';
 const FeedDetailPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const feedId = searchParams.get('feedId');
+    const memberId = searchParams.get('memberId');
 
     const [feed, setFeed] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -20,7 +23,7 @@ const FeedDetailPage = () => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const response = await axios_api.get('/feed/detail?feedId=' + feedId);
+                const response = await axios_api.get(`/feed/detail?memberId=${memberId}&feedId=${feedId}`);
                 console.log(response);
                 setFeed(response.data);
             } catch (e) {
@@ -34,14 +37,18 @@ const FeedDetailPage = () => {
     }, []);
 
     if(loading) {
-        return "대기중..."
+        return (
+            <div>
+                <Loading />
+            </div>
+        );
     }
 
     if(!feed) {
         return (
             <div>
-            <BasicNavbar />
-            <FeedNotFound/>
+                <BasicNavbar />
+                <FeedNotFound/>
             </div>
         );
     }
@@ -49,9 +56,9 @@ const FeedDetailPage = () => {
     return (
         <div>
             <BasicNavbar />
-            <FeedDetail data={feed} />
+            <FeedDetail data={feed} memberId = {memberId} />
             <div>
-                {/* <Footer /> */}
+                <Footer />
             </div>
         </div>
     );

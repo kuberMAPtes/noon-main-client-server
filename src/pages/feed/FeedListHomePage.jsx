@@ -13,10 +13,10 @@ import './css/FeedList.css';
 import axios_api from '../../lib/axios_api';
 
 /**
- * 회원 아이디를 통해서 개인으로 관련이 있는 피드 목록을 가져온다.
- * @returns 자신이 작성한 피드, 좋아요와 북마크를 누른 피드, 구독한 건물에 대한 피드(총 4가지)를 가져온다
+ * 피드 대표 Home을 설정하는 곳입니다. FeedListPage와 대동소이함
+ * @returns 인기도가 높은 피드 리스트를 가져온다.
  */
-const FeedListPage = () => {
+const FeedListHomePage = () => {
     const [searchParams] = useSearchParams();
     const memberId = searchParams.get('memberId');
     const initialPage = searchParams.get('page') || 1;
@@ -25,7 +25,7 @@ const FeedListPage = () => {
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [page, setPage] = useState(Number(initialPage));
-    const [fetchUrl, setFetchUrl] = useState('/feed/getFeedListByMember')
+    const [fetchUrl, setFetchUrl] = useState('/feed/getAllFeedOrderByPopolarity')
     const observer = useRef();
 
     // 기본적으로 볼 수 있는 피드 목록 가져오기
@@ -33,11 +33,11 @@ const FeedListPage = () => {
         setLoading(true);
     
         // QueryString 설정
-        let queryString = `?memberId=${memberId}&page=${page}`;
+        let paging = `?memberId=${memberId}&page=${page}`;
 
         // axios 실행
         try {
-            const response = await axios_api.get(url + queryString);
+            const response = await axios_api.get(url + paging);
             if (response.data.length === 0) {
                 setHasMore(false);
             } else {
@@ -49,20 +49,6 @@ const FeedListPage = () => {
 
         setLoading(false);
     };
-
-    // 콜백 함수 정의 : 실행될 때마다 상태 초기화
-    const handleSelect = (url) => {
-        setFeeds([]);
-        setPage(1);
-        setHasMore(true);
-        setFetchUrl(prevUrl => {
-            if (prevUrl === url) {
-                // 강제로 상태 변경을 트리거하기 위해 같은 URL이라도 setFetchUrl을 호출
-                fetchData(url, 1);
-            }
-            return url;
-        });
-    }
 
     // 랜더링 될 때마다 실행
     useEffect(() => {
@@ -103,7 +89,6 @@ const FeedListPage = () => {
         <div>
             <BasicNavbar />
             <div className='container'>
-            <Dropdown onSelect={handleSelect} />
                 <div className="row">
                     {feeds.map((feed, index) => (
                         <div
@@ -122,4 +107,4 @@ const FeedListPage = () => {
     );
 };
 
-export default FeedListPage;
+export default FeedListHomePage;
