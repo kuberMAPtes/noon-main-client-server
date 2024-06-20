@@ -1,9 +1,15 @@
 /* styles.css */
 
-.transition-wrapper{
-position: relative;
-width:100vw;
+
+  
+.transition-wrapper {
+    
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
 }
+
 .slide-enter {
 transform: translateX(0%);
 opacity: 0;

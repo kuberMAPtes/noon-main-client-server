@@ -22,9 +22,9 @@ const PUBLIC_RANGES = [
   },
   {
     id: "PRIVATE",
-    title: "비공개",
-  },
-];
+    title: "비공개"
+  }
+]
 
 const SAMPLE_MEMBER_ID = "member_2";
 

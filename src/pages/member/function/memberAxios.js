@@ -379,21 +379,63 @@ export const listMembers = async (searchCriteria, page, size) => {
   }
 };
 
-// 회원 관계 목록 조회
+//회원관계목록조회
 export const getMemberRelationshipList = async (criteria, page, size) => {
-  try {
-    console.log("getMemberRelationshipList 요청:", { criteria, page, size });
-    const response = await axiosInstance.post(
-      `/member/getMemberRelationshipList`,
-      { criteria, page, size }
-    );
-    console.log("getMemberRelationshipList 응답:", response.data);
-    return response.data;
-  } catch (error) {
-    console.error("getMemberRelationshipList error:", error);
-    throw error;
-  }
-};
+    try {
+      console.log("getMemberRelationshipList 요청:", { criteria, page, size });
+  
+      const { fromId, toId, following, follower, blocking, blocker } = criteria;
+  
+      const res = await axiosInstance.post(
+        `/member/getMemberRelationshipList`,
+        { fromId, toId, page, size, following, follower, blocking, blocker }
+      );
+      console.log("getMemberRelationshipList 응답:", res.data.info);
+      const response = res.data.info;
+
+      //초기화에 관한 에러처리
+      if (!Array.isArray(response)) {
+        // console.error('Expected an array but received:', response);
+        return;
+      }
+  
+      // 관계 유형에 따라 필터링 및 개수 세기
+      const receivedFollowerCount = response.filter(
+        relationship =>
+          relationship.relationshipType === "FOLLOW" &&
+          relationship?.toMember?.memberId === toId
+      ).length;
+  
+      const receivedFollowingCount = response.filter(
+        relationship =>
+          relationship.relationshipType === "FOLLOW" &&
+          relationship?.fromMember?.memberId === toId
+      ).length;
+  
+      const receivedBlockerCount = response.filter(
+        relationship =>
+          relationship.relationshipType === "BLOCK" &&
+          relationship?.toMember?.memberId === toId
+      ).length;
+  
+      const receivedBlockingCount = response.filter(
+        relationship =>
+          relationship.relationshipType === "BLOCK" &&
+          relationship?.fromMember?.memberId === toId
+      ).length;
+  
+      return {
+        response,
+        receivedFollowerCount,
+        receivedFollowingCount,
+        receivedBlockerCount,
+        receivedBlockingCount
+      };
+    } catch (error) {
+      console.error("getMemberRelationshipList error:", error);
+      throw error;
+    }
+  };
 
 // 회원 관계 삭제
 export const deleteMemberRelationship = async (fromId, toId) => {

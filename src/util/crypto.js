@@ -12,10 +12,20 @@ export const encryptWithLv = (data) => {
     };
 };
 // AES 복호화 함수
-export const decryptWithIv = (encryptedData, ivData) => {
+export const decryptWithLv = (encryptedData, ivData) => {
     const key = CryptoJS.enc.Utf8.parse(passphrase);
     const iv = CryptoJS.enc.Base64.parse(ivData);
     const ciphertext = CryptoJS.enc.Base64.parse(encryptedData);
     const decrypted = CryptoJS.AES.decrypt({ ciphertext: ciphertext }, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 });
     return CryptoJS.enc.Utf8.stringify(decrypted);
+};
+//
+export const encryptWithLvWithUri = (data) => {
+    return {
+        encryptedData: encodeURIComponent(encryptWithLv(data).encryptedData),
+        ivData: encodeURIComponent(encryptWithLv(data).ivData)
+    };
+};
+export const decryptWithLvWithUri = (encryptedData, ivData) => {
+    return decryptWithLv(decodeURIComponent(encryptedData) , decodeURIComponent(ivData));
 };
