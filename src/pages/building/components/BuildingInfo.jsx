@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance from '../../../lib/axiosInstance';
+import { useSelector } from 'react-redux';
+
 import {
     Button,
     Card,
@@ -51,7 +53,7 @@ const BuildingInfo = () => {
     //건물 정보 가져오기
     const getBuildingProfile = async () => {
 
-      const response = await axios.get(`http://localhost:8080/buildingProfile/getBuildingProfile`, { /////////////////////////////하드코딩한 부분 수정
+      const response = await axiosInstance.get(`/buildingProfile/getBuildingProfile`, {
         params: { buildingId: buildingId }
       });
       setProfile(response.data);
@@ -61,7 +63,7 @@ const BuildingInfo = () => {
     //구독자 수 가져오기
     const getSubscriberCnt = async () => {
 
-      const response = await axios.get(`http://localhost:8080/buildingProfile/getSubscriberCnt`, { /////////////////////////////하드코딩한 부분 수정
+      const response = await axiosInstance.get(`/buildingProfile/getSubscriberCnt`, { 
         params: { buildingId: buildingId }
       });
       setSubscriber(response.data);
@@ -72,7 +74,7 @@ const BuildingInfo = () => {
     //회원의 구독여부 체크
     const getSubscriptionStatus = async () =>{
 
-      const response = await axios.get(`http://localhost:8080/buildingProfile/getMemberSubscriptionList`, { /////////////////////////////하드코딩한 부분 수정
+      const response = await axiosInstance.get(`/buildingProfile/getMemberSubscriptionList`, {
         params: { memberId: memberId }  // 현재 회원의 아이디 가져오도록 수정해야함
       }); 
 
@@ -91,7 +93,7 @@ const BuildingInfo = () => {
 
           try {
             
-            const response = await axios.post('http://localhost:8080/buildingProfile/deleteSubscription', { /////////////////////////////하드코딩한 부분 수정
+            const response = await axiosInstance.post('/buildingProfile/deleteSubscription', {
               memberId: memberId, // 현재 회원의 아이디 가져오도록 수정해야함
               buildingId: buildingId 
             });
@@ -106,7 +108,7 @@ const BuildingInfo = () => {
 
           try {
 
-            const response = await axios.post('http://localhost:8080/buildingProfile/addSubscription', { /////////////////////////////하드코딩한 부분 수정
+            const response = await axiosInstance.post('/buildingProfile/addSubscription', { 
               memberId: memberId, // 현재 회원의 아이디 가져오도록 수정해야함
               buildingId: buildingId 
             });
