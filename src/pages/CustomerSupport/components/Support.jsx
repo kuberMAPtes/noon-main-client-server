@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import axiosInstance from '../../../lib/axiosInstance';
 
-import ClickableCard from "../components/ClickableCard"
+import ClickableCard from "./ClickableCard"
 
 // reactstrap components
 import {
@@ -22,7 +23,7 @@ const Support = ({ isAdmin }) => {
 
   //회원 아이디(테스트용 임시데이터)
   const [memberId, setMemberId] = useState("member_1");
-  const [role, setRole] = useState("admin");
+  const [role, setRole] = useState("member");
 
   //회원 아이디(실제 데이터. 리덕스 상태값)
   //const memberId = useSelector((state) => state.auth.memberId);
@@ -34,8 +35,8 @@ const Support = ({ isAdmin }) => {
   //회원의 role 체크
   const getRole = async () =>{
 
-    const response = await axios.get(`http://localhost:8080/member/getMemberBymemberId`, { /////////////////////////////하드코딩한 부분 수정, 현준님 컨트롤러 문의
-      params: { memberId: memberId }  
+    const response = await axiosInstance.post(`/member/getMember`, { 
+      memberId: memberId   
     }); 
 
     console.log("role: "+response.data.role);

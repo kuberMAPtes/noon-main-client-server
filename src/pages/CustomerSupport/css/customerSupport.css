@@ -45,3 +45,15 @@
 .clickable-col:hover {
   transform: scale(1.05);
 }
+
+
+/* UpdateUnlockTimeModal.css */
+.custom-dropdown {
+  width: 100px; /* 원하는 너비로 설정 */
+}
+
+/* customerSupport.css */
+.custom-modal {
+  max-width: 400px; /* 모달의 최대 너비 설정 */
+  margin: 0 auto; /* 중앙 정렬 */
+}
