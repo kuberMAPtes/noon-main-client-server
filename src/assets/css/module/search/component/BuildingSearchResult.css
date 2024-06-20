@@ -1,0 +1,18 @@
+.building-item-container {
+  display: flex;
+  flex-direction: row;
+  font-size: 14px;
+  padding-left: 8px;
+  padding-right: 8px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.building-item-container h3 {
+  font-size: 20px;
+}
+
+.building-item-container img {
+  width: 14px;
+  height: 14px;
+}

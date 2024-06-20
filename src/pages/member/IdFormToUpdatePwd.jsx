@@ -5,7 +5,7 @@ import { handleMemberIdChangeExisted } from "./function/AddUpdateMemberUtil";
 import { TbUserSearch } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import styles from "../../assets/css/module/member/color.module.css";
+import styles from "../../assets/css/module/member/base.module.css";
 const IdFormToUpdatePwd = () => {
   const [memberId, setMemberId] = useState("");
   const [isMemberIdValid, setIsMemberIdValid] = useState(false);

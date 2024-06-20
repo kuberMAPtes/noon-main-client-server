@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "../../../assets/css/module/search/component/MemberSearchResult.css";
 
 const SAMPLE_DATA = [];
 
@@ -35,12 +36,11 @@ export default function MemberSearchResult({
   searchResult,
   pageCallback
 }) {
-  const [memberData, setMemberData] = useState(SAMPLE_DATA);
 
   return (
-    <div>
+    <div className="list-container">
       {
-        memberData.map((data, idx) => (
+        searchResult?.info?.content && searchResult.info.content.map((data, idx) => (
           <MemberSearchResultItem
             key={`member-data-${idx}`}
             profilePhotoUrl={data.profilePhotoUrl}
@@ -57,28 +57,34 @@ export default function MemberSearchResult({
 
 /**
  * @param {{
- *   profilePhotoUrl: string;
  *   memberId: string;
  *   nickname: string;
+ *   phoneNumber: string;
+ *   profilePhotoUrl: string;
+ *   profileIntro: string;
+ *   follower: boolean;
  *   following: boolean;
- *   followed: boolean;
  * }} props
  */
 function MemberSearchResultItem({
-  profilePhotoUrl,
   memberId,
   nickname,
-  following,
-  followed
+  phoneNumber,
+  profilePhotoUrl,
+  profileIntro,
+  follower,
+  following
 }) {
   return (
-    <div>
+    <div className="member-item-container">
       <img src={profilePhotoUrl} alt="Profile" />
-      <p>{memberId}</p>
-      <p>{nickname}</p>
-      <div>
-        {following && <p>팔로잉</p>}
-        {followed && <p>팔로워</p>}
+      <div className="member-name-container">
+        <div className="nickname">{nickname}</div>
+        <div className="member-id">{memberId}</div>
+      </div>
+      <div className="relationship-container">
+        {following && <div>내가 팔로우하는 회원</div>}
+        {follower && <div>나를 팔로우하는 회원</div>}
       </div>
     </div>
   );

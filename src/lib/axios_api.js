@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { MAIN_API_URL } from "../util/constants";
 
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = MAIN_API_URL;
 
 const axios_api = axios.create({
     baseURL: BASE_URL,
@@ -27,7 +28,7 @@ export const addChatroom = async(chatRoomData) => {
 // 채팅방목록 조회 (by memberId)
 export const getMyChatrooms = async (memberId) => {
     try {
-        console.log("addChatrom fetching 중....!")
+        console.log("getMyChatrooms fetching 중....!")
 
         const response = await axios_api.get(`/chatroom/getMyChatrooms?memberId=${memberId}`);
         console.log('getMyChatrooms fetching 결과 :', response.data);
@@ -42,7 +43,7 @@ export const getMyChatrooms = async (memberId) => {
 // 채팅방 정보 불러오기 (by chatroomId)
 export const getChatroom = async (chatRoomId) => {
     try {
-        console.log("addChatrom fetching 중....!")
+        console.log("getChatroom fetching 중....!")
         
         const response = await axios_api.get(`/chatroom/getChatroom?roomId=${chatRoomId}`)
         console.log('getChatroom fetching 결과 :', response.data);
