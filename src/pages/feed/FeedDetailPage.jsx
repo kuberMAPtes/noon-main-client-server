@@ -56,7 +56,7 @@ const FeedDetailPage = () => {
     return (
         <div>
             <BasicNavbar />
-            <FeedDetail data={feed} />
+            <FeedDetail data={feed} memberId = {memberId} />
             <div>
                 <Footer />
             </div>

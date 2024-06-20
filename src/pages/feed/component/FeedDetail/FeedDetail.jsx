@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import '../../css/FeedDetail.css';
 
-import { Badge, Button, Card, CardBody, CardSubtitle, CardText, CardTitle, Form, Input, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { Badge, Button, Card, CardBody, CardSubtitle, CardText, CardTitle, Form, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { toggleBookmark, toggleLike } from '../../axios/FeedAxios';
-import { FaBookmark, FaHeart, FaRegBookmark, FaRegHeart } from 'react-icons/fa';
+import { FaBookmark, FaHeart, FaRegBookmark, FaRegHeart, FaCommentAlt, FaRegEye, FaFireAlt } from 'react-icons/fa';
+import LikedUsersList from './LikedUsersList';
 
 const FeedDetail = ({ data, memberId }) => {
     const {
@@ -14,20 +15,27 @@ const FeedDetail = ({ data, memberId }) => {
         feedText,
         buildingName,
         like,
+        likeCount,
         bookmark,
+        bookmarkCount,
+        popularity,
         mainActivated,
+        viewCnt,
         attachments = [],
         tags = [],
         comments = [],
     } = data;
 
-    const [liked, setLiked] = useState(like);
-    const [bookmarked, setBookmarked] = useState(bookmark);
+    const [liked, setLiked] = useState(like); // 좋아요 여부
+    const [bookmarked, setBookmarked] = useState(bookmark); // 북마크 여부
 
-    const writtenTimeReplace = data.writtenTime.replace('T', ' ');
+    const writtenTimeReplace = data.writtenTime.replace('T', ' '); // 날짜 포멧팅
 
     const [newComment, setNewComment] = useState('');
     const [commentList, setCommentList] = useState(comments);
+
+    const [likedCount, setLikeCount] = useState(likeCount); // 좋아요 개수
+    const [showLikedUsers, setShowLikedUsers] = useState(false); // 리스트 표시 여부
 
     const handleCommentChange = (e) => {
         setNewComment(e.target.value);
@@ -49,10 +57,15 @@ const FeedDetail = ({ data, memberId }) => {
 
     const handleLikeClick = () => {
         toggleLike(liked, setLiked, feedId, memberId);
+        setLikeCount(preCount => liked ? preCount - 1 : preCount + 1); // 좋아요 수는 변동이 바로 보이도록 변경
     }
     
     const handleBookmarkClick = () => {
         toggleBookmark(bookmarked, setBookmarked, feedId, memberId);
+    }
+
+    const handleShowLikedUsersClick = () => {
+        setShowLikedUsers(!showLikedUsers); // 리스트 표시 여부 토글
     }
 
     return (
@@ -76,22 +89,24 @@ const FeedDetail = ({ data, memberId }) => {
                     <CardSubtitle>
                         {writerNickname} | {writtenTimeReplace} | {buildingName}
                     </CardSubtitle>
-
-                    {/* Body */}
                     <CardText>{feedText}</CardText>
                     <div className="tags">
                         {tags.map((tag) => (
-                            <Badge key={tag.tagId} color="primary">
+                            <Badge className='tag' key={tag.tagId} color="primary">
                                 {tag.tagText}
                             </Badge>
                         ))}
                     </div>
+                    
+                    {/* Body */}
                     <div className="feed-stats">
-                        <p>좋아요 수: 0</p>
-                        <p>댓글 수: {commentList.length}</p>
-                        <p>조회수: 0</p>
-                        <p>인기도: 0</p>
+                        <p onClick={handleShowLikedUsersClick} style={{ cursor: 'pointer' }}
+                        ><FaRegHeart size='20'/> &nbsp; {likedCount}</p> {/* 좋아요 수 */}
+                        <p><FaCommentAlt size='20'/> &nbsp; {commentList.length}</p> {/* 댓글 수 */}
+                        <p><FaRegEye size='20'/> &nbsp; {viewCnt}</p> {/* 조회수 */}
+                        <p><FaFireAlt size='20'/>&nbsp; {popularity}</p> {/* 인기도 */}
                     </div>
+                    {showLikedUsers && <LikedUsersList feedId={feedId} />}
                 </CardBody>
             </Card>
 
@@ -100,7 +115,8 @@ const FeedDetail = ({ data, memberId }) => {
                     {attachments.map((attachment) => (
                         <div key={attachment.attachmentId} className="mb-3">
                             <img
-                                src={attachment.fileUrl}
+                                // src={attachment.fileUrl}
+                                src = "https://picsum.photos/200/300?grayscale​" 
                                 alt={`Attachment ${attachment.attachmentId}`}
                                 className="attachment-img"
                             />
@@ -119,8 +135,8 @@ const FeedDetail = ({ data, memberId }) => {
                             </ListGroupItem>
                         ))}
                     </ListGroup>
-                    <CardBody>
-                        <form onSubmit={handleCommentSubmit}>
+                    <Form onSubmit={handleCommentSubmit} className='mt-3'>
+                        <Form.Group controlId="formNewComment">
                             <Form.Control
                                 type="text"
                                 value={newComment}
@@ -128,11 +144,11 @@ const FeedDetail = ({ data, memberId }) => {
                                 placeholder="Enter your comment"
                                 className="form-control"
                             />
-                            <Button type="submit" className="btn btn-primary mt-2">
-                                Add Comment
-                            </Button>
-                        </form>
-                    </CardBody>
+                        </Form.Group>
+                        <Button type="submit" className="btn btn-primary mt-2">
+                            추가
+                        </Button>
+                    </Form>
                 </CardBody>
             </Card>
         </div>
