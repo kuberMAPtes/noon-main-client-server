@@ -6,7 +6,7 @@ import { getMemberProfile } from "../../function/memberAxios";
 import useGetInitialPage from "../common/useGetInitialPage";
 import useDecryptId from "../common/useDecryptId";
 
-const useProfile = () => {
+const UseProfile = () => {
   const { initialPage } = useGetInitialPage();
   const { toId } = useDecryptId();
   const fromId = useSelector((state) => state.auth.member.memberId);
@@ -56,4 +56,4 @@ const useProfile = () => {
   return { profile, toId, fromId, initialPage, isDenied };
 };
 
-export default useProfile;
+export default UseProfile;

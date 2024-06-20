@@ -3,28 +3,28 @@ import { Container, Row, Col, Button, Card } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useSearchParams } from "react-router-dom";
 import UseProfileFetchFeeds from "./component/profile/UseProfileFetchFeeds";
-import useProfileInfiniteScroll from "./component/profile/useProfileInfiniteScroll";
+import UseProfileInfiniteScroll from "./component/profile/UseProfileInfiniteScroll";
 import ProfileFeedList from "./component/profile/ProfileFeedList";
 import ProfileHeader from "./component/profile/ProfileHeader";
 import ProfileBody from "./component/profile/ProfileBody";
 import useFetchMemberRelationshipList from "./component/common/useFetchMemberRelationshipList";
-import useProfileBuildingSubscriptions from "./component/profile/useProfileBuildingSubscriptions";
-import useProfile from "./component/profile/useProfile";
+import UseProfileBuildingSubscriptions from "./component/profile/UseProfileBuildingSubscriptions";
+import UseProfile from "./component/profile/UseProfile";
 const GetMemberProfile = () => {
-  const { profile, toId, fromId, initialPage, isDenied } = useProfile();
+  const { profile, toId, fromId, initialPage, isDenied } = UseProfile();
   const { feeds, hasMore, setPage } = UseProfileFetchFeeds(
     profile.feedDtoList,
     toId,
     initialPage
   );
-  const { buildingSubscriptionCount } = useProfileBuildingSubscriptions({
+  const { buildingSubscriptionCount } = UseProfileBuildingSubscriptions({
     toId,
   });
   const { followerCount, followingCount } = useFetchMemberRelationshipList(
     fromId,
     toId
   );
-  const lastFeedElementRef = useProfileInfiniteScroll(hasMore, setPage);
+  const lastFeedElementRef = UseProfileInfiniteScroll(hasMore, setPage);
 
   return (
     <Container
