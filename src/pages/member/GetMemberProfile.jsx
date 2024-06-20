@@ -2,23 +2,30 @@ import React, { useState } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useSearchParams } from "react-router-dom";
-import UseProfileFetchFeeds from "./component/profile/UseProfileFetchFeeds";
-import UseProfileInfiniteScroll from "./component/profile/UseProfileInfiniteScroll";
+import useProfileFetchFeeds from "./component/profile/useProfileFetchFeeds";
+import useProfileInfiniteScroll from "./component/profile/useProfileInfiniteScroll";
 import ProfileFeedList from "./component/profile/ProfileFeedList";
 import ProfileHeader from "./component/profile/ProfileHeader";
 import ProfileBody from "./component/profile/ProfileBody";
-import UseProfileMemberRelationshipList from "./component/profile/UseProfileMemberRelationshipList";
-import UseProfileBuildingSubscriptions from "./component/profile/UseProfileBuildingSubscriptions";
-import UseProfile from "./component/profile/UseProfile";
+import useFetchMemberRelationshipList from "./component/common/useFetchMemberRelationshipList";
+import useProfileBuildingSubscriptions from "./component/profile/useProfileBuildingSubscriptions";
+import useProfile from "./component/profile/useProfile";
 import LogoutForm from "./component/LogoutForm";
 const GetMemberProfile = () => {
-  const { profile, toId, fromId, initialPage, isDenied } = UseProfile();
-  const { feeds, hasMore, setPage } = UseProfileFetchFeeds(profile.feedDtoList,toId, initialPage);
-  const { buildingSubscriptionCount } = UseProfileBuildingSubscriptions({
+  const { profile, toId, fromId, initialPage, isDenied } = useProfile();
+  const { feeds, hasMore, setPage } = useProfileFetchFeeds(
+    profile.feedDtoList,
+    toId,
+    initialPage
+  );
+  const { buildingSubscriptionCount } = useProfileBuildingSubscriptions({
     toId,
   });
-  const { followerCount, followingCount } = UseProfileMemberRelationshipList(fromId, toId);
-  const lastFeedElementRef = UseProfileInfiniteScroll(hasMore, setPage);
+  const { followerCount, followingCount } = useFetchMemberRelationshipList(
+    fromId,
+    toId
+  );
+  const lastFeedElementRef = useProfileInfiniteScroll(hasMore, setPage);
 
   return (
     <Container
@@ -31,7 +38,6 @@ const GetMemberProfile = () => {
           <ProfileHeader />
           {isDenied ? (
             <div>
-                isDenied가 true입니다.
               <ProfileBody />
               <Button variant="primary" className="mt-3">
                 미정
@@ -40,15 +46,15 @@ const GetMemberProfile = () => {
             </div>
           ) : (
             <div>
-                isDenied가 false입니다.
               <ProfileBody
+                toId={toId}
                 profile={profile}
                 feeds={feeds}
                 buildingSubscriptionCount={buildingSubscriptionCount}
                 followerCount={followerCount}
                 followingCount={followingCount}
               />
-                <LogoutForm />
+              <LogoutForm />
               <ProfileFeedList
                 feeds={feeds}
                 lastFeedElementRef={lastFeedElementRef}

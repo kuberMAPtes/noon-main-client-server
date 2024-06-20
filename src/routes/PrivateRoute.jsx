@@ -25,7 +25,7 @@ const PrivateRoute = ({ children }) => {
     //authorization이 undefined >> 아직 authLoader가 처리하기 전
     //authorization이 false >> authLoader가 로그인 안한 유저로 판단
     if (authorization===false && isRedirect) {
-      alert("리다이렉트했습니다. Redirect false로 변경"+ authorization + isRedirect);
+      // alert("리다이렉트했습니다. Redirect false로 변경"+ authorization + isRedirect);
       dispatch(setIsRedirect(false));
       navigate("/member/getAuthMain");
     }

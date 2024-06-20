@@ -3,24 +3,25 @@ import { useSelector } from "react-redux";
 import { useParams, useSearchParams } from "react-router-dom";
 import { decryptWithLvWithUri } from "../../../../util/crypto";
 import { getMemberProfile } from "../../function/memberAxios";
+import useGetInitialPage from "../common/useGetInitialPage";
+import useDecryptId from "../common/useDecryptId";
 
-const UseProfile = () => {
-  const [searchParams] = useSearchParams();
-  const { secretId, secretIv } = useParams();
+const useProfile = () => {
+  const { initialPage } = useGetInitialPage();
+  const { toId } = useDecryptId();
+  const fromId = useSelector((state) => state.auth.member.memberId);
 
   const authorization = useSelector((state) => state.auth.authorization);
-  const fromId = useSelector((state) => state.auth.member.memberId);
-  const [profile, setProfile] = useState({
-    dajungScore : 0,
-    profilePhotoUrl: "",
-    profileIntro : "",
-    nickname : "",
-    feedDtoList : [],
-    });
-  const [isDenied, setIsDenied] = useState(false);
 
-  const initialPage = searchParams.get("page") || 1;
-  const toId = decryptWithLvWithUri(secretId, secretIv);
+  const [profile, setProfile] = useState({
+    dajungScore: 0,
+    profilePhotoUrl: "",
+    profileIntro: "",
+    nickname: "",
+    feedDtoList: [],
+  });
+
+  const [isDenied, setIsDenied] = useState(false);
 
   useEffect(() => {
     if (authorization && fromId && toId) {
@@ -38,10 +39,10 @@ const UseProfile = () => {
         const response = await getMemberProfile(fromId, toId); //관계를 다 따져볼거임. info에 뭐가 있을까...
         // alert("fetchMemberProfile"+JSON.stringify(response));
         if (response?.memberId) {
-        //   alert("setIsDenied false");
+          //   alert("setIsDenied false");
           setIsDenied(false);
         } else {
-            // alert("setIsDenied true");
+          // alert("setIsDenied true");
           setIsDenied(true);
         }
         console.log("Profile data:", response);
@@ -52,7 +53,7 @@ const UseProfile = () => {
     }
   }, [authorization, toId, fromId, isDenied]);
 
-  return { profile, toId, fromId, initialPage,isDenied };
+  return { profile, toId, fromId, initialPage, isDenied };
 };
 
-export default UseProfile;
+export default useProfile;

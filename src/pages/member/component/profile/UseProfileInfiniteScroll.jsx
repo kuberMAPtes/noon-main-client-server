@@ -1,6 +1,7 @@
 import { useRef, useCallback } from 'react';
 
-const UseProfileInfiniteScroll = (hasMore, setPage) => {
+const useProfileInfiniteScroll = (hasMore, setPage) => {
+  
     const observer = useRef();
 
     const lastFeedElementRef = useCallback((node) => {
@@ -16,4 +17,4 @@ const UseProfileInfiniteScroll = (hasMore, setPage) => {
     return {lastFeedElementRef};
 };
 
-export default UseProfileInfiniteScroll;
+export default useProfileInfiniteScroll;

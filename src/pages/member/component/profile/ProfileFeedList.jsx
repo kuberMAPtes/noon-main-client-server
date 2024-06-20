@@ -6,7 +6,7 @@ const ProfileFeedList = ({ feeds, lastFeedElementRef }) => {
     <>
       {feeds.map((feed, index) => (
         <div
-          key={feed.feedId}
+          key={feed.feedId ?? `feed-${index}`}
           className="col-12 mb-4"
           ref={feeds.length === index + 1 ? lastFeedElementRef : null}
         >
