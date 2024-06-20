@@ -19,19 +19,19 @@ const LoginForm = () => {
   const [pwd, setPassword] = useState("");
   const [validationError, setValidationError] = useState("");
 
-  const handleLoginSubmit = async (event) => {
+  const handleLoginClick = async (event) => {
     event.preventDefault();
-    setValidationError("");
+    // setValidationError("");
     const loginData = {
       member: { memberId: memberId, pwd: pwd },
       loginWay: "normal",
     };
 
-    const validationMessage = validateLoginForm(memberId, pwd);
-    if (validationMessage) {
-      setValidationError(validationMessage);
-      return;
-    }
+    // const validationMessage = validateLoginForm(memberId, pwd);
+    // if (validationMessage) {
+    //   setValidationError(validationMessage);
+    //   return;
+    // }
 
     try {
       console.log("로그인 하기 전 store.auth.member :: ", storeMemberId);
@@ -61,7 +61,7 @@ const LoginForm = () => {
       <Row className="justify-content-center">
         <Col xs={12} sm={10} md={8} lg={6}>
           <h2 className="text-center">로그인</h2>
-          <Form onSubmit={handleLoginSubmit}>
+          <Form>
             <Form.Group controlId="memberId">
               <Form.Label>Member ID</Form.Label>
               <Form.Control
@@ -86,7 +86,8 @@ const LoginForm = () => {
             </Form.Group>
             <Button
               variant="primary"
-              type="submit"
+              type="button"
+              onClick={handleLoginClick}
               className={`mt-3 w-100 ${styles.btn} ${styles2.typicalButtonColor}`}
             >
               로그인

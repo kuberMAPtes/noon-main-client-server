@@ -16,6 +16,7 @@ const UseProfileFetchFeeds = (toId, initialPage) => {
         const queryString = `?memberId=${toId}&page=${page}`;
         try {
             const response = await axiosInstance.get(fetchUrl + queryString);
+            alert("피드 response" + JSON.stringify(response));
             if (response.data.length === 0) {
                 setHasMore(false);
             } else {
@@ -29,8 +30,8 @@ const UseProfileFetchFeeds = (toId, initialPage) => {
     }, [fetchUrl]);
 
     useEffect(() => {
-        fetchData(fetchUrl, page);
-    }, [page, fetchUrl, fetchData]);
+        fetchData(toId, page);
+    }, [page, toId, fetchData]);
 
     return { feeds, loading, hasMore, setPage };
 };
