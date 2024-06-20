@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "../../../assets/css/module/search/component/BuildingSearchResult.css";
 
 const SAMPLE_DATA = [
   {
@@ -25,23 +26,33 @@ const SAMPLE_DATA = [
 
 /**
  * @param {{
- *   searchResult: {}
+ *   searchResult: {
+ *     buildingName: "string",
+ *     roadAddr: "string",
+ *     feedAiSummary: "string",
+ *     liveliestChatroomDto: {
+ *       chatroomName: "string",
+ *       liveliness: "string"
+ *     }
+ *   }[],
+ *   pageCallback: () => void
  * }} props
  */
 export default function BuildingSearchResult({
-  searchResult
+  searchResult,
+  pageCallback
 }) {
-  const [buildingData, setBuildingData] = useState(SAMPLE_DATA);
 
   return (
-    <div>
+    <div className="list-container">
       {
-        buildingData.map((data, idx) =>
+        searchResult.map((data, idx) =>
             <BuildingSearchResultItem
                 key={`building-item-${idx}`}
-                buildingName={data.builidngName}
-                liveliestChatroomName={data.liveliestChatroomName}
-                roadAddress={data.roadAddress}
+                buildingName={data.buildingName}
+                liveliestChatroomDto={data.liveliestChatroomDto}
+                roadAddr={data.roadAddr}
+                feedAiSummary={data.feedAiSummary}
             />)
       }
     </div>
@@ -51,21 +62,38 @@ export default function BuildingSearchResult({
 /**
  * 
  * @param {{
- *   buildingName: string;
- *   liveliestChatroomName: string;
- *   roadAddress: string;
+ *   buildingName: "string",
+ *   roadAddr: "string",
+ *   feedAiSummary: "string",
+ *   liveliestChatroomDto: {
+ *     chatroomName: "string",
+ *     liveliness: "string"
+ *   }
  * }} props 
 */
 function BuildingSearchResultItem({
   buildingName,
-  liveliestChatroomName,
-  roadAddress
+  roadAddr,
+  feedAiSummary,
+  liveliestChatroomDto
 }) {
+  console.log(buildingName);
+  console.log(roadAddr);
+  console.log(feedAiSummary);
+  console.log(liveliestChatroomDto);
   return (
-    <div>
-      <p>{buildingName}</p>
-      <p>{liveliestChatroomName}</p>
-      <p>{roadAddress}</p>
+    <div className="building-item-container item-container">
+      <h3>{buildingName}</h3>
+      <div>
+        <div className="icon-title">
+          <img src="./image/chat.png" alt="chat" />
+          <div>{liveliestChatroomDto.chatroomName}</div>
+        </div>
+        <div className="icon-title">
+          <img src="./image/address.png" alt="address" />
+          <div>{roadAddr}</div>
+        </div>
+      </div>
     </div>
   );
 }
