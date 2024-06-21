@@ -17,19 +17,19 @@ import "../../../assets/css/module/search/component/ChatroomSearchResult.css";
  *       chatroomType: string;
  *       chatroomMinTemp: number;
  *     }[]
- *   },
- *   pageCallback: () => void;
+ *   };
+ *   infScrollTargetRef;
  * }} props
  */
 export default function ChatroomSearchResult({
   searchResult,
-  pageCallback
+  infScrollTargetRef
 }) {
   console.log(searchResult);
   return (
-    <div className="list-container">
+    <div className="scroll list-container">
       {
-        searchResult && searchResult.content && searchResult.content.map((data, idx) => (
+        searchResult && searchResult.map((data, idx) => (
           <CharoomSearchResultItem
             key={`chatroom-item-${idx}`}
             chatroomId={data.chatroomId}
@@ -40,6 +40,7 @@ export default function ChatroomSearchResult({
             chatroomCreatorId={data.chatroomCreatorId}
             chatroomType={data.chatroomType}
             chatroomMinTemp={data.chatroomMinTemp}
+            infScrollTargetRef={idx + 1 === searchResult.length ? infScrollTargetRef : null}
           />
         ))
       }
@@ -67,13 +68,15 @@ function CharoomSearchResultItem({
   roadAddr,
   chatroomCreatorId,
   chatroomType,
-  chatroomMinTemp
+  chatroomMinTemp,
+  infScrollTargetRef
 }) {
   const navigate = useNavigate();
   return (
     <div
         className="item-container chatroom-item-container"
         onClick={() => navigate(`/chat/chatroom?chatroomID=${chatroomId}`)}
+        ref={infScrollTargetRef}
     >
       <div className="info">
         <h3>{chatroomName}</h3>

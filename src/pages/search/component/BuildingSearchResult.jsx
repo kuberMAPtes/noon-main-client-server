@@ -13,18 +13,18 @@ import "../../../assets/css/module/search/component/BuildingSearchResult.css";
  *       liveliness: string;
  *     }
  *   }[],
- *   pageCallback: () => void
+ *   infScrollTargetRef
  * }} props
  */
 export default function BuildingSearchResult({
   searchResult,
-  pageCallback
+  infScrollTargetRef
 }) {
 
   return (
-    <div className="list-container">
+    <div className="scroll list-container">
       {
-        searchResult.map((data, idx) =>
+        searchResult && searchResult.map((data, idx) =>
             <BuildingSearchResultItem
                 key={`building-item-${idx}`}
                 buildingId={data.buildingId}
@@ -32,6 +32,7 @@ export default function BuildingSearchResult({
                 liveliestChatroomDto={data.liveliestChatroomDto}
                 roadAddr={data.roadAddr}
                 feedAiSummary={data.feedAiSummary}
+                infScrollTargetRef={idx + 1 === searchResult.length ? infScrollTargetRef : null}
             />)
       }
     </div>
@@ -56,7 +57,8 @@ function BuildingSearchResultItem({
   buildingName,
   roadAddr,
   feedAiSummary,
-  liveliestChatroomDto
+  liveliestChatroomDto,
+  infScrollTargetRef
 }) {
   const navigate = useNavigate();
   console.log(buildingName);
@@ -67,6 +69,7 @@ function BuildingSearchResultItem({
     <div
         className="building-item-container item-container"
         onClick={() => navigate(`/getBuildingProfile/${buildingId}`)}
+        ref={infScrollTargetRef}
     >
       <h3>{buildingName}</h3>
       <div>

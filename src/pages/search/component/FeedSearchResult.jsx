@@ -21,19 +21,19 @@ const TEXT_MAX_LENGTH = 30;
  *     like: boolean;
  *     bookmark: boolean;
  *     mainActivated: boolean;
- *   }[],
- *   pageCallback: () => void
+ *   }[];
+ *   infScrollTargetRef;
  * }} props
  */
 export default function FeedSearchResult({
   searchResult,
-  pageCallback
+  infScrollTargetRef
 }) {
   console.log(searchResult);
   return (
-    <div className="list-container">
+    <div className="scroll list-container">
       {
-        searchResult.map((data, idx) => (
+        searchResult && searchResult.map((data, idx) => (
           <FeedSearchResultItem
               key={`feed-search-${idx}`}
               feedId={data.feedId}
@@ -45,6 +45,7 @@ export default function FeedSearchResult({
               text={data.feedText}
               buildingName={data.buildingName}
               thumbnailUrl={data.feedAttachementURL}
+              infScrollTargetRef={idx + 1 === searchResult.length ? infScrollTargetRef : null}
           />
         ))
       }
@@ -66,7 +67,7 @@ export default function FeedSearchResult({
 * }} prop
 */
 function FeedSearchResultItem({
-  feedId, writer, writtenTime, title, text, buildingName, thumbnailUrl
+  feedId, writer, writtenTime, title, text, buildingName, thumbnailUrl, infScrollTargetRef
 }) {
   const navigate = useNavigate();
   const periodInSeconds = (new Date() - writtenTime) / 1000;
@@ -86,6 +87,7 @@ function FeedSearchResultItem({
     <div
         className="item-container"
         onClick={() => navigate(`/feed/detail?feedId=${feedId}`)}
+        ref={infScrollTargetRef}
     >
       <div className="feed-info">
         <div className="feed-metadata">
