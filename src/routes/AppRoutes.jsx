@@ -148,7 +148,7 @@ const AppRoutes = () => {
               }
             />
 
-            <Route path="kakaoNav" element={<KakaoNav />} />
+            <Route path="kakaoNav/:memberId" element={<KakaoNav />} />
             <Route
               path="IdFormToUpdatePwd"
               element={
