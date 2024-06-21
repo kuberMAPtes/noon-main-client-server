@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios_api from '../../../../lib/axios_api';
-import { ListGroup, ListGroupItem } from 'react-bootstrap';
+import { Image, ListGroup, ListGroupItem } from 'react-bootstrap';
+import useNavigator from '../../util/Navigator';
 
 const LikedUsersList = (props) => {
 
     const [likeUserList, setLikeUserList] = useState([]);
+    const {goToMemberProfile} = useNavigator();
 
     const likedUser = async () => {
         try {
@@ -21,10 +23,28 @@ const LikedUsersList = (props) => {
 
     return (
         <div className="liked-users-list">
+            <br/>
             <ListGroup>
                 {likeUserList.map((user, index) => (
-                    <ListGroupItem key={index}>
-                        {user.memberNickname}
+                    <ListGroupItem 
+                        key={index} 
+                        className="d-flex align-items-center"
+                        onClick={() => goToMemberProfile(user.memberId)}>
+                        <Image
+                            src={user.memberProfile || 'https://via.placeholder.com/40'}
+                            roundedCircle
+                            width="40"
+                            height="40"
+                            className="me-3"
+                        />
+                        <div>
+                            <strong>{user.memberNickname}</strong>
+                            {user.points && (
+                                <span className="text-muted ms-2">
+                                    ({user.points} pts)
+                                </span>
+                            )}
+                        </div>
                     </ListGroupItem>
                 ))}
             </ListGroup>

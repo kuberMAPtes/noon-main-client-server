@@ -6,6 +6,7 @@ import FeedNotFound from './component/FeedNotFound'
 import axios_api from '../../lib/axios_api';
 import Loading from './component/FeedList/FeedLoading';
 import Footer from '../../components/common/Footer';
+import { useSelector } from 'react-redux';
 
 /**
  * 피드 하나에 대한 상세보기를 진행한다.
@@ -13,8 +14,12 @@ import Footer from '../../components/common/Footer';
  */
 const FeedDetailPage = () => {
     const [searchParams, setSearchParams] = useSearchParams();
+    
     const feedId = searchParams.get('feedId');
-    const memberId = searchParams.get('memberId');
+
+    const memberIdFromStore = useSelector((state) => state.auth.member.memberId);
+    const memberIdFromURL = searchParams.get('memberId');
+    const memberId = memberIdFromStore || memberIdFromURL;
 
     const [feed, setFeed] = useState(null);
     const [loading, setLoading] = useState(false);

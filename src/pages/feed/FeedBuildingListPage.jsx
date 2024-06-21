@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import FeedItem from './component/FeedList/FeedItem';
-import Dropdown from './component/FeedList/FeedDropdown';
 import FeedNotFound from './component/FeedNotFound';
 import Loading from './component/FeedList/FeedLoading';
 
@@ -12,6 +11,7 @@ import BasicNavbar from '../../components/common/BasicNavbar';
 import './css/FeedList.css';
 import axios_api from '../../lib/axios_api';
 import FeedPopularyRanking from './component/FeedList/FeedPopularyRanking';
+import { useSelector } from 'react-redux';
 
 /**
  * 건물별 피드 목록을 보여준다. FeedListPage와 그 성질이 달라서 분리하였다.
@@ -20,7 +20,9 @@ import FeedPopularyRanking from './component/FeedList/FeedPopularyRanking';
 
 const FeedBuildingListPage = () => {
     const [searchParams] = useSearchParams();
-    const memberId = searchParams.get('memberId');
+    const memberIdFromStore = useSelector((state) => state.auth.member.memberId);
+    const memberIdFromURL = searchParams.get('memberId');
+    const memberId = memberIdFromStore || memberIdFromURL;
     const buildingId = searchParams.get('buildingId');
     const initialPage = searchParams.get('page') || 1;
 
@@ -65,6 +67,8 @@ const FeedBuildingListPage = () => {
                 setRanking([]);
             } else {
                 setRanking((prevFeeds) => [...prevFeeds, ...response.data]); // 기존의 끝에 추가
+
+                console.log(response.data);
             }
         } catch (e) {
             console.log(e);
@@ -113,8 +117,6 @@ const FeedBuildingListPage = () => {
 
     return (
         <div>
-            <BasicNavbar />
-            <br/>
             <FeedPopularyRanking feeds={ranking} />
             <div className='container'>
                 <div className="row">
