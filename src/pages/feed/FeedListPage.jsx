@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import axios from 'axios';
 import { useSearchParams } from 'react-router-dom';
 
 import FeedItem from './component/FeedList/FeedItem';

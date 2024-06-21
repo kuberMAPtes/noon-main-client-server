@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "../../../assets/css/module/search/component/BuildingSearchResult.css";
 
 const SAMPLE_DATA = [
   {
@@ -43,7 +44,7 @@ export default function BuildingSearchResult({
 }) {
 
   return (
-    <div>
+    <div className="list-container">
       {
         searchResult.map((data, idx) =>
             <BuildingSearchResultItem
@@ -81,10 +82,18 @@ function BuildingSearchResultItem({
   console.log(feedAiSummary);
   console.log(liveliestChatroomDto);
   return (
-    <div>
-      <p>{buildingName}</p>
-      <p>{liveliestChatroomDto.chatroomName}</p>
-      <p>{roadAddr}</p>
+    <div className="building-item-container item-container">
+      <h3>{buildingName}</h3>
+      <div>
+        <div className="icon-title">
+          <img src="./image/chat.png" alt="chat" />
+          <div>{liveliestChatroomDto.chatroomName}</div>
+        </div>
+        <div className="icon-title">
+          <img src="./image/address.png" alt="address" />
+          <div>{roadAddr}</div>
+        </div>
+      </div>
     </div>
   );
 }

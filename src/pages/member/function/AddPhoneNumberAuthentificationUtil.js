@@ -39,8 +39,8 @@ export const handlePhoneNumberChange = async (
 
   if (formattedPhoneNumber.length === 13) {
     if (toUrl === "addMember") {
-      // const response = await checkPhoneNumber(formattedPhoneNumber);
-      const response = { info: true };
+      const response = await checkPhoneNumber(formattedPhoneNumber);
+      // const response = { info: true };
 
       if (!validatePhoneNumber(formattedPhoneNumber)) {
         setPhoneNumberValidationMessage("유효하지 않은 전화번호 형식입니다.");
