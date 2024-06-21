@@ -1,21 +1,4 @@
-import { useEffect, useState } from "react";
 import "../../../assets/css/module/search/component/FeedSearchResult.css";
-
-const SAMPLE_DATA = [];
-
-for (let i = 1; i <= 5; i++) {
-  SAMPLE_DATA.push({
-    writer: {
-      nickname: `nickname-${i}`,
-      profilePhotoUrl: `url-${i}`
-    },
-    writtenTime: new Date() - i * i * i,
-    title: `title-${i}`,
-    text: `text-${i}`,
-    buildingName: `buildingName-${i}`,
-    thumnailUrl: `thumbnailUrl-${i}`
-  });
-}
 
 const MINUTE = 60;
 const HOUR = MINUTE * 60;

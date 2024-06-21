@@ -1,16 +1,4 @@
-import { useEffect, useState } from "react";
 import "../../../assets/css/module/search/component/ChatroomSearchResult.css";
-
-const SAMPLE_DATA = []
-
-for (let i = 0; i <= 5; i++) {
-  SAMPLE_DATA.push({
-    chatroomName: `chatroomName-${i}`,
-    participantCount: i + 13,
-    buildingName: `buildingName-${i}`,
-    roadAddress: `서울시 영등포구`
-  });
-}
 
 /**
  * @param {{
