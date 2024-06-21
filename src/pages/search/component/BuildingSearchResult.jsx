@@ -1,14 +1,16 @@
+import { useNavigate } from "react-router-dom";
 import "../../../assets/css/module/search/component/BuildingSearchResult.css";
 
 /**
  * @param {{
  *   searchResult: {
- *     buildingName: "string",
- *     roadAddr: "string",
- *     feedAiSummary: "string",
+ *     buildingId: number;
+ *     buildingName: string;
+ *     roadAddr: string;
+ *     feedAiSummary: string;
  *     liveliestChatroomDto: {
- *       chatroomName: "string",
- *       liveliness: "string"
+ *       chatroomName: string;
+ *       liveliness: string;
  *     }
  *   }[],
  *   pageCallback: () => void
@@ -25,6 +27,7 @@ export default function BuildingSearchResult({
         searchResult.map((data, idx) =>
             <BuildingSearchResultItem
                 key={`building-item-${idx}`}
+                buildingId={data.buildingId}
                 buildingName={data.buildingName}
                 liveliestChatroomDto={data.liveliestChatroomDto}
                 roadAddr={data.roadAddr}
@@ -38,27 +41,33 @@ export default function BuildingSearchResult({
 /**
  * 
  * @param {{
- *   buildingName: "string",
- *   roadAddr: "string",
- *   feedAiSummary: "string",
+ *   buildingId: number;
+ *   buildingName: string;
+ *   roadAddr: string;
+ *   feedAiSummary: string;
  *   liveliestChatroomDto: {
- *     chatroomName: "string",
- *     liveliness: "string"
+ *     chatroomName: string;
+ *     liveliness: string;
  *   }
  * }} props 
 */
 function BuildingSearchResultItem({
+  buildingId,
   buildingName,
   roadAddr,
   feedAiSummary,
   liveliestChatroomDto
 }) {
+  const navigate = useNavigate();
   console.log(buildingName);
   console.log(roadAddr);
   console.log(feedAiSummary);
   console.log(liveliestChatroomDto);
   return (
-    <div className="building-item-container item-container">
+    <div
+        className="building-item-container item-container"
+        onClick={() => navigate(`/getBuildingProfile/${buildingId}`)}
+    >
       <h3>{buildingName}</h3>
       <div>
         <div className="icon-title">
