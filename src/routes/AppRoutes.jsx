@@ -5,6 +5,7 @@ import {
   Route,
   useLocation,
   useNavigationType,
+  Navigate,
 } from "react-router-dom";
 import GetAuthMain from "../pages/member/GetAuthMain";
 import GetSignUpTermAgreement from "../pages/member/GetSignUpTermAgreement";
@@ -14,7 +15,6 @@ import AddMemberResult from "../pages/member/AddMemberResult";
 import UpdatePwd from "../pages/member/UpdatePwd";
 import UpdatePwdResult from "../pages/member/UpdatePwdResult";
 import GetMember from "../pages/member/GetMember";
-import GetMemberProfile from "../pages/member/GetMemberProfile";
 import UpdateMember from "../pages/member/UpdateMember";
 import GetMemberRelationshipList from "../pages/member/GetMemberRelationshipList";
 
@@ -47,6 +47,7 @@ import ListImages from '../pages/CustomerSupport/ListImages';
 import GetImage from '../pages/CustomerSupport/GetImage';
 import DeleteBadFeed from '../pages/CustomerSupport/DeleteBadFeed';
 import GetListReport from '../pages/CustomerSupport/GetReportList';
+import GetNoticeList from "../pages/CustomerSupport/GetNoticeList";
 
 import MemberSetting from "../pages/setting/MemberSetting";
 // import Test from '../pages/Chat/Test';
@@ -56,7 +57,7 @@ import FeedDetail from "../pages/feed/FeedDetailPage";
 import FeedForm from "../pages/feed/FeedFormPage";
 import GetMemberId from "../pages/member/GetMemberId";
 import IdFormToUpdatePwd from "../pages/member/IdFormToUpdatePwd";
-import ProfileView from "../pages/member/function/test/ProfileView";
+
 import TestComponent from '../pages/member/component/test/TestComponent';
 import Postcode from '../pages/member/component/Postcode';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
@@ -65,10 +66,8 @@ import LoginForm from '../pages/member/component/LoginForm';
 import AuthLoader from '../components/common/AuthLoader'
 import FeedChartPage from '../pages/feed/FeedChartPage';
 import FeedBuildingListPage from '../pages/feed/FeedBuildingListPage';
-import GetNoticeList from "../pages/CustomerSupport/GetNoticeList";
-import GetListReport from '../pages/CustomerSupport/GetReportList';
-import FeedChartPage from '../pages/feed/FeedChartPage';
-import FeedBuildingListPage from '../pages/feed/FeedBuildingListPage';
+import FeedListHomePage from '../pages/feed/FeedListHomePage';
+import GetMemberProfile from "../pages/member/GetMemberProfile";
 const AppRoutes = () => {
   const location = useLocation();
   const navigationType = useNavigationType();
@@ -91,21 +90,16 @@ const AppRoutes = () => {
   }, [location, navigationType]);
 
   return (
-    <TransitionGroup className="transition-wrapper">
+    <TransitionGroup className="transition-wrapper" fluid>
       <CSSTransition
         key={location.pathname}
         timeout={300}
         classNames={isBack ? "reverse-slide" : "slide"}
       >
         <Routes location={location}>
+          {/* <Route path="/" element={<Navigate to="/member/getAuthMain" />} /> */}
+          <Route path="/" element={<Navigate to="/member/getAuthMain" />} />
           <Route path="/b" element={<B />}></Route>
-          <Route
-            path="/profileView"
-            element={
-            <GuestRoute>
-                <ProfileView/>
-            </GuestRoute>}
-          ></Route>
           <Route path="/testComponent" element={<TestComponent />}></Route>
           <Route path="/member">
             <Route
@@ -212,7 +206,7 @@ const AppRoutes = () => {
               }
             />
             <Route
-              path="getMemberRelationshipList"
+              path="getMemberRelationshipList/:secretId/:secretIv"
               element={
                 <PrivateRoute>
                   <GetMemberRelationshipList />
@@ -239,7 +233,7 @@ const AppRoutes = () => {
         <Route path="/map" element={<BMap />} />
         <Route path="/search" element={<Search />} />
         <Route path="/getBuildingProfile/:buildingId" element={<GetBuilding />} />
-        <Route path="/customerSupport">
+         <Route path="/customerSupport">
             <Route path="" element={<GetCustomerSupport />} />
             <Route path="getChatbot" element={<GetChatbot />} />
             <Route path="getNoticeList" element={<GetNoticeList />} />
@@ -252,13 +246,14 @@ const AppRoutes = () => {
             <Route path="getImage" element={<GetImage />} />
             <Route path="deleteBadFeed" element={<DeleteBadFeed />} />
         </Route>
-        <Route path="/setting" element={<MemberSetting />} />
-        <Route path="/feed">
+          <Route path="/setting" element={<MemberSetting />} />
+          <Route path="/feed">
             <Route path="list" element={<FeedList />} />
-            <Route path="list/building" element={<FeedBuildingListPage/>}/>
+            <Route path="list/building" element={<FeedBuildingListPage />} />
             <Route path="detail" element={<FeedDetail />} />
             <Route path="form" element={<FeedForm />} />
-            <Route path="chart" element={<FeedChartPage/>}/>
+            <Route path="chart" element={<FeedChartPage />} />
+            <Route path="main" element={<FeedListHomePage />}/>
             <Route path="" element={<FeedPages />} />
           </Route>
         </Routes>
