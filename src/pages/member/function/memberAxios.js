@@ -145,9 +145,12 @@ export const Login = async (loginRequestDto) => {
 export const googleLogin = async (googleLoginRequestDto) => {
   try {
     console.log("googleLogin 요청");
+
+    const {authorizeCode, memberId,nickname,phoneNumber,profilePhotoUrl} = googleLoginRequestDto;
+
     const response = await axiosInstance.post(
       `/member/googleLogin`,
-      googleLoginRequestDto
+      {authorizeCode, memberId,nickname,phoneNumber,profilePhotoUrl}
     );
     console.log("googleLogin 응답 response :", response);
     return response.data.info;

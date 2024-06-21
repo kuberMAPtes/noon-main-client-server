@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import io from 'socket.io-client';
-import './Chatroom.css'; // 스타일 파일을 import 합니다
+import module from './Chatroom.module.css'; // 스타일 파일을 import 합니다
 import { getChatroom } from '../../lib/axios_api';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -218,8 +218,8 @@ const Chatroom = () => {
   }
 
   return (
-    <div className="chat-container">
-      <div className="sidebar">
+    <div className={module.chatContainer}>
+      <div className={module.sidebarChat}>
         --------------------------------
         <p> 로그인 한놈 : {memberID} </p>
         --------------------------------
@@ -254,8 +254,8 @@ const Chatroom = () => {
         <Link to='/chat/myChatroomList'>내 채팅방 목록</Link>
       </div>
 
-        <div className="chat">
-          <div className="messages">
+        <div className={module.chat}>
+          <div className={module.messages}>
             {receivedMessage.map((msg, index) => (
               <div key={index} className={`message ${msg.type === 'mine' ? 'mine-message' : msg.type === 'other' ? 'other-message' : 'notice-message'}`}>
                 <p>{msg.text}</p>

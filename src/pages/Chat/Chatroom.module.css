@@ -1,4 +1,4 @@
-.chat-container {
+.chatContainer {
   display: flex;
   flex-direction: row;
   height: 100vh;
@@ -6,7 +6,7 @@
   background-color: #ececec;
 }
 
-.sidebar {
+.sidebarChat {
   width: 30%;
   padding: 20px;
   border-right: 1px solid #ccc;
@@ -17,17 +17,17 @@
   flex-shrink: 0; /* 이 사이드바는 줄어들지 않음 */
 }
 
-.sidebar h2 {
+.sidebarChat h2 {
   margin: 10px 0;
   color: #333;
 }
 
-.sidebar p {
+.sidebarChat p {
   margin: 10px 0;
   color: #666;
 }
 
-.sidebar a {
+.sidebarChat a {
   text-decoration: none;
   color: #333;
   font-weight: bold;
@@ -35,7 +35,7 @@
   display: inline-block;
 }
 
-.sidebar a:hover {
+.sidebarChat a:hover {
   text-decoration: underline;
 }
 
