@@ -20,12 +20,15 @@ export const decryptWithLv = (encryptedData, ivData) => {
     return CryptoJS.enc.Utf8.stringify(decrypted);
 };
 //
+// URI 인코딩을 포함한 AES 암호화 함수
 export const encryptWithLvWithUri = (data) => {
-    return {
-        encryptedData: encodeURIComponent(encryptWithLv(data).encryptedData),
-        ivData: encodeURIComponent(encryptWithLv(data).ivData)
-    };
+  const { encryptedData, ivData } = encryptWithLv(data);
+  return {
+      encryptedData: encodeURIComponent(encryptedData),
+      ivData: encodeURIComponent(ivData)
+  };
 };
+// URI 디코딩을 포함한 AES 복호화 함수
 export const decryptWithLvWithUri = (encryptedData, ivData) => {
-    return decryptWithLv(decodeURIComponent(encryptedData) , decodeURIComponent(ivData));
+  return decryptWithLv(decodeURIComponent(encryptedData), decodeURIComponent(ivData));
 };

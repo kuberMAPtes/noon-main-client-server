@@ -394,38 +394,22 @@ export const getMemberRelationshipList = async (criteria, page, size) => {
         { fromId, toId, page, size, following, follower, blocking, blocker }
       );
       console.log("getMemberRelationshipList 응답:", res.data.info);
-      const response = res.data.info;
+      alert("getMemberRelationshipList 응답:"+JSON.stringify(res.data.info));
+      const map = res.data.info;
 
       //초기화에 관한 에러처리
-      if (!Array.isArray(response)) {
+      if (!Array.isArray(map.dtoList)) {
         // console.error('Expected an array but received:', response);
         return;
       }
   
-      // 관계 유형에 따라 필터링 및 개수 세기
-      const receivedFollowerCount = response.filter(
-        relationship =>
-          relationship.relationshipType === "FOLLOW" &&
-          relationship?.toMember?.memberId === toId
-      ).length;
-  
-      const receivedFollowingCount = response.filter(
-        relationship =>
-          relationship.relationshipType === "FOLLOW" &&
-          relationship?.fromMember?.memberId === toId
-      ).length;
-  
-      const receivedBlockerCount = response.filter(
-        relationship =>
-          relationship.relationshipType === "BLOCK" &&
-          relationship?.toMember?.memberId === toId
-      ).length;
-  
-      const receivedBlockingCount = response.filter(
-        relationship =>
-          relationship.relationshipType === "BLOCK" &&
-          relationship?.fromMember?.memberId === toId
-      ).length;
+      // 관계 유형에 따라 토탈 개수 세기 and 필요한 데이터만 가져오기
+      const response = map.dtoList
+      const receivedFollowerCount = map.totalFollowingCount;
+      const receivedFollowingCount = map.totalFollowerCount;
+      const receivedBlockerCount = map.totalBlockingCount;
+      const receivedBlockingCount = map.totalBlockerCount;
+
   
       return {
         response,

@@ -58,7 +58,7 @@ const GetAuthMain = () => {
       console.log("$$$$ getResult 함수 시작");
       const response = await checkRedirectResult(dispatch);
       console.log("checkRedirectResult 결과:", response); // 여기는 토큰과 유저가 온다.
-      alert("checkRedirectResult 결과:"+ response); // 여기는 토큰과 유저가 온다.
+      // alert("checkRedirectResult 결과:"+ response); // 여기는 토큰과 유저가 온다.
       const info = response?.user;
       const token = response?.token;
       if (info?.email && info?.email !== "") {

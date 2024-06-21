@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Row, Col, Card } from 'react-bootstrap';
 import profile from '../../../../assets/css/module/member/GetMemberProfile.module.css';
 import { useNavigate } from 'react-router-dom';
-import { encryptWithLvWithUri } from '../../../../util/crypto';
+import { decryptWithLv, decryptWithLvWithUri, encryptWithLvWithUri } from '../../../../util/crypto';
 import useEncryptId from '../common/useEncryptId';
 
 const ProfileStats = ({toId,feeds,buildingSubscriptionCount,followerCount,followingCount}) => {
@@ -14,6 +14,8 @@ const ProfileStats = ({toId,feeds,buildingSubscriptionCount,followerCount,follow
     const navigate = useNavigate();
 
     const handleFollowerClick = () => {
+
+      // alert("복호화가 안되나봐 :: " + decryptWithLvWithUri(encryptedData, ivData)+ " :: " + encryptedData + " :: " + ivData);
 
       const secretId = encryptedData;
       const secretIv = ivData;

@@ -30,7 +30,7 @@ export const checkRedirectResult = async (dispatch) => {
 
   const result = await getRedirectResult(auth);
   console.log("getRedirectResult 호출 완료:", result);
-  alert( "getRedirectResult 호출 완료:"+ result);
+  // alert( "getRedirectResult 호출 완료:"+ result);
 
 
   if (result) {

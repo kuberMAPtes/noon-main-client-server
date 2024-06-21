@@ -19,6 +19,11 @@ const ProfileBody = ({
   const [dajungTemperature, setDajungTemperature] = useState("");
   const defaultPhotoUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSg3ya9qxUA7YtK-RHIkePuc-IhSgFlOf_7YA&s"
 
+
+  const handleImageError = (e) => {
+    e.target.src = defaultPhotoUrl;
+  };
+
   useEffect(() => {
     if (profile.dajungScore >= 80) {
       setDajungTemperature("매우 따뜻함");
@@ -38,7 +43,12 @@ const ProfileBody = ({
       <Card.Body>
         <Row className="mb-3">
           <Col xs={4}>
-            <Image src={profile.profilePhotoUrl || defaultPhotoUrl} roundedCircle className="mb-3" style={{width:"100%"}} />
+            <Image
+            src={profile.profilePhotoUrl || defaultPhotoUrl}
+            roundedCircle
+            className="mb-3"
+            style={{width:"100%"}}
+            onError={handleImageError} />
 
             <Card.Title>{profile.nickname}</Card.Title>
             <LogoutForm />

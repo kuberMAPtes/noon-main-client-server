@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams, useSearchParams } from "react-router-dom";
-import { decryptWithLvWithUri } from "../../../../util/crypto";
 import { getMemberProfile } from "../../function/memberAxios";
 import useGetInitialPage from "../common/useGetInitialPage";
 import useDecryptId from "../common/useDecryptId";
