@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import "../../../assets/css/module/search/component/ChatroomSearchResult.css";
 
 /**
@@ -31,7 +32,7 @@ export default function ChatroomSearchResult({
         searchResult && searchResult.content && searchResult.content.map((data, idx) => (
           <CharoomSearchResultItem
             key={`chatroom-item-${idx}`}
-            chatroomId={data.chatroomID}
+            chatroomId={data.chatroomId}
             chatroomName={data.chatroomName}
             participantCount={data.participantCount}
             buildingName={data.buildingName}
@@ -68,8 +69,12 @@ function CharoomSearchResultItem({
   chatroomType,
   chatroomMinTemp
 }) {
+  const navigate = useNavigate();
   return (
-    <div className="item-container chatroom-item-container">
+    <div
+        className="item-container chatroom-item-container"
+        onClick={() => navigate(`/chat/chatroom?chatroomID=${chatroomId}`)}
+    >
       <div className="info">
         <h3>{chatroomName}</h3>
         <div className="icon-title">
