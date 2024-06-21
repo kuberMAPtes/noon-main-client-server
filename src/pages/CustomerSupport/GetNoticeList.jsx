@@ -5,6 +5,8 @@ import Footer from '../../components/common/Footer';
 import axiosInstance from '../../lib/axiosInstance';
 import { Card, CardHeader, CardBody, Table, Row, Col } from 'reactstrap';
 import { useInView } from 'react-intersection-observer';
+import { useSelector } from 'react-redux';
+
 
 const GetNoticeList = () => {
   
@@ -14,11 +16,19 @@ const GetNoticeList = () => {
   const [hasMore, setHasMore] = useState(true);
   const navigate = useNavigate();
 
-  //회원 role(테스트용 임시데이터)
-  const [role, setRole] = useState("admin");
+
 
   //회원 아이디(실제 데이터. 리덕스 상태값)
-  //const memberId = useSelector((state) => state.auth.memberId);
+  const member = useSelector((state) => state.auth.member);
+  const [role, setRole] = useState("MEMBER");
+
+
+  useEffect(() => {
+
+    setRole(member.memberRole);
+    console.log('현재 회원의 역할은: '+member.memberRole);
+
+  }, []); 
 
 
   //공지 목록 가져오기
@@ -40,6 +50,18 @@ const GetNoticeList = () => {
       setLoading(false);
     }
   };
+
+
+
+  
+  //공지 작성
+  const handleAddNoticeLink = () => {
+
+    navigate('../addNotice');
+
+  };
+
+
 
   useEffect(() => {
     if (hasMore) {
@@ -70,13 +92,14 @@ const GetNoticeList = () => {
             <Card>
               <CardHeader></CardHeader>
               <CardBody>
+                {role=="ADMIN" && <button onClick={handleAddNoticeLink} style={{ backgroundColor: '#030722'}} >작성</button>}
                 <Table responsive>
                   <thead className="text-primary">
                     <tr>
                       <th className="text-right">제목</th>
                       <th className="text-right">작성자</th>
                       <th className="text-right">작성일</th>
-                      <th className="text-right">조회수</th>
+                      <th className="text-right">👀</th>
                     </tr>
                   </thead>
                   <tbody>

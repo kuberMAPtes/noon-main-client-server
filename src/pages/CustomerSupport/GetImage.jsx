@@ -87,7 +87,7 @@ const GetImage = () => {
 
 
   return (
-    <div style={styles.container}>
+    <div>
 
       <CustomerSupportHeader title="사진 상세보기" />
 
@@ -99,7 +99,7 @@ const GetImage = () => {
         <MessageModal isOpen={blurModalOpen} toggle={toggleBlurModal} message={messages.blur}/>
 
         <button onClick={toggleDeleteModal} style={styles.button}>
-          피드 삭제 <br />& 계정 잠금
+          피드 삭제
         </button>
         <UpdateUnlockTimeModal isOpen={deleteModalOpen} toggle={toggleDeleteModal}  onSubmit={handleUnlockSubmit} />
 
@@ -122,52 +122,20 @@ const GetImage = () => {
 
 const styles = {
 
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: '10px',
-    backgroundColor: '#FFFFF0',
-    color: '#fff',
-    height: '100vh',
-    width: '100%',
-    boxSizing: 'border-box',
-  },
-  header: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-    marginBottom: '10px',
-  },
-  backButton: {
-    backgroundColor: 'transparent',
-    border: 'none',
-    color: '#fff',
-    fontSize: '20px',
-  },
-  title: {
-    flexGrow: 1,
-    textAlign: 'center',
-  },
-  iconButton: {
-    backgroundColor: 'transparent',
-    border: 'none',
-    color: '#fff',
-    fontSize: '20px',
-  },
+
   imageContainer: {
     flexGrow: 1,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-    marginBottom: '10px',
+    marginBottom: '25px',
+    marginTop: '30px',
   },
   image: {
-    maxWidth: '100%',
+    maxWidth: '80%',
     maxHeight: '60vh',
-    borderRadius: '10px',
+    borderRadius: '5px',
   },
   buttonContainer: {
     display: 'flex',
@@ -176,13 +144,13 @@ const styles = {
     height: '30%',
   },
   button: {
-    backgroundColor: '#333333',
+    backgroundColor: '#030722',
     border: 'none',
     color: '#fff',
     padding: '10px 20px',
     borderRadius: '5px',
     cursor: 'pointer',
-    width: '40%',
+    width: '30%',
     height: '30%',
   },
 };

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import $ from "jquery";
-import SearchBar from "../../components/common/SearchBar";
+import SearchBar, { PARAM_KEY_SEARCH_KEYWORD } from "../../components/common/SearchBar";
 import FetchTypeToggle from "./component/FetchTypeToggle";
 import axios_api from "../../lib/axios_api";
 import { MAIN_API_URL } from "../../util/constants";
@@ -8,6 +8,7 @@ import { is2xxStatus, is4xxStatus } from "../../util/statusCodeUtil";
 import { getBuildingMarkerHtml, getPlaceSearchMarkerHtml } from "./contant/markerHtml";
 import "../../assets/css/module/map/BMap.css";
 import Footer from "../../components/common/Footer";
+import { useSearchParams } from "react-router-dom";
 
 const naver = window.naver;
 
@@ -27,7 +28,10 @@ const buildingFetchChecked = {
 }
 
 export default function BMap() {
-  const [placeSearchKeyword, setPlaceSearchKeyword] = useState("");
+  const [queryParams, setQueryParams] = useSearchParams();
+
+  const [placeSearchKeyword, setPlaceSearchKeyword] =
+      useState(queryParams.has(PARAM_KEY_SEARCH_KEYWORD) ? queryParams.get(PARAM_KEY_SEARCH_KEYWORD) : "");
   const [currentPosition, setCurrentPosition] = useState(undefined);
   const [subscriptionChecked, setSubscriptionChecked] = useState(true);
   const [popBuildingChecked, setPopBuildingChecked] = useState(true);
@@ -106,7 +110,7 @@ export default function BMap() {
     <div className="container map-container">
       <SearchBar
         typeCallback={(text) => setPlaceSearchKeyword(text)}
-        searchCallback={() => searchPlaceList(placeSearchKeyword, onFetchPlace)}
+        searchCallback={() => searchPlaceList(placeSearchKeyword, onFetchPlace, queryParams, setQueryParams)}
       />
       <div id="map">
         <button
@@ -132,7 +136,9 @@ export default function BMap() {
  * @param {string} searchKeyword 
  * @param {(places: any) => void} callback 
  */
-function searchPlaceList(searchKeyword, callback) {
+function searchPlaceList(searchKeyword, callback, queryParams, setQueryParams) {
+  queryParams.set(PARAM_KEY_SEARCH_KEYWORD, searchKeyword);
+  setQueryParams(queryParams);
   axios_api.get(`${MAIN_API_URL}/places/search`, {
     params: {
       placeName: searchKeyword

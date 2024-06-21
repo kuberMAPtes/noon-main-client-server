@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import FeedList from './FeedList';
+import FeedList from '../../feed/FeedListPage'
 import ChatroomList from './ChatroomList';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,7 +12,7 @@ const TabNavigation = () => {
   const handleCreationLink = () => {
 
     if(activeTab === 'feed'){
-      navigate('/feed/feedform');
+      navigate('/feed/form');
     }else{
       navigate('/chat/chatroomCreation');
     }

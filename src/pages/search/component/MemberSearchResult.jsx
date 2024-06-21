@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import "../../../assets/css/module/search/component/MemberSearchResult.css";
+import { useNavigate } from "react-router-dom";
+import useEncryptId from "../../member/component/common/useEncryptId";
 
 const SAMPLE_DATA = [];
 
@@ -29,18 +31,18 @@ for (let i = 0; i < 5; i++) {
  *       following: boolean;
  *     }[]
  *   },
- *   pageCallback: () => void;
+ *   infScrollTargetRef;
  * }} props
  */
 export default function MemberSearchResult({
   searchResult,
-  pageCallback
+  infScrollTargetRef
 }) {
 
   return (
-    <div className="list-container">
+    <div className="scroll list-container">
       {
-        searchResult?.info?.content && searchResult.info.content.map((data, idx) => (
+        searchResult && searchResult.map((data, idx) => (
           <MemberSearchResultItem
             key={`member-data-${idx}`}
             profilePhotoUrl={data.profilePhotoUrl}
@@ -48,6 +50,7 @@ export default function MemberSearchResult({
             nickname={data.nickname}
             following={data.following}
             followed={data.followed}
+            infScrollTargetRef={idx + 1 === searchResult.length ? infScrollTargetRef : null}
           />
         ))
       }
@@ -73,10 +76,17 @@ function MemberSearchResultItem({
   profilePhotoUrl,
   profileIntro,
   follower,
-  following
+  following,
+  infScrollTargetRef
 }) {
+  const navigate = useNavigate();
+  const {encryptedData, ivData} =useEncryptId(memberId);
   return (
-    <div className="member-item-container">
+    <div
+        ref={infScrollTargetRef}
+        className="member-item-container"
+        onClick={() => navigate(`/member/getMemberProfile/${encryptedData}/${ivData}`)}
+    >
       <img src={profilePhotoUrl} alt="Profile" />
       <div className="member-name-container">
         <div className="nickname">{nickname}</div>

@@ -1,58 +1,38 @@
-import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../../../assets/css/module/search/component/BuildingSearchResult.css";
-
-const SAMPLE_DATA = [
-  {
-    buildingName: "name1",
-    liveliestChatroomName: "chatroom1",
-    roadAddress: "서울시 영등포구"
-  },
-  {
-    buildingName: "name2",
-    liveliestChatroomName: "chatroom2",
-    roadAddress: "서울시 영등포구"
-  },
-  {
-    buildingName: "name3",
-    liveliestChatroomName: "chatroom3",
-    roadAddress: "서울시 영등포구"
-  },
-  {
-    buildingName: "name4",
-    liveliestChatroomName: "chatroom4",
-    roadAddress: "서울시 영등포구"
-  }
-]
 
 /**
  * @param {{
  *   searchResult: {
- *     buildingName: "string",
- *     roadAddr: "string",
- *     feedAiSummary: "string",
+ *     buildingId: number;
+ *     buildingName: string;
+ *     roadAddr: string;
+ *     feedAiSummary: string;
  *     liveliestChatroomDto: {
- *       chatroomName: "string",
- *       liveliness: "string"
+ *       chatroomName: string;
+ *       liveliness: string;
  *     }
  *   }[],
- *   pageCallback: () => void
+ *   infScrollTargetRef
  * }} props
  */
 export default function BuildingSearchResult({
   searchResult,
-  pageCallback
+  infScrollTargetRef
 }) {
 
   return (
-    <div className="list-container">
+    <div className="scroll list-container">
       {
-        searchResult.map((data, idx) =>
+        searchResult && searchResult.map((data, idx) =>
             <BuildingSearchResultItem
                 key={`building-item-${idx}`}
+                buildingId={data.buildingId}
                 buildingName={data.buildingName}
                 liveliestChatroomDto={data.liveliestChatroomDto}
                 roadAddr={data.roadAddr}
                 feedAiSummary={data.feedAiSummary}
+                infScrollTargetRef={idx + 1 === searchResult.length ? infScrollTargetRef : null}
             />)
       }
     </div>
@@ -62,27 +42,35 @@ export default function BuildingSearchResult({
 /**
  * 
  * @param {{
- *   buildingName: "string",
- *   roadAddr: "string",
- *   feedAiSummary: "string",
+ *   buildingId: number;
+ *   buildingName: string;
+ *   roadAddr: string;
+ *   feedAiSummary: string;
  *   liveliestChatroomDto: {
- *     chatroomName: "string",
- *     liveliness: "string"
+ *     chatroomName: string;
+ *     liveliness: string;
  *   }
  * }} props 
 */
 function BuildingSearchResultItem({
+  buildingId,
   buildingName,
   roadAddr,
   feedAiSummary,
-  liveliestChatroomDto
+  liveliestChatroomDto,
+  infScrollTargetRef
 }) {
+  const navigate = useNavigate();
   console.log(buildingName);
   console.log(roadAddr);
   console.log(feedAiSummary);
   console.log(liveliestChatroomDto);
   return (
-    <div className="building-item-container item-container">
+    <div
+        className="building-item-container item-container"
+        onClick={() => navigate(`/getBuildingProfile/${buildingId}`)}
+        ref={infScrollTargetRef}
+    >
       <h3>{buildingName}</h3>
       <div>
         <div className="icon-title">

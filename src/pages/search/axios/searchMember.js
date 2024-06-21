@@ -7,5 +7,9 @@ export default function searchMember(searchKeyword, page, callback, requesterId)
       searchKeyword,
       page
     }
-  }).then((response) => callback(response.data));
+  }).then((response) => callback(response.data.info.content));
+}
+
+export function isMemberSearchResultEmpty(data) {
+  return data.info.content.length === 0;
 }

@@ -1,101 +1,137 @@
-import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+import '../CustomerSupport/css/text-editor.css';
 import axiosInstance from '../../lib/axiosInstance';
+
 import CustomerSupportHeader from './components/CustomerSupportHeader';
 import Footer from '../../components/common/Footer';
-import MessageModal from './components/MessageModal';
-import messages from './metadata/messages';
+
+
+
 
 const AddNotice = () => {
-
-  //회원 role(테스트용 임시데이터)
-  const [role, setRole] = useState("admin");
-
-  //회원 아이디(실제 데이터. 리덕스 상태값)
-  //const memberId = useSelector((state) => state.auth.memberId);
-
-  const { reporterId, reporteeId } = useParams();
-  const [reportText, setReportText] = useState('');
-  const navigate = useNavigate();
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const quillRef = useRef(null);
 
 
-  const handleReportTextChange = (e) => {
-    setReportText(e.target.value);
+  const handleTitleChange = (e) => {
+    setTitle(e.target.value);
   };
 
+  const handleTextChange = (value) => {
+    setContent(value);
+  };
 
-  //공지 등록하기
-  const [reportModalOpen, setReportModalOpen] = useState(false);
-  const addReport = async () => {
-
+  const handleAddNotice = async () => {
     try {
-      const response = await axiosInstance.post(`/customersupport/addReport`, {
-        reporterId : reporterId,
-        reporteeId : reporteeId,
-        reportText : reportText,
-        reportStatus : 'PEND'
+      const response = await axiosInstance.post('/customersupport/addNotice', {
+        title: title,
+        feedText: content,
       });
-      console.log("등록한 공지 정보: "+JSON.stringify(response.data));
-      toggleReportModal();
+      console.log('Notice added:', response.data);
     } catch (error) {
-      console.error("Error fetching addReport details:", error);
+      console.error('Error adding notice:', error);
     }
-
   };
 
-  const toggleReportModal = () => {
-    setReportModalOpen(!reportModalOpen);
+  const handleImageUpload = (file) => {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    axiosInstance.post('/customersupport/addNotice', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+      .then(response => {
+        const quill = quillRef.current.getEditor();
+        const range = quill.getSelection();
+        quill.insertEmbed(range.index, 'image', response.data.imageUrl);
+      })
+      .catch(error => {
+        console.error('Error uploading image:', error);
+      });
   };
 
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      // 필요한 로직 추가
+    });
+    const editor = quillRef.current.getEditor().root;
+    observer.observe(editor, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+
+  const modules = useMemo(() => {
+    return {
+      toolbar: {
+        container: [
+          ['image'],
+          [{ header: [1, 2, 3, false] }],
+          ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+        ],
+        handlers: {
+          image: () => {
+            const input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'image/*');
+            input.click();
+  
+            input.onchange = () => {
+              const file = input.files[0];
+              if (file) {
+                handleImageUpload(file);
+              }
+            };
+          },
+        },
+      },
+    };
+  }, []);
 
 
 
-
-
-
-
-
-
-
-
-
+  const formats = [
+    'header', 'font', 'size',
+    'bold', 'italic', 'underline', 'strike', 'blockquote',
+    'list', 'bullet', 'indent',
+    'link', 'image'
+  ];
 
   return (
     <div>
-      <CustomerSupportHeader title="신고하기" />
+      <CustomerSupportHeader title="공지사항 작성" />
       <div>
-          <div>
-            <label htmlFor="reportedId">{reporteeId}를 신고합니다.</label>
-          </div>
-          <div>
-            <textarea
-              id="reportText"
-              value={reportText}
-              onChange={handleReportTextChange}
-              placeholder="신고 사유를 상세히 작성..."
-              rows="4"
-              cols="50"
-            />
-          </div>
-          <div style={styles.buttonContainer}>
-            <button type="button" onClick={() => navigate(-1)}>취소</button>
-            <button onClick={addReport}>신고등록</button>
-            <MessageModal isOpen={reportModalOpen} toggle={toggleReportModal} message={messages.addReport}/>
-          </div>
+        <input 
+          type="text" 
+          placeholder="제목을 입력하세요" 
+          value={title} 
+          onChange={handleTitleChange} 
+          style={{ width: '100%', padding: '10px', marginTop: '20px', marginBottom: '20px' }} 
+        />
       </div>
-      <Footer />
+      <div>
+        <ReactQuill 
+          ref={quillRef}
+          value={content} 
+          onChange={handleTextChange} 
+          modules={modules} 
+          formats={formats} 
+          style={{ height: '350px', marginBottom: '50px' }}
+        />
+      </div>
+      <button onClick={handleAddNotice} style={{ padding: '10px 20px', fontSize: '16px', marginBottom: '100px',  backgroundColor: '#030722'}}>
+        등록
+      </button>
+      <Footer/>
     </div>
   );
-};
-
-
-
-const styles = {
-  buttonContainer: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    marginTop: '20px',
-  },
 };
 
 export default AddNotice;

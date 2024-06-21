@@ -6,7 +6,7 @@ import '../css/customerSupport.css'
 const UpdateUnlockTimeModal = ({ isOpen, toggle, onSubmit }) => {
 
 
-  const [unlockDuration, setUnlockDuration] = useState('');
+  const [unlockDuration, setUnlockDuration] = useState('ONE_DAY');
 
   const handleDurationChange = (e) => {
     setUnlockDuration(e.target.value);

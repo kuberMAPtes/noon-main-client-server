@@ -1,0 +1,31 @@
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;
+    padding: 0 10px;
+    background-color: #9BAAF8;
+    border-bottom: 1px solid #ddd;
+    position: relative;
+    /*margin-bottom: 30px;*/ 
+}
+
+.back-button {
+    background: none;
+    border: none;
+    font-size: 24px; 
+    cursor: pointer;
+    position: absolute;
+    left: 0; /* 가장 왼쪽 끝에 배치 */
+    padding-left: 10px; 
+}
+
+.header-title {
+    flex: 1;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}

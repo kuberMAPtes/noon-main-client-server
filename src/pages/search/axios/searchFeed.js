@@ -10,3 +10,8 @@ export default function searchFeed(searchKeyword, page, callback) {
       callback(response.data);
     })
 }
+
+export function isFeedSearchResultEmpty(data) {
+  console.log(data);
+  return data.length === 0;
+}
