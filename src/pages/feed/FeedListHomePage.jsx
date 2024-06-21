@@ -79,7 +79,6 @@ const FeedListHomePage = () => {
     if (!loading && feeds.length === 0) {
         return (
             <div>
-                <BasicNavbar />
                 <FeedNotFound />
             </div>
         );

@@ -12,6 +12,7 @@ import BasicNavbar from '../../components/common/BasicNavbar';
 import './css/FeedList.css';
 import axios_api from '../../lib/axios_api';
 import FeedPopularyRanking from './component/FeedList/FeedPopularyRanking';
+import { useSelector } from 'react-redux';
 
 /**
  * 건물별 피드 목록을 보여준다. FeedListPage와 그 성질이 달라서 분리하였다.
@@ -20,7 +21,9 @@ import FeedPopularyRanking from './component/FeedList/FeedPopularyRanking';
 
 const FeedBuildingListPage = () => {
     const [searchParams] = useSearchParams();
-    const memberId = searchParams.get('memberId');
+    const memberIdFromStore = useSelector((state) => state.auth.member.memberId);
+    const memberIdFromURL = searchParams.get('memberId');
+    const memberId = memberIdFromStore || memberIdFromURL;
     const buildingId = searchParams.get('buildingId');
     const initialPage = searchParams.get('page') || 1;
 
@@ -113,8 +116,6 @@ const FeedBuildingListPage = () => {
 
     return (
         <div>
-            <BasicNavbar />
-            <br/>
             <FeedPopularyRanking feeds={ranking} />
             <div className='container'>
                 <div className="row">

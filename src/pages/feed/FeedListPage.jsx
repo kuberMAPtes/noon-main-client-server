@@ -11,6 +11,7 @@ import BasicNavbar from '../../components/common/BasicNavbar';
 
 import './css/FeedList.css';
 import axios_api from '../../lib/axios_api';
+import { useSelector } from 'react-redux';
 
 /**
  * 회원 아이디를 통해서 개인으로 관련이 있는 피드 목록을 가져온다.
@@ -18,7 +19,9 @@ import axios_api from '../../lib/axios_api';
  */
 const FeedListPage = () => {
     const [searchParams] = useSearchParams();
-    const memberId = searchParams.get('memberId');
+    const memberIdFromStore = useSelector((state) => state.auth.member.memberId);
+    const memberIdFromURL = searchParams.get('memberId');
+    const memberId = memberIdFromStore || memberIdFromURL;
     const initialPage = searchParams.get('page') || 1;
 
     const [feeds, setFeeds] = useState([]);
@@ -88,35 +91,29 @@ const FeedListPage = () => {
             </div>
         );
     }
-
-    // NotFount 페이지
-    if (!loading && feeds.length === 0) {
-        return (
-            <div>
-                <BasicNavbar />
-                <FeedNotFound />
-            </div>
-        );
-    }
-
+    
     return (
         <div>
-            <BasicNavbar />
             <div className='container'>
             <Dropdown onSelect={handleSelect} />
-                <div className="row">
-                    {feeds.map((feed, index) => (
-                        <div
-                            key={feed.feedId}
-                            className="col-12 mb-4"
-                            ref={feeds.length === index + 1 ? lastFeedElementRef : null}
-                        >
-                            <FeedItem data={feed} memberId={memberId} />
-                        </div>
-                    ))}
+            {!loading && feeds.length === 0 ? (
+                <FeedNotFound />
+            ) : (
+                <div>
+                    <div className="row">
+                        {feeds.map((feed, index) => (
+                            <div
+                                key={feed.feedId}
+                                className="col-12 mb-4"
+                                ref={feeds.length === index + 1 ? lastFeedElementRef : null}
+                            >
+                                <FeedItem data={feed} memberId={memberId} />
+                            </div>
+                        ))}
+                    </div>
+                    {loading && <p>Loading...</p>}
                 </div>
-                {loading && <p>Loading...</p>}
-                <Footer />
+            )}
             </div>
         </div>
     );
