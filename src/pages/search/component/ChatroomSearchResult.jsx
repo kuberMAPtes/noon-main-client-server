@@ -1,16 +1,5 @@
-import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../../../assets/css/module/search/component/ChatroomSearchResult.css";
-
-const SAMPLE_DATA = []
-
-for (let i = 0; i <= 5; i++) {
-  SAMPLE_DATA.push({
-    chatroomName: `chatroomName-${i}`,
-    participantCount: i + 13,
-    buildingName: `buildingName-${i}`,
-    roadAddress: `서울시 영등포구`
-  });
-}
 
 /**
  * @param {{
@@ -28,22 +17,22 @@ for (let i = 0; i <= 5; i++) {
  *       chatroomType: string;
  *       chatroomMinTemp: number;
  *     }[]
- *   },
- *   pageCallback: () => void;
+ *   };
+ *   infScrollTargetRef;
  * }} props
  */
 export default function ChatroomSearchResult({
   searchResult,
-  pageCallback
+  infScrollTargetRef
 }) {
   console.log(searchResult);
   return (
-    <div className="list-container">
+    <div className="scroll list-container">
       {
-        searchResult && searchResult.content && searchResult.content.map((data, idx) => (
+        searchResult && searchResult.map((data, idx) => (
           <CharoomSearchResultItem
             key={`chatroom-item-${idx}`}
-            chatroomId={data.chatroomID}
+            chatroomId={data.chatroomId}
             chatroomName={data.chatroomName}
             participantCount={data.participantCount}
             buildingName={data.buildingName}
@@ -51,6 +40,7 @@ export default function ChatroomSearchResult({
             chatroomCreatorId={data.chatroomCreatorId}
             chatroomType={data.chatroomType}
             chatroomMinTemp={data.chatroomMinTemp}
+            infScrollTargetRef={idx + 1 === searchResult.length ? infScrollTargetRef : null}
           />
         ))
       }
@@ -78,10 +68,16 @@ function CharoomSearchResultItem({
   roadAddr,
   chatroomCreatorId,
   chatroomType,
-  chatroomMinTemp
+  chatroomMinTemp,
+  infScrollTargetRef
 }) {
+  const navigate = useNavigate();
   return (
-    <div className="item-container chatroom-item-container">
+    <div
+        className="item-container chatroom-item-container"
+        onClick={() => navigate(`/chat/chatroom?chatroomID=${chatroomId}`)}
+        ref={infScrollTargetRef}
+    >
       <div className="info">
         <h3>{chatroomName}</h3>
         <div className="icon-title">

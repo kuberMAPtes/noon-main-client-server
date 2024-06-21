@@ -28,7 +28,7 @@ const Footer = () => {
             </Link>
           </Col>
           <Col>
-            <Link to="/Footer4">
+            <Link to="/search">
               <FaSearch size={24} />
               <div>검색</div>
             </Link>

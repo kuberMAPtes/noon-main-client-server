@@ -6,5 +6,9 @@ export default function searchChatroom(searchKeyword, page, callback) {
       searchKeyword,
       page
     }
-  }).then((response) => callback(response.data));
+  }).then((response) => callback(response.data.content));
+}
+
+export function isChatroomSearchResultEmpty(data) {
+  return data.content.length === 0;
 }
