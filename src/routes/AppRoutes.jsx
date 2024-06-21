@@ -90,7 +90,7 @@ const AppRoutes = () => {
   }, [location, navigationType]);
 
   return (
-    <TransitionGroup className="transition-wrapper" fluid>
+    <TransitionGroup className="transition-wrapper" fluid="true">
       <CSSTransition
         key={location.pathname}
         timeout={300}
