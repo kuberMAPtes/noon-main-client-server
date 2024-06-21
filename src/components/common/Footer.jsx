@@ -16,7 +16,7 @@ const Footer = () => {
             </Link>
           </Col>
           <Col>
-            <Link to="/Footer2">
+            <Link to="/chat/myChatroomList">
               <FaComments size={24} />
               <div>채팅</div>
             </Link>

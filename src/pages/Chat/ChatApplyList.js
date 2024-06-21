@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { newChatApplyList } from '../../lib/axios_api'
+import { newChatApplyList } from '../Chat/function/axios_api'
 import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux';
 import styles from './ChatApplyList.css';
 
 const ChatApplyList = () => {
+  const member = useSelector((state) => state.auth.member);
+  const authorization = useSelector((state) => state.auth.authorization);
+  const memberID = member.memberId
+
   const [requests, setRequests] = useState([ ]);
   const navigate = useNavigate();
 
   useEffect(() => {
   
-    newChatApplyList('user01') //임시로 유저데이터 넣음 리덕스에서 가져와야함
+    newChatApplyList(memberID)
     .then((dataList)=>{setRequests(dataList);
     })
 
