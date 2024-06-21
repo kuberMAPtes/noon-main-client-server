@@ -6,9 +6,6 @@ import Dropdown from './component/FeedList/FeedDropdown';
 import FeedNotFound from './component/FeedNotFound';
 import Loading from './component/FeedList/FeedLoading';
 
-import Footer from '../../components/common/Footer';
-import BasicNavbar from '../../components/common/BasicNavbar';
-
 import './css/FeedList.css';
 import axios_api from '../../lib/axios_api';
 import { useSelector } from 'react-redux';

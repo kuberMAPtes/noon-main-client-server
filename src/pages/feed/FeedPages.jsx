@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import BasicNavbar from '../../components/common/BasicNavbar';
 import Footer from "../../components/common/Footer";
 import FeedListPage from "./FeedListPage";
-import PrivateRoute from "../../routes/PrivateRoute";
+import FeedBuildingListPage from "./FeedBuildingListPage";
 
 /**
  * 테스트용 페이지, 개발이 어느정도 완료되면 삭제할 예정
@@ -28,12 +28,10 @@ const FeedPages = () => {
             <li>
               <Link to="form">Feed Form</Link>
             </li>
-            <li>
-              <Link to="main?memberId=member_1&page=1">Feed Main Page</Link>
-            </li>
           </ul>
         </nav>
         <FeedListPage/>
+        <FeedBuildingListPage/>
         <div>
           <Footer />
         </div>

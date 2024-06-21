@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import FeedItem from './component/FeedList/FeedItem';
-import Dropdown from './component/FeedList/FeedDropdown';
 import FeedNotFound from './component/FeedNotFound';
 import Loading from './component/FeedList/FeedLoading';
 
@@ -68,6 +67,8 @@ const FeedBuildingListPage = () => {
                 setRanking([]);
             } else {
                 setRanking((prevFeeds) => [...prevFeeds, ...response.data]); // 기존의 끝에 추가
+
+                console.log(response.data);
             }
         } catch (e) {
             console.log(e);

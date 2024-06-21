@@ -5,7 +5,7 @@ import { Card, CardBody, CardImg, CardText, CardTitle } from 'react-bootstrap';
 import { FaHeart, FaRegHeart, FaBookmark, FaRegBookmark } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { toggleLike, toggleBookmark } from '../../axios/FeedAxios';
-import Navigator from '../../util/Navigator'
+import useNavigator from '../../util/Navigator'
 
 const FeedItem = ({ data, memberId }) => {
 
@@ -27,7 +27,7 @@ const FeedItem = ({ data, memberId }) => {
     const [liked, setLiked] = useState(like);
     const [bookmarked, setBookmarked] = useState(bookmark);
 
-    const {goToMemberProfile, goToBuildingProfile, goToFeedDetail} = Navigator();
+    const {goToMemberProfile, goToBuildingProfile, goToFeedDetail} = useNavigator();
 
     // 데이터 처리
     const writtenTimeReplace = data.writtenTime.replace('T', ' ');
