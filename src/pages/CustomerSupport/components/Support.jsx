@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import axiosInstance from '../../../lib/axiosInstance';
-
+import { useSelector } from 'react-redux';
 import ClickableCard from "./ClickableCard"
 
-// reactstrap components
 import {
   Card,
   CardHeader,
@@ -20,39 +17,16 @@ import "../css/customerSupport.css"
 
 const Support = ({ isAdmin }) => {
 
-
-  //회원 아이디(테스트용 임시데이터)
-  const [memberId, setMemberId] = useState("member_1");
-  const [role, setRole] = useState("member");
-
-  //회원 아이디(실제 데이터. 리덕스 상태값)
-  //const memberId = useSelector((state) => state.auth.memberId);
-
-
-
-
-  
-  //회원의 role 체크
-  const getRole = async () =>{
-
-    const response = await axiosInstance.post(`/member/getMember`, { 
-      memberId: memberId   
-    }); 
-
-    console.log("role: "+response.data.role);
-    setRole(response.data.role);
-    
-  }
-
-
+  const member = useSelector((state) => state.auth.member);
+  const [role, setRole] = useState("ADMIN");
 
 
   useEffect(() => {
 
-      getRole();
+  //  setRole(member.memberRole);
+    console.log('현재 회원의 역할은: '+member.memberRole);
 
   }, []); 
-
 
 
 
@@ -61,7 +35,7 @@ const Support = ({ isAdmin }) => {
     <div className="support">
       <Row>
 
-        { role === "admin" ? (
+        { role === "ADMIN" ? (
           <>
             <ClickableCard
               path="./getNoticeList"

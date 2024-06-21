@@ -60,8 +60,8 @@ const GetListReport = () => {
               <Table responsive>
                 <thead className="text-primary">
                   <tr>
-                    <th className="text-right">신고 ID</th>
-                    <th className="text-right">신고자 ID</th>
+                    <th className="text-right">ID</th>
+                    <th className="text-right">신고자</th>
                     <th className="text-right">신고일자</th>
                     <th className="text-right">신고상태</th>
                   </tr>
