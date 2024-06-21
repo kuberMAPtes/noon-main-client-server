@@ -19,7 +19,6 @@ const MessageModal = ({ isOpen, toggle, message }) => {
       </ModalBody>
       <ModalFooter>
         <Button color="primary" onClick={handleConfirm}>확인</Button>
-        <Button color="primary" onClick={toggle}>확인</Button>
       </ModalFooter>
     </Modal>
   );
