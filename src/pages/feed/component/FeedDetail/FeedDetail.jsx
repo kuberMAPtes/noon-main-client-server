@@ -133,14 +133,15 @@ const FeedDetail = ({ data, memberId }) => {
                             {title}
                         </CardTitle>
                     <CardText>{feedText}</CardText>
-                    <div className="tags">
-                        {tags.map((tag) => (
-                            <Badge className='tag' key={tag.tagId} color="primary">
-                                {tag.tagText}
-                            </Badge>
-                        ))}
-                    </div>
-                    
+                    { tags && tags.length > 0 && (
+                        <div className="tags">
+                            {tags.map((tag) => (
+                                    <Badge className='tag' key={tag.tagId} color="primary">
+                                        {tag.tagText}
+                                    </Badge>
+                                ))}
+                        </div>
+                    )}
                     {/* Body */}
                     <div className="feed-stats">
                         <p onClick={handleShowLikedUsersClick} style={{ cursor: 'pointer' }}
