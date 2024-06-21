@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import CustomerSupportHeader from './components/CustomerSupportHeader';
 import ImageGrid from './components/OneImage';
 import '../CustomerSupport/css/image-grid.css';
@@ -44,7 +43,7 @@ const ListImages = () => {
   }, [filterTab]);
 
   return (
-    <div style={styles.container}>
+    <div>
       <CustomerSupportHeader title={filterTab === "all" ? '모든 피드 사진 목록' : '유해 피드 사진 목록'} />
       <div style={styles.tabs}>
         <button
@@ -76,22 +75,11 @@ const ListImages = () => {
 };
 
 const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    padding: '10px',
-    backgroundColor: '#FFFFF0',
-    color: '#FFFFF0',
-    minHeight: '100vh',
-    width: '100%',
-    boxSizing: 'border-box',
-  },
   tabs: {
     display: 'flex',
     justifyContent: 'space-around',
     width: '100%',
-    marginBottom: '10px',
+    /*marginBottom: '10px',*/
   },
   tabButton: {
     backgroundColor: 'transparent',
@@ -100,7 +88,8 @@ const styles = {
     fontSize: '20px',
   },
   activeTab: {
-    borderBottom: '2px solid #000',
+    borderBottom: '2.5px solid #030722',
+    width: '25%', 
   },
   grid: {
     width: '100%',

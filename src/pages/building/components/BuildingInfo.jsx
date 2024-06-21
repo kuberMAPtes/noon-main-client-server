@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate} from 'react-router-dom';
 import axiosInstance from '../../../lib/axiosInstance';
 import { useSelector } from 'react-redux';
 
@@ -20,11 +20,10 @@ import {
 
 const BuildingInfo = () => {
 
-    //회원 아이디(테스트용 임시데이터)
-    const [memberId, setMemberId] = useState("member_1");
+    const navigate = useNavigate();
     
-    //회원 아이디(실제 데이터. 리덕스 상태값)
-    //const memberId = useSelector((state) => state.auth.memberId);
+    //회원 정보
+    const member = useSelector((state) => state.auth.member);
 
     //회원의 구독 여부
     const [subscription, setSubscription] = useState(false);
@@ -75,12 +74,15 @@ const BuildingInfo = () => {
     const getSubscriptionStatus = async () =>{
 
       const response = await axiosInstance.get(`/buildingProfile/getMemberSubscriptionList`, {
-        params: { memberId: memberId }  // 현재 회원의 아이디 가져오도록 수정해야함
+        params: { memberId: member.memberId } 
       }); 
+
+      console.log("회원의 구독 여부 확인");
 
       const buildingIds = response.data.map(building => building.buildingId);
       if (buildingIds.includes(Number(buildingId))) {
         setSubscription(true);
+        console.log("구독 중인 건물입니다.");
       }
       
     }
@@ -94,7 +96,7 @@ const BuildingInfo = () => {
           try {
             
             const response = await axiosInstance.post('/buildingProfile/deleteSubscription', {
-              memberId: memberId, // 현재 회원의 아이디 가져오도록 수정해야함
+              memberId: member.memberId, 
               buildingId: buildingId 
             });
             setSubscription(response.data.activated);
@@ -109,7 +111,7 @@ const BuildingInfo = () => {
           try {
 
             const response = await axiosInstance.post('/buildingProfile/addSubscription', { 
-              memberId: memberId, // 현재 회원의 아이디 가져오도록 수정해야함
+              memberId: member.memberId, // 현재 회원의 아이디 가져오도록 수정해야함
               buildingId: buildingId 
             });
             setSubscription(response.data.activated);
@@ -123,6 +125,19 @@ const BuildingInfo = () => {
         }
       
     }
+
+
+
+    const getWikipage = () => {
+      const baseUrl = process.env.REACT_APP_WIKI_BASE_URL;
+      if (!baseUrl) {
+          console.error("REACT_APP_WIKI_BASE_URL is not defined");
+          return;
+      }
+      const url = `${baseUrl}sample`; // 테스트를 위해 sample로. 추후 수정 `${baseUrl}${buildingId}`
+      window.location.href = url;
+    };
+
 
     
     useEffect(() => {
@@ -175,7 +190,7 @@ const BuildingInfo = () => {
                         </Button>
                     </Col>
                     <Col md="4">
-                          <Button block color="primary">
+                          <Button block color="primary" onClick={getWikipage}>
                             건물 위키 보기
                           </Button>
                         </Col>
