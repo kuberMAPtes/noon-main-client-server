@@ -4,6 +4,8 @@ import { useState } from 'react';
 import SlideUpModal from "./component/FeedForm/SlideUpModal";
 import BasicNavbar from "../../components/common/BasicNavbar";
 import { Button } from "react-bootstrap";
+import { useSearchParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 /**
  * 피드를 추가 및 수정한다.
@@ -13,6 +15,14 @@ const FeedFormPage = () => {
     const [feeds, setFeeds] = useState([]);
     const [selectedFeed, setSelectedFeed] = useState(null);
     const [showModal, setShowModal] = useState(false);
+    const [searchParams] = useSearchParams();
+    // 1. memberId
+    const memberIdFromStore = useSelector((state) => state.auth.member.memberId);
+    const memberIdFromURL = searchParams.get('memberId');
+    const writerId = memberIdFromStore || memberIdFromURL;
+
+    // 2. buildingId
+    const buildingId = searchParams.get('buildingId');
 
     const handleSave = (feed) => {
         if (selectedFeed) {
@@ -41,18 +51,8 @@ const FeedFormPage = () => {
                 <SlideUpModal show={showModal} onHide={() => setShowModal(false)} />
             </div>
 
-            <FeedForm existingFeed={selectedFeed} onSave={handleSave} />
-
-            <div className="feed-list">
-                {feeds.map(feed => (
-                    <div key={feed.id} className="feed-item">
-                        <div className="feed-info">
-                            <span>{feed.title} - {feed.writerNickname}</span>
-                            <button onClick={() => handleEdit(feed)}>Edit</button>
-                        </div>
-                    </div>
-                ))}
-            </div>
+            <FeedForm existingFeed={selectedFeed} onSave={handleSave} inputWriterId={writerId} inputBuildingId = {buildingId}/>
+            
             <div>
             <Footer />
             </div>

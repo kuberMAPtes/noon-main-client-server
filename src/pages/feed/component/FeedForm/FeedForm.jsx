@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Card, ListGroup, Container, Badge } from 'react-bootstrap';
-import axios from 'axios';  // axios import 추가
 import "../../css/FeedForm.css";
+import axios_api from '../../../../lib/axios_api';
 
-const FeedForm = ({ existingFeed, onSave }) => {
+const FeedForm = ({ existingFeed, onSave, inputWriterId, inputBuildingId }) => {
     const [feedData, setFeedData] = useState({
+        writerId: inputWriterId,
+        mainActivate: false,
+        viewCnt: 0,
+        writtenTime: '',  // 현재 시간
+        modified : false,
         title: '',
         feedText: '',
-        tags: [],
-        category: '',
-        publicRange: '',
+        updateTagList: [],
+        category: 'GENERAL',
+        publicRange: 'PUBLIC',
         attachments: []
     });
     const [tagInput, setTagInput] = useState(''); // 태그 추가
@@ -19,9 +24,9 @@ const FeedForm = ({ existingFeed, onSave }) => {
             setFeedData({
                 title: existingFeed.title,
                 feedText: existingFeed.feedText,
-                tags: existingFeed.tags || [],
-                category: existingFeed.category,
-                publicRange: existingFeed.publicRange,
+                updateTagList : existingFeed.tags || [],
+                category: existingFeed.category || 'GENERAL',
+                publicRange: existingFeed.publicRange || 'PUBLIC',
                 attachments: existingFeed.attachments || []
             });
         } else {
@@ -29,8 +34,8 @@ const FeedForm = ({ existingFeed, onSave }) => {
                 title: '',
                 feedText: '',
                 tags: [],
-                category: '',
-                publicRange: '',
+                category: 'GENERAL',
+                publicRange: 'PUBLIC',
                 attachments: []
             });
         }
@@ -46,27 +51,37 @@ const FeedForm = ({ existingFeed, onSave }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         try {
-            // 먼저 피드 데이터를 전송합니다.
-            const feedResponse = await axios.post('/api/feed', {
+            const addFeedData = {
+                writerId: inputWriterId,
+                buildingId : inputBuildingId,
+                mainActivate: false,
+                viewCnt: 0,
+                writtenTime: new Date(),
+                modified : false,
                 title: feedData.title,
                 feedText: feedData.feedText,
-                tags: feedData.tags,
-                category: feedData.category,
+                updateTagList: [],
+                feedCategory: feedData.category,
                 publicRange: feedData.publicRange
-            });
+            };
 
-            const feedId = feedResponse.data.id;
+            console.log(addFeedData);
 
-            // 파일 업로드를 위해 FormData를 생성합니다.
-            const formData = new FormData();
+            // 먼저 피드 데이터를 전송
+            const feedResponse = await axios_api.post('/feed/addFeed', addFeedData);
+
+            const feedId = feedResponse.data;
+
+            // 파일 업로드를 위해 FormData를 생성
+            const formData  = new FormData();
             feedData.attachments.forEach((file) => {
-                formData.append('files', file);
+                formData.append('multipartFile', file);
             });
 
-            // 첨부파일을 업로드합니다.
-            await axios.post(`/api/feed/${feedId}/attachments`, formData, {
+            // 첨부파일을 업로드
+            await axios_api.post(`/feed/addFeedAttachment/${feedId}`, formData , {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -84,8 +99,8 @@ const FeedForm = ({ existingFeed, onSave }) => {
             title: '',
             feedText: '',
             tags: [],
-            category: '',
-            publicRange: '',
+            category: 'GENERAL',
+            publicRange: 'PUBLIC',
             attachments: []
         });
     };
