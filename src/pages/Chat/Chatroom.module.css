@@ -43,70 +43,76 @@
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  padding: 0 20px 20px 20px; /* 상단 패딩을 0으로 설정 */
   background-color: #f7f7f7;
   overflow-y: auto; /* 채팅 메시지가 넘칠 경우 스크롤 표시 */
 }
 
+.messages {
+  flex-grow: 1; /* 메시지 영역이 가능한 한 크게 확장됨 */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; /* 메시지가 아래에서부터 쌓이도록 설정 */
+  overflow-y: auto; /* 메시지가 많아지면 스크롤 */
+}
+
 .message {
-  margin-bottom: 10px;
+  margin: 5px 0; /* 메시지 간 간격을 줄임 */
   padding: 10px;
-  border-radius: 10px;
+  border-radius: 20px;
+  display: inline-block;
 }
 
-.mine-message {
-  background-color: #e1ffc7; /* 내가 보낸 메시지 */
-  text-align: right;
-  align-self: flex-end;
-  max-width: 65%; /* 최대 너비를 설정하여 텍스트에 맞게 배경색이 적용되도록 함 */
-  margin-left: auto; /* 왼쪽 여백을 자동으로 조정하여 오른쪽 정렬이 되도록 함 */
-  white-space: pre-wrap; /* 공백을 조절하는 css, 개행 유지 */
+.mineMessage {
+  background-color: #fff9ab; /* 내가 보낸 메시지 배경색 */
+  color: #333; /* 내가 보낸 메시지 텍스트 색상 */
+  align-self: flex-end; /* 오른쪽 정렬 */
+  max-width: 70%; /* 최대 너비 설정 */
+  text-align: right; /* 텍스트 오른쪽 정렬 */
 }
 
-.other-message {
-  background-color: #ffffff; /* 다른 사람이 보낸 메시지 */
-  border: 1px solid #ddd;
-  text-align: left;
-  align-self: flex-start;
-  max-width: 65%; /* 최대 너비를 설정하여 텍스트에 맞게 배경색이 적용되도록 함 */
-  white-space: pre-wrap; /* 공백을 조절하는 css, 개행 유지 */
+.otherMessage {
+  background-color: #ffffff; /* 다른 사람이 보낸 메시지 배경색 */
+  border: 1px solid #ddd; /* 테두리 설정 */
+  color: #333; /* 다른 사람이 보낸 메시지 텍스트 색상 */
+  align-self: flex-start; /* 왼쪽 정렬 */
+  max-width: 70%; /* 최대 너비 설정 */
+  text-align: left; /* 텍스트 왼쪽 정렬 */
 }
 
-.notice-message {
-  background-color: #f0f0f0; /* 공지 메시지 */
-  text-align: center;
+.noticeMessage {
+  background-color: #f0f0f0; /* 공지 메시지 배경색 */
+  text-align: center; /* 가운데 정렬 */
 }
 
 .message p {
-  margin: 0;
+  margin: 5px 10px; /* 메시지 위 아래 여백 조정 */
+  font-size: 14px; /* 텍스트 사이즈 조정 */
+  white-space: pre-wrap; /* 공백을 조절하는 css, 개행 유지 */
 }
 
-input {
-  width: 75%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 20px;
-  margin-right: 10px;
-  box-sizing: border-box;
-  outline: none;
+.message .meta {
+  font-size: 10px;
+  color: #999;
+  margin-top: 5px;
+  text-align: right;
 }
 
-button {
-  width: 20%;
-  padding: 10px;
-  border: none;
-  border-radius: 20px;
-  background-color: #ffeb3b;
-  color: #333;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  outline: none;
+.message .sender {
+  margin-right: 5px;
+  font-weight: bold;
 }
 
-button:hover {
-  background-color: #fdd835;
+.liveIndicator {
+  width: 10px;
+  height: 10px;
+  background-color: rgb(95, 235, 95);
+  border-radius: 50%;
+  margin-left: 5px;
+  animation: blink 1s infinite;
 }
 
-button:active {
-  background-color: #fbc02d;
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }

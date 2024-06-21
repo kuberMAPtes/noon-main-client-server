@@ -3,7 +3,7 @@ import './ChatRoomCreation.css';
 import { useNavigate  } from 'react-router-dom';
 import { addChatroom } from '../../lib/axios_api'
 import { addChatroomData } from '../../store/store';
-import { useDispatch } from 'react-redux';
+import { useDispatch , useSelector } from 'react-redux';
 
 const ChatRoomCreation = () => {
     const [dajungMinTemp, setDajungMinTemp] = useState('');
@@ -11,10 +11,9 @@ const ChatRoomCreation = () => {
     const [chatroomName, setChatRoomName] = useState('');
     const dispatch = useDispatch();
 
-    const loggedInUserTestInfo = {
-        userId: '12345',
-        token: 'your-token-here'
-    };
+    const member = useSelector((state) => state.auth.member);
+    const authorization = useSelector((state) => state.auth.authorization);
+    const memberID = member.memberId
 
     const navigate = useNavigate();
 
@@ -26,7 +25,7 @@ const ChatRoomCreation = () => {
             chatroomMinTemp: parseFloat(dajungMinTemp),
             chatroomMaxTemp: parseFloat(dajungMaxTemp),
             chatroomName : chatroomName,
-            chatroomCreatorId: loggedInUserTestInfo.userId,
+            chatroomCreatorId: memberID,
             chatroomType: 'GROUP_CHATTING'
         };
 

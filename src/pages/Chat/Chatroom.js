@@ -2,30 +2,20 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import io from 'socket.io-client';
 import module from './Chatroom.module.css'; // 스타일 파일을 import 합니다
-import { getChatroom } from '../../lib/axios_api';
+import { getChatroom } from '../Chat/function/axios_api'
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useNavigate  } from 'react-router-dom';
-import ActiveChatroomChecker from './function/ActiveChatroomChecker';
 
-////////// 임시로 member Id를 만듦 /////////////
-function generateRandomNickname() {
-  const adjectives = ['Red', 'Blue', 'Green', 'Yellow', 'Silver', 'Golden', 'Clever', 'Swift', 'Wise', 'Brave'];
-  const nouns = ['Fox', 'Wolf', 'Eagle', 'Lion', 'Tiger', 'Bear', 'Snake', 'Dragon', 'Phoenix', 'Knight']; 
-  const emoji = ['😺','🙉','🦁','🐺','🦒','🦊','🐯','🐰','🦝','🐷','🐻','🐻‍❄️','🐼','🐨','🦓','🐔','🦄','🫏','🐽']
-  const randomAdjective = adjectives[Math.floor(Math.random() * adjectives.length)];
-  const randomNoun = nouns[Math.floor(Math.random() * nouns.length)];
-  const randomEmoji = emoji[Math.floor(Math.random() * nouns.length)];
-
-  return randomEmoji + ' ' +randomAdjective +' ' + randomNoun;
-}
-const randomNickname = generateRandomNickname();
-
-const memberID = randomNickname;
-
-////////////////////////////////////////////////
 
 const Chatroom = () => {
+  const member = useSelector((state) => state.auth.member);
+  const authorization = useSelector((state) => state.auth.authorization);
+  const memberID = member.memberId
+
+  console.log("member", member)
+  console.log("authorization", authorization);
+
   console.log("\n\n\n🐬 Chatroom 컴포넌트 시작 \n\n\n")
 
   const [receivedMessage, setReceivedMessage] = useState([]); // 소켓에서 수신한 메세지
@@ -66,8 +56,6 @@ const Chatroom = () => {
 
     const socket = socketRef.current;
 
-    // 활발한 채팅방 함수 실행
-    ActiveChatroomChecker(socketRef, roomInfo);
 
     if (Object.keys(roomInfo).length === 0){ //roomInfo 가 null or undefined 일 경우 대비
       console.log("🚨roomInfo 없어서 socket 연결없이 useEffect 종료");
@@ -155,7 +143,7 @@ const Chatroom = () => {
       socket.off('message');
       socket.off('connect');
     };
-  }, [memberID, roomInfo]);
+  }, [roomInfo]);
 
   
   // 소켓에서 열린 실시간 채팅방 과 실시간 채팅유저정보를 받음
@@ -237,7 +225,12 @@ const Chatroom = () => {
           {/* {console.log(participants)} */}
           {participants.map((participant, index) => (
             <div key={index}>
-              <p><strong> memberID:</strong> {participant.chatroomMemberId} ({participant.chatroomMemberType})</p>
+              <p><strong> memberID:</strong> {participant.chatroomMemberId} ({participant.chatroomMemberType})
+              {liveParticipants.includes(participant.chatroomMemberId) && (
+                  <span className={module.liveIndicator}>🟢</span>
+                )}
+              </p>
+            
             </div>
           ))}
         </div>
@@ -257,7 +250,7 @@ const Chatroom = () => {
         <div className={module.chat}>
           <div className={module.messages}>
             {receivedMessage.map((msg, index) => (
-              <div key={index} className={`message ${msg.type === 'mine' ? 'mine-message' : msg.type === 'other' ? 'other-message' : 'notice-message'}`}>
+              <div key={index} className={ msg.type === 'mine' ? module.mineMessage : msg.type === 'other' ? module.otherMessage : module.noticeMessage }>
                 <p>{msg.text}</p>
               </div>
             ))}
