@@ -1,7 +1,7 @@
 import Footer from "../../components/common/Footer";
-import FeedForm from "./component/FeedForm"
+import FeedForm from "./component/FeedForm/FeedForm"
 import { useState } from 'react';
-import SlideUpModal from "./component/SlideUpModal";
+import SlideUpModal from "./component/FeedForm/SlideUpModal";
 import BasicNavbar from "../../components/common/BasicNavbar";
 import { Button } from "react-bootstrap";
 

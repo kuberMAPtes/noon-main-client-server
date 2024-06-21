@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Card, ListGroup, Container, Row, Col } from 'react-bootstrap';
-import "../css/FeedForm.css";
+import { Form, Button, Card, ListGroup, Container, Badge } from 'react-bootstrap';
+import axios from 'axios';  // axios import 추가
+import "../../css/FeedForm.css";
 
 const FeedForm = ({ existingFeed, onSave }) => {
     const [feedData, setFeedData] = useState({
@@ -11,6 +12,7 @@ const FeedForm = ({ existingFeed, onSave }) => {
         publicRange: '',
         attachments: []
     });
+    const [tagInput, setTagInput] = useState(''); // 태그 추가
 
     useEffect(() => {
         if (existingFeed) {
@@ -42,14 +44,39 @@ const FeedForm = ({ existingFeed, onSave }) => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const updatedFeed = {
-            ...existingFeed,
-            ...feedData,
-            tags: feedData.tags
-        };
-        onSave(updatedFeed);
+        
+        try {
+            // 먼저 피드 데이터를 전송합니다.
+            const feedResponse = await axios.post('/api/feed', {
+                title: feedData.title,
+                feedText: feedData.feedText,
+                tags: feedData.tags,
+                category: feedData.category,
+                publicRange: feedData.publicRange
+            });
+
+            const feedId = feedResponse.data.id;
+
+            // 파일 업로드를 위해 FormData를 생성합니다.
+            const formData = new FormData();
+            feedData.attachments.forEach((file) => {
+                formData.append('files', file);
+            });
+
+            // 첨부파일을 업로드합니다.
+            await axios.post(`/api/feed/${feedId}/attachments`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            onSave(feedResponse.data); // 저장 후 처리할 함수 호출
+            console.log('피드가 성공적으로 저장되었습니다:', feedResponse.data);
+        } catch (error) {
+            console.error('피드 저장 중 오류 발생:', error);
+        }
     };
 
     const handleCancel = () => {
@@ -63,6 +90,7 @@ const FeedForm = ({ existingFeed, onSave }) => {
         });
     };
 
+    // 첨부파일 변경, 삭제에 대하여
     const handleFileChange = (e) => {
         const files = Array.from(e.target.files);
         setFeedData(prevState => ({
@@ -74,6 +102,26 @@ const FeedForm = ({ existingFeed, onSave }) => {
     const handleFileRemove = (fileName) => {
         const updatedFiles = feedData.attachments.filter((file) => file.name !== fileName);
         setFeedData({ ...feedData, attachments: updatedFiles });
+    };
+
+    const isImageOrVideo = (file) => {
+        return file.type.startsWith('image/') || file.type.startsWith('video/');
+    };
+
+    // 태그 추가, 변경, 삭제에 대하여
+    const handleTagAdd = () => {
+        if (tagInput.trim() !== '') {
+            setFeedData(prevState => ({
+                ...prevState,
+                tags: [...prevState.tags, tagInput.trim()]
+            }));
+            setTagInput('');
+        }
+    };
+
+    const handleTagRemove = (tag) => {
+        const updatedTags = feedData.tags.filter(t => t !== tag);
+        setFeedData({ ...feedData, tags: updatedTags });
     };
 
     return (
@@ -115,7 +163,11 @@ const FeedForm = ({ existingFeed, onSave }) => {
                             <ListGroup className="file-list mt-3">
                                 {feedData.attachments.map((file, index) => (
                                     <ListGroup.Item key={index} className="d-flex justify-content-between align-items-center">
-                                        {file.name}
+                                        {isImageOrVideo(file) ? (
+                                            <img src={URL.createObjectURL(file)} alt={file.name} style={{ maxWidth: '50px', maxHeight: '50px' }} />
+                                        ) : (
+                                            <span>{file.name}</span>
+                                        )}
                                         <Button variant="danger" size="sm" onClick={() => handleFileRemove(file.name)}>삭제</Button>
                                     </ListGroup.Item>
                                 ))}
@@ -127,11 +179,18 @@ const FeedForm = ({ existingFeed, onSave }) => {
                             <div className="d-flex">
                                 <Form.Control
                                     type="text"
-                                    name="tags"
-                                    value={feedData.tags}
-                                    onChange={handleChange}
+                                    value={tagInput}
+                                    onChange={(e) => setTagInput(e.target.value)}
+                                    placeholder="태그를 입력하세요"
                                 />
-                                <Button className="ml-2">추가</Button>
+                                <Button className="ml-2" onClick={handleTagAdd}>추가</Button>
+                            </div>
+                            <div className="mt-2">
+                            {Array.isArray(feedData.tags) && feedData.tags.map((tag, index) => (
+                                <Badge key={index} pill variant="primary" className="mr-2">
+                                    {tag} <span className="badge-close" onClick={() => handleTagRemove(tag)}>×</span>
+                                </Badge>
+                            ))}
                             </div>
                         </Form.Group>
 
