@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import "../../../assets/css/module/search/component/FeedSearchResult.css";
 
 const MINUTE = 60;
@@ -67,6 +68,7 @@ export default function FeedSearchResult({
 function FeedSearchResultItem({
   feedId, writer, writtenTime, title, text, buildingName, thumbnailUrl
 }) {
+  const navigate = useNavigate();
   const periodInSeconds = (new Date() - writtenTime) / 1000;
   let timeDisplay;
 
@@ -81,7 +83,10 @@ function FeedSearchResultItem({
   }
 
   return (
-    <div className="item-container">
+    <div
+        className="item-container"
+        onClick={() => navigate(`/feed/detail?feedId=${feedId}`)}
+    >
       <div className="feed-info">
         <div className="feed-metadata">
           <div className="sub-info">
