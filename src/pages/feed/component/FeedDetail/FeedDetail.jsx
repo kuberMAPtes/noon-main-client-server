@@ -7,15 +7,18 @@ import { FaBookmark, FaHeart, FaRegBookmark, FaRegHeart, FaCommentAlt, FaRegEye,
 import { MdDelete } from "react-icons/md";
 import LikedUsersList from './LikedUsersList';
 import axios_api from '../../../../lib/axios_api';
+import Navigator from '../../util/Navigator'
 
 const FeedDetail = ({ data, memberId }) => {
     const {
         feedId,
         title,
+        writerId,
         writerNickname,
         writerProfile,
         writtenTime,
         feedText,
+        buildingId,
         buildingName,
         like,
         likeCount,
@@ -33,6 +36,8 @@ const FeedDetail = ({ data, memberId }) => {
     const [bookmarked, setBookmarked] = useState(bookmark); // 북마크 여부
 
     const writtenTimeReplace = data.writtenTime.replace('T', ' '); // 날짜 포멧팅
+
+    const {goToMemberProfile, goToBuildingProfile} = Navigator();
 
     // 댓글 추가 관리
     const [newComment, setNewComment] = useState('');
@@ -87,7 +92,6 @@ const FeedDetail = ({ data, memberId }) => {
     const handleShowLikedUsersClick = () => {
         setShowLikedUsers(!showLikedUsers); // 리스트 표시 여부 토글
     }
-
     // 댓글 삭제
     const handleDeleteComment = async (commentId) => {
         setCommentList(commentList.filter(comment => comment.commentId !== commentId));
@@ -104,7 +108,6 @@ const FeedDetail = ({ data, memberId }) => {
         }
     }
 
-
     return (
         <div className="container">
             <Card>
@@ -113,7 +116,7 @@ const FeedDetail = ({ data, memberId }) => {
                     <div className="d-flex justify-content-between align-items-center">
                         <div className="d-flex align-items-center">
                             <Image src={writerProfile || 'https://via.placeholder.com/50'} roundedCircle width="50" height="50" className="mr-3" />
-                            <div>&nbsp; {writerNickname}</div>
+                            <div onClick={() => goToMemberProfile(writerId)} style={{ cursor: 'pointer', display: 'inline' }}>&nbsp; {writerNickname}</div>
                         </div>
                         <div>
                             <span onClick={handleLikeClick} style={{ cursor: 'pointer', marginRight: '10px' }}>
@@ -126,7 +129,7 @@ const FeedDetail = ({ data, memberId }) => {
                     </div>
                     <br/>
                     <CardSubtitle>
-                        {writtenTimeReplace} | {buildingName}  
+                        {writtenTimeReplace} | <div onClick={() => goToBuildingProfile(buildingId)} style={{ cursor: 'pointer', display: 'inline' }}>{buildingName}</div>  
                     </CardSubtitle>
                     <br/>
                     <CardTitle tag="h2">

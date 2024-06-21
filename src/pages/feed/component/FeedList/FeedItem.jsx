@@ -5,6 +5,7 @@ import { Card, CardBody, CardImg, CardText, CardTitle } from 'react-bootstrap';
 import { FaHeart, FaRegHeart, FaBookmark, FaRegBookmark } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { toggleLike, toggleBookmark } from '../../axios/FeedAxios';
+import Navigator from '../../util/Navigator'
 
 const FeedItem = ({ data, memberId }) => {
 
@@ -12,7 +13,9 @@ const FeedItem = ({ data, memberId }) => {
         feedId,
         title,
         feedText,
+        buildingId,
         buildingName,
+        writerId,
         writerNickname,
         like,
         bookmark,
@@ -24,14 +27,11 @@ const FeedItem = ({ data, memberId }) => {
     const [liked, setLiked] = useState(like);
     const [bookmarked, setBookmarked] = useState(bookmark);
 
+    const {goToMemberProfile, goToBuildingProfile, goToFeedDetail} = Navigator();
+
     // 데이터 처리
     const writtenTimeReplace = data.writtenTime.replace('T', ' ');
 
-    // 상세보기 페이지로 이동
-    const navigate = useNavigate();
-    const handleCardClick = () => {
-        navigate(`/feed/detail?memberId=${memberId}&feedId=${feedId}`);
-    }
 
     const handleLikeClick = () => {
         toggleLike(liked, setLiked, feedId, memberId);
@@ -47,7 +47,7 @@ const FeedItem = ({ data, memberId }) => {
                 <CardBody>
                     {/* Header */}
                     <div className="d-flex justify-content-between align-items-center">
-                        <CardTitle tag="h2" onClick={handleCardClick} style={{ cursor: 'pointer' }}>
+                        <CardTitle tag="h2" onClick={() => goToFeedDetail(memberId, feedId)} style={{ cursor: 'pointer' }}>
                             {title}
                         </CardTitle>
                         <div>
@@ -69,7 +69,8 @@ const FeedItem = ({ data, memberId }) => {
                     </CardText>
                     <CardText>
                         <small className="text-muted">
-                            {writerNickname} | {buildingName}
+                            <div onClick={() => goToMemberProfile(writerId)} style={{ cursor: 'pointer', display: 'inline' }}>{writerNickname}</div> 
+                            &nbsp;|&nbsp;<div onClick={() => goToBuildingProfile(buildingId)} style={{ cursor: 'pointer', display: 'inline' }}>{buildingName}</div>
                         </small>
                     </CardText>
                 </CardBody>
