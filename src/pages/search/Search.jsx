@@ -1,5 +1,5 @@
 import { useState } from "react";
-import SearchBar from "../../components/common/SearchBar";
+import SearchBar, { PARAM_KEY_SEARCH_KEYWORD } from "../../components/common/SearchBar";
 import SearchModeTab, { modes } from "./component/SearchModeTab";
 import FeedSearchResult from "./component/FeedSearchResult";
 import BuildingSearchResult from "./component/BuildingSearchResult";
@@ -10,10 +10,17 @@ import searchBuilding from "./axios/searchBuilding";
 import searchChatroom from "./axios/searchChatroom";
 import searchMember from "./axios/searchMember";
 import "../../assets/css/module/search/Search.css";
+import { useSearchParams } from "react-router-dom";
+
+
+const PARAM_KEY_SEARCH_MODE = "search-mode";
 
 export default function Search() {
-  const [searchKeyword, setSearchKeyword] = useState("");
-  const [currentSearchMode, setCurrentSearchMode] = useState(modes.INTEGRATION);
+  const [queryParams, setQueryParams] = useSearchParams();
+  
+  const [searchKeyword, setSearchKeyword] = useState(queryParams.has(PARAM_KEY_SEARCH_KEYWORD) ? queryParams.get(PARAM_KEY_SEARCH_KEYWORD) : "");
+  const [currentSearchMode, setCurrentSearchMode] =
+      useState(queryParams.has(PARAM_KEY_SEARCH_MODE) ? parseInt(queryParams.get(PARAM_KEY_SEARCH_MODE)) : modes.INTEGRATION);
   const [searchResult, setSearchResult] = useState({
     2: [],
     3: [],
@@ -53,19 +60,24 @@ export default function Search() {
 
   function onSearch() {
     searchFunction(searchKeyword, page, (data) => {
-      console.log(data);
-      console.log(currentSearchMode);
+      queryParams.set(PARAM_KEY_SEARCH_KEYWORD, searchKeyword);
+      setQueryParams(queryParams);
       const newSearchResult = {...searchResult};
       newSearchResult[currentSearchMode] = data;
-      console.log(newSearchResult);
       setSearchResult(newSearchResult);
     }, SAMPLE_MEMBER);
+  }
+
+  function onModeChange(mode) {
+    setCurrentSearchMode(mode);
+    queryParams.set(PARAM_KEY_SEARCH_MODE, mode);
+    setQueryParams(queryParams);
   }
 
   return (
     <div className="container">
       <SearchBar typeCallback={(text) => setSearchKeyword(text)} searchCallback={onSearch} />
-      <SearchModeTab currentSearchMode={currentSearchMode} onModeChange={(mode) => setCurrentSearchMode(mode)} />
+      <SearchModeTab currentSearchMode={currentSearchMode} onModeChange={onModeChange} />
       {component}
     </div>
   );
