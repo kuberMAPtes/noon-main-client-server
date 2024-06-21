@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import "../../../assets/css/module/search/component/MemberSearchResult.css";
+import { useNavigate } from "react-router-dom";
+import useEncryptId from "../../member/component/common/useEncryptId";
 
 const SAMPLE_DATA = [];
 
@@ -75,8 +77,13 @@ function MemberSearchResultItem({
   follower,
   following
 }) {
+  const navigate = useNavigate();
+  const {encryptedData, ivData} =useEncryptId(memberId);
   return (
-    <div className="member-item-container">
+    <div
+        className="member-item-container"
+        onClick={() => navigate(`/member/getMemberProfile/${encryptedData}/${ivData}`)}
+    >
       <img src={profilePhotoUrl} alt="Profile" />
       <div className="member-name-container">
         <div className="nickname">{nickname}</div>
