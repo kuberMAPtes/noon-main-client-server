@@ -6,6 +6,7 @@ import { FaHeart, FaRegHeart, FaBookmark, FaRegBookmark } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import axios_api from '../../../lib/axios_api';
 
+import profile from "./css/profile.module.css";
 const FeedItemByMember = ({ data, memberId }) => {
 
     const {
@@ -73,7 +74,7 @@ const FeedItemByMember = ({ data, memberId }) => {
     };
 
     return (
-        <div>
+        <div className={`${profile.feedList}`}>
             <Card>
                 <CardBody>
                     {/* Header */}

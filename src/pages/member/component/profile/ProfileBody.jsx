@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Row, Col, Image, ProgressBar } from "react-bootstrap";
+import { Card, Row, Col, Image, ProgressBar, Button } from "react-bootstrap";
 import ProfileStats from "./ProfileStats";
 import ProfileActions from "./ProfileActions";
 import LogoutForm from "../LogoutForm";
@@ -9,6 +9,7 @@ import LogoutForm from "../LogoutForm";
 //> 상위컴포넌트의 커스텀 훅에서 하고 여기서는 받아쓰자.
 const ProfileBody = ({
   toId,
+  fromId,
   profile,
   feeds,
   buildingSubscriptionCount,
@@ -37,20 +38,21 @@ const ProfileBody = ({
       <Card.Body>
         <Row className="mb-3">
           <Col xs={4}>
-            <Image src={profile.profilePhotoUrl || defaultPhotoUrl} roundedCircle className="mb-3" />
+            <Image src={profile.profilePhotoUrl || defaultPhotoUrl} roundedCircle className="mb-3" style={{width:"100%"}} />
 
             <Card.Title>{profile.nickname}</Card.Title>
             <LogoutForm />
           </Col>
           <Col xs={8}>
             <Row>
-              <Col xs={3}>다정 온도 : {dajungTemperature}</Col>
+              <Col xs={3} style={{fontSize:"14px", padding:"0px"}}>다정 온도</Col>
               <Col xs={9}>
                 <div className="d-flex flex-column align-items-center">
                   <ProgressBar
                     now={profile.dajungScore}
                     style={{ width: "100%", height: "1rem" }}
                   />
+                  <div>{dajungTemperature}</div>
                 </div>
               </Col>
             </Row>
@@ -58,13 +60,17 @@ const ProfileBody = ({
               <Col xs={12}>
                 <hr />
               </Col>
-              <Col xs={12}>
-                <br />
-              </Col>
             </Row>
             <Row>
               <Col xs={12}>{profile.profileIntro}</Col>
             </Row>
+            { toId!==fromId && (
+            <Row>
+              <Col xs={12}>
+                <Button style={{width:"49%"}}>그룹채팅방 초대</Button><Button style={{width:"51%"}}>1대1채팅방 초대</Button>
+              </Col>
+            </Row>
+            )}
           </Col>
           <Col xs={12}>
           <hr/>
@@ -78,7 +84,10 @@ const ProfileBody = ({
           followingCount={followingCount}
         />
         
-        <ProfileActions />
+        <ProfileActions 
+          toId={toId}
+          fromId={fromId}
+        />
       </Card.Body>
     </Card>
   );

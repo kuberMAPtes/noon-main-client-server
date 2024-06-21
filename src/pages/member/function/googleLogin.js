@@ -21,8 +21,17 @@ export const handleGoogleLogin = async (dispatch) => {
 
 export const checkRedirectResult = async (dispatch) => {
   console.log("checkRedirectResult 함수 시작");
+
+  if (!auth) {
+    console.error("Firebase auth 객체가 초기화되지 않았습니다.");
+    dispatch(setLoginStatus('failed'));
+    return null;
+  }
+
   const result = await getRedirectResult(auth);
   console.log("getRedirectResult 호출 완료:", result);
+  alert( "getRedirectResult 호출 완료:"+ result);
+
 
   if (result) {
     const credential = GoogleAuthProvider.credentialFromResult(result);

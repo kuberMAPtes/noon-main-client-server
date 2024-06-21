@@ -10,6 +10,8 @@ const UseProfileInfiniteScroll = (hasMore, setPage) => {
         if (entries[0].isIntersecting && hasMore) {
           setPage((prevPage) => prevPage + 1);
         }
+      }, {
+        threshold: 0
       });
       if (node) observer.current.observe(node);
     },

@@ -299,7 +299,7 @@ export const getMemberIdByPhoneNumber = async (phoneNumber) => {
     }
     return response.data.info; //info가 false면 없는 번호라고 하면 됨.
   } catch (error) {
-    console.error("getMemberByPhoneNumber error:", error);
+    // console.error("getMemberByPhoneNumber error:", error); 없는 번호면 그냥 에러를 
     return false;
   }
 };
