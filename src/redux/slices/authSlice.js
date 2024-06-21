@@ -26,6 +26,7 @@ export const login = createAsyncThunk(
         // 카카오 로그인 처리
         //카카오 로그인 로직 시 아이디가 없다면 서버에서 회원가입을 해놓았음.
         console.log("카카오 로그인 처리중 :: loginData:", loginData);
+        alert("카카오 로그인 처리중 :: loginData:" + JSON.stringify(loginData?.member));
         // const response = await axiosInstance.post(`/member/getMember`, loginData?.member);
         const info = await getMember(loginData?.member);
         console.log("카카오 로그인 처리중 response:", info);
@@ -34,6 +35,7 @@ export const login = createAsyncThunk(
         // 구글 로그인 처리
         // 여기서 회원가입도 같이 함.
         console.log("구글 로그인 처리중 :: loginData:", loginData);
+        alert("구글 로그인 처리중 :: loginData:" + JSON.stringify(loginData?.member));
         const info = await googleLogin(loginData?.member); //여기 member에는 authorizeCode도 있음
 
         console.log("구글 로그인 처리중 response:", info);
