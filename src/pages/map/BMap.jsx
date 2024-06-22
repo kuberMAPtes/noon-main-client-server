@@ -36,6 +36,7 @@ export default function BMap() {
   const [currentPosition, setCurrentPosition] = useState(undefined);
   const [subscriptionChecked, setSubscriptionChecked] = useState(true);
   const [popBuildingChecked, setPopBuildingChecked] = useState(true);
+  const [firstEntry, setFirstEntry] = useState(true);
 
   buildingFetchChecked.popBuildingChecked = popBuildingChecked;
   buildingFetchChecked.subscriptionChecked = subscriptionChecked;
@@ -58,10 +59,7 @@ export default function BMap() {
     console.error("Geolocation API not supported");
   }
 
-  useEffect(() => {
-    const mapElement = document.getElementById("map");
-    map = new naver.maps.Map(mapElement);
-
+  function initMap(map) {
     naver.maps.Event.addListener(map, "click", (e) => {
       const latitude = e.latlng.y;
       const longitude = e.latlng.x;
@@ -75,7 +73,27 @@ export default function BMap() {
     naver.maps.Event.addListener(map, "zoom_changed", (e) => {
       fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, buildingFetchChecked.popBuildingChecked, sampleMember);
     });
-    getCurrentPosition(onCurrentPositionAwared, onFailedFetchingPosition);
+  }
+
+  useEffect(() => {
+    const mapElement = document.getElementById("map");
+    getCurrentPosition((coords) => {
+      setCurrentPosition({
+        latitude: coords.latitude,
+        longitude: coords.longitude
+      });
+      map = new naver.maps.Map(mapElement, {
+        center: new naver.maps.LatLng(coords.latitude, coords.longitude)
+      });
+      initMap(map);
+      setFirstEntry(false);
+    }, () => {
+      console.error("Geolocation API not supported");
+      map = new naver.maps.Map(mapElement);
+      initMap(map);
+      setFirstEntry(false);
+    });
+    
     if (!intervalId) {
       intervalId = window.setInterval(() => {
         getCurrentPosition(onCurrentPositionAwared, onFailedFetchingPosition);
@@ -87,12 +105,15 @@ export default function BMap() {
       memberMarker = undefined;
       popBuildingMarkers = undefined;
       buildingSubscriptionMarkers = undefined;
+      map = undefined;
     }
   }, []);
 
   useEffect(() => {
-    fetchBuildingMarkers(subscriptionChecked, popBuildingChecked, sampleMember);
-  }, [popBuildingChecked, subscriptionChecked]);
+    if (!firstEntry) {
+      fetchBuildingMarkers(subscriptionChecked, popBuildingChecked, sampleMember);
+    }
+  }, [popBuildingChecked, subscriptionChecked, firstEntry]);
 
   useEffect(() => {
     if (currentPosition) { 
