@@ -115,9 +115,7 @@ const GetNotice = () => {
               <Card>
                 <CardHeader>내용</CardHeader>
                 <CardBody>
-                  <div>
-                    {notice.feedText}
-                  </div>
+                  <div dangerouslySetInnerHTML={{ __html: notice.feedText }} />
                 </CardBody>
               </Card>
 
