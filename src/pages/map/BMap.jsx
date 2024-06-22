@@ -105,7 +105,6 @@ export default function BMap() {
       memberMarker = undefined;
       popBuildingMarkers = undefined;
       buildingSubscriptionMarkers = undefined;
-      map = undefined;
     }
   }, []);
 
@@ -181,10 +180,14 @@ function searchPlaceList(searchKeyword, callback, queryParams, setQueryParams) {
  * }[]} places 
  */
 function onFetchPlace(places) {
+  console.log(places);
   places.forEach((place) => {
     const contentHtml = getPlaceSearchMarkerHtml(place.roadAddress, place.placeName);
     addMarker(contentHtml, place.latitude, place.longitude);
-  })
+  });
+  if (places?.length > 0) {
+    map.setCenter(new naver.maps.LatLng(places[0].latitude, places[0].longitude))
+  }
 }
 
 /**
