@@ -1,21 +1,22 @@
 import Footer from "../../components/common/Footer";
 import FeedForm from "./component/FeedForm/FeedForm"
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SlideUpModal from "./component/FeedForm/SlideUpModal";
 import BasicNavbar from "../../components/common/BasicNavbar";
 import { Button } from "react-bootstrap";
-import { useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import axios_api from "../../lib/axios_api";
 
 /**
- * 피드를 추가 및 수정한다.
+ * 피드를 새롭게 추가한다.
  * @returns 
  */
 const FeedFormPage = () => {
-    const [feeds, setFeeds] = useState([]);
     const [selectedFeed, setSelectedFeed] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [searchParams] = useSearchParams();
+
     // 1. memberId
     const memberIdFromStore = useSelector((state) => state.auth.member.memberId);
     const memberIdFromURL = searchParams.get('memberId');
@@ -24,22 +25,25 @@ const FeedFormPage = () => {
     // 2. buildingId
     const buildingId = searchParams.get('buildingId');
 
-    const handleSave = (feed) => {
-        if (selectedFeed) {
-            // 피드 수정
-            setFeeds(feeds.map(f => (f.id === feed.id ? feed : f)));
-        } else {
-            // 피드 추가
-            setFeeds([...feeds, { ...feed, id: feeds.length + 1 }]);
-        }
-        setSelectedFeed(null);
-        setShowModal(false);
-    };
+    // 3. feedid
+    const params = useParams()
+    const feedId = params.feedId || null;
 
-    const handleEdit = (feed) => {
-        setSelectedFeed(feed);
-        setShowModal(true);
-    };
+    useEffect(() => {
+        if (feedId) {
+            const fetchFeed = async () => {
+                try {
+                    const response = await axios_api.get(`/feed/detail?feedId=${feedId}`);
+                    setSelectedFeed(response.data);
+                } catch (error) {
+                    console.error('피드 데이터를 가져오는 중 오류 발생:', error);
+                }
+            };
+            fetchFeed();
+        } else {
+            setSelectedFeed(null);
+        }
+    }, [feedId]);
 
     return (
         <div>
@@ -51,7 +55,12 @@ const FeedFormPage = () => {
                 <SlideUpModal show={showModal} onHide={() => setShowModal(false)} />
             </div>
 
-            <FeedForm existingFeed={selectedFeed} onSave={handleSave} inputWriterId={writerId} inputBuildingId = {buildingId}/>
+            <FeedForm 
+                existingFeed={selectedFeed} 
+                inputWriterId={writerId} 
+                inputBuildingId = {buildingId} 
+                inputFeedId = {feedId}
+            />
             
             <div>
             <Footer />

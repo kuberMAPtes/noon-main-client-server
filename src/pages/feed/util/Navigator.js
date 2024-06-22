@@ -26,7 +26,19 @@ const useNavigator = () => {
     [navigate]
   );
 
-  return { goToFeedDetail, goToMemberProfile, goToBuildingProfile };
+  const goToFeedForm = useCallback(
+    (feedId) => {
+      navigate(`/feed/form/${feedId}`);
+    },
+    [navigate]
+  );
+
+  return {
+    goToFeedDetail,
+    goToMemberProfile,
+    goToBuildingProfile,
+    goToFeedForm,
+  };
 };
 
 export default useNavigator;

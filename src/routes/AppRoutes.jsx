@@ -252,6 +252,7 @@ const AppRoutes = () => {
             <Route path="list/building" element={<FeedBuildingListPage />} />
             <Route path="detail" element={<FeedDetail />} />
             <Route path="form" element={<FeedForm />} />
+            <Route path="form/:feedId" element={<FeedForm />} />
             <Route path="chart" element={<FeedChartPage />} />
             <Route path="main" element={<FeedListHomePage />}/>
             <Route path="" element={<FeedPages />} />

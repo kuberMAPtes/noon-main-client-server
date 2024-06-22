@@ -3,11 +3,13 @@ import '../../css/FeedDetail.css';
 
 import { Image, Badge, Button, Card, CardBody, CardSubtitle, CardText, CardTitle, Form, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { toggleBookmark, toggleLike } from '../../axios/FeedAxios';
-import { FaBookmark, FaHeart, FaRegBookmark, FaRegHeart, FaCommentAlt, FaRegEye, FaFireAlt, FaExchangeAlt } from 'react-icons/fa';
+import { FaBookmark, FaHeart, FaRegBookmark, FaRegHeart, FaCommentAlt, FaRegEye, FaFireAlt } from 'react-icons/fa';
+import { GrUpdate } from "react-icons/gr";
 import { MdDelete } from "react-icons/md";
 import LikedUsersList from './LikedUsersList';
 import axios_api from '../../../../lib/axios_api';
 import Navigator from '../../util/Navigator'
+import useNavigator from '../../util/Navigator';
 
 const FeedDetail = ({ data, memberId }) => {
     const {
@@ -45,6 +47,8 @@ const FeedDetail = ({ data, memberId }) => {
 
     const [likedCount, setLikeCount] = useState(likeCount); // 좋아요 개수
     const [showLikedUsers, setShowLikedUsers] = useState(false); // 리스트 표시 여부
+
+    const { goToFeedForm } = useNavigator();
 
     // 댓글 추가 내용 만들기
     const handleCommentChange = (e) => {
@@ -92,6 +96,7 @@ const FeedDetail = ({ data, memberId }) => {
     const handleShowLikedUsersClick = () => {
         setShowLikedUsers(!showLikedUsers); // 리스트 표시 여부 토글
     }
+
     // 댓글 삭제
     const handleDeleteComment = async (commentId) => {
         setCommentList(commentList.filter(comment => comment.commentId !== commentId));
@@ -99,7 +104,6 @@ const FeedDetail = ({ data, memberId }) => {
         // 댓글 삭제 axios
         let url = "/feed/deleteFeedComment/" + commentId;
 
-        // 댓글 추가 axios
         try {
             const response = await axios_api.post(url)
             console.log(response.data);
@@ -119,6 +123,9 @@ const FeedDetail = ({ data, memberId }) => {
                             <div onClick={() => goToMemberProfile(writerId)} style={{ cursor: 'pointer', display: 'inline' }}>&nbsp; {writerNickname}</div>
                         </div>
                         <div>
+                            <span onClick={() => goToFeedForm(feedId)} style={{ cursor: 'pointer', marginRight: '10px' }}>
+                                <GrUpdate size='32'/>
+                            </span>
                             <span onClick={handleLikeClick} style={{ cursor: 'pointer', marginRight: '10px' }}>
                                 {liked ? <FaHeart color="red" size='32'/> : <FaRegHeart size='32'/>}
                             </span>

@@ -3,13 +3,13 @@ import { Form, Button, Card, ListGroup, Container, Badge } from 'react-bootstrap
 import "../../css/FeedForm.css";
 import axios_api from '../../../../lib/axios_api';
 
-const FeedForm = ({ existingFeed, onSave, inputWriterId, inputBuildingId }) => {
+const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, onSave }) => {
     const [feedData, setFeedData] = useState({
         writerId: inputWriterId,
         mainActivate: false,
         viewCnt: 0,
-        writtenTime: '',  // 현재 시간
-        modified : false,
+        writtenTime: '',
+        modified: false,
         title: '',
         feedText: '',
         updateTagList: [],
@@ -17,29 +17,39 @@ const FeedForm = ({ existingFeed, onSave, inputWriterId, inputBuildingId }) => {
         publicRange: 'PUBLIC',
         attachments: []
     });
-    const [tagInput, setTagInput] = useState(''); // 태그 추가
+    const [tagInput, setTagInput] = useState('');
 
     useEffect(() => {
         if (existingFeed) {
             setFeedData({
+                writerId: existingFeed.writerId,
+                mainActivate: existingFeed.mainActivate,
+                viewCnt: existingFeed.viewCnt,
+                writtenTime: existingFeed.writtenTime,
+                modified: true,
                 title: existingFeed.title,
                 feedText: existingFeed.feedText,
-                updateTagList : existingFeed.tags || [],
+                updateTagList: existingFeed.tags || [],
                 category: existingFeed.category || 'GENERAL',
                 publicRange: existingFeed.publicRange || 'PUBLIC',
                 attachments: existingFeed.attachments || []
             });
         } else {
             setFeedData({
+                writerId: inputWriterId,
+                mainActivate: false,
+                viewCnt: 0,
+                writtenTime: '',
+                modified: false,
                 title: '',
                 feedText: '',
-                tags: [],
+                updateTagList: [],
                 category: 'GENERAL',
                 publicRange: 'PUBLIC',
                 attachments: []
             });
         }
-    }, [existingFeed]);
+    }, [existingFeed, inputWriterId]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -53,42 +63,75 @@ const FeedForm = ({ existingFeed, onSave, inputWriterId, inputBuildingId }) => {
         e.preventDefault();
 
         try {
-            const addFeedData = {
-                writerId: inputWriterId,
-                buildingId : inputBuildingId,
-                mainActivate: false,
-                viewCnt: 0,
-                writtenTime: new Date(),
-                modified : false,
-                title: feedData.title,
-                feedText: feedData.feedText,
-                updateTagList: [],
-                feedCategory: feedData.category,
-                publicRange: feedData.publicRange
-            };
+            if (inputFeedId) {
+                const updateFeedData = {
+                    feedId: inputFeedId,
+                    writerId: inputWriterId,
+                    mainActivate: feedData.mainActivate,
+                    viewCnt: feedData.viewCnt,
+                    writtenTime: feedData.writtenTime,
+                    modified: true,
+                    title: feedData.title,
+                    feedText: feedData.feedText,
+                    updateTagList: feedData.updateTagList,
+                    feedCategory: feedData.category,
+                    publicRange: feedData.publicRange,
+                    attachments: feedData.attachments
+                };
 
-            console.log(addFeedData);
+                console.log(updateFeedData);
 
-            // 먼저 피드 데이터를 전송
-            const feedResponse = await axios_api.post('/feed/addFeed', addFeedData);
+                const feedResponse = await axios_api.put(`/feed/updateFeed`, updateFeedData);
 
-            const feedId = feedResponse.data;
+                const formData = new FormData();
+                feedData.attachments.forEach((file) => {
+                    formData.append('multipartFile', file);
+                });
 
-            // 파일 업로드를 위해 FormData를 생성
-            const formData  = new FormData();
-            feedData.attachments.forEach((file) => {
-                formData.append('multipartFile', file);
-            });
+                await axios_api.post(`/feed/addFeedAttachment`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
 
-            // 첨부파일을 업로드
-            await axios_api.post(`/feed/addFeedAttachment/${feedId}`, formData , {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
+                console.log('피드가 성공적으로 저장되었습니다:', feedResponse.data);
 
-            onSave(feedResponse.data); // 저장 후 처리할 함수 호출
-            console.log('피드가 성공적으로 저장되었습니다:', feedResponse.data);
+            } else {
+                const addFeedData = {
+                    writerId: inputWriterId,
+                    buildingId: inputBuildingId,
+                    mainActivate: false,
+                    viewCnt: 0,
+                    writtenTime: new Date(),
+                    modified: false,
+                    title: feedData.title,
+                    feedText: feedData.feedText,
+                    updateTagList: [],
+                    feedCategory: feedData.category,
+                    publicRange: feedData.publicRange
+                };
+
+                console.log(addFeedData);
+
+                const feedResponse = await axios_api.post('/feed/addFeed', addFeedData);
+
+                const feedId = feedResponse.data;
+
+                const formData = new FormData();
+                feedData.attachments.forEach((file) => {
+                    formData.append('multipartFile', file);
+                });
+
+                await axios_api.post(`/feed/addFeedAttachment/${feedId}`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+
+                console.log('피드가 성공적으로 저장되었습니다:', feedResponse.data);
+            }
+
+            onSave && onSave();
         } catch (error) {
             console.error('피드 저장 중 오류 발생:', error);
         }
@@ -105,7 +148,6 @@ const FeedForm = ({ existingFeed, onSave, inputWriterId, inputBuildingId }) => {
         });
     };
 
-    // 첨부파일 변경, 삭제에 대하여
     const handleFileChange = (e) => {
         const files = Array.from(e.target.files);
         setFeedData(prevState => ({
@@ -120,23 +162,22 @@ const FeedForm = ({ existingFeed, onSave, inputWriterId, inputBuildingId }) => {
     };
 
     const isImageOrVideo = (file) => {
-        return file.type.startsWith('image/') || file.type.startsWith('video/');
+        return file && file.type && (file.type.startsWith('image/') || file.type.startsWith('video/'));
     };
 
-    // 태그 추가, 변경, 삭제에 대하여
     const handleTagAdd = () => {
         if (tagInput.trim() !== '') {
             setFeedData(prevState => ({
                 ...prevState,
-                tags: [...prevState.tags, tagInput.trim()]
+                updateTagList: [...prevState.updateTagList, { tagId: Date.now(), tagText: tagInput.trim() }]
             }));
             setTagInput('');
         }
     };
 
-    const handleTagRemove = (tag) => {
-        const updatedTags = feedData.tags.filter(t => t !== tag);
-        setFeedData({ ...feedData, tags: updatedTags });
+    const handleTagRemove = (tagId) => {
+        const updatedTags = feedData.updateTagList.filter(t => t.tagId !== tagId);
+        setFeedData({ ...feedData, updateTagList: updatedTags });
     };
 
     return (
@@ -201,11 +242,11 @@ const FeedForm = ({ existingFeed, onSave, inputWriterId, inputBuildingId }) => {
                                 <Button className="ml-2" onClick={handleTagAdd}>추가</Button>
                             </div>
                             <div className="mt-2">
-                            {Array.isArray(feedData.tags) && feedData.tags.map((tag, index) => (
-                                <Badge key={index} pill variant="primary" className="mr-2">
-                                    {tag} <span className="badge-close" onClick={() => handleTagRemove(tag)}>×</span>
-                                </Badge>
-                            ))}
+                                {Array.isArray(feedData.updateTagList) && feedData.updateTagList.map((tag, index) => (
+                                    <Badge key={index} pill variant="primary" className="mr-2">
+                                        {tag.tagText} <span className="badge-close" onClick={() => handleTagRemove(tag.tagId)}>×</span>
+                                    </Badge>
+                                ))}
                             </div>
                         </Form.Group>
 
@@ -223,14 +264,11 @@ const FeedForm = ({ existingFeed, onSave, inputWriterId, inputBuildingId }) => {
                                 <option value="QUESTION">Q&A</option>
                                 <option value="EVENT">이벤트</option>
                                 <option value="POLL">투표</option>
-                                <option value="SHARE">나눔</option>
-                                <option value="HELP_REQUEST">도움 요청</option>
-                                <option value="MEGAPHONE">확성기</option>
                                 <option value="NOTICE">공지사항</option>
                             </Form.Control>
                         </Form.Group>
 
-                        <Form.Group controlId="publicRange" className="mb-3">
+                        <Form.Group controlId="feedPublicRange" className="mb-3">
                             <Form.Label>공개 범위</Form.Label>
                             <Form.Control
                                 as="select"
@@ -240,16 +278,17 @@ const FeedForm = ({ existingFeed, onSave, inputWriterId, inputBuildingId }) => {
                                 required
                             >
                                 <option value="PUBLIC">전체 공개</option>
+                                <option value="GROUP">그룹 공개</option>
                                 <option value="PRIVATE">비공개</option>
-                                <option value="FOLLOWER_ONLY">팔로워 공개</option>
-                                <option value="MUTUAL_ONLY">맞팔 공개</option>
                             </Form.Control>
                         </Form.Group>
 
-                        <div className="form-buttons d-flex justify-content-between">
-                            <Button type="submit" variant="primary">저장</Button>
-                            <Button type="button" variant="secondary" onClick={handleCancel}>취소</Button>
-                        </div>
+                        <Button variant="primary" type="submit" className="mr-2">
+                            저장
+                        </Button>
+                        <Button variant="secondary" onClick={handleCancel}>
+                            취소
+                        </Button>
                     </Form>
                 </Card.Body>
             </Card>

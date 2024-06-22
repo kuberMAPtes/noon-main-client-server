@@ -8,6 +8,7 @@ import Loading from './component/FeedList/FeedLoading';
 import Footer from '../../components/common/Footer';
 import { useSelector } from 'react-redux';
 
+
 /**
  * 피드 하나에 대한 상세보기를 진행한다.
  * @returns 
