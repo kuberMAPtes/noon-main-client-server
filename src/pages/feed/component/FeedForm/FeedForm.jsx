@@ -29,7 +29,7 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                 modified: true,
                 title: existingFeed.title,
                 feedText: existingFeed.feedText,
-                updateTagList: existingFeed.tags || [],
+                updateTagList: existingFeed.updateTagList || [],
                 category: existingFeed.category || 'GENERAL',
                 publicRange: existingFeed.publicRange || 'PUBLIC',
                 attachments: existingFeed.attachments || []
@@ -81,14 +81,16 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
 
                 console.log(updateFeedData);
 
-                const feedResponse = await axios_api.put(`/feed/updateFeed`, updateFeedData);
+                const feedResponse = await axios_api.post(`/feed/updateFeed`, updateFeedData);
+
+                const feedId = feedResponse.data;
 
                 const formData = new FormData();
                 feedData.attachments.forEach((file) => {
                     formData.append('multipartFile', file);
                 });
 
-                await axios_api.post(`/feed/addFeedAttachment`, formData, {
+                await axios_api.post(`/feed/addFeedAttachment/${feedId}`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }
@@ -106,7 +108,7 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                     modified: false,
                     title: feedData.title,
                     feedText: feedData.feedText,
-                    updateTagList: [],
+                    updateTagList: feedData.updateTagList,
                     feedCategory: feedData.category,
                     publicRange: feedData.publicRange
                 };
@@ -169,14 +171,14 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
         if (tagInput.trim() !== '') {
             setFeedData(prevState => ({
                 ...prevState,
-                updateTagList: [...prevState.updateTagList, { tagId: Date.now(), tagText: tagInput.trim() }]
+                updateTagList: [...prevState.updateTagList, tagInput.trim()]
             }));
             setTagInput('');
         }
     };
 
-    const handleTagRemove = (tagId) => {
-        const updatedTags = feedData.updateTagList.filter(t => t.tagId !== tagId);
+    const handleTagRemove = (tagText) => {
+        const updatedTags = feedData.updateTagList.filter(t => t !== tagText);
         setFeedData({ ...feedData, updateTagList: updatedTags });
     };
 
@@ -244,7 +246,7 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                             <div className="mt-2">
                                 {Array.isArray(feedData.updateTagList) && feedData.updateTagList.map((tag, index) => (
                                     <Badge key={index} pill variant="primary" className="mr-2">
-                                        {tag.tagText} <span className="badge-close" onClick={() => handleTagRemove(tag.tagId)}>×</span>
+                                        {tag} <span className="badge-close" onClick={() => handleTagRemove(tag)}>×</span>
                                     </Badge>
                                 ))}
                             </div>
