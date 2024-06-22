@@ -39,7 +39,7 @@ const LogoutForm = () => {
 //     if(!authorization) navigate('/member/getAuthMain');
 //   },[authorization,navigate]);
 
-  return <button onClick={handleLogout} style={{height:"17%", width:"80%",padding:"0px"}}>Logout</button>;
+  return <button onClick={handleLogout} style={{height:"53px", width:"145px",padding:"0px"}}>Logout</button>;
 };
 
 export default LogoutForm;

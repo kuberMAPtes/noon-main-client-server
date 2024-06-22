@@ -23,3 +23,37 @@
   color: white; /* 글자색 변경 */
   background-color: #91a7ff; /* 배경색 변경 */
 }
+/* ProfileList.module.css */
+.listGroupItem {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.imageCol {
+  border-right: 1px solid #ccc;
+  padding-right: 10px;
+}
+
+.nicknameCol {
+  border-right: 1px solid #ccc;
+  padding-right: 10px;
+}
+
+.buttonCol {
+  padding-left: 10px;
+}
+
+.buttonColor {
+  background:#91a7ff;
+  border-color : #91a7ff !important;
+  border-radius:5px;
+  margin:0px;
+}
+.buttonColorMutual {
+  background:#a9afc5;
+  border-color : #a9afc5 !important;
+  border-radius:5px;
+  margin:0px;
+}

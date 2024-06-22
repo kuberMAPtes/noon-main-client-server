@@ -29,12 +29,12 @@ const useFetchMemberRelationshipList = (fromId, toId, initialPage) => {
   const [page, setPage] = useState(Number(initialPage));
 
   // 멤버 관계 목록을 가져오는 함수
-  const fetchMemberRelationshipList = useCallback(async () => {
+  const fetchMoreData = useCallback(async () => {
 
     if (!fromId || !toId) return false;
 
-    // alert(`fetchMemberRelationshipList 호출됨: fromId=${fromId}, toId=${toId}, page=${page}`);
-    console.log(`fetchMemberRelationshipList 호출됨: fromId=${fromId}, toId=${toId}, page=${page}`);
+    // alert(`fetchMoreData 호출됨: fromId=${fromId}, toId=${toId}, page=${page}`);
+    console.log(`fetchMoreData 호출됨: fromId=${fromId}, toId=${toId}, page=${page}`);
     console.log("Fetching member relationship list");
     const size = 10; // 페이지당 아이템 수
     const criteria = {
@@ -69,13 +69,50 @@ const useFetchMemberRelationshipList = (fromId, toId, initialPage) => {
     }
   }, [fromId, toId, page]);
 
-  // 컴포넌트가 처음 렌더링될 때와 fetchMemberRelationshipList 함수가 변경될 때마다 호출
+  // 컴포넌트가 처음 렌더링될 때와 fetchMoreData 함수가 변경될 때마다 호출
   useEffect(() => {
-    fetchMemberRelationshipList();
-  }, [fetchMemberRelationshipList]);
+    fetchMoreData();
+  }, [fetchMoreData]);
+
+  //refetchData 함수. 팔로우 취소 팔로우, 차단 해제, 차단에 사용
+  const refetchData = useCallback(async () => {
+    if (!fromId || !toId) return false;
+  
+    const size = 10;
+    let newMemberRelationshipList = [];
+    let currentPage = 0;
+  
+    //axios를 여러번 요청해야함
+    while (currentPage < page) {//page가 현재페이지임
+      const criteria = {
+        fromId: fromId,
+        toId: toId,
+        following: true,
+        follower: true,
+        blocking: true
+      };
+      const { response, receivedFollowerCount, receivedFollowingCount, receivedBlockingCount } = await getMemberRelationshipList(criteria, currentPage, size);
+  
+      newMemberRelationshipList = newMemberRelationshipList.concat(response);
+  
+      // 팔로워, 팔로잉, 차단 수는 페이지 단위로 받아올 필요 없으므로 첫 페이지에서만 설정
+      if (currentPage === 0) {
+        setFollowerCount(receivedFollowerCount);
+        setFollowingCount(receivedFollowingCount);
+        setBlockingCount(receivedBlockingCount);
+      }
+  
+      currentPage += 1;
+  
+      // 응답이 비어있다면 중단
+      if (response.length === 0) break;
+    }
+    setMemberRelationshipList(newMemberRelationshipList);
+    setPage(currentPage);
+  }, [fromId, toId, page]);
 
   // 상태와 데이터를 반환
-  return { memberRelationshipList, followerCount, followingCount, blockingCount, fetchMoreData: fetchMemberRelationshipList };
+  return { memberRelationshipList, followerCount, followingCount, blockingCount, fetchMoreData, refetchData };
 };
 
 export default useFetchMemberRelationshipList;

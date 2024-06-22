@@ -362,7 +362,25 @@ export const addMemberRelationship = async (
     throw error;
   }
 };
-
+// 회원 관계 삭제
+export const deleteMemberRelationship = async (fromId, toId, relationshipType, activated) => {
+  try {
+    console.log("deleteMemberRelationship 요청:", { fromId, toId });
+    const response = await axiosInstance.post(
+      `/member/deleteMemberRelationship`, {
+        fromId,
+        toId,
+        relationshipType,
+        activated,
+      }
+    );
+    console.log("deleteMemberRelationship 응답:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("deleteMemberRelationship error:", error);
+    throw error;
+  }
+};
 // 회원 목록 조회
 export const listMembers = async (searchCriteria, page, size) => {
   try {
@@ -424,18 +442,3 @@ export const getMemberRelationshipList = async (criteria, page, size) => {
     }
   };
 
-// 회원 관계 삭제
-export const deleteMemberRelationship = async (fromId, toId) => {
-  try {
-    console.log("deleteMemberRelationship 요청:", { fromId, toId });
-    const response = await axiosInstance.post(
-      `/member/deleteMemberRelationship`,
-      { fromId, toId }
-    );
-    console.log("deleteMemberRelationship 응답:", response.data);
-    return response.data;
-  } catch (error) {
-    console.error("deleteMemberRelationship error:", error);
-    throw error;
-  }
-};

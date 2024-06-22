@@ -11,6 +11,7 @@ const useDecryptId = () => {
       const decryptedId = decryptWithLv(secretId, secretIv);
       // alert(`${secretId} ${secretIv}`);
       // alert("가져온 toId"+decryptedId);
+      alert(`가져온 toId: ${decryptedId}`);
       setToId(decryptedId);
     }
   }, [secretId, secretIv]);
