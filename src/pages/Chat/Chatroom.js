@@ -24,6 +24,7 @@ const Chatroom = () => {
   const [participants, setParticipants] = useState([]); // 채팅방 참여자 (from spring boot)
   const [roomInfo, setRoomInfo] = useState({}); // 채팅방 정보
   const [liveParticipants, setLiveParticipants] = useState([]); // 채팅방 실시간 참여자 (from node)
+  const [messageReadUpdator, setMessageReadUpdator] = useState(true);
 
   console.log("🦄랜더링 roomInfo => ", roomInfo);
 
@@ -99,16 +100,16 @@ const Chatroom = () => {
       console.log("메세지 히스토리 받은거 => ", messageHistory);
       
       messageHistory.forEach( history => {
-        const { nickname, chatMsg, time, type } = history;
+        const { nickname, chatMsg, time, type, readMembers } = history;
         const text = `${nickname} : ${chatMsg} \n( ${time} )`;
 
-        previousMessages.push({ type: type ? type : 'other' , text : text });
+        previousMessages.push({ type: type ? type : 'other' , text : text , readMembers : readMembers });
       });
   
       // 불러오기 완료 메세지 추가
       const completeMsg = {
         type : 'notice',
-        text : `${messageHistory.length} 개의 이전 채팅 내역을 모두 불러왔습니다! `
+        text : `${messageHistory.length} 개의 이전 채팅 내역을 모두 불러왔습니다! `,
       }
       previousMessages.push(completeMsg);
 
@@ -124,6 +125,11 @@ const Chatroom = () => {
     socket.emit('message_read', memberID, roomInfo, (data) =>{
       console.log("🟥⚪메세지 읽었습니다 결과는 ", data)
     })
+
+    // (개발중) 다른유저 채팅 메세지 읽음시 메세지 업데이트 
+    socket.on('message_read_notice', (data)=>{
+      setMessageReadUpdator(prevState => !prevState)
+    } )
 
     // 다른유저 채팅방 입장시 실시간 유저에 추가
     socket.on("enter_room_notice", (data)=>{
@@ -195,8 +201,8 @@ const Chatroom = () => {
     // 내가 보낸 채팅 메세지 표시
     const myMessage = {
       type : 'mine', //css로 내가 보냈는지 남이 보냈는지 별도로 표기
-      text : `${messageInput} \n( ${new Date()} )`
-      //readMembers
+      text : `${messageInput} \n( ${new Date()} )`,
+      readMembers : [memberID]
     }
     setReceivedMessage((prevMessages) => [...prevMessages, myMessage]);
     
@@ -300,10 +306,8 @@ const Chatroom = () => {
               <div key={index} className={ msg.type === 'mine' ? module.mineMessage : msg.type === 'other' ? module.otherMessage : module.noticeMessage }>
                 <p>{msg.text}</p>
                 {msg.type !== 'notice' && (
-                    <p>안읽은 사람 수 : {
-                        participants.filter(name => msg.readMembers && Array.isArray(msg.readMembers) && !msg.readMembers.includes(name)).length
-                    }</p>
-                )}
+                    <p>안읽은 사람 수 : { participants.length - msg.readMembers.length }</p>
+                )}                
               </div>
             ))}
           </div>
