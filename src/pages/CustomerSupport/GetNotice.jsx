@@ -93,7 +93,7 @@ const GetNotice = () => {
           <Row>
             <Col md="12">
               <Card>
-                <CardHeader>공지제목: {notice.title}</CardHeader>
+                <CardHeader>{notice.title}</CardHeader>
                 <CardBody>
                   <Table responsive>
                     <thead className="text-primary">

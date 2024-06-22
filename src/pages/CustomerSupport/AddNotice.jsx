@@ -7,12 +7,14 @@ import { useSelector } from 'react-redux';
 
 import CustomerSupportHeader from './components/CustomerSupportHeader';
 import Footer from '../../components/common/Footer';
+import { useNavigate } from 'react-router-dom';
 
 const AddNotice = () => {
   const member = useSelector((state) => state.auth.member);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const quillRef = useRef(null);
+  const navigate = useNavigate();
 
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -22,30 +24,27 @@ const AddNotice = () => {
     setContent(value);
   };
 
-  const handleImageUpload = async (file) => {
+  const handleAttachmentUpload = async (file) => {
     const formData = new FormData();
     formData.append('attachment', file);
 
     try {
-      const response = await axiosInstance.post('/customersupport/uploadImage', formData, {
+      const response = await axiosInstance.post('/customersupport/uploadAttachment', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
 
-      console.log(JSON.stringify(response.data));
-
-      return response.data; // 서버에서 반환한 이미지 URL
+      return response.data; //오브젝트 스토리지에 저장된 이미지/동영상 url
     } catch (error) {
       console.error('Error uploading attachment:', error);
       return null;
     }
   };
 
+
+
   const insertImage = async () => {
-
-    console.log("insertImage");
-
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
     input.setAttribute('accept', 'image/*');
@@ -53,16 +52,31 @@ const AddNotice = () => {
 
     input.onchange = async () => {
       const file = input.files[0];
-
       if (file) {
-        const imageUrl = await handleImageUpload(file);
-        console.log(imageUrl);
-
+        const imageUrl = await handleAttachmentUpload(file);
         if (imageUrl) {
           const quill = quillRef.current.getEditor();
           const range = quill.getSelection();
           quill.insertEmbed(range.index, 'image', imageUrl);
-          console.log(`Inserted image URL: ${imageUrl}`);
+        }
+      }
+    };
+  };
+
+  const insertVideo = async () => {
+    const input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'video/*');
+    input.click();
+
+    input.onchange = async () => {
+      const file = input.files[0];
+      if (file) {
+        const videoUrl = await handleAttachmentUpload(file);
+        if (videoUrl) {
+          const quill = quillRef.current.getEditor();
+          const range = quill.getSelection();
+          quill.insertEmbed(range.index, 'video', videoUrl);
         }
       }
     };
@@ -72,7 +86,6 @@ const AddNotice = () => {
     const editorContent = quillRef.current.getEditor().root.innerHTML;
     const formData = new FormData();
     formData.append('writerId', member.memberId);
-  
     formData.append('title', title);
     formData.append('feedText', editorContent);
 
@@ -82,7 +95,7 @@ const AddNotice = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
-      console.log('Notice added:', response.data);
+      navigate('../getNotice/'+response.data.feedId);
     } catch (error) {
       console.error('Error adding notice:', error);
     }
@@ -92,12 +105,13 @@ const AddNotice = () => {
     return {
       toolbar: {
         container: [
-          ['image'],
+          ['image', 'video'],
           [{ header: [1, 2, 3, false] }],
           ['bold', 'italic', 'underline', 'strike', 'blockquote'],
         ],
         handlers: {
           image: insertImage,
+          video: insertVideo,
         },
       },
     };
@@ -107,7 +121,7 @@ const AddNotice = () => {
     'header', 'font', 'size',
     'bold', 'italic', 'underline', 'strike', 'blockquote',
     'list', 'bullet', 'indent',
-    'link', 'image'
+    'link', 'image', 'video'
   ];
 
   return (
