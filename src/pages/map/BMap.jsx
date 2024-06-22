@@ -6,6 +6,7 @@ import axios_api from "../../lib/axios_api";
 import { MAIN_API_URL } from "../../util/constants";
 import { is2xxStatus, is4xxStatus } from "../../util/statusCodeUtil";
 import { getBuildingMarkerHtml, getPlaceSearchMarkerHtml } from "./contant/markerHtml";
+import mapStyles from "../../assets/css/module/map/BMap.module.css";
 import "../../assets/css/module/map/BMap.css";
 import Footer from "../../components/common/Footer";
 import { useSearchParams } from "react-router-dom";
@@ -107,25 +108,25 @@ export default function BMap() {
   }, [currentPosition]);
   
   return (
-    <div className="container map-container">
-      <SearchBar
-        typeCallback={(text) => setPlaceSearchKeyword(text)}
-        searchCallback={() => searchPlaceList(placeSearchKeyword, onFetchPlace, queryParams, setQueryParams)}
-      />
+    <div className={mapStyles.mapContainer}>
       <div id="map">
+        <SearchBar
+            typeCallback={(text) => setPlaceSearchKeyword(text)}
+            searchCallback={() => searchPlaceList(placeSearchKeyword, onFetchPlace, queryParams, setQueryParams)}
+          />
         <button
             type="button"
-            className="btn--my-location"
+            className={mapStyles.myLocationButton}
             onClick={() => currentPosition && map && map.setCenter(new naver.maps.LatLng(currentPosition.latitude, currentPosition.longitude))}>
           <img src="./image/my-location.png" alt="my-location" /> 
         </button>
+        <FetchTypeToggle
+            subscriptionChecked={subscriptionChecked}
+            setSubscriptionChecked={setSubscriptionChecked}
+            popBuildingChecked={popBuildingChecked}
+            setPopBuildingChecked={setPopBuildingChecked}
+        />
       </div>
-      <FetchTypeToggle
-          subscriptionChecked={subscriptionChecked}
-          setSubscriptionChecked={setSubscriptionChecked}
-          popBuildingChecked={popBuildingChecked}
-          setPopBuildingChecked={setPopBuildingChecked}
-      />
       <Footer />
     </div>
   )
@@ -195,7 +196,7 @@ function fetchBuildingInfo(latitude, longitude) {
     console.log(response);
   }).catch((err) => {
     if (is4xxStatus(err.response.status)) {
-      console.log("No building profile on it");
+      console.log(err.response.data); // TODO: response에 맞게 대응
     }
   })
 }
