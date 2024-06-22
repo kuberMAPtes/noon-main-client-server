@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate, useNavigate } from "react-router-dom";
+
 import Footer from "../components/common/Footer";
 import { setIsRedirect } from "../redux/slices/authSlice";
+import { useNavigate } from "react-router-dom";
 import { navigateMainPage } from "../util/mainPageUri";
+import useEncryptId from "../pages/member/component/common/useEncryptId";
 
 const PrivateRoute = ({ children }) => {
   const authorization = useSelector((state) => state.auth.authorization);
+  const memberId = useSelector((state) => state.auth.member.memberId);
   const isRedirect = useSelector((state) => state.auth.isRedirect);
   const loading = useSelector((state) => state.auth.loading); //AuthLoader가 비동기요청을 처리한 후 > false
-  const [IsFirst, setIsFirst] = useState(true);
+  
+  // useEffect(()=>{
+  //   alert("PrivateRoute에서 가져온 memberId: "+memberId);
+  // },[memberId]);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -29,7 +35,6 @@ const PrivateRoute = ({ children }) => {
       dispatch(setIsRedirect(false));
       navigate("/member/getAuthMain");
     }
-    setIsFirst(false);
   }, [authorization,isRedirect,navigate,dispatch]);
 
   if (loading === true) {
@@ -38,7 +43,8 @@ const PrivateRoute = ({ children }) => {
   return (
     <>
       {children}
-      <Footer />
+      <Footer
+      />
     </>
   );
 };

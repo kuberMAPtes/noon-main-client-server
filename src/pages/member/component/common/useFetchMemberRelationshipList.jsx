@@ -76,14 +76,18 @@ const useFetchMemberRelationshipList = (fromId, toId, initialPage) => {
 
   //refetchData 함수. 팔로우 취소 팔로우, 차단 해제, 차단에 사용
   const refetchData = useCallback(async () => {
-    if (!fromId || !toId) return false;
+    if (!fromId || !toId) {
+      // alert('fromId 또는 toId가 설정되지 않았습니다.');
+      console.log('fromId 또는 toId가 설정되지 않았습니다.');
+      return false;
+    }
   
     const size = 10;
     let newMemberRelationshipList = [];
     let currentPage = 0;
   
-    //axios를 여러번 요청해야함
-    while (currentPage < page) {//page가 현재페이지임
+    // axios를 여러 번 요청해야함
+    while (currentPage < page) { // page가 현재 페이지임
       const criteria = {
         fromId: fromId,
         toId: toId,
@@ -91,7 +95,12 @@ const useFetchMemberRelationshipList = (fromId, toId, initialPage) => {
         follower: true,
         blocking: true
       };
+  
+      console.log(`요청 중: 페이지 ${currentPage}, 기준: `, criteria);
+  
       const { response, receivedFollowerCount, receivedFollowingCount, receivedBlockingCount } = await getMemberRelationshipList(criteria, currentPage, size);
+  
+      console.log(`응답 받음: 페이지 ${currentPage}, 응답: `, response);
   
       newMemberRelationshipList = newMemberRelationshipList.concat(response);
   
@@ -100,16 +109,34 @@ const useFetchMemberRelationshipList = (fromId, toId, initialPage) => {
         setFollowerCount(receivedFollowerCount);
         setFollowingCount(receivedFollowingCount);
         setBlockingCount(receivedBlockingCount);
+  
+        console.log('첫 페이지 응답 설정: ', {
+          receivedFollowerCount,
+          receivedFollowingCount,
+          receivedBlockingCount
+        });
       }
   
       currentPage += 1;
   
       // 응답이 비어있다면 중단
-      if (response.length === 0) break;
+      if (response.length === 0) {
+        alert(`응답이 비어 있음. 페이지 ${currentPage}에서 중단합니다.`);
+        console.log(`응답이 비어 있음. 페이지 ${currentPage}에서 중단합니다.`);
+        break;
+      }
     }
+    // alert("최종상태 설정 : " + JSON.stringify(newMemberRelationshipList) + " " + JSON.stringify(currentPage));
+  
     setMemberRelationshipList(newMemberRelationshipList);
     setPage(currentPage);
-  }, [fromId, toId, page]);
+  
+    console.log('최종 상태 설정: ', {
+      newMemberRelationshipList,
+      currentPage
+    });
+  
+  }, [fromId, toId, page]); 
 
   // 상태와 데이터를 반환
   return { memberRelationshipList, followerCount, followingCount, blockingCount, fetchMoreData, refetchData };

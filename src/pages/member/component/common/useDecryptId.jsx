@@ -8,10 +8,11 @@ const useDecryptId = () => {
 
   useEffect(() => {
     if (secretId && secretIv) {
+      //useParams가 URI인코딩을 알아서 해준다.
       const decryptedId = decryptWithLv(secretId, secretIv);
       // alert(`${secretId} ${secretIv}`);
       // alert("가져온 toId"+decryptedId);
-      alert(`가져온 toId: ${decryptedId}`);
+      // alert(`가져온 toId: ${decryptedId}`);
       setToId(decryptedId);
     }
   }, [secretId, secretIv]);

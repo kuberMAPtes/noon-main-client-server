@@ -375,7 +375,7 @@ export const deleteMemberRelationship = async (fromId, toId, relationshipType, a
       }
     );
     console.log("deleteMemberRelationship 응답:", response.data);
-    return response.data;
+    return response.data.info;
   } catch (error) {
     console.error("deleteMemberRelationship error:", error);
     throw error;
@@ -399,8 +399,37 @@ export const listMembers = async (searchCriteria, page, size) => {
     throw error;
   }
 };
+export const getMemberRelationship = async (fromId,toId) => {
+  try{
+    console.log("getMemberRelationship 요청:",{fromId,toId});
+    const response = await axiosInstance.get(`/member/getFollowRelationship`,
+    {params:{fromId,toId}}
+    );
+    console.log("getMemberRelationship 응답:",response.data.info);
 
-//회원관계목록조회
+    const map = response.data.info;
+    //from이 나 > 너 , to가 너>나
+    if(map.from===null && map.to===null){
+      return "NONE"
+    }else if(map.from===null){
+      return "FOLLOWER"
+    }else if(map.to===null){
+      return "FOLLOWING"
+    }else{
+      return "MUTUAL"
+    }
+    //from이 null이자나? 그러면 내가 너한테 팔로우 안한거임 
+    
+    //to가 null이자나? 그러면 너가 나한테 팔로우 안한거임
+    //둘다 null이면 둘다 팔로우 안한거임
+    //둘다 있으면 둘다 팔로우한거임
+    
+  }catch(error){
+    console.error("getMemberRelationship error:", error);
+    throw error;
+  }
+}
+//대상 회원에 대한 모든 회원관계 목록을 가져오는 회원관계목록조회
 export const getMemberRelationshipList = async (criteria, page, size) => {
     try {
       console.log("getMemberRelationshipList 요청:", { criteria, page, size });
@@ -412,7 +441,7 @@ export const getMemberRelationshipList = async (criteria, page, size) => {
         { fromId, toId, page, size, following, follower, blocking, blocker }
       );
       console.log("getMemberRelationshipList 응답:", res.data.info);
-      alert("getMemberRelationshipList 응답:"+JSON.stringify(res.data.info));
+      // alert("getMemberRelationshipList 응답:"+JSON.stringify(res.data.info));
       const map = res.data.info;
 
       //초기화에 관한 에러처리
