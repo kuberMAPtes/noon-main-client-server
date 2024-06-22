@@ -121,7 +121,7 @@ const useFetchMemberRelationshipList = (fromId, toId, initialPage) => {
   
       // 응답이 비어있다면 중단
       if (response.length === 0) {
-        alert(`응답이 비어 있음. 페이지 ${currentPage}에서 중단합니다.`);
+        // alert(`응답이 비어 있음. 페이지 ${currentPage}에서 중단합니다.`);
         console.log(`응답이 비어 있음. 페이지 ${currentPage}에서 중단합니다.`);
         break;
       }
