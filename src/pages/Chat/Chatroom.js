@@ -6,7 +6,8 @@ import { getChatroom } from '../Chat/function/axios_api'
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useNavigate  } from 'react-router-dom';
-
+import { CustomModal } from './function/CustomModal'
+import { BootstrapModal } from './function/BootstrapModal'
 
 const Chatroom = () => {
   const member = useSelector((state) => state.auth.member);
@@ -119,7 +120,24 @@ const Chatroom = () => {
     // 실시간 소켓룸 및 실시간 접속자 정보 받아오기
     socket.emit('live_socketRoomInfo', roomInfo, initLiveSetting);
 
-    // 채팅 메세지 수신 
+    // 입장과 동시에 채팅읽음처리
+    socket.emit('message_read', memberID, roomInfo, (data) =>{
+      console.log("🟥⚪메세지 읽었습니다 결과는 ", data)
+    })
+
+    // 다른유저 채팅방 입장시 실시간 유저에 추가
+    socket.on("enter_room_notice", (data)=>{
+      console.log("다른 유저가 입장해서 가져온 데이터", data)
+      setLiveParticipants(data);
+    })
+
+    // 다른유저 채팅방 퇴장시 실시간 유저에 추가
+    socket.on("leave_room_notice", (data)=>{
+      console.log("다른 유저가 퇴장해서 가져온 데이터", data)
+      setLiveParticipants(data);
+    })
+    
+    // 채팅 메세지 수신   
     socket.on('specific_chat', (message) => {
       console.log("표시할 메세지 =>", message);
       setReceivedMessage((prevMessages) => [...prevMessages, message]);
@@ -178,6 +196,7 @@ const Chatroom = () => {
     const myMessage = {
       type : 'mine', //css로 내가 보냈는지 남이 보냈는지 별도로 표기
       text : `${messageInput} \n( ${new Date()} )`
+      //readMembers
     }
     setReceivedMessage((prevMessages) => [...prevMessages, myMessage]);
     
@@ -198,6 +217,23 @@ const Chatroom = () => {
       navigate(`/chat/myChatroomList`);           
     });
   };
+
+  //// 실험중 /////
+
+  // 유저 프로필로 이동
+  const handleLeftClick = (memberId) => {
+    prompt("씨파")
+    window.confirm("ㅎㅎ")
+  };
+
+  // 추방하기 
+  const handleRightClick = (event,data) => {
+    event.preventDefault(); // 윈도우 기본 우클릭했을 때 나오는 창 안뜨게함
+    console.log("kick!" , data);
+
+    // userNavigation or kick Axios 요청하는함수
+
+  }
 
   // 이전 페이지에서 넘어와서 redux 데이터를 받는다면? 
   if (!roomInfo) {
@@ -225,8 +261,19 @@ const Chatroom = () => {
           {/* {console.log(participants)} */}
           {participants.map((participant, index) => (
             <div key={index}>
-              <p><strong> memberID:</strong> {participant.chatroomMemberId} ({participant.chatroomMemberType})
-              {liveParticipants.includes(participant.chatroomMemberId) && (
+              <p>
+                <strong>memberID:</strong>{' '}
+                <CustomModal/>
+
+                <span
+                  onClick={(e) => handleLeftClick(e, participant.chatroomMemberId)}
+                  onContextMenu={(e) => handleRightClick(e, participant.chatroomMemberId)}
+                  style={{ cursor: 'pointer' }}
+                >
+
+                  {participant.chatroomMemberId} ({participant.chatroomMemberType})
+                </span>{' '}
+                {liveParticipants.includes(participant.chatroomMemberId) && (
                   <span className={module.liveIndicator}>🟢</span>
                 )}
               </p>
@@ -252,6 +299,11 @@ const Chatroom = () => {
             {receivedMessage.map((msg, index) => (
               <div key={index} className={ msg.type === 'mine' ? module.mineMessage : msg.type === 'other' ? module.otherMessage : module.noticeMessage }>
                 <p>{msg.text}</p>
+                {msg.type !== 'notice' && (
+                    <p>안읽은 사람 수 : {
+                        participants.filter(name => msg.readMembers && Array.isArray(msg.readMembers) && !msg.readMembers.includes(name)).length
+                    }</p>
+                )}
               </div>
             ))}
           </div>
@@ -259,6 +311,11 @@ const Chatroom = () => {
           type="text"
           value={messageInput}
           onChange={(e) => setMessageInput(e.target.value)}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              sendMessage();
+            }
+          }}
           placeholder="메시지를 입력하세요..."
         />
         <button onClick={sendMessage}>Send</button>
