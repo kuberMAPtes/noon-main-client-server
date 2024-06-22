@@ -42,6 +42,7 @@ const useFetchMemberRelationshipList = (fromId, toId, initialPage) => {
       toId: toId,
       following: true,
       follower: true,
+      blocking: true
     };
     const { response, receivedFollowerCount, receivedFollowingCount, receivedBlockingCount } = await getMemberRelationshipList(criteria, page, size);
 
@@ -74,7 +75,7 @@ const useFetchMemberRelationshipList = (fromId, toId, initialPage) => {
   }, [fetchMemberRelationshipList]);
 
   // 상태와 데이터를 반환
-  return { memberRelationshipList, followerCount, followingCount,blockingCount, fetchMoreData: fetchMemberRelationshipList };
+  return { memberRelationshipList, followerCount, followingCount, blockingCount, fetchMoreData: fetchMemberRelationshipList };
 };
 
 export default useFetchMemberRelationshipList;

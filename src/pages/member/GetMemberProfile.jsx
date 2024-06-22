@@ -31,10 +31,12 @@ const GetMemberProfile = () => {
     <Container
       fluid
       className={`${module.container} d-flex flex-column justify-content-start align-items-center pt-6`}
-      style={{ paddingTop: "50px", maxWidth: "100%", display: "none" }}
+      style={{ paddingTop: "30px", margin:"0px", maxWidth: "100%" }}
     >
-      <Row className="justify-content-center d-flex">
-        <Col xs={12} sm={8} md={6} lg={8} className="d-flex justify-content-center">
+      <Row className="justify-content-center d-flex" style={{width:"100%"}}>
+        {/* <Col xs={12} sm={12} md={12} lg={12}
+        className="d-flex justify-content-center"
+        style={{width:"100%"}}> */}
 
             {isDenied ? (
               <div className="d-flex flex-column align-items-center">
@@ -46,7 +48,10 @@ const GetMemberProfile = () => {
                 <ProfileFeedList lastFeedElementRef={lastFeedElementRef} />
               </div>
             ) : (
-              <div className="d-flex flex-column" style={{ paddingBottom: "50px" }}>
+              <>
+              <Col xs={12} sm={12} md={12} lg={12}
+              className="d-flex flex-column"
+              style={{width:"100%" }}>
                 <ProfileBody
                   toId={toId}
                   fromId={fromId}
@@ -56,14 +61,17 @@ const GetMemberProfile = () => {
                   followerCount={followerCount}
                   followingCount={followingCount}
                 />
+                </Col>
+                <Col xs={12} sm={12} md={12} lg={12}>
                 <ProfileFeedList
                   feeds={feeds}
                   lastFeedElementRef={lastFeedElementRef}
                 />
-              </div>
+                </Col>
+                </>
             )}
 
-        </Col>
+        {/* </Col> */}
       </Row>
     </Container>
   );

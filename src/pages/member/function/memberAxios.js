@@ -405,10 +405,10 @@ export const getMemberRelationshipList = async (criteria, page, size) => {
   
       // 관계 유형에 따라 토탈 개수 세기 and 필요한 데이터만 가져오기
       const response = map.dtoList
-      const receivedFollowerCount = map.totalFollowingCount;
-      const receivedFollowingCount = map.totalFollowerCount;
-      const receivedBlockerCount = map.totalBlockingCount;
-      const receivedBlockingCount = map.totalBlockerCount;
+      const receivedFollowerCount = map.totalFollowerCount;
+      const receivedFollowingCount = map.totalFollowingCount;
+      const receivedBlockerCount = map.totalBlockerCount;
+      const receivedBlockingCount = map.totalBlockingCount;
 
   
       return {
