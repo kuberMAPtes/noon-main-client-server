@@ -97,6 +97,18 @@ const FeedDetail = ({ data, memberId }) => {
         setShowLikedUsers(!showLikedUsers); // 리스트 표시 여부 토글
     }
 
+    // 피드 삭제
+    const handleDeleteFeed = async (feedId) => {
+        let url = "/feed/deleteFeed/" + feedId;
+
+        try {
+            const response = await axios_api.post(url)
+            console.log("피드 삭제 성공 : " + response.data);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     // 댓글 삭제
     const handleDeleteComment = async (commentId) => {
         setCommentList(commentList.filter(comment => comment.commentId !== commentId));
@@ -106,7 +118,7 @@ const FeedDetail = ({ data, memberId }) => {
 
         try {
             const response = await axios_api.post(url)
-            console.log(response.data);
+            console.log("댓글 삭제 성공" + response.data);
         } catch (e) {
             console.log(e);
         }
@@ -123,6 +135,9 @@ const FeedDetail = ({ data, memberId }) => {
                             <div onClick={() => goToMemberProfile(writerId)} style={{ cursor: 'pointer', display: 'inline' }}>&nbsp; {writerNickname}</div>
                         </div>
                         <div>
+                            <span onClick={() => handleDeleteFeed(feedId)} style={{ cursor: 'pointer', marginRight: '10px' }}>
+                                <MdDelete size='32'/>
+                            </span>
                             <span onClick={() => goToFeedForm(feedId)} style={{ cursor: 'pointer', marginRight: '10px' }}>
                                 <GrUpdate size='32'/>
                             </span>
