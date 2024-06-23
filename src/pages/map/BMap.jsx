@@ -77,7 +77,7 @@ export default function BMap() {
     });
 
     naver.maps.Event.addListener(map, "dragend", (e) => {
-      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, buildingFetchChecked.popBuildingChecked, sampleMember);
+      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, buildingFetchChecked.popBuildingChecked, sampleMember, navigate);
       const center = map.getCenter();
       dispatch(setCurrentMapCenter({
         latitude: center.y,
@@ -86,7 +86,7 @@ export default function BMap() {
     });
 
     naver.maps.Event.addListener(map, "zoom_changed", (e) => {
-      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, buildingFetchChecked.popBuildingChecked, sampleMember);
+      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, buildingFetchChecked.popBuildingChecked, sampleMember, navigate);
       const center = map.getCenter();
       dispatch(setCurrentMapCenter({
         latitude: center.y,
@@ -141,7 +141,7 @@ export default function BMap() {
 
   useEffect(() => {
     if (!firstEntry) {
-      fetchBuildingMarkers(subscriptionChecked, popBuildingChecked, sampleMember);
+      fetchBuildingMarkers(subscriptionChecked, popBuildingChecked, sampleMember, navigate);
     }
   }, [popBuildingChecked, subscriptionChecked, firstEntry]);
 
@@ -265,16 +265,16 @@ function fetchBuildingInfo(latitude, longitude) {
  * @param {boolean} popBuildingChecked 
  * @param {string} memberId
  */
-function fetchBuildingMarkers(subscriptionChecked, popBuildingChecked, memberId) {
+function fetchBuildingMarkers(subscriptionChecked, popBuildingChecked, memberId, navigate) {
   clearMarkers(buildingSubscriptionMarkers);
   clearMarkers(popBuildingMarkers);
 
   if (subscriptionChecked) {
-    fetchSubscriptions(memberId);
+    fetchSubscriptions(memberId, navigate);
   }
 
   if (popBuildingChecked) {
-    fetchBuildingsInPositionRange();
+    fetchBuildingsInPositionRange(navigate);
   }
 }
 
@@ -302,7 +302,7 @@ function addMarker(html, latitude, longitude) {
   });
 }
 
-function fetchSubscriptions(memberId) {
+function fetchSubscriptions(memberId, navigate) {
   axios_api.get(`${MAIN_API_URL}/buildingProfile/getMemberSubscriptionList`, {
     params: {
       memberId
@@ -321,13 +321,17 @@ function fetchSubscriptions(memberId) {
     const buildingMarkersCache = [];
     data.forEach((d) => {
       const contenthtml = getBuildingMarkerHtml(sampleSubscriptionProviders, sampleLiveliestChatroom, d.buildingName);
-      buildingMarkersCache.push(addMarker(contenthtml, d.latitude, d.longitude));
+      const buildingMarker = addMarker(contenthtml, d.latitude, d.longitude);
+      naver.maps.Event.addListener(buildingMarker, "click", () => {
+        navigate(`/getBuildingProfile/${d.buildingId}`);
+      });
+      buildingMarkersCache.push(buildingMarker);
     });
     buildingSubscriptionMarkers = buildingMarkersCache;
   });
 }
 
-function fetchBuildingsInPositionRange() {
+function fetchBuildingsInPositionRange(navigate) {
   const positionRange = getPositionRange();
   console.log(positionRange);
   axios_api.get(`${MAIN_API_URL}/buildingProfile/getBuildingsWithinRange`, {
@@ -346,7 +350,11 @@ function fetchBuildingsInPositionRange() {
     const buildingMarkersCache = [];
     data.forEach((d) => {
       const contenthtml = getBuildingMarkerHtml(sampleSubscriptionProviders, sampleLiveliestChatroom, d.buildingName);
-      buildingMarkersCache.push(addMarker(contenthtml, d.latitude, d.longitude));
+      const buildingMarker = addMarker(contenthtml, d.latitude, d.longitude)
+      naver.maps.Event.addListener(buildingMarker, "click", () => {
+        navigate(`/getBuildingProfile/${d.buildingId}`);
+      });
+      buildingMarkersCache.push(buildingMarker);
     });
     popBuildingMarkers = buildingMarkersCache;
   });
