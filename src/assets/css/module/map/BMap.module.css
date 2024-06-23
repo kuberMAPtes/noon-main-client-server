@@ -1,0 +1,34 @@
+.mapContainer {
+  height: 90vh;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.myLocationButton {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  z-index: 98;
+  right: 3%;
+  bottom: 8%;
+  padding: 8px;
+  background-color: #ced4da;
+  border-radius: 5px;
+}
+
+.myLocationButton img {
+  width: 100%;
+  height: 100%;
+  z-index: 98;
+}
+
+.fetchTypeContainer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  z-index: 98;
+  position: absolute;
+  top: 8%;
+  right: 3%
+}
