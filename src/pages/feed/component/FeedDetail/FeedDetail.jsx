@@ -135,17 +135,21 @@ const FeedDetail = ({ data, memberId }) => {
                             <div onClick={() => goToMemberProfile(writerId)} style={{ cursor: 'pointer', display: 'inline' }}>&nbsp; {writerNickname}</div>
                         </div>
                         <div>
-                            <span onClick={() => handleDeleteFeed(feedId)} style={{ cursor: 'pointer', marginRight: '10px' }}>
-                                <MdDelete size='32'/>
-                            </span>
-                            <span onClick={() => goToFeedForm(feedId)} style={{ cursor: 'pointer', marginRight: '10px' }}>
-                                <GrUpdate size='32'/>
-                            </span>
+                            { memberId && memberId === writerId && (
+                                <>
+                                    <span onClick={() => handleDeleteFeed(feedId)} style={{ cursor: 'pointer', marginRight: '10px' }}>
+                                            <MdDelete size='32'/> {/* 피드 삭제 */}
+                                    </span>
+                                    <span onClick={() => goToFeedForm(feedId)} style={{ cursor: 'pointer', marginRight: '10px' }}>
+                                        <GrUpdate size='32'/> {/* 피드 수정 */}
+                                    </span>
+                                </>
+                            )}
                             <span onClick={handleLikeClick} style={{ cursor: 'pointer', marginRight: '10px' }}>
-                                {liked ? <FaHeart color="red" size='32'/> : <FaRegHeart size='32'/>}
-                            </span>
+                                {liked ? <FaHeart color="red" size='32'/> : <FaRegHeart size='32'/>} {/* 피드 좋아요 */}
+                            </span> 
                             <span onClick={handleBookmarkClick} style={{ cursor: 'pointer' }}>
-                                {bookmarked ? <FaBookmark color="gold" size='32' /> : <FaRegBookmark size='32' />}
+                                {bookmarked ? <FaBookmark color="gold" size='32' /> : <FaRegBookmark size='32' />} {/* 피드 북마크 */}
                             </span>
                         </div>
                     </div>
