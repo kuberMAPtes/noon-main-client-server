@@ -34,7 +34,7 @@ const ProfileActions = ({toId,fromId}) => {
         <Col xs={4}>
           <div
             className={`${profile.memberCircle} ${base.hoverStyle}`}
-            onClick={() => navigate("/member/updateMember")}
+            onClick={() => navigate("/member/getMember")}
           >
             <div className={profile["circle-profile-icon"]}>
               <FaUserEdit />

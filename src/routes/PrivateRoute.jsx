@@ -30,12 +30,12 @@ const PrivateRoute = ({ children }) => {
     console.log("authorization 상태 변경:", authorization);
     //authorization이 undefined >> 아직 authLoader가 처리하기 전
     //authorization이 false >> authLoader가 로그인 안한 유저로 판단
-    if (authorization===false && isRedirect) {
+    if (loading===false && authorization===false && isRedirect && memberId==="") {
       // alert("리다이렉트했습니다. Redirect false로 변경"+ authorization + isRedirect);
       dispatch(setIsRedirect(false));
       navigate("/member/getAuthMain");
     }
-  }, [authorization,isRedirect,navigate,dispatch]);
+  }, [authorization,isRedirect,navigate,dispatch,memberId,loading]);
 
   if (loading === true) {
     return null;

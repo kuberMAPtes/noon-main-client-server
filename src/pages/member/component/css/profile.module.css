@@ -8,3 +8,6 @@
 .feedList{
   overflow:auto;
 }
+.flexItem{
+  flex-grow: 1;
+}

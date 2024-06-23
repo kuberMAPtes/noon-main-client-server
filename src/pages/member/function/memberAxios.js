@@ -186,6 +186,7 @@ export const addMember = async (addMemberDto) => {
     return null
   }
 };
+// 회원 정보 변경 : 주소변경가능
 
 // 비밀번호 변경
 export const updatePwd = async (memberId, pwd) => {
@@ -265,10 +266,6 @@ export const updatePhoneNumber = async (phoneNumberDto) => {
     return null
   }
 }
-// 회원 정보 변경
-export const updateMember = async (member) => {
-
-}
 
 // 회원 조회
 export const getMember = async (member) => {
@@ -292,6 +289,7 @@ export const checkMemberIdExisted = async (memberId) => {
     //alert('checkMemberIdExisted 응답 response:'+ JSON.stringify(response));
 
     if (response.data.info === true) {
+      // alert("서버에서 true반환");
       return true; // memberId 속성이 있는 경우 true 반환
     } else {
       return false; // memberId 속성이 없는 경우 false 반환

@@ -19,8 +19,8 @@ const GetMemberProfile = () => {
     initialPage
   );
   const { buildingSubscriptionCount } = UseProfileBuildingSubscriptions({
-    toId
-  });;
+    toId,
+  });
   const { followerCount, followingCount } = useFetchMemberRelationshipList(
     fromId,
     toId
@@ -31,47 +31,52 @@ const GetMemberProfile = () => {
     <Container
       fluid
       className={`${module.container} d-flex flex-column justify-content-start align-items-center pt-6`}
-      style={{ paddingTop: "30px", margin:"0px", maxWidth: "100%" }}
+      style={{
+        flexWrap: "no",
+        paddingTop: "30px",
+        margin: "0px",
+        maxWidth: "100%",
+        height: "85vh",
+        overflow: "auto",
+      }}
     >
-      <Row className="justify-content-center d-flex" style={{width:"100%"}}>
-        {/* <Col xs={12} sm={12} md={12} lg={12}
-        className="d-flex justify-content-center"
-        style={{width:"100%"}}> */}
-
-            {isDenied ? (
-              <div className="d-flex flex-column align-items-center">
-                회원프로필을 볼 수 없습니다.
-                <ProfileBody />
-                <Button variant="primary" className="mt-3">
-                  미정
-                </Button>
-                <ProfileFeedList lastFeedElementRef={lastFeedElementRef} />
-              </div>
-            ) : (
-              <>
-              <Col xs={12} sm={12} md={12} lg={12}
-              className="d-flex flex-column"
-              style={{width:"100%" }}>
-                <ProfileBody
-                  toId={toId}
-                  fromId={fromId}
-                  profile={profile}
-                  feeds={feeds}
-                  buildingSubscriptionCount={buildingSubscriptionCount}
-                  followerCount={followerCount}
-                  followingCount={followingCount}
-                />
-                </Col>
-                <Col xs={12} sm={12} md={12} lg={12}>
-                <ProfileFeedList
-                  feeds={feeds}
-                  lastFeedElementRef={lastFeedElementRef}
-                />
-                </Col>
-                </>
-            )}
-
-        {/* </Col> */}
+      <Row
+        className={`justify-content-center ${module.flexItem}`}
+        style={{ width: "100%", height: "100%" }}
+      >
+        {isDenied ? (
+          <div
+            className="d-flex flex-column align-items-center"
+            style={{ width: "100%", height: "100%" }}
+          >
+            회원프로필을 볼 수 없습니다.
+            <ProfileBody />
+            <Button variant="primary" className="mt-3">
+              미정
+            </Button>
+            <ProfileFeedList lastFeedElementRef={lastFeedElementRef} />
+          </div>
+        ) : (
+          <>
+            <Col xs={12} sm={12} md={12} lg={12}>
+              <ProfileBody
+                toId={toId}
+                fromId={fromId}
+                profile={profile}
+                feeds={feeds}
+                buildingSubscriptionCount={buildingSubscriptionCount}
+                followerCount={followerCount}
+                followingCount={followingCount}
+              />
+            </Col>
+            <Col xs={12} sm={12} md={12} lg={12}>
+              <ProfileFeedList
+                feeds={feeds}
+                lastFeedElementRef={lastFeedElementRef}
+              />
+            </Col>
+          </>
+        )}
       </Row>
     </Container>
   );

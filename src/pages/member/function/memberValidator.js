@@ -65,11 +65,16 @@ export const handleChange = async (
       //당연히 있어야함 axios함수
       const response = await checkFunction(input);
       //alert(response);
-      if (response === true) {
+      if (response.info === true) {
         //조건만족
         validationMessageSetter(successMessage);
         validitySetter(true);
-      } else if (response.message) {
+      }else if(response === true){
+        //조건만족
+        validationMessageSetter(successMessage);
+        validitySetter(true);
+      }
+       else if (response.message) {
         //조건실패
         validationMessageSetter(response.message);
         validitySetter(false);

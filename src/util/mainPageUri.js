@@ -1,7 +1,7 @@
 import { encryptWithLv } from "./crypto";
 
 export const navigateMainPage = (memberId,navigate) => {
-    
+    // alert("memberID :: " + memberId);
     const {encryptedData,ivData} = encryptWithLv(memberId);
     const secretId = encodeURIComponent(encryptedData);
     const secretIv = encodeURIComponent(ivData);
@@ -14,5 +14,6 @@ export const navigateMainPage = (memberId,navigate) => {
         ,mainPageUri);
 
     const navigateUri = `${mainPageUri}/${secretId}/${secretIv}`;
+    // alert("네비게이트할 URI :: " + navigateUri);
     navigate(navigateUri);
 }

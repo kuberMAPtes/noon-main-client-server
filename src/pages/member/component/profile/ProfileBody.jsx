@@ -21,7 +21,7 @@ const ProfileBody = ({
 }) => {
   const [dajungTemperature, setDajungTemperature] = useState("");
   const defaultPhotoUrl = `${process.env.PUBLIC_URL}/image/defaultMemberProfilePhoto.png`;
-  const member = useSelector((state)=>state.auth.member);
+  const member = useSelector((state) => state.auth.member);
   const { encryptedData, ivData } = useEncryptId(member?.memberId);
   const navigate = useNavigate();
 
@@ -30,8 +30,10 @@ const ProfileBody = ({
   };
   const handleUpdatePhoneNumber = () => {
     // alert("휴대폰 번호를 등록합니다.");
-    navigate(`/member/AddPhoneNumberAuthentification/updatePhoneNumber?secretId=${encryptedData}&secretIv=${ivData}`);
-  }
+    navigate(
+      `/member/AddPhoneNumberAuthentification/updatePhoneNumber?secretId=${encryptedData}&secretIv=${ivData}`
+    );
+  };
 
   useEffect(() => {
     if (profile.dajungScore >= 80) {
@@ -51,22 +53,39 @@ const ProfileBody = ({
     <Card>
       <Card.Body>
         <Row className="mb-3">
-        <Col xs={4} className="d-flex flex-column align-items-center">
-          <Image
-            src={profile.profilePhotoUrl || defaultPhotoUrl}
-            roundedCircle
-            className="mb-3"
-            style={{ width: "150px", height: "150px", textAlign: "center" }}
-            onError={handleImageError}
-          />
-          <Card.Title style={{ fontSize: "20px", fontWeight: "bold", textAlign: "center" }}>
-            {profile.nickname}
-          </Card.Title>
-          <LogoutForm />
-        </Col>
+          <Col xs={4} className="d-flex flex-column align-items-center">
+            <Image
+              src={profile.profilePhotoUrl || defaultPhotoUrl}
+              roundedCircle
+              className="mb-3"
+              style={{ width: "150px", height: "150px", textAlign: "center" }}
+              onError={handleImageError}
+            />
+            <Card.Title
+              style={{
+                fontSize: "20px",
+                fontWeight: "bold",
+                textAlign: "center",
+              }}
+            >
+              {profile.nickname}
+            </Card.Title>
+
+            <LogoutForm />
+            
+          </Col>
           <Col xs={8}>
             <Row>
-              <Col xs={3} style={{fontSize:"14px", padding:"0px", textAlign:"center"}}>다정 온도</Col>
+              <Col
+                xs={3}
+                style={{
+                  fontSize: "14px",
+                  padding: "0px",
+                  textAlign: "center",
+                }}
+              >
+                다정 온도
+              </Col>
               <Col xs={9}>
                 <div className="d-flex flex-column align-items-center">
                   <ProgressBar
@@ -84,26 +103,36 @@ const ProfileBody = ({
             </Row>
             <Row>
               <Col xs={12}>{profile.profileIntro}</Col>
-              
             </Row>
-            { toId!==fromId && (
-            <Row>
-              <Col xs={12}>
-                <Button style={{width:"49%"}}>그룹채팅방 초대</Button><Button style={{width:"51%"}}>1대1채팅방 초대</Button>
-              </Col>
-            </Row>
-            )}
-            { (toId === fromId && member.phoneNumber && member.phoneNumber.endsWith('X')) && (
+            {toId !== fromId && (
               <Row>
                 <Col xs={12}>
-                  <Button style={{width: "100%"}} onClick={handleUpdatePhoneNumber}>휴대폰 번호 등록</Button>
-                  <span style={{fontSize : "13px"}}>💥휴대폰 번호를 등록하지 않으시면 아이디 및 비밀번호 찾기 서비스를 이용하실 수 없습니다.</span>
+                  <Button style={{ width: "49%" }}>그룹채팅방 초대</Button>
+                  <Button style={{ width: "51%" }}>1대1채팅방 초대</Button>
                 </Col>
               </Row>
             )}
+            {toId === fromId &&
+              member.phoneNumber &&
+              member.phoneNumber.endsWith("X") && (
+                <Row>
+                  <Col xs={12}>
+                    <Button
+                      style={{ width: "100%" }}
+                      onClick={handleUpdatePhoneNumber}
+                    >
+                      휴대폰 번호 등록
+                    </Button>
+                    <span style={{ fontSize: "13px" }}>
+                      💥휴대폰 번호를 등록하지 않으시면 아이디 및 비밀번호 찾기
+                      서비스를 이용하실 수 없습니다.
+                    </span>
+                  </Col>
+                </Row>
+              )}
           </Col>
           <Col xs={12}>
-          <hr/>
+            <hr />
           </Col>
         </Row>
         <ProfileStats
@@ -113,11 +142,8 @@ const ProfileBody = ({
           followerCount={followerCount}
           followingCount={followingCount}
         />
-        
-        <ProfileActions 
-          toId={toId}
-          fromId={fromId}
-        />
+
+        <ProfileActions toId={toId} fromId={fromId} />
       </Card.Body>
     </Card>
   );
