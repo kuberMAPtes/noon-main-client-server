@@ -50,7 +50,7 @@ const followers = [
   }
 ];
 
-const defaultPhotoUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSg3ya9qxUA7YtK-RHIkePuc-IhSgFlOf_7YA&s"
+const defaultPhotoUrl = `${process.env.PUBLIC_URL}/image/defaultMemberProfilePhoto.png`;
 
 const InstagramFollowersView = () => {
   return (
@@ -68,6 +68,7 @@ const InstagramFollowersView = () => {
               <Col xs={2}>
                 <Image
                 src={follower.imgSrc || defaultPhotoUrl}
+                style={{width:"100px", height:"100px"}}
                 roundedCircle fluid />
               </Col>
               <Col xs={6}>

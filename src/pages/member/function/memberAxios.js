@@ -12,7 +12,7 @@ export const sendAuthentificationNumber = async (phoneNumber) => {
     return response.data;
   } catch (error) {
     console.error("문자전송에러 error:", error);
-    throw error;
+    return null
   }
 };
 
@@ -40,7 +40,7 @@ export const confirmAuthentificationNumber = async (
     return response.data;
   } catch (error) {
     console.error("confirmAuthentificationNumber error:", error);
-    throw error;
+    return null
   }
 };
 
@@ -55,7 +55,7 @@ export const checkMemberId = async (memberId) => {
     return response.data;
   } catch (error) {
     console.error("checkMemberId error:", error);
-    throw error;
+    return null
   }
 };
 
@@ -70,7 +70,7 @@ export const checkNickname = async (nickname) => {
     return response.data;
   } catch (error) {
     console.error("checkNickName error:", error);
-    throw error;
+    return null
   }
 };
 
@@ -85,7 +85,7 @@ export const checkPhoneNumber = async (phoneNumber) => {
     return response.data;
   } catch (error) {
     console.error("checkPhoneNumber error:", error);
-    throw error;
+    return null
   }
 };
 export const checkPhoneNumberAndMemberId = async (memberId, phoneNumber) => {
@@ -99,7 +99,7 @@ export const checkPhoneNumberAndMemberId = async (memberId, phoneNumber) => {
     return response.data;
   } catch (error) {
     console.error("checkPhoneNumberAndMemberId error:", error);
-    throw error;
+    return null
   }
 };
 // 비밀번호 확인
@@ -113,7 +113,7 @@ export const checkPassword = async (memberId, password) => {
     return response.data;
   } catch (error) {
     console.error("checkPassword error:", error);
-    throw error;
+    return null
   }
 };
 
@@ -126,7 +126,7 @@ export const refreshToken = async () => {
     return response.data;
   } catch (error) {
     console.error("refreshToken error:", error);
-    throw error;
+    return null
   }
 };
 // 로그인
@@ -138,7 +138,7 @@ export const Login = async (loginRequestDto) => {
     return response.data.info;
   } catch (error) {
     console.error("login error:", error);
-    throw error;
+    return null
   }
 };
 // 구글 로그인
@@ -154,7 +154,7 @@ export const googleLogin = async (googleLoginRequestDto) => {
     return response.data.info;
   } catch (error) {
     console.error("googleLogin error:", error);
-    throw error;
+    return null
   }
 };
 
@@ -167,7 +167,7 @@ export const logout = async () => {
     return response.data;
   } catch (error) {
     console.error("logout error:", error);
-    throw error;
+    return null
   }
 };
 
@@ -183,7 +183,7 @@ export const addMember = async (addMemberDto) => {
     return response.data.info;
   } catch (error) {
     console.error("addMember error:", error);
-    throw error;
+    return null
   }
 };
 
@@ -200,7 +200,7 @@ export const updatePwd = async (memberId, pwd) => {
     return response.data.info;
   } catch (error) {
     console.error("updatePwd error:", error);
-    throw error;
+    return null
   }
 };
 
@@ -216,7 +216,7 @@ export const updateProfilePhoto = async (profilePhotoDto) => {
     return response.data;
   } catch (error) {
     console.error("updateProfilePhoto error:", error);
-    throw error;
+    return null
   }
 };
 
@@ -232,7 +232,7 @@ export const updateProfileIntro = async (profileIntroDto) => {
     return response.data;
   } catch (error) {
     console.error("updateProfileIntro error:", error);
-    throw error;
+    return null
   }
 };
 
@@ -248,9 +248,27 @@ export const updateDajungScore = async (dajungScoreDto) => {
     return response.data;
   } catch (error) {
     console.error("updateDajungScore error:", error);
-    throw error;
+    return null
   }
 };
+
+//전화번호변경
+export const updatePhoneNumber = async (phoneNumberDto) => {
+  try{
+    console.log("updatePhoneNumber 요청:",phoneNumberDto);
+    const response = await axiosInstance.post(`/member/updatePhoneNumber`,phoneNumberDto);
+    console.log("updatePhoneNumber 응답:",response);
+    alert("updatePhoneNumber 응답:"+JSON.stringify(response));
+    return response.data.info;
+  }catch(error){
+    console.error("updatePhoneNumber error:",error);
+    return null
+  }
+}
+// 회원 정보 변경
+export const updateMember = async (member) => {
+
+}
 
 // 회원 조회
 export const getMember = async (member) => {
@@ -316,7 +334,7 @@ export const getMemberProfile = async (fromId, toId) => {
     return response.data.info;
   } catch (error) {
     console.error("getMemberProfile error:", error);
-    throw error;
+    return null
   }
 };
 
@@ -331,7 +349,7 @@ export const deleteMember = async (memberId) => {
     return response.data;
   } catch (error) {
     console.error("deleteMember error:", error);
-    throw error;
+    return null
   }
 };
 
@@ -359,7 +377,7 @@ export const addMemberRelationship = async (
     return response.data.info;
   } catch (error) {
     console.error("addMemberRelationship error:", error);
-    throw error;
+    return null
   }
 };
 // 회원 관계 삭제
@@ -378,7 +396,7 @@ export const deleteMemberRelationship = async (fromId, toId, relationshipType, a
     return response.data.info;
   } catch (error) {
     console.error("deleteMemberRelationship error:", error);
-    throw error;
+    return null
   }
 };
 // 회원 목록 조회
@@ -396,7 +414,7 @@ export const listMembers = async (searchCriteria, page, size) => {
     return response.data;
   } catch (error) {
     console.error("listMembers error:", error);
-    throw error;
+    return null
   }
 };
 export const getMemberRelationship = async (fromId,toId) => {
@@ -426,7 +444,7 @@ export const getMemberRelationship = async (fromId,toId) => {
     
   }catch(error){
     console.error("getMemberRelationship error:", error);
-    throw error;
+    return null
   }
 }
 //대상 회원에 대한 모든 회원관계 목록을 가져오는 회원관계목록조회
@@ -467,7 +485,19 @@ export const getMemberRelationshipList = async (criteria, page, size) => {
       };
     } catch (error) {
       console.error("getMemberRelationshipList error:", error);
-      throw error;
+      return null
     }
   };
-
+export const getBuildingSubscriptionCount = async (memberId) => {
+  try{
+    // alert("getBuildingSubscriptionCount 요청:"+memberId);
+    const buildingDtoList = await axiosInstance.get(`/buildingProfile/getMemberSubscriptionList`,{
+      params:{memberId}
+    });
+    // alert("getBuildingSubscriptionCount 응답:"+JSON.stringify(buildingDtoList.data));
+    return buildingDtoList?.data?.length;
+  } catch(error){
+    console.error("getBuildingSubscriptionCount error:", error);
+    return null
+  }
+}

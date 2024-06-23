@@ -121,9 +121,7 @@ const AppRoutes = () => {
             <Route
               path="addPhoneNumberAuthentification/:toUrl"
               element={
-                <GuestRoute>
-                  <AddPhoneNumberAuthentification />
-                </GuestRoute>
+                <AddPhoneNumberAuthentification />
               }
             />
             {/* 로그인한 상태로 AddPhoneNumberAuthentification가고 싶다? 비밀번호 변경하고 싶다면... */}

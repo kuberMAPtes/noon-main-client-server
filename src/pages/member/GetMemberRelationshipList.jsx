@@ -7,11 +7,14 @@ import { Button, Col, Container, Image, ListGroup, Row } from "react-bootstrap";
 import module from "./component/css/getMemberRelationshipList.module.css";
 import { handleBlockCancelClick, handleFollowCancelClick, handleFollowClick } from "./function/MemberRelationshipUtil";
 import { getMemberRelationship } from "./function/memberAxios";
+import { navigateMainPage } from "../../util/mainPageUri";
+import { useNavigate } from "react-router-dom";
+
 
 // 팔로잉 팔로워 리스트임
 const GetMemberRelationshipList = () => {
   // Redux를 통해 필요한 ID와 페이지 번호를 가져옴
-
+  const navigate = useNavigate();
   //fromId(A가) toId(B의) 팔로우,팔로잉 목록을 본다.
   //memberRelationship.fromMember(C)가 toId(B)를 팔로우/팔로잉/차단한다.
   //toId(B)가 memberRelationship.toMember(D)를 팔로우/팔로잉/차단한다.
@@ -43,6 +46,7 @@ const GetMemberRelationshipList = () => {
     blockingList: initialBlockingList,
   });
   const [activeTab, setActiveTab] = useState('following');
+  
 
   const handleTabClick = (relationshipType) => {
     setActiveTab(relationshipType);
@@ -131,7 +135,7 @@ const GetMemberRelationshipList = () => {
     }
   }, [activeTab, yourRelationshipLists]);
 
-  const defaultPhotoUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSg3ya9qxUA7YtK-RHIkePuc-IhSgFlOf_7YA&s"
+  const defaultPhotoUrl = `${process.env.PUBLIC_URL}/image/defaultMemberProfilePhoto.png`;
 
 
 
@@ -225,6 +229,13 @@ const GetMemberRelationshipList = () => {
       );
   };
 
+
+  const handleImageClick = (memberId) => {
+    if (memberId) {
+      navigateMainPage(memberId,navigate);
+    }
+  };
+
   return (
     <Container style={{width:"100%", margin:"0px", maxWidth:"10000px"}}>
       <Row style={{ border: '1px solid #ccc', borderRadius: '8px' }}>
@@ -266,7 +277,9 @@ const GetMemberRelationshipList = () => {
             <Col xs={2}>
               <Image
               src={memberRelationship?.fromMember?.profilePhotoUrl || defaultPhotoUrl}
-              roundedCircle fluid />
+              className={module.profilePhotoUrl}
+              onClick={()=>handleImageClick(memberRelationship?.fromMember?.memberId)}
+              roundedCircle/>
             </Col>
             <Col xs={6}>
               <div>{memberRelationship?.fromMember?.nickname}</div>
@@ -291,7 +304,9 @@ const GetMemberRelationshipList = () => {
               <Col xs={2}>
                 <Image
                 src={memberRelationship?.toMember?.profilePhotoUrl || defaultPhotoUrl}
-                roundedCircle fluid />
+                className={module.profilePhotoUrl}
+                onClick={()=>handleImageClick(memberRelationship?.toMember?.memberId)}
+                roundedCircle/>
               </Col>
               <Col xs={6} >
                 <div>{memberRelationship?.toMember?.nickname}</div>
@@ -315,7 +330,9 @@ const GetMemberRelationshipList = () => {
             <Col xs={2}>
               <Image
               src={memberRelationship?.toMember?.profilePhotoUrl || defaultPhotoUrl}
-              roundedCircle fluid />
+              className={module.profilePhotoUrl}
+              onClick={()=>handleImageClick(memberRelationship?.toMember?.memberId)}
+              roundedCircle/>
             </Col>
             <Col xs={6}>
               <div>{memberRelationship?.toMember?.nickname}</div>

@@ -19,8 +19,8 @@ const GetMemberProfile = () => {
     initialPage
   );
   const { buildingSubscriptionCount } = UseProfileBuildingSubscriptions({
-    toId,
-  });
+    toId
+  });;
   const { followerCount, followingCount } = useFetchMemberRelationshipList(
     fromId,
     toId

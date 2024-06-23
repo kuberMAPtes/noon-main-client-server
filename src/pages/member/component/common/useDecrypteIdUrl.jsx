@@ -1,9 +1,10 @@
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { decryptWithLv, decryptWithLvWithUri, encryptWithLv, encryptWithLvWithUri } from "../../../../util/crypto";
+import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { decryptWithLv } from '../../../../util/crypto';
 
-const useDecryptId = () => {
-  const { secretId, secretIv } = useParams();
+const useDecrypteIdUrl = () => {
+
+  const { secretId, secretIv } = useSearchParams();
   const [toId, setToId] = useState(null);
 
   useEffect(() => {
@@ -20,4 +21,4 @@ const useDecryptId = () => {
   return { toId };
 };
 
-export default useDecryptId;
+export default useDecrypteIdUrl;

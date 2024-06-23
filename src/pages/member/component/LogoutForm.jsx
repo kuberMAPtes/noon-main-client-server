@@ -16,19 +16,18 @@ const LogoutForm = () => {
 
   const handleLogout = async () => {
     try {
-      clearAllCookies();
-      dispatch(logout(navigate));
-
+      await dispatch(logout(navigate));
       try {
         await signOut(auth);
         console.log("Firebase auth 로그아웃 완료");
-        dispatch(setLoginStatus('logged_out'));
       } catch (error) {
         console.error("로그아웃 중 오류 발생:", error);
       }
 
     } catch (error) {
       console.error('Logout failed', error);
+    } finally {
+      navigate("/member/getAuthMain");
     }
   };
 

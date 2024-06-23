@@ -1,28 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { getBuildingSubscriptionCount } from "../../function/memberAxios";
 
 const UseProfileBuildingSubscriptions = ({ toId }) => {
-  const fromId = useSelector((state) => state.auth.member.memberId);
 
   const [buildingSubscriptionCount, setBuildingSubscriptionCount] = useState(0);
 
   useEffect(() => {
-    const fetchBuildingSubscriptions = async () => {
-      console.log(
-        "Fetching building subscriptions",
-        "From ID:",
-        fromId,
-        "To ID:",
-        toId
-      );
-      // const response = await getBuildingSubscriptionList(fromId, toId);
-      // console.log("Building subscriptions:", response);
-      // const receivedBuildingSubscriptionCount = response.length;
-      const receivedBuildingSubscriptionCount = 100;
-      setBuildingSubscriptionCount(receivedBuildingSubscriptionCount);
-    };
-    fetchBuildingSubscriptions();
-  }, [buildingSubscriptionCount, fromId, toId]);
+    
+    if(toId){
+      const fetchBuildingSubscriptions = async () => {
+        const response = await getBuildingSubscriptionCount(toId);
+        setBuildingSubscriptionCount(response);
+      };
+      fetchBuildingSubscriptions();
+    }
+  }, [buildingSubscriptionCount, toId]);
 
   return { buildingSubscriptionCount };
 };

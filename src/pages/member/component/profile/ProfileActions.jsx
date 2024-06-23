@@ -27,11 +27,6 @@ const ProfileActions = ({toId,fromId}) => {
     // alert("유저를 신고합니다.");
   };
 
-  const handleUpdatePhoneNumber = (e) => {
-    e.preventDefault();
-    // alert("연락처를 등록합니다.");
-  };
-
   return (
     <>
     <Row className="text-center mt-3">
@@ -72,11 +67,13 @@ const ProfileActions = ({toId,fromId}) => {
       <AnimatedDiv onClick={() => navigate("/customerSupport")}>
         고객지원
       </AnimatedDiv>
-      <AnimatedDiv onClick={handleBlock}>차단하기</AnimatedDiv>
-      <AnimatedDiv onClick={() => navigate("/report")}>신고하기</AnimatedDiv>
-      <AnimatedDiv onClick={handleUpdatePhoneNumber}>
-        연락처 등록하기
-      </AnimatedDiv>
+      
+        {fromId !== toId && 
+        (<>
+        <AnimatedDiv onClick={() => navigate(`report/addReport/${fromId}/${toId}`)}>신고하기</AnimatedDiv>
+        <AnimatedDiv onClick={handleBlock}>차단하기</AnimatedDiv>
+        </>)
+        }
     </Row>
   )}
     </Row>
