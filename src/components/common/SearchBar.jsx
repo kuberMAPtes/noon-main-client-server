@@ -24,7 +24,7 @@ export default function SearchBar({typeCallback, searchCallback}) {
   }, []);
 
   return (
-    <InputGroup className="mb-3">
+    <InputGroup className="mb-3 search-bar-container">
       <Form.Control
           onChange={(e) => typeCallback(e.target.value)}
           ref={searchKeywordInputRef}
