@@ -41,7 +41,7 @@ const FeedDetail = ({ data, memberId }) => {
 
     const writtenTimeReplace = data.writtenTime.replace('T', ' '); // 날짜 포멧팅
 
-    const {goToMemberProfile, goToBuildingProfile} = Navigator();
+    const {goToMemberProfile, goToBuildingProfile, backHistory} = Navigator();
 
     // 댓글 추가 관리
     const [newComment, setNewComment] = useState('');
@@ -118,6 +118,7 @@ const FeedDetail = ({ data, memberId }) => {
             const response = await axios_api.post(url)
             console.log("피드 삭제 성공 : " + response.data);
             setFeedDeleteShow(false);
+            backHistory(); // 뒤로 가기
         } catch (e) {
             console.log(e);
         }

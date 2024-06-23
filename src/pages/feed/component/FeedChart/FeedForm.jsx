@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Form, Button, Card, ListGroup, Container, Badge } from 'react-bootstrap';
 import "../../css/FeedForm.css";
 import axios_api from '../../../../lib/axios_api';
-import CheckModal from '../Common/CheckModal';
 
 const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, onSave }) => {
     const [feedData, setFeedData] = useState({
@@ -19,10 +18,6 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
         attachments: []
     });
     const [tagInput, setTagInput] = useState('');
-
-    // Feed Add, Update Modal 관련
-    const [feedAddShow, setFeedAddShow] = useState(false);
-    const [feedUpdateShow, setFeedUpdateShow] = useState(false);
 
     useEffect(() => {
         if (existingFeed) {
@@ -64,121 +59,85 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
         });
     };
 
-    // 피드 추가
-    const handleAddSubmit = async () => {
-        try {
-            const addFeedData = {
-                writerId: inputWriterId,
-                buildingId: inputBuildingId,
-                mainActivate: false,
-                viewCnt: 0,
-                writtenTime: new Date(),
-                modified: false,
-                title: feedData.title,
-                feedText: feedData.feedText,
-                updateTagList: feedData.updateTagList,
-                feedCategory: feedData.category,
-                publicRange: feedData.publicRange
-            };
-
-            console.log(addFeedData);
-
-            const feedResponse = await axios_api.post('/feed/addFeed', addFeedData);
-
-            const feedId = feedResponse.data;
-
-            const formData = new FormData();
-            feedData.attachments.forEach((file) => {
-                formData.append('multipartFile', file);
-            });
-            
-            if(formData && formData.getAll('multipartFile').length > 0) {
-                await axios_api.post(`/feed/addFeedAttachment/${feedId}`, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                });
-            }
-
-            console.log('피드가 성공적으로 저장되었습니다:', feedResponse.data);
-        } catch (error) {
-            console.error('피드 저장 중 오류 발생:', error);
-        }
-    }
-
-    // 피드 수정
-    const handleUpdateSubmit = async () => {
-        try {
-            const updateFeedData = {
-                feedId: inputFeedId,
-                writerId: inputWriterId,
-                mainActivate: feedData.mainActivate,
-                viewCnt: feedData.viewCnt,
-                writtenTime: feedData.writtenTime,
-                modified: true,
-                title: feedData.title,
-                feedText: feedData.feedText,
-                updateTagList: feedData.updateTagList,
-                feedCategory: feedData.category,
-                publicRange: feedData.publicRange,
-                attachments: feedData.attachments
-            };
-
-            console.log(updateFeedData);
-
-            const feedResponse = await axios_api.post(`/feed/updateFeed`, updateFeedData);
-
-            const feedId = feedResponse.data;
-
-            // 첨부파일 저장
-            const formData = new FormData();
-            feedData.attachments.forEach((file) => {
-                formData.append('multipartFile', file);
-            });
-
-            if(formData && formData.getAll('multipartFile').length > 0) {
-                await axios_api.post(`/feed/addFeedAttachment/${feedId}`, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                });
-            }
-
-            console.log('피드가 성공적으로 저장되었습니다:', feedResponse.data);
-        } catch (error) {
-            console.error('피드 수정 중 오류 발생:', error);
-        }
-    }
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
             if (inputFeedId) {
-                setFeedUpdateShow(true);
-            } else {
-                setFeedAddShow(true);
-            }
-        } catch (error) {
-            console.error("HandleSubmit Error 발생 : " + error);
-        }
-    }
+                const updateFeedData = {
+                    feedId: inputFeedId,
+                    writerId: inputWriterId,
+                    mainActivate: feedData.mainActivate,
+                    viewCnt: feedData.viewCnt,
+                    writtenTime: feedData.writtenTime,
+                    modified: true,
+                    title: feedData.title,
+                    feedText: feedData.feedText,
+                    updateTagList: feedData.updateTagList,
+                    feedCategory: feedData.category,
+                    publicRange: feedData.publicRange,
+                    attachments: feedData.attachments
+                };
 
-    const handleModalConfirm = async () => {
-        try {
-            if (inputFeedId) {
-                await handleUpdateSubmit();
+                console.log(updateFeedData);
+
+                const feedResponse = await axios_api.post(`/feed/updateFeed`, updateFeedData);
+
+                const feedId = feedResponse.data;
+
+                const formData = new FormData();
+                feedData.attachments.forEach((file) => {
+                    formData.append('multipartFile', file);
+                });
+
+                await axios_api.post(`/feed/addFeedAttachment/${feedId}`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+
+                console.log('피드가 성공적으로 저장되었습니다:', feedResponse.data);
+
             } else {
-                await handleAddSubmit();
+                const addFeedData = {
+                    writerId: inputWriterId,
+                    buildingId: inputBuildingId,
+                    mainActivate: false,
+                    viewCnt: 0,
+                    writtenTime: new Date(),
+                    modified: false,
+                    title: feedData.title,
+                    feedText: feedData.feedText,
+                    updateTagList: feedData.updateTagList,
+                    feedCategory: feedData.category,
+                    publicRange: feedData.publicRange
+                };
+
+                console.log(addFeedData);
+
+                const feedResponse = await axios_api.post('/feed/addFeed', addFeedData);
+
+                const feedId = feedResponse.data;
+
+                const formData = new FormData();
+                feedData.attachments.forEach((file) => {
+                    formData.append('multipartFile', file);
+                });
+
+                await axios_api.post(`/feed/addFeedAttachment/${feedId}`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+
+                console.log('피드가 성공적으로 저장되었습니다:', feedResponse.data);
             }
 
             onSave && onSave();
-            setFeedAddShow(false);
-            setFeedUpdateShow(false);
         } catch (error) {
-            console.error("HandleModalConfirm Error 발생 : " + error);
+            console.error('피드 저장 중 오류 발생:', error);
         }
-    }
+    };
 
     const handleCancel = () => {
         setFeedData({
@@ -329,31 +288,12 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                         <Button variant="primary" type="submit" className="mr-2">
                             저장
                         </Button>
-                        &nbsp;&nbsp;
                         <Button variant="secondary" onClick={handleCancel}>
                             취소
                         </Button>
                     </Form>
                 </Card.Body>
             </Card>
-
-            {/* Modal : addFeed*/}
-            <CheckModal 
-                show={feedAddShow}
-                onHide={()=>setFeedAddShow(false)}
-                onConfirm={handleModalConfirm}
-                title="피드 추가"
-                content="새로운 일상을 공유할까요?"
-            />
-
-            {/* Modal : updateFeed*/}
-            <CheckModal 
-                show={feedUpdateShow}
-                onHide={()=>setFeedUpdateShow(false)}
-                onConfirm={handleModalConfirm}
-                title="피드 수정"
-                content="변화된 일상을 공유할까요?"
-            />
         </Container>
     );
 };

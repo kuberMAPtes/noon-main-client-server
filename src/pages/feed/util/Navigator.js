@@ -33,11 +33,16 @@ const useNavigator = () => {
     [navigate]
   );
 
+  const backHistory = useCallback(() => {
+    navigate(-1);
+  });
+
   return {
     goToFeedDetail,
     goToMemberProfile,
     goToBuildingProfile,
     goToFeedForm,
+    backHistory,
   };
 };
 
