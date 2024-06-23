@@ -10,8 +10,10 @@ import LikedUsersList from './LikedUsersList';
 import axios_api from '../../../../lib/axios_api';
 import Navigator from '../../util/Navigator'
 import useNavigator from '../../util/Navigator';
+import CheckModal from '../Common/CheckModal';
 
 const FeedDetail = ({ data, memberId }) => {
+    // 데이터
     const {
         feedId,
         title,
@@ -48,6 +50,14 @@ const FeedDetail = ({ data, memberId }) => {
     const [likedCount, setLikeCount] = useState(likeCount); // 좋아요 개수
     const [showLikedUsers, setShowLikedUsers] = useState(false); // 리스트 표시 여부
 
+    // Feed Delete Modal 관련
+    const [feedDeleteShow, setFeedDeleteShow] = useState(false); // Modal창 여부
+
+    // Comment Delete Modal 관련
+    const [commentDeleteShow, setcommentDeleteShow] = useState(false); // Modal창 여부
+    const [deleteCommentId, setDeleteCommentId] = useState(null);
+
+    // 피드 수정 화면으로 이동
     const { goToFeedForm } = useNavigator();
 
     // 댓글 추가 내용 만들기
@@ -84,26 +94,30 @@ const FeedDetail = ({ data, memberId }) => {
         setNewComment('');
     };
 
+    // 좋아요
     const handleLikeClick = () => {
         toggleLike(liked, setLiked, feedId, memberId);
         setLikeCount(preCount => liked ? preCount - 1 : preCount + 1); // 좋아요 수는 변동이 바로 보이도록 변경
     }
     
+    // 북마크
     const handleBookmarkClick = () => {
         toggleBookmark(bookmarked, setBookmarked, feedId, memberId);
     }
 
+    // 좋아요를 누른 사람 목록
     const handleShowLikedUsersClick = () => {
         setShowLikedUsers(!showLikedUsers); // 리스트 표시 여부 토글
     }
 
     // 피드 삭제
-    const handleDeleteFeed = async (feedId) => {
+    const handleDeleteFeed = async () => {
         let url = "/feed/deleteFeed/" + feedId;
 
         try {
             const response = await axios_api.post(url)
             console.log("피드 삭제 성공 : " + response.data);
+            setFeedDeleteShow(false);
         } catch (e) {
             console.log(e);
         }
@@ -119,6 +133,7 @@ const FeedDetail = ({ data, memberId }) => {
         try {
             const response = await axios_api.post(url)
             console.log("댓글 삭제 성공" + response.data);
+            setcommentDeleteShow(false);
         } catch (e) {
             console.log(e);
         }
@@ -137,8 +152,8 @@ const FeedDetail = ({ data, memberId }) => {
                         <div>
                             { memberId && memberId === writerId && (
                                 <>
-                                    <span onClick={() => handleDeleteFeed(feedId)} style={{ cursor: 'pointer', marginRight: '10px' }}>
-                                            <MdDelete size='32'/> {/* 피드 삭제 */}
+                                    <span onClick={() => setFeedDeleteShow(true)} style={{ cursor: 'pointer', marginRight: '10px' }}>
+                                            <MdDelete size='32'/> {/* 피드 삭제 : Modal 열기*/}
                                     </span>
                                     <span onClick={() => goToFeedForm(feedId)} style={{ cursor: 'pointer', marginRight: '10px' }}>
                                         <GrUpdate size='32'/> {/* 피드 수정 */}
@@ -215,7 +230,10 @@ const FeedDetail = ({ data, memberId }) => {
                                 <div>
                                     {memberId && memberId === comment.memberId && (
                                     <>
-                                        <MdDelete style={{ cursor: 'pointer' }} onClick={() => handleDeleteComment(comment.commentId)} />
+                                        <MdDelete style={{ cursor: 'pointer' }} onClick={() => {
+                                            setcommentDeleteShow(true)
+                                            setDeleteCommentId(comment.commentId)
+                                            }} /> {/* 댓글 삭제 : Modal 열기*/}
                                     </>
                                     )}
                                 </div>
@@ -238,6 +256,24 @@ const FeedDetail = ({ data, memberId }) => {
                     </Form>
                 </CardBody>
             </Card>
+
+            {/* Modal : FeedDelete*/}
+            <CheckModal 
+                show={feedDeleteShow}
+                onHide={()=>setFeedDeleteShow(false)}
+                onConfirm={handleDeleteFeed}
+                title="피드 삭제 확인"
+                content="정말 피드를 삭제하시겠습니까?"
+            />
+
+            {/* Modal : CommentDelete*/}
+            <CheckModal 
+                show={commentDeleteShow}
+                onHide={()=>setcommentDeleteShow(false)}
+                onConfirm={()=>handleDeleteComment(deleteCommentId)}
+                title="댓글 삭제 확인"
+                content="정말 댓글를 삭제하시겠습니까?"
+            />
             <br/><br/><br/><br/>
         </div>
     );
