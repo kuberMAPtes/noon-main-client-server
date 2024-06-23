@@ -199,15 +199,29 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
         }));
     };
 
-    const handleFileRemove = (fileName) => {
-        const updatedFiles = feedData.attachments.filter((file) => file.name !== fileName);
+    const handleFileRemove = (fileUrl) => {
+        const updatedFiles = feedData.attachments.filter((file) => {
+            if (file instanceof File) {
+                return URL.createObjectURL(file) !== fileUrl;
+            } else {
+                return file.fileUrl !== fileUrl;
+            }
+        });
         setFeedData({ ...feedData, attachments: updatedFiles });
     };
 
     const isImageOrVideo = (file) => {
-        return file && file.type && (file.type.startsWith('image/') || file.type.startsWith('video/'));
+        if (file instanceof File) {
+            const fileType = file.type.split('/')[0];
+            return fileType === 'image' || fileType === 'video';
+        }
+        return file && (file.fileType === 'PHOTO' || file.fileType === 'VIDEO');
     };
 
+    const isUploadedFile = (file) => {
+        return file.fileUrl !== undefined; // 이미 업로드된 파일은 fileUrl이 존재할 것으로 가정
+    };
+    
     const handleTagAdd = () => {
         if (tagInput.trim() !== '') {
             setFeedData(prevState => ({
@@ -260,16 +274,32 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                                 onChange={handleFileChange}
                             />
                             <ListGroup className="file-list mt-3">
-                                {feedData.attachments.map((file, index) => (
-                                    <ListGroup.Item key={index} className="d-flex justify-content-between align-items-center">
-                                        {isImageOrVideo(file) ? (
-                                            <img src={URL.createObjectURL(file)} alt={file.name} style={{ maxWidth: '50px', maxHeight: '50px' }} />
-                                        ) : (
+                            {feedData.attachments.map((file, index) => (
+                                <ListGroup.Item key={index} className="d-flex justify-content-between align-items-center">
+                                    {isUploadedFile(file) ? (
+                                        // 이미 업로드된 파일의 미리보기
+                                        <div className="d-flex align-items-center">
+                                            {isImageOrVideo(file) ? (
+                                                <img src={file.fileUrl} alt={file.fileUrl} style={{ maxWidth: '50px', maxHeight: '50px', marginRight: '10px' }} />
+                                            ) : (
+                                                <span>{file.fileUrl}</span>
+                                            )}
+                                            <span>{file.fileUrl}</span>
+                                        </div>
+                                    ) : (
+                                        // 새로 업로드할 파일의 미리보기
+                                        <div className="d-flex align-items-center">
+                                            {isImageOrVideo(file) ? (
+                                                <img src={URL.createObjectURL(file)} alt={file.name} style={{ maxWidth: '50px', maxHeight: '50px', marginRight: '10px' }} />
+                                            ) : (
+                                                <span>{file.name}</span>
+                                            )}
                                             <span>{file.name}</span>
-                                        )}
-                                        <Button variant="danger" size="sm" onClick={() => handleFileRemove(file.name)}>삭제</Button>
-                                    </ListGroup.Item>
-                                ))}
+                                        </div>
+                                    )}
+                                    <Button variant="danger" size="sm" onClick={() => handleFileRemove(file)}>삭제</Button>
+                                </ListGroup.Item>
+                            ))}
                             </ListGroup>
                         </Form.Group>
 
