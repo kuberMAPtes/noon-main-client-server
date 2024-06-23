@@ -6,8 +6,9 @@ const axiosInstance = axios.create({
   baseURL: process.env.REACT_APP_API_BASE_URL,
   headers:{
     'Content-Type' : 'application/json'
-  }
-},{withCredentials: true});
+  },
+  withCredentials: true
+});
 // 요청 인터셉터 추가
 // axiosInstance.interceptors.request.use(config => {
 //     // 각 요청에 대해 새로운 UUID 생성
