@@ -213,7 +213,11 @@ const FeedDetail = ({ data, memberId }) => {
                                     </div>
                                 </div>
                                 <div>
-                                    <MdDelete style={{ cursor: 'pointer' }} onClick={() => handleDeleteComment(comment.commentId)} />
+                                    {memberId && memberId === comment.memberId && (
+                                    <>
+                                        <MdDelete style={{ cursor: 'pointer' }} onClick={() => handleDeleteComment(comment.commentId)} />
+                                    </>
+                                    )}
                                 </div>
                             </ListGroupItem>
                         ))}
