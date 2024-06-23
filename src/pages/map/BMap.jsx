@@ -9,7 +9,7 @@ import { getBuildingMarkerHtml, getPlaceSearchMarkerHtml } from "./contant/marke
 import mapStyles from "../../assets/css/module/map/BMap.module.css";
 import "../../assets/css/module/map/BMap.css";
 import Footer from "../../components/common/Footer";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentMapCenter, setMemberPosition } from "../../redux/slices/currentMapCenterSlice";
 
@@ -24,6 +24,8 @@ let memberMarker;
 let popBuildingMarkers;
 
 let buildingSubscriptionMarkers;
+
+let placeSearchMarkers;
 
 const buildingFetchChecked = {
   popBuildingChecked: true,
@@ -46,6 +48,8 @@ export default function BMap() {
 
   buildingFetchChecked.popBuildingChecked = popBuildingChecked;
   buildingFetchChecked.subscriptionChecked = subscriptionChecked;
+
+  const navigate = useNavigate();
 
   // TODO: Replace sample with real
   const sampleMember = "member_1";
@@ -124,8 +128,13 @@ export default function BMap() {
 
     return () => {
       clearInterval(intervalId);
+      if (memberMarker) {
+        clearMarkers([memberMarker]);
+      }
       memberMarker = undefined;
+      clearMarkers(popBuildingMarkers);
       popBuildingMarkers = undefined;
+      clearMarkers(buildingSubscriptionMarkers);
       buildingSubscriptionMarkers = undefined;
     }
   }, []);
@@ -203,10 +212,14 @@ function searchPlaceList(searchKeyword, callback, queryParams, setQueryParams) {
  */
 function onFetchPlace(places) {
   console.log(places);
+  clearMarkers(placeSearchMarkers);
+  const placeSearchMarkersCache = [];
   places.forEach((place) => {
     const contentHtml = getPlaceSearchMarkerHtml(place.roadAddress, place.placeName);
-    addMarker(contentHtml, place.latitude, place.longitude);
+    const placeSearchMarker = addMarker(contentHtml, place.latitude, place.longitude);
+    placeSearchMarkersCache.push(placeSearchMarker);
   });
+  placeSearchMarkers = placeSearchMarkersCache;
   if (places?.length > 0) {
     map.setCenter(new naver.maps.LatLng(places[0].latitude, places[0].longitude))
   }
@@ -253,8 +266,8 @@ function fetchBuildingInfo(latitude, longitude) {
  * @param {string} memberId
  */
 function fetchBuildingMarkers(subscriptionChecked, popBuildingChecked, memberId) {
-  clearMarker(buildingSubscriptionMarkers);
-  clearMarker(popBuildingMarkers);
+  clearMarkers(buildingSubscriptionMarkers);
+  clearMarkers(popBuildingMarkers);
 
   if (subscriptionChecked) {
     fetchSubscriptions(memberId);
@@ -281,6 +294,7 @@ function addMarker(html, latitude, longitude) {
   return new naver.maps.Marker({
     position: new naver.maps.LatLng(latitude, longitude),
     map: map,
+    clickable: true,
     icon: {
         content: contentHtml,
         size: new naver.maps.Size(width, height)
@@ -352,7 +366,7 @@ function getPositionRange() {
   };
 }
 
-function clearMarker(markers) {
+function clearMarkers(markers) {
   if (markers) {
     markers.forEach((b) => {
       b.setMap(null);
