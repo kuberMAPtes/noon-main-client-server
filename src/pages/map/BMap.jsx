@@ -11,7 +11,7 @@ import "../../assets/css/module/map/BMap.css";
 import Footer from "../../components/common/Footer";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setCurrentMapCenter, setMemberPosition } from "../../redux/slices/currentMapCenterSlice";
+import { setCurrentMapState } from "../../redux/slices/currentMapStateSlice";
 
 const naver = window.naver;
 
@@ -26,6 +26,8 @@ let popBuildingMarkers;
 let buildingSubscriptionMarkers;
 
 let placeSearchMarkers;
+
+export const INITIAL_ZOOM_LEVEL = 15;
 
 const buildingFetchChecked = {
   popBuildingChecked: true,
@@ -42,7 +44,7 @@ export default function BMap() {
   const [popBuildingChecked, setPopBuildingChecked] = useState(true);
   const [firstEntry, setFirstEntry] = useState(true);
 
-  const currentMapCenter = useSelector((state) => state.currentMapCenter.value);
+  const currentMapState = useSelector((state) => state.currentMapState.value);
 
   const dispatch = useDispatch();
 
@@ -79,18 +81,29 @@ export default function BMap() {
     naver.maps.Event.addListener(map, "dragend", (e) => {
       fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, buildingFetchChecked.popBuildingChecked, sampleMember, navigate);
       const center = map.getCenter();
-      dispatch(setCurrentMapCenter({
-        latitude: center.y,
-        longitude: center.x
-      }));
+      if (currentMapState) {
+        dispatch(setCurrentMapState({
+          latitude: center.y,
+          longitude: center.x,
+          zoomLevel: INITIAL_ZOOM_LEVEL
+        }));
+      } else {
+        dispatch(setCurrentMapState({
+          ...currentMapState,
+          latitude: center.y,
+          longitude: center.x
+        }));
+      }
     });
 
     naver.maps.Event.addListener(map, "zoom_changed", (e) => {
       fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, buildingFetchChecked.popBuildingChecked, sampleMember, navigate);
       const center = map.getCenter();
-      dispatch(setCurrentMapCenter({
+      console.log(e);
+      dispatch(setCurrentMapState({
         latitude: center.y,
-        longitude: center.x
+        longitude: center.x,
+        zoomLevel: e
       }));
     });
   }
@@ -103,15 +116,17 @@ export default function BMap() {
         longitude: coords.longitude
       });
       map = new naver.maps.Map(mapElement, {
-        center: currentMapCenter ? new naver.maps.LatLng(currentMapCenter.latitude, currentMapCenter.longitude) : new naver.maps.LatLng(coords.latitude, coords.longitude)
+        center: currentMapState ? new naver.maps.LatLng(currentMapState.latitude, currentMapState.longitude) : new naver.maps.LatLng(coords.latitude, coords.longitude),
+        zoom: currentMapState?.zoomLevel ? currentMapState.zoomLevel : INITIAL_ZOOM_LEVEL
       });
       initMap(map);
       setFirstEntry(false);
     }, () => {
       console.error("Geolocation API not supported");
-      if (currentMapCenter) {
+      if (currentMapState) {
         map = new naver.maps.Map(mapElement, {
-          center: new naver.maps.LatLng(currentMapCenter.latitude, currentMapCenter.longitude)
+          center: new naver.maps.LatLng(currentMapState.latitude, currentMapState.longitude),
+          zoom: currentMapState?.zoomLevel ? currentMapState.zoomLevel : INITIAL_ZOOM_LEVEL
         });
       } else {
         map = new naver.maps.Map(mapElement);
