@@ -193,7 +193,7 @@ const BuildingInfo = () => {
                           <Button block color="primary" onClick={getWikipage}>
                             건물 위키 보기
                           </Button>
-                        </Col>
+                    </Col>
                   </Row>
                 </div>
               </CardFooter>
