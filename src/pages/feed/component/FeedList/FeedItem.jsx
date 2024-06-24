@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../css/FeedItem.css';
 
 import { Card, CardBody, CardImg, CardText, CardTitle } from 'react-bootstrap';
 import { FaHeart, FaRegHeart, FaBookmark, FaRegBookmark } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
 import { toggleLike, toggleBookmark } from '../../axios/FeedAxios';
 import useNavigator from '../../util/Navigator'
+import axios_api from '../../../../lib/axios_api';
 import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
+import AttachmentGetter from '../../util/AttachmentGetter';
 
 const FeedItem = ({ data, memberId }) => {
 
@@ -22,11 +23,12 @@ const FeedItem = ({ data, memberId }) => {
         bookmark,
         mainActivated,
         writtenTime,        // 포멧팅 처리
-        feedAttachmentURL,  // 일단 임시 이미지로 대체
+        feedAttachmentId,
     } = data;
 
     const [liked, setLiked] = useState(like);
     const [bookmarked, setBookmarked] = useState(bookmark);
+    const [mainAttachment, setMainAttachment] = useState(null);
 
     const {goToMemberProfile, goToBuildingProfile, goToFeedDetail} = useNavigator();
 
@@ -43,6 +45,46 @@ const FeedItem = ({ data, memberId }) => {
         toggleBookmark(bookmarked, setBookmarked, feedId, memberId);
     }
     
+    // 첨부파일 처리
+    // const handleMainAttachment = async (e) => {
+    //     let url = `/feed/getFeedAttachment?attachmentId=${feedAttachmentId}`;
+    //     try {
+    //         const response = await axios_api.get(url, {
+    //             responseType:'arraybuffer'
+    //         });
+            
+    //         if (response.data && response.data.byteLength > 0) {
+    //             const imageBlob = new Blob([response.data], { type: 'image/jpeg' });
+    //             const imageObjectURL = URL.createObjectURL(imageBlob);
+    
+    //             setMainAttachment(imageObjectURL);
+    //         } else {
+    //             console.log(feedAttachmentId + " 데이터가 없음");
+    //         }
+    //     } catch (e) {
+    //         if (e.response && e.response.status === 404) {
+    //             console.log("Attachment not found (404)");
+    //         } else {
+    //             console.log(e);
+    //         }
+    //     }
+    // }
+    
+
+    useEffect(() => {
+        const loadAttachment = async () => {
+            const attachmentUrl = await AttachmentGetter(feedAttachmentId);
+            if (attachmentUrl) {
+                setMainAttachment(attachmentUrl);
+            } else {
+                setMainAttachment(null);
+            }
+        };
+
+        loadAttachment();
+
+    }, [feedAttachmentId])
+
     return (
         <div>
             <Card>
@@ -76,14 +118,16 @@ const FeedItem = ({ data, memberId }) => {
                         </small>
                     </CardText>
                 </CardBody>
-                <CardImg
+                {mainAttachment && (
+                    <CardImg
                     alt={feedId}
-                    src="https://picsum.photos/200/300?grayscale​"  // 임시 사진
+                    src={mainAttachment}
                     style={{
                         height: 300
                     }}
                     width="100%"
-                />
+                    />
+                )}
             </Card>
         </div>
     );

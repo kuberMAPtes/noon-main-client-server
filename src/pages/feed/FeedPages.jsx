@@ -18,10 +18,10 @@ const FeedPages = () => {
               <Link to="list?memberId=member_1&page=1">Feed List</Link>
             </li>
             <li>
-              <Link to="list/building?memberId=member_1&buildingId=10001&page=1">Feed Building List</Link>
+              <Link to="list/building/10001?memberId=member_1&page=1">Feed Building List</Link>
             </li>
             <li>
-              <Link to="detail?feedId=10001">Feed Detail</Link>
+              <Link to="detail?feedId=10001&memberId=member_1">Feed Detail</Link>
             </li>
             <li>
               <Link to="form?buildingId=10010&memberId=member_1">Feed Form(추가)</Link>
