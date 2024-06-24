@@ -8,6 +8,7 @@ const axios_api = axios.create({
     headers: {
         'Content-Type': 'application/json',
     },
+    withCredentials: true
 });
 
 // 채팅방 생성

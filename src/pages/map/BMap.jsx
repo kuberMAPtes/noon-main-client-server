@@ -6,9 +6,12 @@ import axios_api from "../../lib/axios_api";
 import { MAIN_API_URL } from "../../util/constants";
 import { is2xxStatus, is4xxStatus } from "../../util/statusCodeUtil";
 import { getBuildingMarkerHtml, getPlaceSearchMarkerHtml } from "./contant/markerHtml";
+import mapStyles from "../../assets/css/module/map/BMap.module.css";
 import "../../assets/css/module/map/BMap.css";
 import Footer from "../../components/common/Footer";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setCurrentMapState } from "../../redux/slices/currentMapStateSlice";
 
 const naver = window.naver;
 
@@ -21,6 +24,10 @@ let memberMarker;
 let popBuildingMarkers;
 
 let buildingSubscriptionMarkers;
+
+let placeSearchMarkers;
+
+export const INITIAL_ZOOM_LEVEL = 15;
 
 const buildingFetchChecked = {
   popBuildingChecked: true,
@@ -35,9 +42,16 @@ export default function BMap() {
   const [currentPosition, setCurrentPosition] = useState(undefined);
   const [subscriptionChecked, setSubscriptionChecked] = useState(true);
   const [popBuildingChecked, setPopBuildingChecked] = useState(true);
+  const [firstEntry, setFirstEntry] = useState(true);
+
+  const currentMapState = useSelector((state) => state.currentMapState.value);
+
+  const dispatch = useDispatch();
 
   buildingFetchChecked.popBuildingChecked = popBuildingChecked;
   buildingFetchChecked.subscriptionChecked = subscriptionChecked;
+
+  const navigate = useNavigate();
 
   // TODO: Replace sample with real
   const sampleMember = "member_1";
@@ -57,10 +71,7 @@ export default function BMap() {
     console.error("Geolocation API not supported");
   }
 
-  useEffect(() => {
-    const mapElement = document.getElementById("map");
-    map = new naver.maps.Map(mapElement);
-
+  function initMap(map) {
     naver.maps.Event.addListener(map, "click", (e) => {
       const latitude = e.latlng.y;
       const longitude = e.latlng.x;
@@ -68,13 +79,62 @@ export default function BMap() {
     });
 
     naver.maps.Event.addListener(map, "dragend", (e) => {
-      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, buildingFetchChecked.popBuildingChecked, sampleMember);
+      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, buildingFetchChecked.popBuildingChecked, sampleMember, navigate);
+      const center = map.getCenter();
+      if (currentMapState) {
+        dispatch(setCurrentMapState({
+          latitude: center.y,
+          longitude: center.x,
+          zoomLevel: INITIAL_ZOOM_LEVEL
+        }));
+      } else {
+        dispatch(setCurrentMapState({
+          ...currentMapState,
+          latitude: center.y,
+          longitude: center.x
+        }));
+      }
     });
 
     naver.maps.Event.addListener(map, "zoom_changed", (e) => {
-      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, buildingFetchChecked.popBuildingChecked, sampleMember);
+      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, buildingFetchChecked.popBuildingChecked, sampleMember, navigate);
+      const center = map.getCenter();
+      console.log(e);
+      dispatch(setCurrentMapState({
+        latitude: center.y,
+        longitude: center.x,
+        zoomLevel: e
+      }));
     });
-    getCurrentPosition(onCurrentPositionAwared, onFailedFetchingPosition);
+  }
+
+  useEffect(() => {
+    const mapElement = document.getElementById("map");
+    getCurrentPosition((coords) => {
+      setCurrentPosition({
+        latitude: coords.latitude,
+        longitude: coords.longitude
+      });
+      map = new naver.maps.Map(mapElement, {
+        center: currentMapState ? new naver.maps.LatLng(currentMapState.latitude, currentMapState.longitude) : new naver.maps.LatLng(coords.latitude, coords.longitude),
+        zoom: currentMapState?.zoomLevel ? currentMapState.zoomLevel : INITIAL_ZOOM_LEVEL
+      });
+      initMap(map);
+      setFirstEntry(false);
+    }, () => {
+      console.error("Geolocation API not supported");
+      if (currentMapState) {
+        map = new naver.maps.Map(mapElement, {
+          center: new naver.maps.LatLng(currentMapState.latitude, currentMapState.longitude),
+          zoom: currentMapState?.zoomLevel ? currentMapState.zoomLevel : INITIAL_ZOOM_LEVEL
+        });
+      } else {
+        map = new naver.maps.Map(mapElement);
+      }
+      initMap(map);
+      setFirstEntry(false);
+    });
+    
     if (!intervalId) {
       intervalId = window.setInterval(() => {
         getCurrentPosition(onCurrentPositionAwared, onFailedFetchingPosition);
@@ -83,15 +143,22 @@ export default function BMap() {
 
     return () => {
       clearInterval(intervalId);
+      if (memberMarker) {
+        clearMarkers([memberMarker]);
+      }
       memberMarker = undefined;
+      clearMarkers(popBuildingMarkers);
       popBuildingMarkers = undefined;
+      clearMarkers(buildingSubscriptionMarkers);
       buildingSubscriptionMarkers = undefined;
     }
   }, []);
 
   useEffect(() => {
-    fetchBuildingMarkers(subscriptionChecked, popBuildingChecked, sampleMember);
-  }, [popBuildingChecked, subscriptionChecked]);
+    if (!firstEntry) {
+      fetchBuildingMarkers(subscriptionChecked, popBuildingChecked, sampleMember, navigate);
+    }
+  }, [popBuildingChecked, subscriptionChecked, firstEntry]);
 
   useEffect(() => {
     if (currentPosition) { 
@@ -107,25 +174,25 @@ export default function BMap() {
   }, [currentPosition]);
   
   return (
-    <div className="container map-container">
-      <SearchBar
-        typeCallback={(text) => setPlaceSearchKeyword(text)}
-        searchCallback={() => searchPlaceList(placeSearchKeyword, onFetchPlace, queryParams, setQueryParams)}
-      />
+    <div className={mapStyles.mapContainer}>
       <div id="map">
+        <SearchBar
+            typeCallback={(text) => setPlaceSearchKeyword(text)}
+            searchCallback={() => searchPlaceList(placeSearchKeyword, onFetchPlace, queryParams, setQueryParams)}
+          />
         <button
             type="button"
-            className="btn--my-location"
+            className={mapStyles.myLocationButton}
             onClick={() => currentPosition && map && map.setCenter(new naver.maps.LatLng(currentPosition.latitude, currentPosition.longitude))}>
           <img src="./image/my-location.png" alt="my-location" /> 
         </button>
+        <FetchTypeToggle
+            subscriptionChecked={subscriptionChecked}
+            setSubscriptionChecked={setSubscriptionChecked}
+            popBuildingChecked={popBuildingChecked}
+            setPopBuildingChecked={setPopBuildingChecked}
+        />
       </div>
-      <FetchTypeToggle
-          subscriptionChecked={subscriptionChecked}
-          setSubscriptionChecked={setSubscriptionChecked}
-          popBuildingChecked={popBuildingChecked}
-          setPopBuildingChecked={setPopBuildingChecked}
-      />
       <Footer />
     </div>
   )
@@ -159,10 +226,18 @@ function searchPlaceList(searchKeyword, callback, queryParams, setQueryParams) {
  * }[]} places 
  */
 function onFetchPlace(places) {
+  console.log(places);
+  clearMarkers(placeSearchMarkers);
+  const placeSearchMarkersCache = [];
   places.forEach((place) => {
     const contentHtml = getPlaceSearchMarkerHtml(place.roadAddress, place.placeName);
-    addMarker(contentHtml, place.latitude, place.longitude);
-  })
+    const placeSearchMarker = addMarker(contentHtml, place.latitude, place.longitude);
+    placeSearchMarkersCache.push(placeSearchMarker);
+  });
+  placeSearchMarkers = placeSearchMarkersCache;
+  if (places?.length > 0) {
+    map.setCenter(new naver.maps.LatLng(places[0].latitude, places[0].longitude))
+  }
 }
 
 /**
@@ -195,7 +270,7 @@ function fetchBuildingInfo(latitude, longitude) {
     console.log(response);
   }).catch((err) => {
     if (is4xxStatus(err.response.status)) {
-      console.log("No building profile on it");
+      console.log(err.response.data); // TODO: response에 맞게 대응
     }
   })
 }
@@ -205,16 +280,16 @@ function fetchBuildingInfo(latitude, longitude) {
  * @param {boolean} popBuildingChecked 
  * @param {string} memberId
  */
-function fetchBuildingMarkers(subscriptionChecked, popBuildingChecked, memberId) {
-  clearMarker(buildingSubscriptionMarkers);
-  clearMarker(popBuildingMarkers);
+function fetchBuildingMarkers(subscriptionChecked, popBuildingChecked, memberId, navigate) {
+  clearMarkers(buildingSubscriptionMarkers);
+  clearMarkers(popBuildingMarkers);
 
   if (subscriptionChecked) {
-    fetchSubscriptions(memberId);
+    fetchSubscriptions(memberId, navigate);
   }
 
   if (popBuildingChecked) {
-    fetchBuildingsInPositionRange();
+    fetchBuildingsInPositionRange(navigate);
   }
 }
 
@@ -234,6 +309,7 @@ function addMarker(html, latitude, longitude) {
   return new naver.maps.Marker({
     position: new naver.maps.LatLng(latitude, longitude),
     map: map,
+    clickable: true,
     icon: {
         content: contentHtml,
         size: new naver.maps.Size(width, height)
@@ -241,7 +317,7 @@ function addMarker(html, latitude, longitude) {
   });
 }
 
-function fetchSubscriptions(memberId) {
+function fetchSubscriptions(memberId, navigate) {
   axios_api.get(`${MAIN_API_URL}/buildingProfile/getMemberSubscriptionList`, {
     params: {
       memberId
@@ -259,14 +335,18 @@ function fetchSubscriptions(memberId) {
 
     const buildingMarkersCache = [];
     data.forEach((d) => {
-      const contenthtml = getBuildingMarkerHtml(sampleSubscriptionProviders, sampleLiveliestChatroom, d.buildingName);
-      buildingMarkersCache.push(addMarker(contenthtml, d.latitude, d.longitude));
+      const contenthtml = getBuildingMarkerHtml(sampleSubscriptionProviders, sampleLiveliestChatroom, d.buildingName, "./image/subscription-bulilding.png");
+      const buildingMarker = addMarker(contenthtml, d.latitude, d.longitude);
+      naver.maps.Event.addListener(buildingMarker, "click", () => {
+        navigate(`/getBuildingProfile/${d.buildingId}`);
+      });
+      buildingMarkersCache.push(buildingMarker);
     });
     buildingSubscriptionMarkers = buildingMarkersCache;
   });
 }
 
-function fetchBuildingsInPositionRange() {
+function fetchBuildingsInPositionRange(navigate) {
   const positionRange = getPositionRange();
   console.log(positionRange);
   axios_api.get(`${MAIN_API_URL}/buildingProfile/getBuildingsWithinRange`, {
@@ -284,8 +364,12 @@ function fetchBuildingsInPositionRange() {
 
     const buildingMarkersCache = [];
     data.forEach((d) => {
-      const contenthtml = getBuildingMarkerHtml(sampleSubscriptionProviders, sampleLiveliestChatroom, d.buildingName);
-      buildingMarkersCache.push(addMarker(contenthtml, d.latitude, d.longitude));
+      const contenthtml = getBuildingMarkerHtml(sampleSubscriptionProviders, sampleLiveliestChatroom, d.buildingName, "./image/popular-bulilding.png");
+      const buildingMarker = addMarker(contenthtml, d.latitude, d.longitude)
+      naver.maps.Event.addListener(buildingMarker, "click", () => {
+        navigate(`/getBuildingProfile/${d.buildingId}`);
+      });
+      buildingMarkersCache.push(buildingMarker);
     });
     popBuildingMarkers = buildingMarkersCache;
   });
@@ -305,7 +389,7 @@ function getPositionRange() {
   };
 }
 
-function clearMarker(markers) {
+function clearMarkers(markers) {
   if (markers) {
     markers.forEach((b) => {
       b.setMap(null);

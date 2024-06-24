@@ -26,12 +26,13 @@ const FeedPages = () => {
               <Link to="detail?feedId=10001">Feed Detail</Link>
             </li>
             <li>
-              <Link to="form">Feed Form</Link>
+              <Link to="form?buildingId=10010&memberId=member_1">Feed Form(추가)</Link>
+            </li>
+            <li>
+              <Link to="form/10010?memberId=member_1">Feed Form(수정)</Link>
             </li>
           </ul>
         </nav>
-        <FeedListPage/>
-        <FeedBuildingListPage/>
         <div>
           <Footer />
         </div>

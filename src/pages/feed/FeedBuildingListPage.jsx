@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 import FeedItem from './component/FeedList/FeedItem';
 import FeedNotFound from './component/FeedNotFound';
@@ -23,7 +23,7 @@ const FeedBuildingListPage = () => {
     const memberIdFromStore = useSelector((state) => state.auth.member.memberId);
     const memberIdFromURL = searchParams.get('memberId');
     const memberId = memberIdFromStore || memberIdFromURL;
-    const buildingId = searchParams.get('buildingId');
+    const { buildingId } = useParams();
     const initialPage = searchParams.get('page') || 1;
 
     const [feeds, setFeeds] = useState([]);

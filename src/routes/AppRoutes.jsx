@@ -68,6 +68,7 @@ import FeedChartPage from '../pages/feed/FeedChartPage';
 import FeedBuildingListPage from '../pages/feed/FeedBuildingListPage';
 import FeedListHomePage from '../pages/feed/FeedListHomePage';
 import GetMemberProfile from "../pages/member/GetMemberProfile";
+import ApplicantSample from "../pages/building/components/ApplicantSample";
 const AppRoutes = () => {
   const location = useLocation();
   const navigationType = useNavigationType();
@@ -233,6 +234,7 @@ const AppRoutes = () => {
         <Route path="/map" element={<BMap />} />
         <Route path="/search" element={<Search />} />
         <Route path="/getBuildingProfile/:buildingId" element={<GetBuilding />} />
+        <Route path="/applicantSample" element={<ApplicantSample/>}/>
          <Route path="/customerSupport">
             <Route path="" element={<GetCustomerSupport />} />
             <Route path="getChatbot" element={<GetChatbot />} />
@@ -251,7 +253,8 @@ const AppRoutes = () => {
             <Route path="list" element={<FeedList />} />
             <Route path="list/building" element={<FeedBuildingListPage />} />
             <Route path="detail" element={<FeedDetail />} />
-            <Route path="form" element={<FeedForm />} />
+            <Route path="form" element={<FeedForm />} /> {/*피드 추가*/}
+            <Route path="form/:feedId" element={<FeedForm />} /> {/*피드 수정*/}
             <Route path="chart" element={<FeedChartPage />} />
             <Route path="main" element={<FeedListHomePage />}/>
             <Route path="" element={<FeedPages />} />
