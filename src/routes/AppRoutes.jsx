@@ -204,7 +204,7 @@ const AppRoutes = () => {
             />
           </Route>
           <Route path="chat">
-            <Route path="chatroomCreation" element={<ChatRoomCreation />} />
+            <Route path="chatroomCreation/:buildingId" element={<ChatRoomCreation />} />
             <Route path="chatroom" element={<Chatroom />} />
             <Route path="myChatroomList" element={<MyChatroomList />} />
             <Route path="ChatApplyList" element={<ChatApplyList />} />
