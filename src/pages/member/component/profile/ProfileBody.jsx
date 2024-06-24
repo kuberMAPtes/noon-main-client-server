@@ -6,6 +6,8 @@ import LogoutForm from "../LogoutForm";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import useEncryptId from "../common/useEncryptId";
+import NormalButton from "../NormalButton";
+import module from "../../../../assets/css/module/member/GetMemberProfile.module.css";
 
 //4가지 파라미터 다 WAS에서 받아야함
 //> setProfile등등..필요
@@ -22,17 +24,9 @@ const ProfileBody = ({
   const [dajungTemperature, setDajungTemperature] = useState("");
   const defaultPhotoUrl = `${process.env.PUBLIC_URL}/image/defaultMemberProfilePhoto.png`;
   const member = useSelector((state) => state.auth.member);
-  const { encryptedData, ivData } = useEncryptId(member?.memberId);
-  const navigate = useNavigate();
 
   const handleImageError = (e) => {
     e.target.src = defaultPhotoUrl;
-  };
-  const handleUpdatePhoneNumber = () => {
-    // alert("휴대폰 번호를 등록합니다.");
-    navigate(
-      `/member/AddPhoneNumberAuthentification/updatePhoneNumber?secretId=${encryptedData}&secretIv=${ivData}`
-    );
   };
 
   useEffect(() => {
@@ -51,26 +45,25 @@ const ProfileBody = ({
 
   return (
     <Card>
-      <Card.Body>
+      <Card.Body style={{border: "2px solid #91A7FF", borderRadius:"7px"}}>
         <Row className="mb-3">
-          <Col xs={4} className="d-flex flex-column align-items-center">
+          <Col xs={4} className="d-flex flex-column align-items-center" style={{margin:"0px"}}>
             <Image
               src={profile.profilePhotoUrl || defaultPhotoUrl}
               roundedCircle
-              className="mb-3"
-              style={{ width: "150px", height: "150px", textAlign: "center" }}
+              className={`mb-3 ${module.fixedMargin} ${module.profilePhoto}`}
+              style={{textAlign: "center"}}
               onError={handleImageError}
             />
             <Card.Title
               style={{
-                fontSize: "20px",
+                fontSize: "15px",
                 fontWeight: "bold",
                 textAlign: "center",
               }}
             >
               {profile.nickname}
             </Card.Title>
-
             <LogoutForm />
             
           </Col>
@@ -90,19 +83,25 @@ const ProfileBody = ({
                 <div className="d-flex flex-column align-items-center">
                   <ProgressBar
                     now={profile.dajungScore}
-                    style={{ width: "100%", height: "1rem" }}
-                  />
+                    style={{ width: "100%", height: "1rem"}}
+                  ><div
+                  style={{
+                    background:"#ff8787",
+                    width: `${profile.dajungScore}%`,
+                    height: `100%`
+                  }}
+                  ></div></ProgressBar>
                   <div>{dajungTemperature}</div>
                 </div>
               </Col>
             </Row>
             <Row>
               <Col xs={12}>
-                <hr />
+                소개
               </Col>
             </Row>
-            <Row>
-              <Col xs={12}>{profile.profileIntro}</Col>
+            <Row style={{minHeight:"20%"}}>
+              <Col xs={12} style={{border: "2px solid #91A7FF", borderRadius:"7px"}}>{profile.profileIntro}</Col>
             </Row>
             {toId !== fromId && (
               <Row>
@@ -132,7 +131,7 @@ const ProfileBody = ({
               )}
           </Col>
           <Col xs={12}>
-            <hr />
+            <hr style={{border: "1px solid #91A7FF"}} />
           </Col>
         </Row>
         <ProfileStats

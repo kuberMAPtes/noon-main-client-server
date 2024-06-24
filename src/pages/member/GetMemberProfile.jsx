@@ -30,7 +30,7 @@ const GetMemberProfile = () => {
     <Container
       fluid
       className={`${module.container} d-flex flex-column justify-content-start align-items-center pt-6`}
-      style={{
+      style={{ 
         flexWrap: "no",
         paddingTop: "30px",
         margin: "0px",
@@ -50,9 +50,6 @@ const GetMemberProfile = () => {
           >
             회원프로필을 볼 수 없습니다.
             <ProfileBody />
-            <Button variant="primary" className="mt-3">
-              미정
-            </Button>
             <ProfileFeedList lastFeedElementRef={lastFeedElementRef} />
           </div>
         ) : (
