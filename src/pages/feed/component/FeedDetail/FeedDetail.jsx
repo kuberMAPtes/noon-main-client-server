@@ -9,8 +9,9 @@ import { MdDelete } from "react-icons/md";
 import LikedUsersList from './LikedUsersList';
 import axios_api from '../../../../lib/axios_api';
 import Navigator from '../../util/Navigator'
-import useNavigator from '../../util/Navigator';
+import navigator from '../../util/Navigator';
 import CheckModal from '../Common/CheckModal';
+import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
 
 const FeedDetail = ({ data, memberId }) => {
     // 데이터
@@ -58,7 +59,9 @@ const FeedDetail = ({ data, memberId }) => {
     const [deleteCommentId, setDeleteCommentId] = useState(null);
 
     // 피드 수정 화면으로 이동
-    const { goToFeedForm } = useNavigator();
+    const { goToFeedForm } = navigator();
+
+    const renderFeedText = (feedText) => renderFeedTextWithLink(feedText);
 
     // 댓글 추가 내용 만들기
     const handleCommentChange = (e) => {
@@ -174,10 +177,12 @@ const FeedDetail = ({ data, memberId }) => {
                         {writtenTimeReplace} | <div onClick={() => goToBuildingProfile(buildingId)} style={{ cursor: 'pointer', display: 'inline' }}>{buildingName}</div>  
                     </CardSubtitle>
                     <br/>
+                    {/* 제목 */}
                     <CardTitle tag="h2">
                             {title}
                         </CardTitle>
-                    <CardText>{feedText}</CardText>
+                    {/* 내용 */}
+                    <CardText>{renderFeedText(feedText)}</CardText>
                     { tags && tags.length > 0 && (
                         <div className="tags">
                             {tags.map((tag) => (
