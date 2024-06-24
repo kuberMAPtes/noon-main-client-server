@@ -80,29 +80,27 @@ export default function BMap() {
 
     naver.maps.Event.addListener(map, "dragend", (e) => {
       fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, buildingFetchChecked.popBuildingChecked, sampleMember, navigate);
-      const center = map.getCenter();
-      if (currentMapState) {
+      console.log(e);
+      if (!currentMapState) {
         dispatch(setCurrentMapState({
-          latitude: center.y,
-          longitude: center.x,
+          latitude: e.latlng.y,
+          longitude: e.latlng.x,
           zoomLevel: INITIAL_ZOOM_LEVEL
         }));
       } else {
         dispatch(setCurrentMapState({
           ...currentMapState,
-          latitude: center.y,
-          longitude: center.x
+          latitude: e.latlng.y,
+          longitude: e.latlng.x
         }));
       }
     });
 
     naver.maps.Event.addListener(map, "zoom_changed", (e) => {
       fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, buildingFetchChecked.popBuildingChecked, sampleMember, navigate);
-      const center = map.getCenter();
       console.log(e);
       dispatch(setCurrentMapState({
-        latitude: center.y,
-        longitude: center.x,
+        ...currentMapState,
         zoomLevel: e
       }));
     });
