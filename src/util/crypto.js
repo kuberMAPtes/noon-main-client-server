@@ -32,3 +32,33 @@ export const encryptWithLvWithUri = (data) => {
 export const decryptWithLvWithUri = (encryptedData, ivData) => {
   return decryptWithLv(decodeURIComponent(encryptedData), decodeURIComponent(ivData));
 };
+
+export const generateNavigateUrl = async (memberId) => {
+  try {
+    const encryptionPromise = new Promise((resolve, reject) => {
+      try {
+        const { encryptedData, ivData } = encryptWithLv(memberId);
+        resolve({ encryptedData, ivData });
+      } catch (error) {
+        reject(error);
+      }
+    });
+
+    const { encryptedData, ivData } = await encryptionPromise;
+
+    const secretId = encodeURIComponent(encryptedData);
+    const secretIv = encodeURIComponent(ivData);
+    const mainPageUri = process.env.REACT_APP_MAIN_PAGE_URI || '/member/getMemberProfile';
+
+    console.log("네비게이트하기전 확인 :: uri인코딩,암호화된멤버아이디",
+      secretId, "uri인코딩,암호화된Iv",
+      secretIv, "메인페이지URI",
+      mainPageUri);
+
+    const navigateUri = `${mainPageUri}/${secretId}/${secretIv}`;
+    return navigateUri;
+  } catch (error) {
+    console.error("암호화 처리 중 오류 발생:", error);
+    return null;
+  }
+};

@@ -4,7 +4,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import UseProfileFetchFeeds from "./component/profile/UseProfileFetchFeeds";
 import UseProfileInfiniteScroll from "./component/profile/UseProfileInfiniteScroll";
 import ProfileFeedList from "./component/profile/ProfileFeedList";
-import ProfileHeader from "./component/profile/ProfileHeader";
 import ProfileBody from "./component/profile/ProfileBody";
 import useFetchMemberRelationshipList from "./component/common/useFetchMemberRelationshipList";
 import UseProfileBuildingSubscriptions from "./component/profile/UseProfileBuildingSubscriptions";

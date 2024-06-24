@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { decryptWithLv } from "../../util/crypto";
 import Cookies from "js-cookie";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
@@ -30,13 +30,17 @@ import {
 import useReadOnlyInput from "./component/common/useReadOnlyInput";
 import NormalButton from "./component/NormalButton";
 import { navigateMainPage } from "../../util/mainPageUri";
+import useMainPage from "./component/common/useMainPage";
 
 const GetMember = () => {
   // 각 필드의 상태와 유효성 메시지, 유효성 플래그 관리
   const member = useSelector((state) => state.auth.member);
+  const mainPageUrl = useMainPage(member.memberId);
+
   const [nickname, setNickname] = useState(member.nickname);
   const [memberId, setMemberId] = useState(member.memberId);
   const [pwd, setPwd] = useState(member.pwd);
+
   // const [address, setAddress] = useState(member.address);
 
   const [nicknameValidationMessage, setNicknameValidationMessage] =
@@ -64,28 +68,24 @@ const GetMember = () => {
   const location = useLocation();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    // 쿠키에서 인증 정보를 읽고, 휴대폰 본인인증을 완료했는지 확인
-    if (hasNavigated) return;
+  // useEffect(() => {
+  //   if (hasNavigated.current) return;
 
-    const encryptedData = Cookies.get("addMemberKey");
-    const ivData = Cookies.get("addMemberOtherKey");
-    console.log("당신은 휴대폰인증을 했습니다 encryptedData:", encryptedData);
-    console.log("당신은 휴대폰인증을 했습니다 ivData:", ivData);
+  //   const encryptedData = Cookies.get("addMemberKey");
+  //   const ivData = Cookies.get("addMemberOtherKey");
 
-    if (encryptedData && ivData && Cookies.get("user-data")) {
-      const isVerified = decryptWithLv(encryptedData, ivData);
-      if (isVerified !== "success") {
-        //alert('본인인증을 완료해야 회원가입을 할 수 있습니다.');
-        hasNavigated = true;
-        navigate("/member/getAuthMain");
-      }
-    } else {
-      //alert('본인인증을 완료해야 회원가입을 할 수 있습니다.');
-      hasNavigated = true;
-      navigate("/member/getAuthMain");
-    }
-  }, [navigate]);
+  //   if (encryptedData && ivData && Cookies.get("user-data")) {
+  //     const isVerified = decryptWithLv(encryptedData, ivData);
+  //     if (isVerified !== "success") {
+  //       hasNavigated.current = true;
+  //       alert()
+  //       navigate("/member/getAuthMain");
+  //     }
+  //   } else {
+  //     hasNavigated.current = true;
+  //     navigate("/member/getAuthMain");
+  //   }
+  // }, [navigate]);
 
   const handlePwdUpdateClick = () => {
     // alert("handleClick실행 :: "+isMemberIdValid);
@@ -131,6 +131,13 @@ const GetMember = () => {
   //   }
   // }, [location.state]);
 
+  const handleClick = (memberId) => {
+    if (memberId) {
+      navigateMainPage(memberId,navigate);
+    }
+  };
+
+
   return (
     <Container
       className="mt-5"
@@ -168,12 +175,12 @@ const GetMember = () => {
                 <FaUser />
                 &nbsp;닉네임&nbsp;&nbsp;
                 {isNicknameValid && <FaCheck />}
-                <NormalButton
-                  onClick={() => navigateMainPage(member.memberId, navigate)}
-                  style={{ width: "60px", height: "30px" }}
-                >
+                <Link to={mainPageUrl}>
+                {/* <NormalButton style={{ width: "60px", height: "30px" }} onClick={()=>handleClick(member.memberId)}> */}
+                <NormalButton style={{ width: "60px", height: "30px" }}>
                   변경
                 </NormalButton>
+                </Link>
               </Form.Label>
               <Form.Control
                 type="text"
