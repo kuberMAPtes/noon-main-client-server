@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './ChatRoomCreation.css';
-import { useNavigate  } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { addChatroom } from '../../lib/axios_api'
 import { addChatroomData } from '../../store/store';
 import { useDispatch , useSelector } from 'react-redux';
@@ -15,6 +15,9 @@ const ChatRoomCreation = () => {
     const authorization = useSelector((state) => state.auth.authorization);
     const memberID = member.memberId
 
+    const { buildingId } = useParams(); // 받아온 경로매개변수
+
+
     const navigate = useNavigate();
 
     const handleSubmit = async(e) => {
@@ -26,7 +29,8 @@ const ChatRoomCreation = () => {
             chatroomMaxTemp: parseFloat(dajungMaxTemp),
             chatroomName : chatroomName,
             chatroomCreatorId: memberID,
-            chatroomType: 'GROUP_CHATTING'
+            chatroomType: 'GROUP_CHATTING',
+            buildingId: buildingId ? buildingId : null
         };
 
         console.log(chatRoomData);
