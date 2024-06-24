@@ -10,21 +10,24 @@ import { CustomModal } from './function/CustomModal'
 import { BootstrapModal } from './function/BootstrapModal'
 
 const Chatroom = () => {
+  const [receivedMessage, setReceivedMessage] = useState([]); // 소켓에서 수신한 메세지
+  const [messageInput, setMessageInput] = useState(''); // 입력창에 입력한 메세지
+  const [participants, setParticipants] = useState([]); // 채팅방 참여자 (from spring boot)
+  const [roomInfo, setRoomInfo] = useState({}); // 채팅방 정보
+  const [liveParticipants, setLiveParticipants] = useState([]); // 채팅방 실시간 참여자 (from node)
+  const [showModal, setShowModal] = useState(false); // 유저 프로필보기 / 추방하기 모달 on/off
+  const [selectedParticipant, setSelectedParticipant] = useState(null); // 모달에 유저 정보 전달하기 위함
+
   const member = useSelector((state) => state.auth.member);
   const authorization = useSelector((state) => state.auth.authorization);
   const memberID = member.memberId
+  const chatroomMemberRole = roomInfo.chatroomCreatorId === memberID ? 'OWNER' : 'MEMBER';
 
   console.log("member", member)
   console.log("authorization", authorization);
 
   console.log("\n\n\n🐬 Chatroom 컴포넌트 시작 \n\n\n")
 
-  const [receivedMessage, setReceivedMessage] = useState([]); // 소켓에서 수신한 메세지
-  const [messageInput, setMessageInput] = useState(''); // 입력창에 입력한 메세지
-  const [participants, setParticipants] = useState([]); // 채팅방 참여자 (from spring boot)
-  const [roomInfo, setRoomInfo] = useState({}); // 채팅방 정보
-  const [liveParticipants, setLiveParticipants] = useState([]); // 채팅방 실시간 참여자 (from node)
-  const [messageReadUpdator, setMessageReadUpdator] = useState(true);
 
   console.log("🦄랜더링 roomInfo => ", roomInfo);
 
@@ -251,7 +254,7 @@ const Chatroom = () => {
     <div className={module.chatContainer}>
       <div className={module.sidebarChat}>
         --------------------
-        <p> 로그인 한놈 : {memberID} </p>
+        <p> 로그인 한놈 : {memberID} ({chatroomMemberRole}) </p>
         --------------------
 
         <div>
@@ -264,20 +267,28 @@ const Chatroom = () => {
 
         <div>
           <h2>채팅 참여자 목록 ({participants.length})</h2>
-          {/* {console.log(participants)} */}
+          {console.log("파티시팬트", participants)}
           {participants.map((participant, index) => (
             <div key={index}>
               <p>
-                <strong>memberID:</strong>{' '}
-                <CustomModal roomInfoUpdate={setRoomInfo} currentChatroomID={roomInfo.chatroomID} targetMemberID={participant.memberID}/>
-
-                <span
-                  onClick={(e) => handleLeftClick(e, participant.chatroomMemberId)}
-                  onContextMenu={(e) => handleRightClick(e, participant.chatroomMemberId)}
-                >
-
-                  {participant.chatroomMemberId} ({participant.chatroomMemberType})
-                </span>{' '}
+                <strong>memberID:</strong>{' '} &nbsp;
+                <span onClick={() => { 
+                  setShowModal(true);
+                  setSelectedParticipant(participant);
+                  }} 
+                  className={module.clickable} 
+                > 
+                  {participant.chatroomMemberId}
+                </span>  &nbsp;
+                ({participant.chatroomMemberType }) 
+                <CustomModal
+                  showModal = {showModal} // showModal on off 정보
+                  setShowModal = {setShowModal} // show Modal on off 함수
+                  roomInfoUpdate={setRoomInfo}  // 강퇴후 채팅방 정보를 업데이트하기 위한 함수
+                  currentChatroomID={roomInfo.chatroomID} // 채팅방ID
+                  loginMemberRole={chatroomMemberRole}  // 채팅방에서 로그인유저의 권한
+                  targetMember={selectedParticipant} // 클릭한 회원
+                />
                 {liveParticipants.includes(participant.chatroomMemberId) && (
                   <span className={module.liveIndicator}>🟢</span>
                 )}
@@ -324,6 +335,7 @@ const Chatroom = () => {
         <button onClick={sendMessage}>Send</button>
         <button onClick={leaveRoom}>채팅방 나가기</button>
       </div>
+
     </div>
   );
 };

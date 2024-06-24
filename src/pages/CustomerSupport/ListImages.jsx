@@ -5,16 +5,11 @@ import '../CustomerSupport/css/image-grid.css';
 import axiosInstance from '../../lib/axiosInstance';
 import Footer from '../../components/common/Footer';
 
-
-
-
 const getImageList = async (currentPage, filterTab, setAttachmentList, setLoading) => {
-
   setLoading(true);
   try {
-    
     const response = await axiosInstance.get(`/customersupport/${filterTab === "bad" ? 'getFilteredListByAI' : 'getImageList'}`, {
-      params: { currentPage: currentPage }  
+      params: { currentPage: currentPage }
     });
     
     console.log("attachmentList : " + JSON.stringify(response.data));
@@ -26,17 +21,15 @@ const getImageList = async (currentPage, filterTab, setAttachmentList, setLoadin
   }
 }
 
-
-
 const ListImages = () => {
-    const [currentPage, setCurrentPage] = useState(1);
-    const [filterTab, setFilterTab] = useState("all");
-    const [attachmentList, setAttachmentList] = useState([]);
-    const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [filterTab, setFilterTab] = useState("all");
+  const [attachmentList, setAttachmentList] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-    const handleTabChange = (tab) => {
-      setFilterTab(tab);
-    };
+  const handleTabChange = (tab) => {
+    setFilterTab(tab);
+  };
 
   useEffect(() => {
     getImageList(currentPage, filterTab, setAttachmentList, setLoading);
@@ -50,13 +43,13 @@ const ListImages = () => {
           style={{ ...styles.tabButton, ...(filterTab === "all" ? styles.activeTab : {}) }}
           onClick={() => handleTabChange("all")}
         >
-          <span role="img" aria-label="all">📸</span>
+          <span role="img" aria-label="all"><i style={{ color: "#9BAAF8" }} className="fa-solid fa-images"></i>ALL</span>
         </button>
         <button
           style={{ ...styles.tabButton, ...(filterTab === "bad" ? styles.activeTab : {}) }}
           onClick={() => handleTabChange("bad")}
         >
-          <span role="img" aria-label="bad">⚠️</span>
+          <span role="img" aria-label="bad"><i style={{ color: "#9BAAF8" }} className="fa-solid fa-triangle-exclamation"></i>BAD</span>
         </button>
       </div>
       <div style={styles.grid}>
@@ -66,11 +59,8 @@ const ListImages = () => {
           <ImageGrid attachmentList={attachmentList} />
         )}
       </div>
-    
-      <Footer/>
+      <Footer />
     </div>
-
-    
   );
 };
 
@@ -79,12 +69,11 @@ const styles = {
     display: 'flex',
     justifyContent: 'space-around',
     width: '100%',
-    /*marginBottom: '10px',*/
   },
   tabButton: {
     backgroundColor: 'transparent',
     border: 'none',
-    color: '#fff',
+    color: '#D9D9D9',
     fontSize: '20px',
   },
   activeTab: {
@@ -92,10 +81,12 @@ const styles = {
     width: '25%', 
   },
   grid: {
-    width: '100%',
+    width: '92%',
+    margin: '0 auto', // 좌우 기준 가운데 정렬
+    marginBottom: '120px', // 하단에 20px 마진 추가
   },
   loading: {
-    color: '#111',
+    color: '#D9D9D9',
     fontSize: '20px',
     textAlign: 'center',
   },

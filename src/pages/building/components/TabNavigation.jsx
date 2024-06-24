@@ -2,19 +2,20 @@ import React, { useState } from 'react';
 import FeedList from '../../feed/FeedListPage';
 import FeedBuildingListPage from '../../feed/FeedBuildingListPage';
 import ChatroomList from './ChatroomList';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import '../css/tab-navigation.css';
 
 const TabNavigation = () => {
   const [activeTab, setActiveTab] = useState('feed');
   const navigate = useNavigate();
+  const { buildingId } = useParams();
 
   // 피드 생성 or 채팅방 생성
   const handleCreationLink = () => {
     if(activeTab === 'feed'){
       navigate('/feed/form');
     } else {
-      navigate('/chat/chatroomCreation');
+      navigate('/chat/chatroomCreation/'+buildingId);
     }
   };
 
