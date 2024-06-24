@@ -1,100 +1,92 @@
-import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Button } from "react-bootstrap";
-import { decryptWithLv, encryptWithLv } from "../../../../util/crypto";
-import styles from "./B.module.css";
-import { FaArrowLeft, FaGoogle, FaApple } from "react-icons/fa";
-import { SiNaver } from "react-icons/si";
-import { RiKakaoTalkFill } from "react-icons/ri"; // Kakao icon
-import GoogleLogo from "../../component/GoogleLogo"; // SVG 컴포넌트 임포트
-import KakaoLogo from "../../component/KakaoLogo";
-const LoginPage = () => {
+import React from 'react';
+import { Container, Row, Col, Image, Button, ListGroup } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+const followers = [
+  {
+    username: '34915_g380',
+    name: '',
+    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSg3ya9qxUA7YtK-RHIkePuc-IhSgFlOf_7YA&s", // Replace with actual image path
+  },
+  {
+    username: 'stephane6585',
+    name: '',
+    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSg3ya9qxUA7YtK-RHIkePuc-IhSgFlOf_7YA&s", // Replace with actual image path
+  },
+  {
+    username: 'dh0opestjko',
+    name: '김하린',
+    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSg3ya9qxUA7YtK-RHIkePuc-IhSgFlOf_7YA&s", // Replace with actual image path
+  },
+  {
+    username: '8c269sw39i',
+    name: '',
+    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSg3ya9qxUA7YtK-RHIkePuc-IhSgFlOf_7YA&s", // Replace with actual image path
+  },
+  {
+    username: 'kms12002',
+    name: 'kms',
+    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSg3ya9qxUA7YtK-RHIkePuc-IhSgFlOf_7YA&s", // Replace with actual image path
+  },
+  {
+    username: 'rlagpwjdyu',
+    name: '나영',
+    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSg3ya9qxUA7YtK-RHIkePuc-IhSgFlOf_7YA&s"
+  },
+  {
+    username: '__sulfur.min',
+    name: '황성민',
+    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSg3ya9qxUA7YtK-RHIkePuc-IhSgFlOf_7YA&s"
+  },
+  {
+    username: 's._.hhh',
+    name: '김세현',
+    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSg3ya9qxUA7YtK-RHIkePuc-IhSgFlOf_7YA&s"
+  },
+  {
+    username: 'blazeful_kbs',
+    name: '김범섭',
+    imgSrc: 'path/to/image9.jpg', // Replace with actual image path
+  }
+];
+
+const defaultPhotoUrl = `${process.env.PUBLIC_URL}/image/defaultMemberProfilePhoto.png`;
+
+const InstagramFollowersView = () => {
   return (
-    <Container className={styles.loginPage}>
-      <Row className="justify-content-center">
-        <Col xs={12} md={8} lg={6} className="text-center">
-          <Button variant="link" className={styles.backButton}>
-            <FaArrowLeft /> 로그인
-          </Button>
-          <div className={styles.logo}>
-            <img src="path_to_logo_image" alt="yanolja" />
-          </div>
-          <Button variant="warning" className={styles.loginButton}>
-            <KakaoLogo className="me-2" /> 카카오로 시작하기
-          </Button>
-          <hr />
-          <Button variant="light" className={styles.loginButton}>
-            <GoogleLogo className="me-2" /> nbsp; Google로 시작하기
-          </Button>
-          <hr />
-          <Button
-            variant="success"
-            className={`d-flex align-items-center justify-content-center ${styles.loginButton} ${styles.customButton}`}
-          >
-            계정 ID로 시작하기
-          </Button>
-          <hr />
-          <Button
-            variant="success"
-            className={`d-flex align-items-center justify-content-center ${styles.loginButton} ${styles.customButton}`}
-          >
-            회원가입하기
-          </Button>
-          <hr />
+    <Container fluid className="p-3">
+      <Row className="mb-3">
+        <Col className="text-center">
+          <h4>팔로워 119명</h4>
+          <h4>팔로잉 392명</h4>
         </Col>
       </Row>
-      <Row className="justify-content-center">
-        <Col xs={12} md={8} lg={6} className="text-center">
-          <div className={styles.welcomeBanner}>
-            국내 최초 건물 기반 SNS <br /> 우리 같이 놀아요!
-          </div>
-        </Col>
-      </Row>
+      <ListGroup>
+        {followers.map((follower, index) => (
+          <ListGroup.Item key={index} className="d-flex align-items-center justify-content-between">
+            <Row className="align-items-center" style={{width:"100%"}}>
+              <Col xs={2}>
+                <Image
+                src={follower.imgSrc || defaultPhotoUrl}
+                style={{width:"100px", height:"100px"}}
+                roundedCircle fluid />
+              </Col>
+              <Col xs={6}>
+                <div>{follower.username}</div>
+                <div className="text-muted">{follower.name}</div>
+              </Col>
+              <Col xs={2}>
+                <Button variant="link" size="sm">팔로우</Button>
+              </Col>
+              <Col xs={2}>
+                <Button variant="danger" size="sm">삭제</Button>
+              </Col>
+            </Row>
+          </ListGroup.Item>
+        ))}
+      </ListGroup>
     </Container>
   );
 };
 
-///////////////////////////////////////////////////////////////////////////////////////
-const B = () => {
-  const [count, setCount] = useState(0);
-
-  console.log("B component render");
-
-  useEffect(() => {
-    console.log("B component useEffect");
-  }, [count]);
-  //console 먼저 하고 return 안에 있는거 하고 useEffect한다.
-  return (
-    <div>
-      Component B
-      <button onClick={() => setCount(count + 1)}>Increment B</button>
-      <LoginPage />
-    </div>
-  );
-};
-////////////////////////////////////////////////////////////////////////////
-const A = () => {
-  const a = decryptWithLv(
-    "8IJUIOQeTJF8VIvZ+l7mYg==",
-    "dyj8n7eNe4QSotOSIMki7w=="
-  ); //데이터 IV 키
-  console.log("A렌더링 디코딩 결과" + a);
-
-  const b = "wschoi809@naver.com";
-  console.log("인코딩전", b);
-  const { encryptedData, ivData } = encryptWithLv(b);
-  console.log("인코딩후" + encryptedData, ivData);
-  const d = decryptWithLv(encryptedData, ivData);
-  console.log("디코딩후", d);
-  useEffect(() => {
-    console.log("A component useEffect");
-  });
-
-  return (
-    <div>
-      Component A
-      <B />
-    </div>
-  );
-};
-
-export default A;
+export default InstagramFollowersView;

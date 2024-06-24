@@ -1,21 +1,27 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Cookies from 'js-cookie';
-import { restoreAuthState, setAuthorization, setLoading } from '../../redux/slices/authSlice';
-import { getMember } from '../../pages/member/function/memberAxios';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Cookies from "js-cookie";
+import {
+  restoreAuthState,
+  setAuthorization,
+  setLoading,
+} from "../../redux/slices/authSlice";
+import { getMember } from "../../pages/member/function/memberAxios";
 
 const AuthLoader = ({ children }) => {
   const dispatch = useDispatch();
-  const authorization = useSelector((state)=>state.auth.authorization);
+  const authorization = useSelector((state) => state.auth.authorization);
+  const member = useSelector((state) => state.auth.member);
   console.log("#### AuthLoader 렌더링(authorization)구독", authorization);
 
   useEffect(() => {
-      console.log("@@@@ AuthLoader useEffect 시작");
-      React.Children.map(children, child => {
-        console.log("Child:", child);
-      });
+    console.log("@@@@ AuthLoader useEffect 시작");
+    // React.Children.map(children, child => {
+    //   console.log("Child:", child);
+    // });
     //인증이 안되어 있으면...
-    if (authorization===undefined) {
+    if (authorization === undefined && member.memberId === "") {
+      // alert("authorization이 undefined입니다." + "member는" + JSON.stringify(member));
       const fetchMemberData = async () => {
         //쿠키에 인증이 남아있는지 확인한다.
         const loginData = Cookies.get("AuthToken");
@@ -50,12 +56,11 @@ const AuthLoader = ({ children }) => {
         }
 
         dispatch(setLoading(false));
-        
       };
 
       fetchMemberData();
     }
-  }, [dispatch]);
+  }, [dispatch, authorization, member]);
 
   return <>{children}</>;
 };

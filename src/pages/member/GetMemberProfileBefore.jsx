@@ -12,7 +12,7 @@ import LogoutForm from "./component/LogoutForm";
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 import { getMemberProfile } from "./function/memberAxios";
 import { useSelector } from "react-redux";
-import { decryptWithLv, decryptWithLvWithUri } from "../../util/crypto";
+import { decryptWithLv} from "../../util/crypto";
 import { useParams } from "react-router-dom";
 
 const GetMemberProfileBefore = () => {
@@ -30,7 +30,7 @@ const GetMemberProfileBefore = () => {
   useEffect(() => {
     // console.log("URL Parameters - encryptedToId:", secretId, "IV:", secretIv);
     if (secretId && secretIv) {
-      const decryptedToId = decryptWithLvWithUri(secretId, secretIv);
+      const decryptedToId = decryptWithLv(secretId, secretIv);
       //   console.log("Decrypted toId: ", decryptedToId);
       setToId(decryptedToId);
     }

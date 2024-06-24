@@ -4,7 +4,9 @@ import { useSearchParams } from "react-router-dom";
 const useGetInitialPage = () => {
   const [searchParams] = useSearchParams();
 
-  const initialPage = searchParams.get("page") || 0;
+  const initialPage = Number(searchParams.get("page")) || Number(0);
+  // alert(`useGetInitialPage: initialPage=${initialPage}`);
+  console.log(`useGetInitialPage: initialPage=${initialPage}`);
 
   return { initialPage };
 };

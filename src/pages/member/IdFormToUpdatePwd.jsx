@@ -15,7 +15,8 @@ const IdFormToUpdatePwd = () => {
 
   const navigate = useNavigate();
 
-  const handleClick = (e) => {
+  const handleClick = () => {
+    // alert("handleClick실행 :: "+isMemberIdValid);
     if (isMemberIdValid) {
       //휴대폰번호로 네비게이션
       sessionStorage.setItem("w", memberId); // 세션 스토리지에 memberId 저장
@@ -57,7 +58,7 @@ const IdFormToUpdatePwd = () => {
           variant="info"
           type="button"
           className={styles.typicalButtonColor}
-          onClick={(e) => handleClick(e)}
+          onClick={handleClick}
         >
           확인
         </Button>

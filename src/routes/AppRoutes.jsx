@@ -15,7 +15,7 @@ import AddMemberResult from "../pages/member/AddMemberResult";
 import UpdatePwd from "../pages/member/UpdatePwd";
 import UpdatePwdResult from "../pages/member/UpdatePwdResult";
 import GetMember from "../pages/member/GetMember";
-import UpdateMember from "../pages/member/UpdateMember";
+import UpdateMember from "../pages/member/GetMember";
 import GetMemberRelationshipList from "../pages/member/GetMemberRelationshipList";
 
 import ChatRoomCreation from "../pages/Chat/ChatroomCreation";
@@ -70,6 +70,8 @@ import FeedListHomePage from '../pages/feed/FeedListHomePage';
 import GetMemberProfile from "../pages/member/GetMemberProfile";
 import GetBuildingWiki from "../pages/building/GetBuildingWiki";
 import EditBuildingWiki from "../pages/building/EditBuildingWiki";
+import ApplicantSample from "../pages/building/components/ApplicantSample";
+
 const AppRoutes = () => {
   const location = useLocation();
   const navigationType = useNavigationType();
@@ -123,9 +125,7 @@ const AppRoutes = () => {
             <Route
               path="addPhoneNumberAuthentification/:toUrl"
               element={
-                <GuestRoute>
-                  <AddPhoneNumberAuthentification />
-                </GuestRoute>
+                <AddPhoneNumberAuthentification />
               }
             />
             {/* 로그인한 상태로 AddPhoneNumberAuthentification가고 싶다? 비밀번호 변경하고 싶다면... */}
@@ -154,9 +154,7 @@ const AppRoutes = () => {
             <Route
               path="IdFormToUpdatePwd"
               element={
-                <GuestRoute>
                   <IdFormToUpdatePwd />
-                </GuestRoute>
               }
             />
             <Route
@@ -180,14 +178,6 @@ const AppRoutes = () => {
               element={
                 <PrivateRoute>
                   <GetMember />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="updateMember"
-              element={
-                <PrivateRoute>
-                  <UpdateMember />
                 </PrivateRoute>
               }
             />
@@ -237,6 +227,7 @@ const AppRoutes = () => {
         <Route path="/getBuildingProfile/:buildingId" element={<GetBuilding />} />
         <Route path="/getBuildingWiki/:buildingId" element={<GetBuildingWiki />} />
         <Route path="/editBuildingWiki/:buildingId" element={<EditBuildingWiki />} />
+        <Route path="/applicantSample" element={<ApplicantSample/>}/>
          <Route path="/customerSupport">
             <Route path="" element={<GetCustomerSupport />} />
             <Route path="getChatbot" element={<GetChatbot />} />
@@ -255,7 +246,8 @@ const AppRoutes = () => {
             <Route path="list" element={<FeedList />} />
             <Route path="list/building" element={<FeedBuildingListPage />} />
             <Route path="detail" element={<FeedDetail />} />
-            <Route path="form" element={<FeedForm />} />
+            <Route path="form" element={<FeedForm />} /> {/*피드 추가*/}
+            <Route path="form/:feedId" element={<FeedForm />} /> {/*피드 수정*/}
             <Route path="chart" element={<FeedChartPage />} />
             <Route path="main" element={<FeedListHomePage />}/>
             <Route path="" element={<FeedPages />} />
