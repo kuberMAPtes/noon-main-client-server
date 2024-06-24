@@ -35,8 +35,8 @@ const FeedItem = ({ data, memberId }) => {
     const {goToMemberProfile, goToBuildingProfile, goToFeedDetail} = useNavigator();
 
     // 데이터 처리
-    const writtenTimeReplace = data.writtenTime.replace('T', ' ');
-    const feedCategoryName = FeedCategoryGetter(feedCategory);
+    const writtenTimeReplace = data.writtenTime.replace('T', ' '); // 날짜 포멧팅
+    const feedCategoryName = FeedCategoryGetter(feedCategory); // 카테고리 변환
 
     const renderFeedText = (feedText) => renderFeedTextWithLink(feedText);
 

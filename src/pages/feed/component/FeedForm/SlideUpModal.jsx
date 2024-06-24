@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
+import { FaBullhorn, FaVoteYea } from 'react-icons/fa';
 
 const SlideUpModal = (props) => {
     return (
@@ -10,19 +11,25 @@ const SlideUpModal = (props) => {
             centered
         >
             <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">특별한 게시판</Modal.Title>
+                <Modal.Title>피드 카테고리 선택</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <h4>Centered Modal</h4>
-                <p>
-                Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-                dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac
-                consectetur ac, vestibulum at eros.
-                </p>
+                <div className="d-flex justify-content-around">
+                <Button variant="outline-primary">
+                    <FaVoteYea size={50} />
+                    <div>투표</div>
+                </Button>
+                <Button variant="outline-primary">
+                    <FaBullhorn size={50} />
+                    <div>확성기</div>
+                </Button>
+                </div>
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={props.onHide}>Close</Button>
-      </    Modal.Footer>
+                <Button variant="secondary" onClick={props.onHide}>
+                닫기
+                </Button>
+            </Modal.Footer>
         </Modal>
     );
 };
