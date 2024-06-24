@@ -41,7 +41,6 @@ const AuthLoader = ({ children }) => {
         console.log("로그인 정보가 없습니다.");
         // alert("로그인 정보가 없습니다.");
         }
-        
         dispatch(setLoading(false));
       };
 

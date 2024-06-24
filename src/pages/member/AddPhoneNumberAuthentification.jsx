@@ -69,6 +69,7 @@ const AddPhoneNumberAuthentification = () => {
 
   const handleUpdatePhoneNumber = async (phoneNumber,memberId, verifiedState, navigate, toUrl) => {
     // alert("phoneNumber"+phoneNumber+"memberId"+memberId+"verifiedState"+verifiedState+"toUrl"+toUrl)
+
     if (verifiedState === "success" && toUrl === "updatePhoneNumber" && memberId) {
 
       const response = await updatePhoneNumber({phoneNumber,memberId});

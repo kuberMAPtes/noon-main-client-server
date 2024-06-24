@@ -1,0 +1,39 @@
+.customModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0); /* 반투명한 배경 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* 모달 배경을 화면 상단에 배치 */
+}
+
+.modalContent {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    z-index: 1001; /* 모달 내용을 모달 배경보다 위에 배치 */
+}
+
+.modalContentTitle {
+    margin-bottom: 20px;
+}
+
+.modalContentButton {
+    margin: 5px;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 3px;
+}
+
+.modalContentButton:hover {
+    background-color: #f0f0f0;
+}

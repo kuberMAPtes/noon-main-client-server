@@ -24,12 +24,10 @@ const ProfileBody = ({
   const [dajungTemperature, setDajungTemperature] = useState("");
   const defaultPhotoUrl = `${process.env.PUBLIC_URL}/image/defaultMemberProfilePhoto.png`;
   const member = useSelector((state) => state.auth.member);
-  
 
   const handleImageError = (e) => {
     e.target.src = defaultPhotoUrl;
   };
-  
 
   useEffect(() => {
     if (profile.dajungScore >= 80) {
@@ -65,8 +63,6 @@ const ProfileBody = ({
               }}
             >
               {profile.nickname}
-              
-            
             </Card.Title>
             <LogoutForm />
             
@@ -107,6 +103,32 @@ const ProfileBody = ({
             <Row style={{minHeight:"20%"}}>
               <Col xs={12} style={{border: "2px solid #91A7FF", borderRadius:"7px"}}>{profile.profileIntro}</Col>
             </Row>
+            {toId !== fromId && (
+              <Row>
+                <Col xs={12}>
+                  <Button style={{ width: "49%" }}>그룹채팅방 초대</Button>
+                  <Button style={{ width: "51%" }}>1대1채팅방 초대</Button>
+                </Col>
+              </Row>
+            )}
+            {toId === fromId &&
+              member.phoneNumber &&
+              member.phoneNumber.endsWith("X") && (
+                <Row>
+                  <Col xs={12}>
+                    <Button
+                      style={{ width: "100%" }}
+                      onClick={handleUpdatePhoneNumber}
+                    >
+                      휴대폰 번호 등록
+                    </Button>
+                    <span style={{ fontSize: "13px" }}>
+                      💥휴대폰 번호를 등록하지 않으시면 아이디 및 비밀번호 찾기
+                      서비스를 이용하실 수 없습니다.
+                    </span>
+                  </Col>
+                </Row>
+              )}
           </Col>
           <Col xs={12}>
             <hr style={{border: "1px solid #91A7FF"}} />

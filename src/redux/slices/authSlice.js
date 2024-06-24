@@ -98,7 +98,7 @@ export const login = createAsyncThunk(
 export const logout = createAsyncThunk("auth/logout", async (navigate) => {
   try {
     clearAllCookies();
-    await axiosInstance.post('/member/logout');
+    // await axiosInstance.post('/member/logout');
   } catch (error) {
     console.error("Logout failed", error);
   }

@@ -6,23 +6,28 @@ import { getChatroom } from '../Chat/function/axios_api'
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useNavigate  } from 'react-router-dom';
-
+import { CustomModal } from './function/CustomModal'
+import { BootstrapModal } from './function/BootstrapModal'
 
 const Chatroom = () => {
+  const [receivedMessage, setReceivedMessage] = useState([]); // 소켓에서 수신한 메세지
+  const [messageInput, setMessageInput] = useState(''); // 입력창에 입력한 메세지
+  const [participants, setParticipants] = useState([]); // 채팅방 참여자 (from spring boot)
+  const [roomInfo, setRoomInfo] = useState({}); // 채팅방 정보
+  const [liveParticipants, setLiveParticipants] = useState([]); // 채팅방 실시간 참여자 (from node)
+  const [showModal, setShowModal] = useState(false); // 유저 프로필보기 / 추방하기 모달 on/off
+  const [selectedParticipant, setSelectedParticipant] = useState(null); // 모달에 유저 정보 전달하기 위함
+
   const member = useSelector((state) => state.auth.member);
   const authorization = useSelector((state) => state.auth.authorization);
   const memberID = member.memberId
+  const chatroomMemberRole = roomInfo.chatroomCreatorId === memberID ? 'OWNER' : 'MEMBER';
 
   console.log("member", member)
   console.log("authorization", authorization);
 
   console.log("\n\n\n🐬 Chatroom 컴포넌트 시작 \n\n\n")
 
-  const [receivedMessage, setReceivedMessage] = useState([]); // 소켓에서 수신한 메세지
-  const [messageInput, setMessageInput] = useState(''); // 입력창에 입력한 메세지
-  const [participants, setParticipants] = useState([]); // 채팅방 참여자 (from spring boot)
-  const [roomInfo, setRoomInfo] = useState({}); // 채팅방 정보
-  const [liveParticipants, setLiveParticipants] = useState([]); // 채팅방 실시간 참여자 (from node)
 
   console.log("🦄랜더링 roomInfo => ", roomInfo);
 
@@ -98,16 +103,16 @@ const Chatroom = () => {
       console.log("메세지 히스토리 받은거 => ", messageHistory);
       
       messageHistory.forEach( history => {
-        const { nickname, chatMsg, time, type } = history;
+        const { nickname, chatMsg, time, type, readMembers } = history;
         const text = `${nickname} : ${chatMsg} \n( ${time} )`;
 
-        previousMessages.push({ type: type ? type : 'other' , text : text });
+        previousMessages.push({ type: type ? type : 'other' , text : text , readMembers : readMembers });
       });
   
       // 불러오기 완료 메세지 추가
       const completeMsg = {
         type : 'notice',
-        text : `${messageHistory.length} 개의 이전 채팅 내역을 모두 불러왔습니다! `
+        text : `${messageHistory.length} 개의 이전 채팅 내역을 모두 불러왔습니다! `,
       }
       previousMessages.push(completeMsg);
 
@@ -119,7 +124,29 @@ const Chatroom = () => {
     // 실시간 소켓룸 및 실시간 접속자 정보 받아오기
     socket.emit('live_socketRoomInfo', roomInfo, initLiveSetting);
 
-    // 채팅 메세지 수신 
+    // 입장과 동시에 채팅읽음처리
+    socket.emit('message_read', memberID, roomInfo, (data) =>{
+      console.log("🟥⚪메세지 읽었습니다 결과는 ", data)
+    })
+
+    // (개발중) 다른유저 채팅 메세지 읽음시 메세지 업데이트 
+    // socket.on('message_read_notice', (data)=>{
+    //   setMessageReadUpdator(prevState => !prevState)
+    // } )
+
+    // 다른유저 채팅방 입장시 실시간 유저에 추가
+    socket.on("enter_room_notice", (data)=>{
+      console.log("다른 유저가 입장해서 가져온 데이터", data)
+      setLiveParticipants(data);
+    })
+
+    // 다른유저 채팅방 퇴장시 실시간 유저에 추가
+    socket.on("leave_room_notice", (data)=>{
+      console.log("다른 유저가 퇴장해서 가져온 데이터", data)
+      setLiveParticipants(data);
+    })
+    
+    // 채팅 메세지 수신   
     socket.on('specific_chat', (message) => {
       console.log("표시할 메세지 =>", message);
       setReceivedMessage((prevMessages) => [...prevMessages, message]);
@@ -177,7 +204,8 @@ const Chatroom = () => {
     // 내가 보낸 채팅 메세지 표시
     const myMessage = {
       type : 'mine', //css로 내가 보냈는지 남이 보냈는지 별도로 표기
-      text : `${messageInput} \n( ${new Date()} )`
+      text : `${messageInput} \n( ${new Date()} )`,
+      readMembers : [memberID]
     }
     setReceivedMessage((prevMessages) => [...prevMessages, myMessage]);
     
@@ -199,6 +227,23 @@ const Chatroom = () => {
     });
   };
 
+  //// 실험중 /////
+
+  // 유저 프로필로 이동
+  const handleLeftClick = (memberId) => {
+    prompt("씨파")
+    window.confirm("ㅎㅎ")
+  };
+
+  // 추방하기 
+  const handleRightClick = (event,data) => {
+    event.preventDefault(); // 윈도우 기본 우클릭했을 때 나오는 창 안뜨게함
+    console.log("kick!" , data);
+
+    // userNavigation or kick Axios 요청하는함수
+
+  }
+
   // 이전 페이지에서 넘어와서 redux 데이터를 받는다면? 
   if (!roomInfo) {
     setTimeout(() => window.location.reload(), 1000);
@@ -208,9 +253,9 @@ const Chatroom = () => {
   return (
     <div className={module.chatContainer}>
       <div className={module.sidebarChat}>
-        --------------------------------
-        <p> 로그인 한놈 : {memberID} </p>
-        --------------------------------
+        --------------------
+        <p> 로그인 한놈 : {memberID} ({chatroomMemberRole}) </p>
+        --------------------
 
         <div>
           <h2>채팅방 이름: {roomInfo.chatroomName}</h2>
@@ -222,11 +267,29 @@ const Chatroom = () => {
 
         <div>
           <h2>채팅 참여자 목록 ({participants.length})</h2>
-          {/* {console.log(participants)} */}
+          {console.log("파티시팬트", participants)}
           {participants.map((participant, index) => (
             <div key={index}>
-              <p><strong> memberID:</strong> {participant.chatroomMemberId} ({participant.chatroomMemberType})
-              {liveParticipants.includes(participant.chatroomMemberId) && (
+              <p>
+                <strong>memberID:</strong>{' '} &nbsp;
+                <span onClick={() => { 
+                  setShowModal(true);
+                  setSelectedParticipant(participant);
+                  }} 
+                  className={module.clickable} 
+                > 
+                  {participant.chatroomMemberId}
+                </span>  &nbsp;
+                ({participant.chatroomMemberType }) 
+                <CustomModal
+                  showModal = {showModal} // showModal on off 정보
+                  setShowModal = {setShowModal} // show Modal on off 함수
+                  roomInfoUpdate={setRoomInfo}  // 강퇴후 채팅방 정보를 업데이트하기 위한 함수
+                  currentChatroomID={roomInfo.chatroomID} // 채팅방ID
+                  loginMemberRole={chatroomMemberRole}  // 채팅방에서 로그인유저의 권한
+                  targetMember={selectedParticipant} // 클릭한 회원
+                />
+                {liveParticipants.includes(participant.chatroomMemberId) && (
                   <span className={module.liveIndicator}>🟢</span>
                 )}
               </p>
@@ -252,6 +315,9 @@ const Chatroom = () => {
             {receivedMessage.map((msg, index) => (
               <div key={index} className={ msg.type === 'mine' ? module.mineMessage : msg.type === 'other' ? module.otherMessage : module.noticeMessage }>
                 <p>{msg.text}</p>
+                {msg.type !== 'notice' && (
+                    <p>안읽은 사람 수 : { participants.length - msg.readMembers.length }</p>
+                )}                
               </div>
             ))}
           </div>
@@ -259,11 +325,17 @@ const Chatroom = () => {
           type="text"
           value={messageInput}
           onChange={(e) => setMessageInput(e.target.value)}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              sendMessage();
+            }
+          }}
           placeholder="메시지를 입력하세요..."
         />
         <button onClick={sendMessage}>Send</button>
         <button onClick={leaveRoom}>채팅방 나가기</button>
       </div>
+
     </div>
   );
 };

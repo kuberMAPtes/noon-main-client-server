@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import ClickableCard from "./ClickableCard"
-
 import {
   Card,
   CardHeader,
@@ -10,32 +9,23 @@ import {
   CardTitle,
   Row,
   Col,
+  Container
 } from "reactstrap";
-
-import "../css/customerSupport.css"
-
 
 const Support = ({ isAdmin }) => {
 
   const member = useSelector((state) => state.auth.member);
-  const [role, setRole] = useState("ADMIN");
-
+  const [role, setRole] = useState("MEMBER");
 
   useEffect(() => {
-
-  //  setRole(member.memberRole);
-    console.log('현재 회원의 역할은: '+member.memberRole);
-
-  }, []); 
-
-
-
+    setRole(member.memberRole);
+    console.log('현재 회원의 역할은: ' + member.memberRole);
+  }, [member.memberRole]);
 
   return (
-    <div className="support">
-      <Row>
-
-        { role === "ADMIN" ? (
+    <Container className="support-container" style={{ marginTop:'50px', height: '50vh' }}>
+      <Row style={{ width: '110%', height: '100%' }} className="justify-content-center align-items-center">
+        {role === "ADMIN" ? (
           <>
             <ClickableCard
               path="./getNoticeList"
@@ -72,10 +62,8 @@ const Support = ({ isAdmin }) => {
             />
           </>
         )}
-
       </Row>
-
-    </div>
+    </Container>
   );
 };
 

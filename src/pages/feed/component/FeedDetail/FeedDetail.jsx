@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../css/FeedDetail.css';
 
 import { Image, Badge, Button, Card, CardBody, CardSubtitle, CardText, CardTitle, Form, ListGroup, ListGroupItem } from 'react-bootstrap';
@@ -9,8 +9,10 @@ import { MdDelete } from "react-icons/md";
 import LikedUsersList from './LikedUsersList';
 import axios_api from '../../../../lib/axios_api';
 import Navigator from '../../util/Navigator'
-import useNavigator from '../../util/Navigator';
+import navigator from '../../util/Navigator';
 import CheckModal from '../Common/CheckModal';
+import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
+import AttachmentGetter from '../../util/AttachmentGetter';
 
 const FeedDetail = ({ data, memberId }) => {
     // 데이터
@@ -58,7 +60,30 @@ const FeedDetail = ({ data, memberId }) => {
     const [deleteCommentId, setDeleteCommentId] = useState(null);
 
     // 피드 수정 화면으로 이동
-    const { goToFeedForm } = useNavigator();
+    const { goToFeedForm } = navigator();
+
+    // 맴버 프로필 리다이렉팅
+    const renderFeedText = (feedText) => renderFeedTextWithLink(feedText);
+
+    const [attachmentUrls, setAttachmentUrls] = useState([]); // 첨부파일 URL 목록
+
+    // 첨부파일 적용
+    useEffect(() => {
+        const fetchAttachments = async () => {
+            const urls = await Promise.all(
+                attachments.map(async (attachment) => {
+                    // console.log(attachment);
+                    const url = await AttachmentGetter(attachment.attachmentId);
+                    // console.log({ attachmentId: attachment.attachmentId, url });
+                    return { attachmentId: attachment.attachmentId, url };
+                })
+            );
+            setAttachmentUrls(urls.filter(urlObj => urlObj.url)); // 유효한 URL만 설정
+        };
+
+        fetchAttachments();
+    }, [attachments]);
+
 
     // 댓글 추가 내용 만들기
     const handleCommentChange = (e) => {
@@ -174,10 +199,15 @@ const FeedDetail = ({ data, memberId }) => {
                         {writtenTimeReplace} | <div onClick={() => goToBuildingProfile(buildingId)} style={{ cursor: 'pointer', display: 'inline' }}>{buildingName}</div>  
                     </CardSubtitle>
                     <br/>
+
+                    {/* 제목 */}
                     <CardTitle tag="h2">
                             {title}
                         </CardTitle>
-                    <CardText>{feedText}</CardText>
+
+                    {/* 내용 */}
+                    
+                    <p style={{ whiteSpace: "pre-wrap" }}><CardText>{renderFeedText(feedText)}</CardText></p>
                     { tags && tags.length > 0 && (
                         <div className="tags">
                             {tags.map((tag) => (
@@ -187,6 +217,7 @@ const FeedDetail = ({ data, memberId }) => {
                                 ))}
                         </div>
                     )}
+
                     {/* Body */}
                     <div className="feed-stats">
                         <p onClick={handleShowLikedUsersClick} style={{ cursor: 'pointer' }}
@@ -199,18 +230,26 @@ const FeedDetail = ({ data, memberId }) => {
                 </CardBody>
             </Card>
 
+            {/* 첨부 파일 */}
             <Card>
                 <CardBody>
-                    {attachments.map((attachment) => (
-                        <div key={attachment.attachmentId} className="mb-3">
-                            <img
-                                // src={attachment.fileUrl}
-                                src = "https://picsum.photos/200/300?grayscale​" 
-                                alt={`Attachment ${attachment.attachmentId}`}
-                                className="attachment-img"
-                            />
-                        </div>
-                    ))}
+                {attachmentUrls.map((attachmentUrl, index) => (
+                    <div key={index}>
+                    {attachmentUrl.url.type === "image" && (
+                        <img
+                            src={attachmentUrl.url.url}
+                            alt={`Attachment ${attachmentUrl.attachmentId}`}
+                            className="attachment-img"
+                        />
+                    )}
+                    {attachmentUrl.url.type === "video" && (
+                        <video width="240" height="180" controls>
+                            <source src={attachmentUrl.url.url} type="video/mp4" />
+                            Your browser does not support the video tag.
+                        </video>
+                    )}
+                    </div>
+                ))}
                 </CardBody>
             </Card>
 

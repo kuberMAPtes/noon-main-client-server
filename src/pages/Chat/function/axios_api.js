@@ -25,6 +25,21 @@ export const addChatroom = async(chatRoomData) => {
     }
 }
 
+// 채팅방 추방
+export const kickChatroom = async(chatroomID, targetMemberID) => {
+    try {
+        console.log("kickChatroom fetching 중....! get data => ", chatroomID, targetMemberID)
+
+        const response = await axios_api.get(`/chatroom/kickChatroom?chatroomId=${chatroomID}&memberId=${targetMemberID}`);
+        console.log('kickChatroom fetching 결과 :', response.data);
+
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching kickChatroom", error);
+        throw error;
+    }
+}
+
 // 채팅방목록 조회 (by memberId)
 export const getMyChatrooms = async (memberId) => {
     try {

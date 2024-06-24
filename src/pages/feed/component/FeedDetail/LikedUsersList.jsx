@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios_api from '../../../../lib/axios_api';
 import { Image, ListGroup, ListGroupItem } from 'react-bootstrap';
-import useNavigator from '../../util/Navigator';
+import navigator from '../../util/Navigator';
 
 const LikedUsersList = (props) => {
 
     const [likeUserList, setLikeUserList] = useState([]);
-    const {goToMemberProfile} = useNavigator();
+    const {goToMemberProfile} = navigator();
 
     const likedUser = async () => {
         try {

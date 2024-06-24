@@ -1,3 +1,18 @@
+.clickable {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.clickable:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
 .chatContainer {
   display: flex;
   flex-direction: row;

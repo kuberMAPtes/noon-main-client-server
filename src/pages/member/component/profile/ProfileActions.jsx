@@ -55,7 +55,6 @@ const ProfileActions = ({toId,fromId}) => {
             <div className={profile["circle-profile-icon"]}>
               <FaUserEdit />
             </div>
-            
           </div>
           <div><FaUserPlus/>팔로잉</div>
         </Col>
