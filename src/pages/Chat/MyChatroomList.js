@@ -73,7 +73,7 @@ const MyChatroomList = () => {
                 {chatrooms.map(chatroom => (
                     <div key={chatroom.chatroomID} className={styles.chatroom}> {/* Use styles from CSS module */}
                         <div className={styles['chatroom-info']}> {/* Use styles from CSS module */}
-                            <p className={styles['chatroom-name']}>{chatroom.chatroomName}</p> {/* Use styles from CSS module */}
+                            <p className={styles['chatroom-name']}>{chatroom.chatroomName} {console.log("채팅찍어보자채팅방", chatrooms)}</p> {/* Use styles from CSS module */}
                             <p className={styles['chatroom-status']}>방장 : {chatroom.chatroomCreator.memberId} ({chatroom.chatroomMinTemp} 도 이상만)</p> {/* Use styles from CSS module */}
                             <p>안읽은메세지수 : {chatroom.unreadMessage} </p>
                         </div>

@@ -127,9 +127,9 @@ const Chatroom = () => {
     })
 
     // (개발중) 다른유저 채팅 메세지 읽음시 메세지 업데이트 
-    socket.on('message_read_notice', (data)=>{
-      setMessageReadUpdator(prevState => !prevState)
-    } )
+    // socket.on('message_read_notice', (data)=>{
+    //   setMessageReadUpdator(prevState => !prevState)
+    // } )
 
     // 다른유저 채팅방 입장시 실시간 유저에 추가
     socket.on("enter_room_notice", (data)=>{
@@ -250,9 +250,9 @@ const Chatroom = () => {
   return (
     <div className={module.chatContainer}>
       <div className={module.sidebarChat}>
-        --------------------------------
+        --------------------
         <p> 로그인 한놈 : {memberID} </p>
-        --------------------------------
+        --------------------
 
         <div>
           <h2>채팅방 이름: {roomInfo.chatroomName}</h2>
@@ -269,12 +269,11 @@ const Chatroom = () => {
             <div key={index}>
               <p>
                 <strong>memberID:</strong>{' '}
-                <CustomModal/>
+                <CustomModal roomInfoUpdate={setRoomInfo} currentChatroomID={roomInfo.chatroomID} targetMemberID={participant.memberID}/>
 
                 <span
                   onClick={(e) => handleLeftClick(e, participant.chatroomMemberId)}
                   onContextMenu={(e) => handleRightClick(e, participant.chatroomMemberId)}
-                  style={{ cursor: 'pointer' }}
                 >
 
                   {participant.chatroomMemberId} ({participant.chatroomMemberType})
