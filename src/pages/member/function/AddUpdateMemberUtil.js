@@ -45,6 +45,52 @@ export const handleNicknameChange = async (
     "닉네임 : 자음과 모음이 반드시 결합, 2~20자"
   );
 };
+export const handleNicknameUpdateChange = async (
+  e,
+  nickname,
+  setNickname,
+  setNicknameValidationMessage,
+  setIsNicknameValid
+) => {
+  console.log("setNickname2", typeof setNickname);
+  console.log(
+    "setNicknameValidationMessage2",
+    typeof setNicknameValidationMessage
+  );
+
+  const input = e.target.value;
+  setNickname(input);
+
+  if(input === nickname){
+    setNicknameValidationMessage("");
+    setIsNicknameValid(false);
+  }else if(validateNickname(input)){
+    if(checkNickname){
+      const response = await checkNickname(input);
+      if(response.info === true){
+        setNicknameValidationMessage("");
+        setIsNicknameValid(true);
+      }else if(response.message){
+        setNicknameValidationMessage(response.message);
+        setIsNicknameValid(false);
+      }else{
+        setNicknameValidationMessage("닉네임 중복확인 오류");
+        setIsNicknameValid(false);
+      }
+    } else {
+      setNicknameValidationMessage("");
+      setIsNicknameValid(true);
+    }
+  } else if(input === ""){
+    setNicknameValidationMessage("");
+    setIsNicknameValid(false);
+  }
+  else {
+    setNicknameValidationMessage("닉네임 : 자음과 모음이 반드시 결합, 2~20자");
+    setIsNicknameValid(false);
+  }
+
+}
 
 export const handleMemberIdChange = async (
   e,
@@ -169,5 +215,3 @@ export const addMemberSubmit = async (
     //alert("오류가 발생하였습니다.");
   }
 };
-
-export const updateMemberSubmit = async (form, dispatch, navigate) => {};

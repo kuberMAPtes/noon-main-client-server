@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
 import axiosInstance from "../../lib/axiosInstance";
-import { setTokenCookie } from "../../pages/member/function/memberFunc";
+import { clearAllCookies, setTokenCookie } from "../../pages/member/function/memberFunc";
 import { getCookie } from "../../util/cookies";
 import { navigateMainPage } from "../../util/mainPageUri";
 import {
@@ -26,7 +26,7 @@ export const login = createAsyncThunk(
         // 카카오 로그인 처리
         //카카오 로그인 로직 시 아이디가 없다면 서버에서 회원가입을 해놓았음.
         console.log("카카오 로그인 처리중 :: loginData:", loginData);
-        alert("카카오 로그인 처리중 :: loginData:" + JSON.stringify(loginData?.member));
+        //alert("카카오 로그인 처리중 :: loginData:" + JSON.stringify(loginData?.member));
         // const response = await axiosInstance.post(`/member/getMember`, loginData?.member);
         const info = await getMember(loginData?.member);
         console.log("카카오 로그인 처리중 response:", info);
@@ -35,7 +35,8 @@ export const login = createAsyncThunk(
         // 구글 로그인 처리
         // 여기서 회원가입도 같이 함.
         console.log("구글 로그인 처리중 :: loginData:", loginData);
-        alert("구글 로그인 처리중 :: loginData:" + JSON.stringify(loginData?.member));
+        // alert("구글 로그인 처리중 :: loginData:" + JSON.stringify(loginData?.member));
+        alert("로그인 되었습니다.");
         const info = await googleLogin(loginData?.member); //여기 member에는 authorizeCode도 있음
 
         console.log("구글 로그인 처리중 response:", info);
@@ -88,9 +89,8 @@ export const login = createAsyncThunk(
 
 export const logout = createAsyncThunk("auth/logout", async (navigate) => {
   try {
-    Cookies.remove("AuthToken");
-    //   await axiosInstance.post('/member/logout');
-    navigate("/member/getAuthMain");
+    clearAllCookies();
+    // await axiosInstance.post('/member/logout');
   } catch (error) {
     console.error("Logout failed", error);
   }

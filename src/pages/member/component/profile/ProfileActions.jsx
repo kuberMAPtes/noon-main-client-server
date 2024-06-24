@@ -7,7 +7,7 @@ import profile from "../../../../assets/css/module/member/GetMemberProfile.modul
 import { useNavigate } from "react-router-dom";
 import base from "../../../../assets/css/module/member/base.module.css";
 
-const ProfileActions = () => {
+const ProfileActions = ({toId,fromId}) => {
   const [showMenu, setShowMenu] = React.useState(false);
 
   const navigate = useNavigate();
@@ -27,60 +27,57 @@ const ProfileActions = () => {
     // alert("유저를 신고합니다.");
   };
 
-  const handleUpdatePhoneNumber = (e) => {
-    e.preventDefault();
-    // alert("연락처를 등록합니다.");
-  };
-
   return (
+    <>
     <Row className="text-center mt-3">
-      <Col>
-        <div
-          className={`${profile.memberCircle} ${base.hoverStyle}`}
-          onClick={() => navigate("/member/updateMember")}
-        >
-          <div className={profile["circle-profile-icon"]}>
-            <FaUserEdit />
-          </div>
-        </div>
-      </Col>
-      <Col>
-        <div
-          className={`${profile.circle} ${base.hoverStyle}`}
-          onClick={() => navigate("/map")}
-        >
-          <div className={profile["circle-map-icon"]}>
-            <FaMapMarkedAlt />
-          </div>
-        </div>
-      </Col>
-      <Col>
-        <Row>
-          <Col xs={8}>
-            <div className={profile["circle-icon"]} onClick={handleToggle}>
-              <MdMoreHoriz />
+      <Row style={{padding:"0px",margin:"0px"}}>
+        <Col xs={4}>
+          <div
+            className={`${profile.memberCircle} ${base.hoverStyle}`}
+            onClick={() => navigate("/member/getMember")}
+          >
+            <div className={profile["circle-profile-icon"]}>
+              <FaUserEdit />
             </div>
-          </Col>
-          {showMenu && (
-            <Col xs={4}>
-              <AnimatedDiv onClick={() => navigate("/setting")}>
-                환경설정으로..
-              </AnimatedDiv>
-              <AnimatedDiv onClick={() => navigate("/customerSupport")}>
-                고객지원
-              </AnimatedDiv>
-              <AnimatedDiv onClick={handleBlock}>차단하기</AnimatedDiv>
-              <AnimatedDiv onClick={handleReport}>신고하기</AnimatedDiv>
-              <AnimatedDiv onClick={handleUpdatePhoneNumber}>
-                연락처 등록하기
-              </AnimatedDiv>
-            </Col>
-          )}
-        </Row>
-        <Row>
-        </Row>
-      </Col>
+          </div>
+        </Col>
+        <Col xs={4}>
+          <div
+            className={`${profile.circle} ${base.hoverStyle}`}
+            onClick={() => navigate("/map")}
+          >
+            <div className={profile["circle-map-icon"]}>
+              <FaMapMarkedAlt />
+            </div>
+          </div>
+        </Col>
+        <Col xs={4}>
+          <div className={`${profile.circle} ${base.hoverStyle}`} onClick={handleToggle}>
+            <MdMoreHoriz size="2em"/>
+          </div>
+        </Col>
+      </Row>
     </Row>
+    <Row>
+      {showMenu && (
+    <Row style={{ margin:"0px",padding:"0px" }}>
+      <AnimatedDiv onClick={() => navigate("/setting")}>
+        환경설정으로..
+      </AnimatedDiv>
+      <AnimatedDiv onClick={() => navigate("/customerSupport")}>
+        고객지원
+      </AnimatedDiv>
+      
+        {fromId !== toId && 
+        (<>
+        <AnimatedDiv onClick={() => navigate(`report/addReport/${fromId}/${toId}`)}>신고하기</AnimatedDiv>
+        <AnimatedDiv onClick={handleBlock}>차단하기</AnimatedDiv>
+        </>)
+        }
+    </Row>
+  )}
+    </Row>
+    </>
   );
 };
 

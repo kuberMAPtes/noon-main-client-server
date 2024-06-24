@@ -1,14 +1,30 @@
-import React from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { FaHome, FaComments, FaMap, FaSearch, FaUser } from 'react-icons/fa';
-import styles from '../../assets/css/module/Footer.module.css';
+import React, { useEffect, useState } from "react";
+import { Container, Row, Col } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { FaHome, FaComments, FaMap, FaSearch, FaUser } from "react-icons/fa";
+import styles from "../../assets/css/module/Footer.module.css";
+import useEncryptId from "../../pages/member/component/common/useEncryptId";
+import { useSelector } from "react-redux";
 
 const Footer = () => {
+  const memberId = useSelector((state) => state.auth.member.memberId);
+  const { encryptedData, ivData } = useEncryptId(memberId);
+  const [secretId, setSecretId] = useState(encryptedData);
+  const [secretIv, setSecretIv] = useState(ivData);
+
+  useEffect(() => {
+    setSecretId(encryptedData);
+    setSecretIv(ivData);
+  }, [encryptedData, ivData, memberId]);
+
+  // useEffect(()=>{
+  //    alert(`Footer에서 가져온 secretId: ${secretId} secretIv: ${secretIv}`);
+  // }, [secretId, secretIv]);
+
   return (
     <footer className="bg-light fixed-bottom">
       <Container>
-        <Row className={`text-center ${styles['row-no-link-style']}`}>
+        <Row className={`text-center ${styles["row-no-link-style"]}`}>
           <Col>
             <Link to="/feed/main">
               <FaHome size={24} />
@@ -34,7 +50,7 @@ const Footer = () => {
             </Link>
           </Col>
           <Col>
-            <Link to="/member/getMemberProfile">
+            <Link to={`/member/getMemberProfile/${secretId}/${secretIv}`}>
               <FaUser size={24} />
               <div>프로필</div>
             </Link>
