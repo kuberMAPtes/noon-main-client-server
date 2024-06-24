@@ -156,7 +156,7 @@ const FeedDetail = ({ data, memberId }) => {
                                     <span onClick={() => setFeedDeleteShow(true)} style={{ cursor: 'pointer', marginRight: '10px' }}>
                                             <MdDelete size='32'/> {/* 피드 삭제 : Modal 열기*/}
                                     </span>
-                                    <span onClick={() => goToFeedForm(feedId)} style={{ cursor: 'pointer', marginRight: '10px' }}>
+                                    <span onClick={() => goToFeedForm(writerId, feedId)} style={{ cursor: 'pointer', marginRight: '10px' }}>
                                         <GrUpdate size='32'/> {/* 피드 수정 */}
                                     </span>
                                 </>

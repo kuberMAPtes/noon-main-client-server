@@ -3,6 +3,7 @@ import { Form, Button, Card, ListGroup, Container, Badge } from 'react-bootstrap
 import "../../css/FeedForm.css";
 import axios_api from '../../../../lib/axios_api';
 import CheckModal from '../Common/CheckModal';
+import useNavigator from '../../util/Navigator';
 
 const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, onSave }) => {
     const [feedData, setFeedData] = useState({
@@ -23,6 +24,13 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
     // Feed Add, Update Modal 관련
     const [feedAddShow, setFeedAddShow] = useState(false);
     const [feedUpdateShow, setFeedUpdateShow] = useState(false);
+
+    // navigator
+    const { goToFeedDetail } = useNavigator();
+
+
+    // 첨부파일을 삭제할 파일 목록
+    const [deletedFiles, setDeletedFiles] = useState([]);
 
     useEffect(() => {
         if (existingFeed) {
@@ -101,6 +109,8 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
             }
 
             console.log('피드가 성공적으로 저장되었습니다:', feedResponse.data);
+
+            goToFeedDetail(inputWriterId, feedId);
         } catch (error) {
             console.error('피드 저장 중 오류 발생:', error);
         }
@@ -133,7 +143,9 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
             // 첨부파일 저장
             const formData = new FormData();
             feedData.attachments.forEach((file) => {
-                formData.append('multipartFile', file);
+                if (file instanceof File) {
+                    formData.append('multipartFile', file);
+                }
             });
 
             if(formData && formData.getAll('multipartFile').length > 0) {
@@ -144,12 +156,22 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                 });
             }
 
+            // 삭제된 파일 처리
+            if (deletedFiles.length > 0) {
+                deletedFiles.forEach(async (deleteFile) => {
+                    await axios_api.post(`/feed/deleteFeedAttachment/${deleteFile.attachmentId}`);
+                });
+            }
+
             console.log('피드가 성공적으로 저장되었습니다:', feedResponse.data);
+
+            goToFeedDetail(inputWriterId, feedId);
         } catch (error) {
             console.error('피드 수정 중 오류 발생:', error);
         }
     }
 
+    // 피드 추가 및 수정 제출하기
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -199,12 +221,16 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
         }));
     };
 
-    const handleFileRemove = (fileUrl) => {
-        const updatedFiles = feedData.attachments.filter((file) => {
-            if (file instanceof File) {
-                return URL.createObjectURL(file) !== fileUrl;
+    // 미리보기 삭제 시 삭제 리스트에 포함시키기
+    const handleFileRemove = (file) => {
+        if (isUploadedFile(file)) {
+            setDeletedFiles([...deletedFiles, file]); //  사용하여 파일 식별
+        }
+        const updatedFiles = feedData.attachments.filter((attachment) => {
+            if (attachment instanceof File) {
+                return URL.createObjectURL(attachment) !== file.fileUrl;
             } else {
-                return file.fileUrl !== fileUrl;
+                return attachment.fileUrl !== file.fileUrl;
             }
         });
         setFeedData({ ...feedData, attachments: updatedFiles });
@@ -274,32 +300,30 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                                 onChange={handleFileChange}
                             />
                             <ListGroup className="file-list mt-3">
-                            {feedData.attachments.map((file, index) => (
-                                <ListGroup.Item key={index} className="d-flex justify-content-between align-items-center">
-                                    {isUploadedFile(file) ? (
-                                        // 이미 업로드된 파일의 미리보기
-                                        <div className="d-flex align-items-center">
-                                            {isImageOrVideo(file) ? (
-                                                <img src={file.fileUrl} alt={file.fileUrl} style={{ maxWidth: '50px', maxHeight: '50px', marginRight: '10px' }} />
-                                            ) : (
+                                {feedData.attachments.map((file, index) => (
+                                    <ListGroup.Item key={index} className="d-flex justify-content-between align-items-center">
+                                        {isUploadedFile(file) ? (
+                                            <div className="d-flex align-items-center">
+                                                {isImageOrVideo(file) ? (
+                                                    <img src={file.fileUrl} alt={file.fileUrl} style={{ maxWidth: '50px', maxHeight: '50px', marginRight: '10px' }} />
+                                                ) : (
+                                                    <span>{file.fileUrl}</span>
+                                                )}
                                                 <span>{file.fileUrl}</span>
-                                            )}
-                                            <span>{file.fileUrl}</span>
-                                        </div>
-                                    ) : (
-                                        // 새로 업로드할 파일의 미리보기
-                                        <div className="d-flex align-items-center">
-                                            {isImageOrVideo(file) ? (
-                                                <img src={URL.createObjectURL(file)} alt={file.name} style={{ maxWidth: '50px', maxHeight: '50px', marginRight: '10px' }} />
-                                            ) : (
+                                            </div>
+                                        ) : (
+                                            <div className="d-flex align-items-center">
+                                                {isImageOrVideo(file) ? (
+                                                    <img src={URL.createObjectURL(file)} alt={file.name} style={{ maxWidth: '50px', maxHeight: '50px', marginRight: '10px' }} />
+                                                ) : (
+                                                    <span>{file.name}</span>
+                                                )}
                                                 <span>{file.name}</span>
-                                            )}
-                                            <span>{file.name}</span>
-                                        </div>
-                                    )}
-                                    <Button variant="danger" size="sm" onClick={() => handleFileRemove(file)}>삭제</Button>
-                                </ListGroup.Item>
-                            ))}
+                                            </div>
+                                        )}
+                                        <Button variant="danger" size="sm" onClick={() => handleFileRemove(file)}>삭제</Button>
+                                    </ListGroup.Item>
+                                ))}
                             </ListGroup>
                         </Form.Group>
 
