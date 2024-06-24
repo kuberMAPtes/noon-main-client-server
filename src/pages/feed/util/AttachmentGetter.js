@@ -11,10 +11,21 @@ const AttachmentGetter = async (feedAttachmentId) => {
     if (response.data && response.data.byteLength > 0) {
       const contentType =
         response.headers["content-type"] || "application/octet-stream";
-      const imageBlob = new Blob([response.data], { type: "image/jpeg" }); // 일단 사진만 출력
-      const imageObjectURL = URL.createObjectURL(imageBlob);
 
-      return imageObjectURL;
+      if (contentType.includes("image")) {
+        const imageBlob = new Blob([response.data], { type: contentType });
+        const imageObjectURL = URL.createObjectURL(imageBlob);
+        console.log("이미지 생성");
+        return { type: "image", url: imageObjectURL };
+      } else if (contentType.includes("video")) {
+        const videoBlob = new Blob([response.data], { type: contentType });
+        const videoObjectURL = URL.createObjectURL(videoBlob);
+        console.log("동영상 생성");
+        return { type: "video", url: videoObjectURL };
+      } else {
+        console.log("Unsupported attachment type:", contentType);
+        return null;
+      }
     } else {
       console.log(feedAttachmentId + " 데이터가 없음");
       return null;

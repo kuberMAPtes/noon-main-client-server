@@ -44,38 +44,12 @@ const FeedItem = ({ data, memberId }) => {
     const handleBookmarkClick = () => {
         toggleBookmark(bookmarked, setBookmarked, feedId, memberId);
     }
-    
-    // 첨부파일 처리
-    // const handleMainAttachment = async (e) => {
-    //     let url = `/feed/getFeedAttachment?attachmentId=${feedAttachmentId}`;
-    //     try {
-    //         const response = await axios_api.get(url, {
-    //             responseType:'arraybuffer'
-    //         });
-            
-    //         if (response.data && response.data.byteLength > 0) {
-    //             const imageBlob = new Blob([response.data], { type: 'image/jpeg' });
-    //             const imageObjectURL = URL.createObjectURL(imageBlob);
-    
-    //             setMainAttachment(imageObjectURL);
-    //         } else {
-    //             console.log(feedAttachmentId + " 데이터가 없음");
-    //         }
-    //     } catch (e) {
-    //         if (e.response && e.response.status === 404) {
-    //             console.log("Attachment not found (404)");
-    //         } else {
-    //             console.log(e);
-    //         }
-    //     }
-    // }
-    
 
     useEffect(() => {
         const loadAttachment = async () => {
             const attachmentUrl = await AttachmentGetter(feedAttachmentId);
             if (attachmentUrl) {
-                setMainAttachment(attachmentUrl);
+                setMainAttachment(attachmentUrl.url);
             } else {
                 setMainAttachment(null);
             }

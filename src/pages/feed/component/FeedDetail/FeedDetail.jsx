@@ -67,11 +67,14 @@ const FeedDetail = ({ data, memberId }) => {
 
     const [attachmentUrls, setAttachmentUrls] = useState([]); // 첨부파일 URL 목록
 
+    // 첨부파일 적용
     useEffect(() => {
         const fetchAttachments = async () => {
             const urls = await Promise.all(
                 attachments.map(async (attachment) => {
+                    // console.log(attachment);
                     const url = await AttachmentGetter(attachment.attachmentId);
+                    // console.log({ attachmentId: attachment.attachmentId, url });
                     return { attachmentId: attachment.attachmentId, url };
                 })
             );
@@ -226,17 +229,26 @@ const FeedDetail = ({ data, memberId }) => {
                 </CardBody>
             </Card>
 
+            {/* 첨부 파일 */}
             <Card>
                 <CardBody>
-                    {attachmentUrls.map(({ attachmentId, url }) => (
-                        <div key={attachmentId} className="mb-3">
-                            <img
-                                src={url}
-                                alt={`Attachment ${attachmentId}`}
-                                className="attachment-img"
-                            />
-                        </div>
-                    ))}
+                {attachmentUrls.map((attachmentUrl, index) => (
+                    <div key={index}>
+                    {attachmentUrl.url.type === "image" && (
+                        <img
+                            src={attachmentUrl.url.url}
+                            alt={`Attachment ${attachmentUrl.attachmentId}`}
+                            className="attachment-img"
+                        />
+                    )}
+                    {attachmentUrl.url.type === "video" && (
+                        <video width="240" height="180" controls>
+                            <source src={attachmentUrl.url.url} type="video/mp4" />
+                            Your browser does not support the video tag.
+                        </video>
+                    )}
+                    </div>
+                ))}
                 </CardBody>
             </Card>
 
