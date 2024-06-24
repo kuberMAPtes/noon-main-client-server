@@ -13,8 +13,12 @@
   right: 3%;
   bottom: 8%;
   padding: 8px;
-  background-color: #ced4da;
-  border-radius: 5px;
+  background-color: #9BAAF8;
+  border-radius: 50px;
+}
+
+.myLocationButton:hover {
+  background-color: #9BAAF8;
 }
 
 .myLocationButton img {

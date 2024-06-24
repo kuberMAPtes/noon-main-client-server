@@ -1,21 +1,22 @@
 #map {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   cursor: default;
   position: relative;
 }
 
 .check-container {
-  background-color: #4dabf7;
-  border: 1px solid #1c7ed6;
+  background-color: #9BAAF8;
+  border: 1px solid #9BAAF8;
   padding: 3px 6px;
   font-weight: bold;
-  border-radius: 2px;
+  border-radius: 4px;
+  margin-top: 12px;
   font-size: 14px;
 }
 
 .unchecked {
-  background-color: #a5d8ff;
+  background-color: #D9D9D9;
 }
 
 .check-container input[type="checkbox"] {
@@ -28,7 +29,7 @@
   z-index: 95;
   position: absolute;
   top: 1%;
-  width: 95vw;
+  width: 90%;
   margin-left: auto;
   margin-right: auto;
   left: 0;
@@ -37,4 +38,6 @@
 
 .search-bar-container button {
   margin: 0;
+  background-color: #9BAAF8;
+  border: none;
 }
