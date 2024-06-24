@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { FaHome, FaComments, FaMap, FaSearch, FaUser } from "react-icons/fa";
 import styles from "../../assets/css/module/Footer.module.css";
 import useEncryptId from "../../pages/member/component/common/useEncryptId";
 import { useSelector } from "react-redux";
 
 const Footer = () => {
+  const location = useLocation();
   const memberId = useSelector((state) => state.auth.member.memberId);
+  const memberRole = useSelector((state) => state.auth.member.memberRole);
   const { encryptedData, ivData } = useEncryptId(memberId);
   const [secretId, setSecretId] = useState(encryptedData);
   const [secretIv, setSecretIv] = useState(ivData);
@@ -15,11 +17,13 @@ const Footer = () => {
   useEffect(() => {
     setSecretId(encryptedData);
     setSecretIv(ivData);
-  }, [encryptedData, ivData, memberId]);
+  }, [encryptedData, ivData, memberId, memberRole]);
 
   // useEffect(()=>{
   //    alert(`Footer에서 가져온 secretId: ${secretId} secretIv: ${secretIv}`);
   // }, [secretId, secretIv]);
+  
+  const isActive = (path) => location.pathname === path;
 
   return (
     <footer className="bg-light fixed-bottom">
