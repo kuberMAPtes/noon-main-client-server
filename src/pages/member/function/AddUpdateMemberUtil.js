@@ -202,9 +202,10 @@ export const addMemberSubmit = async (
   const { member } = await dispatch(login({ loginData, navigate }));
   //alert("멤버 info 쿠키"+member, info, Cookies.get("AuthToken"));
   console.log("info:", info);
-  console.log("Cookies.get(AuthToken):", Cookies.get("AuthToken"));
+  // console.log("Cookies.get(AuthToken):", Cookies.get("AuthToken"));
+  console.log("member:", member);
 
-  if (info === true && Cookies.get("AuthToken")) {
+  if (info === true && member) {
     hasNavigated = true;
     Cookies.remove("addMemberOtherKey"); // 쿠키 삭제
     Cookies.remove("addMemberKey"); // 쿠키 삭제 휴대폰인증할때 받은 회원가입 권한 무효화

@@ -255,7 +255,7 @@ const GetMemberRelationshipList = () => {
         onClick={() => handleTabClick('blocking')}
         className={`${module.tab} ${activeTab === 'blocking' ? module.active : ''}`}
         >
-        차단한 회원 {blockingCount}
+        차단 회원 {blockingCount}
         </Col>
       </Row>
 
@@ -273,8 +273,8 @@ const GetMemberRelationshipList = () => {
             marginTop: '10px',
             paddingBottom: index === getActiveList().length - 1 ? '70px' : '0', // 마지막 요소에만 패딩 추가
           }}>
-          <Row className="align-items-center" style={{width:"100%"}}>
-            <Col xs={2}>
+          <Row className="align-items-center" style={{width:"100%",height:"100%",}}>
+            <Col xs={2} style={{margin : "0px" ,padding : "0px"}}>
               <Image
               src={memberRelationship?.fromMember?.profilePhotoUrl || defaultPhotoUrl}
               className={module.profilePhotoUrl}
@@ -301,7 +301,7 @@ const GetMemberRelationshipList = () => {
             paddingBottom: index === getActiveList().length - 1 ? '70px' : '0', // 마지막 요소에만 패딩 추가
           }}>
             <Row className="align-items-center" style={{width:"100%"}}>
-              <Col xs={2}>
+            <Col xs={2} style={{margin : "0px" ,padding : "0px"}}>
                 <Image
                 src={memberRelationship?.toMember?.profilePhotoUrl || defaultPhotoUrl}
                 className={module.profilePhotoUrl}
@@ -327,7 +327,7 @@ const GetMemberRelationshipList = () => {
             paddingBottom: index === getActiveList().length - 1 ? '70px' : '0', // 마지막 요소에만 패딩 추가
           }}>
           <Row className="align-items-center" style={{width:"100%"}}>
-            <Col xs={2}>
+          <Col xs={2} style={{margin : "0px" ,padding : "0px"}}>
               <Image
               src={memberRelationship?.toMember?.profilePhotoUrl || defaultPhotoUrl}
               className={module.profilePhotoUrl}
@@ -338,7 +338,11 @@ const GetMemberRelationshipList = () => {
               <div>{memberRelationship?.toMember?.nickname}</div>
             </Col>
             <Col xs={2}>
-              <button size="sm" style={{paddingLeft:"10px",paddingRight:"10px"}}className={module.buttonColor} onClick={()=>memoHandleBlockCancelClick(memberRelationship?.toMember?.memberId)}>차단 취소</button>
+              <button
+              size="sm"
+              className={module.buttonColor}
+              style={{paddingLeft:"10px",paddingRight:"10px", width:"100px", height:"40px"}}
+              onClick={()=>memoHandleBlockCancelClick(memberRelationship?.toMember?.memberId)}>차단 취소</button>
             </Col>
           </Row>
         </ListGroup.Item>
