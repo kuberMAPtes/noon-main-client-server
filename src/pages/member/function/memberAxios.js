@@ -4,11 +4,11 @@ import axiosInstance from "../../../lib/axiosInstance";
 export const sendAuthentificationNumber = async (phoneNumber) => {
   try {
     console.log("sendAuthentificationNumber 요청:", { phoneNumber });
-    const response = await axiosInstance.get(`/member/sendAuthentificationNumber`, {
-        params: { phoneNumber },
-    });
-    // const response = { data: { info: 1234 } }; //이거 지우고 아래 주석 풀자
-    // console.log("sendAuthentificationNumber 응답:", response.data);
+    // const response = await axiosInstance.get(`/member/sendAuthentificationNumber`, {
+    //     params: { phoneNumber },
+    // });
+    const response = { data: { info: 1234 } }; //이거 지우고 아래 주석 풀자
+    console.log("sendAuthentificationNumber 응답:", response.data);
     return response.data;
   } catch (error) {
     console.error("문자전송에러 error:", error);
@@ -27,14 +27,14 @@ export const confirmAuthentificationNumber = async (
       authentificationNumber,
     });
 
-    const authNumber = authentificationNumber;
-    const response = await axiosInstance.get(`/member/confirmAuthentificationNumber`, {
-        params: { phoneNumber, authNumber },
-    });
-    // if (authentificationNumber === "1234") {
-    //   return { info: true };
-    // }
-    // const response = { data: { info: false } }; //이거랑 위에 지우고 아래 주석 풀자
+    // const authNumber = authentificationNumber;
+    // const response = await axiosInstance.get(`/member/confirmAuthentificationNumber`, {
+    //     params: { phoneNumber, authNumber },
+    // });
+    if (authentificationNumber === "1234") {
+      return { info: true };
+    }
+    const response = { data: { info: false } }; //이거랑 위에 지우고 아래 주석 풀자
     console.log("confirmAuthentificationNumber 응답:", response.data);
 
     return response.data;
@@ -497,5 +497,16 @@ export const getBuildingSubscriptionCount = async (memberId) => {
   } catch(error){
     console.error("getBuildingSubscriptionCount error:", error);
     return null
+  }
+}
+export const getLoginMember = async () => {
+  try{
+    const response = await axiosInstance.get(`/member/getLoginMember`);
+    // alert("getLoginMember 응답:"+JSON.stringify(response));
+    return response.data.info;
+  } catch(error){
+    console.error("getLoginMember error:", error);
+    // alert("에러났음" + JSON.stringify(error));
+    return null;
   }
 }

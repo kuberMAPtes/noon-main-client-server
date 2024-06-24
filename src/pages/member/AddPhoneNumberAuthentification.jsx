@@ -68,6 +68,7 @@ const AddPhoneNumberAuthentification = () => {
   }, [verifiedState]);
 
   const handleUpdatePhoneNumber = async (phoneNumber,memberId, verifiedState, navigate, toUrl) => {
+    alert("phoneNumber"+phoneNumber+"memberId"+memberId+"verifiedState"+verifiedState+"toUrl"+toUrl)
     if (verifiedState === "success" && toUrl === "updatePhoneNumber" && memberId) {
 
       const response = await updatePhoneNumber({phoneNumber,memberId});
@@ -75,6 +76,7 @@ const AddPhoneNumberAuthentification = () => {
       if(response === true){
       const secretId = encryptedData;
       const secretIv = ivData;
+      alert("휴대폰 번호 등록에 성공했습니다.");
       navigate(`/member/getMemberProfile/${secretId}/${secretIv}`);
       }else{
         alert("휴대폰 번호 등록에 실패했습니다.");

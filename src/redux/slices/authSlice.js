@@ -1,8 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
 import axiosInstance from "../../lib/axiosInstance";
-import { clearAllCookies, setTokenCookie } from "../../pages/member/function/memberFunc";
-import { getCookie } from "../../util/cookies";
+import { clearAllCookies } from "../../pages/member/function/memberFunc";
 import { navigateMainPage } from "../../util/mainPageUri";
 import {
   getMember,
@@ -23,6 +22,7 @@ export const login = createAsyncThunk(
       let returnMember;
 
       if (loginData?.loginWay === "kakao") {
+
         // 카카오 로그인 처리
         //카카오 로그인 로직 시 아이디가 없다면 서버에서 회원가입을 해놓았음.
         console.log("카카오 로그인 처리중 :: loginData:", loginData);
@@ -31,7 +31,9 @@ export const login = createAsyncThunk(
         const info = await getMember(loginData?.member);
         console.log("카카오 로그인 처리중 response:", info);
         returnMember = info;
+
       } else if (loginData?.loginWay === "google") {
+
         // 구글 로그인 처리
         // 여기서 회원가입도 같이 함.
         console.log("구글 로그인 처리중 :: loginData:", loginData);
@@ -41,14 +43,18 @@ export const login = createAsyncThunk(
 
         console.log("구글 로그인 처리중 response:", info);
         returnMember = info;
+
       } else {
+
         // 일반 로그인 처리
         // 일반 로그인은 회원가입은 같이 하지 않는다.
         const info = await Login(loginData?.member);
         console.log("로그인처리중 response:", info);
         returnMember = info;
         //alert("returnMember 로그인합니다" + returnMember);
+        
       }
+      //returnMember의 memberId가 있으면 로그인 성공임.
       //authorization은 true, false,null 값을 가짐
       if (returnMember?.memberId) {
         loginData.member = returnMember;
@@ -59,7 +65,9 @@ export const login = createAsyncThunk(
         Cookies.remove("IV"); //로그인 성공했으면 쿠키 삭제 카카오로그인시 사용
 
         const result = { member: returnMember, authorization: true };
-        setTokenCookie(returnMember);
+
+        // setTokenCookie(returnMember);
+
         if (!(loginData?.loginWay === "signUp")) {
           //alert("네비게이트메인페이지");
           navigateMainPage(returnMember?.memberId, navigate);
@@ -68,7 +76,7 @@ export const login = createAsyncThunk(
       }
       //잘못된경우
       console.log("56번째줄authSlice member" + returnMember);
-      console.log(getCookie("AuthToken"));
+      // console.log(getCookie("AuthToken"));
       return { member: null, authorization: false };
       //   dispatch(setAuthorizationAndMember(authorization));
       //   return { member, authorization };
@@ -90,7 +98,7 @@ export const login = createAsyncThunk(
 export const logout = createAsyncThunk("auth/logout", async (navigate) => {
   try {
     clearAllCookies();
-    // await axiosInstance.post('/member/logout');
+    await axiosInstance.post('/member/logout');
   } catch (error) {
     console.error("Logout failed", error);
   }
