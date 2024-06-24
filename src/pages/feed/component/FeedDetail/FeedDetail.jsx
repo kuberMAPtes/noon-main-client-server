@@ -182,7 +182,7 @@ const FeedDetail = ({ data, memberId }) => {
                             {title}
                         </CardTitle>
                     {/* 내용 */}
-                    <CardText>{renderFeedText(feedText)}</CardText>
+                    <p style={{ whiteSpace: "pre-wrap" }}><CardText>{renderFeedText(feedText)}</CardText></p>
                     { tags && tags.length > 0 && (
                         <div className="tags">
                             {tags.map((tag) => (

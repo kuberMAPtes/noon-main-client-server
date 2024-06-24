@@ -6,6 +6,7 @@ import { FaHeart, FaRegHeart, FaBookmark, FaRegBookmark } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { toggleLike, toggleBookmark } from '../../axios/FeedAxios';
 import useNavigator from '../../util/Navigator'
+import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
 
 const FeedItem = ({ data, memberId }) => {
 
@@ -32,6 +33,7 @@ const FeedItem = ({ data, memberId }) => {
     // 데이터 처리
     const writtenTimeReplace = data.writtenTime.replace('T', ' ');
 
+    const renderFeedText = (feedText) => renderFeedTextWithLink(feedText);
 
     const handleLikeClick = () => {
         toggleLike(liked, setLiked, feedId, memberId);
@@ -61,7 +63,7 @@ const FeedItem = ({ data, memberId }) => {
                     </div>
 
                     {/* Body */}
-                    <CardText>{feedText}</CardText>
+                    <p style={{ whiteSpace: "pre-wrap" }}><CardText>{renderFeedText(feedText)}</CardText></p>
                     <CardText>
                         <small className="text-muted">
                              {writtenTimeReplace}

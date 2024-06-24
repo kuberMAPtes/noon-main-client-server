@@ -298,7 +298,7 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                         </Form.Group>
                         <Label>(Test)내용 미리 보기</Label>
                         <div>
-                            {renderFeedText(feedData.feedText)}
+                            <p style={{ whiteSpace: "pre-wrap" }}>{renderFeedText(feedData.feedText)}</p>
                         </div>
                         <br/>
                         <Form.Group controlId="attachments" className="mb-3">
