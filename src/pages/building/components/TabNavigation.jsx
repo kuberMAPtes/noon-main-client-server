@@ -3,41 +3,37 @@ import FeedList from '../../feed/FeedListPage';
 import FeedBuildingListPage from '../../feed/FeedBuildingListPage';
 import ChatroomList from './ChatroomList';
 import { useNavigate } from 'react-router-dom';
+import '../css/tab-navigation.css';
 
 const TabNavigation = () => {
-
   const [activeTab, setActiveTab] = useState('feed');
   const navigate = useNavigate();
 
-  //피드 생성 or 채팅방 생성
+  // 피드 생성 or 채팅방 생성
   const handleCreationLink = () => {
-
     if(activeTab === 'feed'){
       navigate('/feed/form');
-    }else{
+    } else {
       navigate('/chat/chatroomCreation');
     }
-
   };
 
-
   return (
-    <div>
+    <div className="tab-navigation-container">
       <div className="tabs">
         <button onClick={() => setActiveTab('feed')} className={activeTab === 'feed' ? 'active' : ''}>
-          FEED
+          <i className="fa fa-th"></i>
         </button>
         <button onClick={() => setActiveTab('chat')} className={activeTab === 'chat' ? 'active' : ''}>
-          CHAT
+          <i className="fa fa-comment"></i>
         </button>
-        {activeTab === 'feed' ? ( <button onClick={handleCreationLink} >FEED+</button> ) : ( <button onClick={handleCreationLink}>CHAT+</button> )}
       </div>
       <div className="tab-content">
         {activeTab === 'feed' ? <FeedBuildingListPage /> : <ChatroomList />}
       </div>
-      <div className="create-button">
-        
-      </div>
+      <button className="create-button" onClick={handleCreationLink}>
+        <i className="fa fa-plus"></i>
+      </button>
     </div>
   );
 };
