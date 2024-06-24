@@ -244,7 +244,7 @@ const AppRoutes = () => {
           <Route path="/setting" element={<MemberSetting />} />
           <Route path="/feed">
             <Route path="list" element={<FeedList />} />
-            <Route path="list/building" element={<FeedBuildingListPage />} />
+            <Route path="list/building/:buildingId" element={<FeedBuildingListPage />} />
             <Route path="detail" element={<FeedDetail />} />
             <Route path="form" element={<FeedForm />} /> {/*피드 추가*/}
             <Route path="form/:feedId" element={<FeedForm />} /> {/*피드 수정*/}

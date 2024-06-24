@@ -5,6 +5,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import { useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import Navigator from "../../pages/feed/util/Navigator.js";
+import "../css/BasicNavbar.css";
 
 function BasicNavbar(args) {
   const [searchParams] = useSearchParams();
@@ -22,12 +23,6 @@ function BasicNavbar(args) {
           <Nav className="me-auto">
             <Nav.Link onClick={() => goToMemberProfile(memberId)}>{memberId}</Nav.Link>
             <Nav.Link href="/feed/chart">Feed Chart</Nav.Link>
-          </Nav>
-          <Nav>
-            <Nav.Link href="#deets">Bitcamp</Nav.Link>
-            <Nav.Link eventKey={2} href="#memes">
-            KuberMaptes
-            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>
