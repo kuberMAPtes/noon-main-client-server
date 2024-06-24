@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { clearAllCookies } from '../function/memberFunc';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../../firebase';
+import NormalButton from './NormalButton';
 
 
 const LogoutForm = () => {
@@ -38,7 +39,7 @@ const LogoutForm = () => {
 //     if(!authorization) navigate('/member/getAuthMain');
 //   },[authorization,navigate]);
 
-  return <button onClick={handleLogout} style={{height:"53px", width:"145px",padding:"0px"}}>Logout</button>;
+  return <NormalButton onClick={handleLogout} style={{height:"20%", width:"100%",padding:"0px"}}>Logout</NormalButton>;
 };
 
 export default LogoutForm;

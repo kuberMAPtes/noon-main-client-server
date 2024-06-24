@@ -445,6 +445,29 @@ export const getMemberRelationship = async (fromId,toId) => {
     return null
   }
 }
+export const getBlockMemberRelationship = async (fromId,toId) => {
+  try{
+    console.log("getBlockMemberRelationship 요청:",{fromId,toId});
+    const response = await axiosInstance.get(`/member/getBlockRelationship`,
+    {params:{fromId,toId}}
+    );
+    // alert("getBlockMemberRelationship 응답:"+JSON.stringify(response.data.info));
+    const map = response.data.info;
+    //from이 나 > 너 , to가 너>나
+    if(map.from===null && map.to===null){
+      return "NONE"
+    }else if(map.from===null){
+      return "BLOCKER"
+    }else if(map.to===null){
+      return "BLOCKING"
+    }else{
+      return "MUTUAL"
+    }
+  }catch(error){
+    console.error("getBlockMemberRelationship error:", error);
+    return null
+  }
+}
 //대상 회원에 대한 모든 회원관계 목록을 가져오는 회원관계목록조회
 export const getMemberRelationshipList = async (criteria, page, size) => {
     try {
