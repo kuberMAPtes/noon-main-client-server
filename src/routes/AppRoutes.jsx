@@ -15,7 +15,7 @@ import AddMemberResult from "../pages/member/AddMemberResult";
 import UpdatePwd from "../pages/member/UpdatePwd";
 import UpdatePwdResult from "../pages/member/UpdatePwdResult";
 import GetMember from "../pages/member/GetMember";
-import UpdateMember from "../pages/member/UpdateMember";
+import UpdateMember from "../pages/member/GetMember";
 import GetMemberRelationshipList from "../pages/member/GetMemberRelationshipList";
 
 import ChatRoomCreation from "../pages/Chat/ChatroomCreation";
@@ -122,9 +122,7 @@ const AppRoutes = () => {
             <Route
               path="addPhoneNumberAuthentification/:toUrl"
               element={
-                <GuestRoute>
-                  <AddPhoneNumberAuthentification />
-                </GuestRoute>
+                <AddPhoneNumberAuthentification />
               }
             />
             {/* 로그인한 상태로 AddPhoneNumberAuthentification가고 싶다? 비밀번호 변경하고 싶다면... */}
@@ -153,9 +151,7 @@ const AppRoutes = () => {
             <Route
               path="IdFormToUpdatePwd"
               element={
-                <GuestRoute>
                   <IdFormToUpdatePwd />
-                </GuestRoute>
               }
             />
             <Route
@@ -179,14 +175,6 @@ const AppRoutes = () => {
               element={
                 <PrivateRoute>
                   <GetMember />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="updateMember"
-              element={
-                <PrivateRoute>
-                  <UpdateMember />
                 </PrivateRoute>
               }
             />

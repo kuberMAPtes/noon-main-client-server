@@ -32,7 +32,7 @@ const AddMember = () => {
   const [nickname, setNickname] = useState("");
   const [memberId, setMemberId] = useState("");
   const [pwd, setPwd] = useState("");
-  const [address, setAddress] = useState("");
+  // const [address, setAddress] = useState("");
 
   const [nicknameValidationMessage, setNicknameValidationMessage] =
     useState("");
@@ -44,14 +44,14 @@ const AddMember = () => {
   const [isMemberIdValid, setIsMemberIdValid] = useState(false);
   const [isPwdValid, setIsPwdValid] = useState(false);
 
-  const [zonecode, setZonecode] = useState("");
-  const [detailedAddress, setDetailedAddress] = useState("");
+  // const [zonecode, setZonecode] = useState("");
+  // const [detailedAddress, setDetailedAddress] = useState("");
 
   const hasNavigated = useRef(false);
 
-  const fullAddress = address + " " + detailedAddress;
-  const form = { nickname, memberId, pwd, fullAddress };
-
+  // const fullAddress = address + " " + detailedAddress;
+  // const form = { nickname, memberId, pwd, fullAddress };
+  const form = { nickname, memberId, pwd};
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -79,40 +79,40 @@ const AddMember = () => {
     }
   }, [navigate]);
 
-  useEffect(() => {
-    if (location.state && location.state.zonecode && location.state.address) {
-      if (Object.keys(location.state.nickname).length === 0) {
-        location.state.nickname = "";
-      }
+  // useEffect(() => {
+  //   if (location.state && location.state.zonecode && location.state.address) {
+  //     if (Object.keys(location.state.nickname).length === 0) {
+  //       location.state.nickname = "";
+  //     }
 
-      setZonecode(location.state.zonecode);
-      setAddress(location.state.address);
-      setMemberId(location.state.memberId);
+  //      setZonecode(location.state.zonecode);
+  //      setAddress(location.state.address);
+  //     setMemberId(location.state.memberId);
 
-      setNickname(location.state.nickname);
+  //     setNickname(location.state.nickname);
 
-      setPwd(location.state.pwd);
+  //     setPwd(location.state.pwd);
 
-      handleNicknameChange(
-        { target: { value: location.state.nickname } },
-        setNickname,
-        setNicknameValidationMessage,
-        setIsNicknameValid
-      );
-      handleMemberIdChange(
-        { target: { value: location.state.memberId } },
-        setMemberId,
-        setMemberIdValidationMessage,
-        setIsMemberIdValid
-      );
-      handlePwdChange(
-        { target: { value: location.state.pwd } },
-        setPwd,
-        setPwdValidationMessage,
-        setIsPwdValid
-      );
-    }
-  }, [location.state]);
+  //     handleNicknameChange(
+  //       { target: { value: location.state.nickname } },
+  //       setNickname,
+  //       setNicknameValidationMessage,
+  //       setIsNicknameValid
+  //     );
+  //     handleMemberIdChange(
+  //       { target: { value: location.state.memberId } },
+  //       setMemberId,
+  //       setMemberIdValidationMessage,
+  //       setIsMemberIdValid
+  //     );
+  //     handlePwdChange(
+  //       { target: { value: location.state.pwd } },
+  //       setPwd,
+  //       setPwdValidationMessage,
+  //       setIsPwdValid
+  //     );
+  //   }
+  // }, [location.state]);
 
   return (
     <Container className="mt-5">
@@ -242,7 +242,7 @@ const AddMember = () => {
               )}
             </Form.Group>
 
-            <Form.Group controlId="formAddress" className="mb-3">
+            {/* <Form.Group controlId="formAddress" className="mb-3">
               <Form.Label
                 style={{
                   border: !!address && !!detailedAddress && "#91a7ff",
@@ -300,7 +300,7 @@ const AddMember = () => {
               >
                 주소 찾기
               </Button>
-            </Form.Group>
+            </Form.Group> */}
 
             <Button
               variant="info"

@@ -143,7 +143,7 @@ const AddNotice = () => {
           onChange={handleTextChange} 
           modules={modules} 
           formats={formats} 
-          style={{ height: '300px', marginBottom: '50px' }}
+          style={{ height: '550px', marginBottom: '50px' }}
         />
       </div>
       <button onClick={handleAddNotice} style={{ padding: '10px 20px', fontSize: '16px', marginBottom: '100px', backgroundColor: '#030722', color: '#FFFFFF' }}>

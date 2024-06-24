@@ -36,6 +36,16 @@ export const setTokenCookie = (member) => {
     console.log("만약 쿠키에 데이터가 너무 많다면 쿠키를세팅했습니다 메세지가 뜨지 않고 세팅이 안됩니다.");
     console.log("쿠키를 세팅했습니다 :: ", document.cookie);
 }   
+
+export const clearAllCookies = () => {
+  const cookies = document.cookie.split("; ");
+  cookies.forEach(cookie => {
+    const name = cookie.split("=")[0];
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+  });
+  console.log("모든 쿠키 삭제 완료");
+};
+
 export const renderLoginError = (validationError, loginError) => {
     if (!validationError && loginError) {
       if (typeof loginError === "string") {

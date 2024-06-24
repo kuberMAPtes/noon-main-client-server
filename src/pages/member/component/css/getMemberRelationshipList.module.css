@@ -1,0 +1,64 @@
+/* getMemberRelationshipList.module.css */
+.tab {
+  text-align: center;
+  padding: 4%;
+  font-weight: bold; /* 글자 두께 증가 */
+  font-size: 1em;
+  transition: font-size 0.3s ease, color 0.3s ease, background-color 0.3s ease;
+  cursor: pointer;
+  border-right: 1px solid #ccc;
+}
+
+.tab:first-child {
+  border-radius: 5px 0 0 5px;
+}
+
+.tab:last-child {
+  border-right: none; /* 마지막 탭의 오른쪽 경계선 제거 */
+  border-radius: 0 5px 5px 0;
+}
+
+.tab.active {
+  font-size: 1.2em; /* 클릭 시 폰트 크기 증가 */
+  color: white; /* 글자색 변경 */
+  background-color: #91a7ff; /* 배경색 변경 */
+}
+/* ProfileList.module.css */
+.listGroupItem {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.imageCol {
+  border-right: 1px solid #ccc;
+  padding-right: 10px;
+}
+
+.nicknameCol {
+  border-right: 1px solid #ccc;
+  padding-right: 10px;
+}
+
+.buttonCol {
+  padding-left: 10px;
+}
+
+.buttonColor {
+  background:#91a7ff;
+  border-color : #91a7ff !important;
+  border-radius:5px;
+  margin:0px;
+}
+.buttonColorMutual {
+  background:#a9afc5;
+  border-color : #a9afc5 !important;
+  border-radius:5px;
+  margin:0px;
+}
+.profilePhotoUrl{
+  width:83px;
+  max-width:100%;
+  height:83px;
+}
