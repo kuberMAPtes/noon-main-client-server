@@ -5,9 +5,10 @@ import { Card, CardBody, CardImg, CardText, CardTitle } from 'react-bootstrap';
 import { FaHeart, FaRegHeart, FaBookmark, FaRegBookmark } from 'react-icons/fa';
 import { toggleLike, toggleBookmark } from '../../axios/FeedAxios';
 import useNavigator from '../../util/Navigator'
-import axios_api from '../../../../lib/axios_api';
 import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
 import AttachmentGetter from '../../util/AttachmentGetter';
+import FeedCategoryGetter from '../../util/FeedCategoryGetter';
+import styles from "../../css/FeedItemAndDetail.module.css"; // css 적용
 
 const FeedItem = ({ data, memberId }) => {
 
@@ -21,6 +22,7 @@ const FeedItem = ({ data, memberId }) => {
         writerNickname,
         like,
         bookmark,
+        feedCategory,
         mainActivated,
         writtenTime,        // 포멧팅 처리
         feedAttachmentId,
@@ -34,6 +36,7 @@ const FeedItem = ({ data, memberId }) => {
 
     // 데이터 처리
     const writtenTimeReplace = data.writtenTime.replace('T', ' ');
+    const feedCategoryName = FeedCategoryGetter(feedCategory);
 
     const renderFeedText = (feedText) => renderFeedTextWithLink(feedText);
 
@@ -64,22 +67,28 @@ const FeedItem = ({ data, memberId }) => {
             <Card>
                 <CardBody>
                     {/* Header */}
-                    <div className="d-flex justify-content-between align-items-center">
+                    <div className={styles.headerContainer}>
+                        {/* 제목 */}
                         <CardTitle tag="h2" onClick={() => goToFeedDetail(memberId, feedId)} style={{ cursor: 'pointer' }}>
                             {title}
                         </CardTitle>
-                        <div>
-                            <span onClick={handleLikeClick} style={{ cursor: 'pointer', marginRight: '10px' }}>
-                                {liked ? <FaHeart color="red" size='32'/> : <FaRegHeart size='32'/>}
+                        <div className={styles.iconContainer}>
+                            {/* 피드 카테고리 */}
+                            <div className={styles.feedCategory}>{feedCategoryName}</div>
+
+                            {/* 좋아요 */}
+                            <span onClick={handleLikeClick}>
+                                {liked ? <FaHeart color="red" size='24'/> : <FaRegHeart size='24'/>}
                             </span>
-                            <span onClick={handleBookmarkClick} style={{ cursor: 'pointer' }}>
-                                {bookmarked ? <FaBookmark color="gold" size='32' /> : <FaRegBookmark size='32' />}
+
+                            {/* 북마크 */}
+                            <span onClick={handleBookmarkClick}>
+                                {bookmarked ? <FaBookmark color="gold" size='24' /> : <FaRegBookmark size='24' />}
                             </span>
                         </div>
                     </div>
 
                     {/* Body */}
-                    
                     <p style={{ whiteSpace: "pre-wrap" }}><CardText>{renderFeedText(feedText)}</CardText></p>
                     <CardText>
                         <small className="text-muted">

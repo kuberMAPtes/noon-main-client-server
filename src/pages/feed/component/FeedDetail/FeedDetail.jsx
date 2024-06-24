@@ -13,6 +13,8 @@ import navigator from '../../util/Navigator';
 import CheckModal from '../Common/CheckModal';
 import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
 import AttachmentGetter from '../../util/AttachmentGetter';
+import styles from "../../css/FeedItemAndDetail.module.css"; // css 적용
+import FeedCategoryGetter from '../../util/FeedCategoryGetter';
 
 const FeedDetail = ({ data, memberId }) => {
     // 데이터
@@ -22,15 +24,15 @@ const FeedDetail = ({ data, memberId }) => {
         writerId,
         writerNickname,
         writerProfile,
-        writtenTime,
+        writtenTime, // 포멧팅
         feedText,
         buildingId,
         buildingName,
         like,
         likeCount,
         bookmark,
-        bookmarkCount,
         popularity,
+        feedCategory,
         mainActivated,
         viewCnt,
         attachments = [],
@@ -41,7 +43,9 @@ const FeedDetail = ({ data, memberId }) => {
     const [liked, setLiked] = useState(like); // 좋아요 여부
     const [bookmarked, setBookmarked] = useState(bookmark); // 북마크 여부
 
+    // 데이터 처리
     const writtenTimeReplace = data.writtenTime.replace('T', ' '); // 날짜 포멧팅
+    const feedCategoryName = FeedCategoryGetter(feedCategory); // 카테고리 변환
 
     const {goToMemberProfile, goToBuildingProfile, backHistory} = Navigator();
 
@@ -173,24 +177,28 @@ const FeedDetail = ({ data, memberId }) => {
                     <div className="d-flex justify-content-between align-items-center">
                         <div className="d-flex align-items-center">
                             <Image src={writerProfile || 'https://via.placeholder.com/50'} roundedCircle width="50" height="50" className="mr-3" />
-                            <div onClick={() => goToMemberProfile(writerId)} style={{ cursor: 'pointer', display: 'inline' }}>&nbsp; {writerNickname}</div>
+                            <div onClick={() => goToMemberProfile(writerId)} className={styles.headerContainer}>&nbsp; {writerNickname}</div>
                         </div>
-                        <div>
+                        <div className={styles.iconContainer}>
                             { memberId && memberId === writerId && (
-                                <>
+                                <div className={styles.iconContainer}>
                                     <span onClick={() => setFeedDeleteShow(true)} style={{ cursor: 'pointer', marginRight: '10px' }}>
                                             <MdDelete size='32'/> {/* 피드 삭제 : Modal 열기*/}
                                     </span>
                                     <span onClick={() => goToFeedForm(writerId, feedId)} style={{ cursor: 'pointer', marginRight: '10px' }}>
                                         <GrUpdate size='32'/> {/* 피드 수정 */}
                                     </span>
-                                </>
+                                </div>
                             )}
+
+                            {/* 피드 좋아요 */}
                             <span onClick={handleLikeClick} style={{ cursor: 'pointer', marginRight: '10px' }}>
-                                {liked ? <FaHeart color="red" size='32'/> : <FaRegHeart size='32'/>} {/* 피드 좋아요 */}
+                                {liked ? <FaHeart color="red" size='24'/> : <FaRegHeart size='24'/>} 
                             </span> 
+
+                            {/* 피드 북마크 */}
                             <span onClick={handleBookmarkClick} style={{ cursor: 'pointer' }}>
-                                {bookmarked ? <FaBookmark color="gold" size='32' /> : <FaRegBookmark size='32' />} {/* 피드 북마크 */}
+                                {bookmarked ? <FaBookmark color="gold" size='24' /> : <FaRegBookmark size='24' />} 
                             </span>
                         </div>
                     </div>
@@ -198,6 +206,8 @@ const FeedDetail = ({ data, memberId }) => {
                     <CardSubtitle>
                         {writtenTimeReplace} | <div onClick={() => goToBuildingProfile(buildingId)} style={{ cursor: 'pointer', display: 'inline' }}>{buildingName}</div>  
                     </CardSubtitle>
+                    {/* 피드 카테고리 */}
+                    <div className={styles.feedCategoryDetail}>{feedCategoryName}</div>
                     <br/>
 
                     {/* 제목 */}
