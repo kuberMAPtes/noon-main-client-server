@@ -4,7 +4,7 @@ import axios_api from "../../lib/axios_api";
 import Footer from "../../components/common/Footer";
 import $ from "jquery";
 
-const BUILDING_WIKI_BASE_PATH = "/buildingWiki";
+export const BUILDING_WIKI_BASE_PATH = "/buildingWiki";
 
 export default function GetBuildingWiki() {
   const { buildingId } = useParams();
