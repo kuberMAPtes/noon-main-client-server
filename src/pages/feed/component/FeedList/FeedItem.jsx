@@ -79,6 +79,7 @@ const FeedItem = ({ data, memberId }) => {
                     </div>
 
                     {/* Body */}
+                    
                     <p style={{ whiteSpace: "pre-wrap" }}><CardText>{renderFeedText(feedText)}</CardText></p>
                     <CardText>
                         <small className="text-muted">

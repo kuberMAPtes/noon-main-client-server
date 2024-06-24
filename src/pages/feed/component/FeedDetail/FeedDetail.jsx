@@ -206,6 +206,7 @@ const FeedDetail = ({ data, memberId }) => {
                         </CardTitle>
 
                     {/* 내용 */}
+                    
                     <p style={{ whiteSpace: "pre-wrap" }}><CardText>{renderFeedText(feedText)}</CardText></p>
                     { tags && tags.length > 0 && (
                         <div className="tags">

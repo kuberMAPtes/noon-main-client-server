@@ -15,12 +15,12 @@ const AttachmentGetter = async (feedAttachmentId) => {
       if (contentType.includes("image")) {
         const imageBlob = new Blob([response.data], { type: contentType });
         const imageObjectURL = URL.createObjectURL(imageBlob);
-        console.log("이미지 생성");
+        // console.log("이미지 생성");
         return { type: "image", url: imageObjectURL };
       } else if (contentType.includes("video")) {
         const videoBlob = new Blob([response.data], { type: contentType });
         const videoObjectURL = URL.createObjectURL(videoBlob);
-        console.log("동영상 생성");
+        // console.log("동영상 생성");
         return { type: "video", url: videoObjectURL };
       } else {
         console.log("Unsupported attachment type:", contentType);
