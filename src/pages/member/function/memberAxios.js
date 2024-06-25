@@ -236,7 +236,40 @@ export const updateProfileIntro = async (profileIntroDto) => {
     return null
   }
 };
+//
+export const updateMember = async (memberDto) => {
 
+  try{
+    console.log("updateMember 요청:",memberDto);
+    const response = await axiosInstance.post(`/member/updateMember`,memberDto);
+    console.log("updateMember 응답:",response.data);
+    alert("결과 response.data" + JSON.stringify(response.data));
+    return response.data;
+  } catch(error) {
+    console.error("updateMember error:", error);
+    return null;
+  }
+}
+export const updateProfilePhotoUrl = async (memberId, file) => {
+  const formData = new FormData();
+  formData.append("multipartFile", file);
+
+  try {
+    const response = await axiosInstance.post(
+      `member/updateProfilePhotoUrl/${memberId}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data.info;
+  } catch (error) {
+    console.error("파일 업로드 오류:", error);
+    throw error; // 오류가 발생하면 호출한 쪽에서 처리할 수 있도록 오류를 던짐
+  }
+};
 // 다정점수 변경
 export const updateDajungScore = async (dajungScoreDto) => {
   try {
