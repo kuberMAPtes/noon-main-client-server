@@ -5,13 +5,14 @@ import FeedSearchResult from "./component/FeedSearchResult";
 import BuildingSearchResult from "./component/BuildingSearchResult";
 import ChatroomSearchResult from "./component/ChatroomSearchResult";
 import MemberSearchResult from "./component/MemberSearchResult";
-import searchFeed, { isFeedSearchResultEmpty } from "./axios/searchFeed";
-import searchBuilding, { isBuildingSearchResultEmpty } from "./axios/searchBuilding";
-import searchChatroom, { isChatroomSearchResultEmpty } from "./axios/searchChatroom";
-import searchMember, { isMemberSearchResultEmpty } from "./axios/searchMember";
+import searchFeed from "./axios/searchFeed";
+import searchBuilding from "./axios/searchBuilding";
+import searchChatroom from "./axios/searchChatroom";
+import searchMember from "./axios/searchMember";
 import "../../assets/css/module/search/Search.css";
 import { useSearchParams } from "react-router-dom";
 import Footer from "../../components/common/Footer";
+import { useSelector } from "react-redux";
 
 
 const PARAM_KEY_SEARCH_MODE = "search-mode";
@@ -30,7 +31,7 @@ export default function Search() {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
-  const SAMPLE_MEMBER = "member_2";
+  const loginMemberId = useSelector((state) => state.auth.member.memberId) || "member_2"; // TODO
 
   const lastFeedElementRef = useCallback((node) => {
     if (observer.current) {
@@ -45,8 +46,6 @@ export default function Search() {
       observer.current.observe(node);
     }
   }, [hasMore]);
-
-  console.log(searchResult);
 
   let searchFunction;
   let component;
@@ -80,7 +79,6 @@ export default function Search() {
       searchFunction = searchMember
       break;
     default:
-      component = <p>통합검색창</p>;
       searchFunction = () => {}
   }
 
@@ -103,25 +101,28 @@ export default function Search() {
         }
         setSearchResult(newSearchResult);
         setLoading(false);;
-      }, SAMPLE_MEMBER);
+      }, loginMemberId);
     }
   }, [page]);
 
+  useEffect(() => {
+    search();
+  }, [currentSearchMode]);
+
   function onSearchBtnClick() {
-    if (!loading) {
-      searchFunction(searchKeyword, page, (data) => {
+    search();
+  }
+
+  function search() {
+    if (!loading && searchKeyword && searchKeyword !== "") {
+      searchFunction(searchKeyword, 1, (data) => {
         queryParams.set(PARAM_KEY_SEARCH_KEYWORD, searchKeyword);
         setPage(1);
         setQueryParams(queryParams);
-        console.log(data);
-        if (!data || data.length === 0) {
-          setHasMore(false);
-          return;
-        }
         const newSearchResult = [...data];
         setSearchResult(newSearchResult);
         setLoading(false);
-      }, SAMPLE_MEMBER);
+      }, loginMemberId);
     }
   }
 
@@ -138,7 +139,7 @@ export default function Search() {
   }
 
   return (
-    <div className="container search-container">
+    <div className="search-container">
       <SearchBar typeCallback={(text) => setSearchKeyword(text)} searchCallback={onSearchBtnClick} />
       <SearchModeTab currentSearchMode={currentSearchMode} onModeChange={onModeChange} />
       {component}
