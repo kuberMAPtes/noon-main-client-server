@@ -106,8 +106,16 @@ export default function Search() {
     }
   }, [page]);
 
+  useEffect(() => {
+    search();
+  }, [currentSearchMode]);
+
   function onSearchBtnClick() {
-    if (!loading) {
+    search();
+  }
+
+  function search() {
+    if (!loading && searchKeyword && searchKeyword !== "") {
       searchFunction(searchKeyword, page, (data) => {
         queryParams.set(PARAM_KEY_SEARCH_KEYWORD, searchKeyword);
         setPage(1);
