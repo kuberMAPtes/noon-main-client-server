@@ -240,7 +240,7 @@ const FeedDetail = ({ data, memberId }) => {
                 </CardBody>
             </Card>
 
-            {/* 첨부 파일 */}
+            {/* 첨부 파일 OR 투표 */}
             <Card>
                 <CardBody>
                 {attachmentUrls.map((attachmentUrl, index) => (
