@@ -1,0 +1,80 @@
+.chatRequestList {
+  padding: 20px;
+}
+
+.chatHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.chatHeader h1 {
+  margin: 0;
+}
+
+.myChatroomsButton {
+  background-color: #9BAAF8; /* Green background */
+  border: none;
+  color: white; /* White text */
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition-duration: 0.4s; /* Animation for the button */
+}
+
+.myChatroomsButton:hover {
+  background-color: white;
+  color: black;
+  border: 2px solid #4caf50;
+}
+
+.chatBody {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chatRequest {
+  background-color: #f1f1f1;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.chatRequest h3 {
+  margin: 0;
+}
+
+.details {
+  margin-top: 10px;
+}
+
+.actions {
+  margin-top: 10px;
+}
+
+.actions button {
+  background-color: #9BAAF8; /* Blue background */
+  border: none;
+  color: white; /* White text */
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition-duration: 0.4s; /* Animation for the button */
+}
+
+.actions button:hover {
+  background-color: white;
+  color: black;
+  border: 2px solid #008cba;
+}

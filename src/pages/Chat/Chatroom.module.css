@@ -1,126 +1,148 @@
+/* 채팅방 참여자 버튼 */
 .clickable {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #007BFF;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-    text-align: center;
-    transition: background-color 0.3s, transform 0.3s;
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #9BAAF8;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s, transform 0.3s;
 }
 
 .clickable:hover {
-    background-color: #0056b3;
-    transform: scale(1.05);
-}
-.chatContainer {
-  display: flex;
-  flex-direction: row;
-  height: 100vh;
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  background-color: #ececec;
+  background-color: #9BAAF8;
+  transform: scale(1.05);
 }
 
+/* 전체 화면 컨테이너 */
+.chatContainer {
+position: relative;
+display: flex;
+flex-direction: row;
+height: 100vh;
+font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* 사이드바 버튼 */
+.sidebarButton {
+position: fixed;
+top: 10px;
+right: 10px;
+z-index: 1000;
+padding: 10px;
+background-color: #9BAAF8;
+color: white;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+}
+
+/* 채팅방 정보 */
 .sidebarChat {
-  width: 30%;
-  padding: 20px;
-  border-right: 1px solid #ccc;
-  background-color: #fff;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  flex-shrink: 0; /* 이 사이드바는 줄어들지 않음 */
+position: fixed;
+top: 0;
+left: 110px;
+width: 300px;
+height: 100%;
+padding: 20px;
+border-left: 1px solid #ccc;
+background-color: #fff;
+display: flex;
+flex-direction: column;
+justify-content:  flex-start; /* Adjust based on preferred alignment */
+overflow-y: auto; /* 세로 스크롤 가능하도록 설정 */
+z-index: 999; /* 다른 요소 위에 표시되도록 설정 */
 }
 
 .sidebarChat h2 {
-  margin: 10px 0;
-  color: #333;
+margin: 10px 0;
+color: #333;
 }
 
 .sidebarChat p {
-  margin: 10px 0;
-  color: #666;
+margin: 10px 0;
+color: #666;
 }
 
 .sidebarChat a {
-  text-decoration: none;
-  color: #333;
-  font-weight: bold;
-  margin-top: 20px;
-  display: inline-block;
+text-decoration: none;
+color: #333;
+font-weight: bold;
+margin-top: 20px;
+display: inline-block;
 }
 
 .sidebarChat a:hover {
-  text-decoration: underline;
+text-decoration: underline;
 }
 
+/* 채팅 전체 컨테이너 */
 .chat {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 0 20px 20px 20px; /* 상단 패딩을 0으로 설정 */
-  background-color: #f7f7f7;
-  overflow-y: auto; /* 채팅 메시지가 넘칠 경우 스크롤 표시 */
+flex-grow: 1;
+display: flex;
+flex-direction: column;
+padding: 0 20px 20px 20px; /* 상단 패딩을 0으로 설정 */
+background-color: #f7f7f7;
 }
 
+/* 채팅메세지 오가는 컨테이너 */
 .messages {
-  flex-grow: 1; /* 메시지 영역이 가능한 한 크게 확장됨 */
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end; /* 메시지가 아래에서부터 쌓이도록 설정 */
-  overflow-y: auto; /* 메시지가 많아지면 스크롤 */
-}
+flex-grow: 1; /* 메시지 영역이 가능한 한 크게 확장됨 */
+display: flex;
+flex-direction: column;
+justify-content: flex-end; /* 메시지가 아래에서부터 쌓이도록 설정 */
+} 
 
 .message {
-  margin: 5px 0; /* 메시지 간 간격을 줄임 */
-  padding: 10px;
-  border-radius: 20px;
-  display: inline-block;
+margin: 5px 0; /* 메시지 간 간격을 줄임 */
+padding: 10px;
+border-radius: 20px;
+display: inline-block;
 }
 
 .mineMessage {
-  background-color: #fff9ab; /* 내가 보낸 메시지 배경색 */
-  color: #333; /* 내가 보낸 메시지 텍스트 색상 */
-  align-self: flex-end; /* 오른쪽 정렬 */
-  max-width: 70%; /* 최대 너비 설정 */
-  text-align: right; /* 텍스트 오른쪽 정렬 */
+background-color: #fff9ab; /* 내가 보낸 메시지 배경색 */
+color: #333; /* 내가 보낸 메시지 텍스트 색상 */
+align-self: flex-end; /* 오른쪽 정렬 */
+max-width: 70%; /* 최대 너비 설정 */
+text-align: right; /* 텍스트 오른쪽 정렬 */
 }
 
 .otherMessage {
-  background-color: #ffffff; /* 다른 사람이 보낸 메시지 배경색 */
-  border: 1px solid #ddd; /* 테두리 설정 */
-  color: #333; /* 다른 사람이 보낸 메시지 텍스트 색상 */
-  align-self: flex-start; /* 왼쪽 정렬 */
-  max-width: 70%; /* 최대 너비 설정 */
-  text-align: left; /* 텍스트 왼쪽 정렬 */
+background-color: #ffffff; /* 다른 사람이 보낸 메시지 배경색 */
+border: 1px solid #ddd; /* 테두리 설정 */
+color: #333; /* 다른 사람이 보낸 메시지 텍스트 색상 */
+align-self: flex-start; /* 왼쪽 정렬 */
+max-width: 70%; /* 최대 너비 설정 */
+text-align: left; /* 텍스트 왼쪽 정렬 */
 }
 
 .noticeMessage {
-  background-color: #f0f0f0; /* 공지 메시지 배경색 */
-  text-align: center; /* 가운데 정렬 */
+background-color: #f0f0f0; /* 공지 메시지 배경색 */
+text-align: center; /* 가운데 정렬 */
 }
 
 .message p {
-  margin: 5px 10px; /* 메시지 위 아래 여백 조정 */
-  font-size: 14px; /* 텍스트 사이즈 조정 */
-  white-space: pre-wrap; /* 공백을 조절하는 css, 개행 유지 */
+margin: 5px 10px; /* 메시지 위 아래 여백 조정 */
+font-size: 14px; /* 텍스트 사이즈 조정 */
+white-space: pre-wrap; /* 공백을 조절하는 css, 개행 유지 */
 }
 
 .message .meta {
-  font-size: 10px;
-  color: #999;
-  margin-top: 5px;
-  text-align: right;
+font-size: 10px;
+color: #999;
+margin-top: 5px;
+text-align: right;
 }
 
 .message .sender {
-  margin-right: 5px;
-  font-weight: bold;
+margin-right: 5px;
+font-weight: bold;
 }
 
 .liveIndicator {
   width: 10px;
-  height: 10px;
   background-color: rgb(95, 235, 95);
   border-radius: 50%;
   margin-left: 5px;
