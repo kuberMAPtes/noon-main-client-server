@@ -95,7 +95,7 @@ export default function MemberSetting() {
   return (
     <div>
       <BasicNavbar />
-      <main className="container">
+      <main className="container member-setting-container">
         <h1>환경설정</h1>
         <div className="setting-content-wrapper">
           {
