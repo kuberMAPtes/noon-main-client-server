@@ -315,16 +315,20 @@ function fetchBuildingInfo(latitude, longitude, setWantBuildingProfileModal) {
  * @param {boolean} popBuildingChecked 
  * @param {string} memberId
  */
-function fetchBuildingMarkers(subscriptionChecked, popBuildingChecked, memberId, navigate) {
+async function fetchBuildingMarkers(subscriptionChecked, popBuildingChecked, memberId, navigate) {
   clearMarkers(buildingSubscriptionMarkers);
   clearMarkers(popBuildingMarkers);
 
-  if (subscriptionChecked) {
-    fetchSubscriptions(memberId, navigate);
-  }
+  const buildingIdSet = new Set();
 
   if (popBuildingChecked) {
-    fetchBuildingsInPositionRange(navigate);
+    await fetchBuildingsInPositionRange(navigate, buildingIdSet);
+  }
+
+  console.log(buildingIdSet);
+
+  if (subscriptionChecked) {
+    await fetchSubscriptions(memberId, navigate, buildingIdSet);
   }
 }
 
@@ -352,62 +356,63 @@ function addMarker(html, latitude, longitude) {
   });
 }
 
-function fetchSubscriptions(memberId, navigate) {
-  axios_api.get(`${MAIN_API_URL}/buildingProfile/getMemberSubscriptionList`, {
+async function fetchBuildingsInPositionRange(navigate, buildingIdSet) {
+  const positionRange = getPositionRange();
+  console.log(positionRange);
+  const response = await axios_api.get(`${MAIN_API_URL}/buildingProfile/getBuildingsWithinRange`, {
+    params: positionRange
+  });
+  const data = response.data;
+  console.log(data);
+
+  // TODO: 샘플 데이터 변경
+  const sampleSubscriptionProviders = [ "sample" ];
+  const sampleLiveliestChatroom = {
+    "liveliness": 1,
+    "chatroomName": "sample-chatroom"
+  }
+
+  const buildingMarkersCache = [];
+  data.forEach((d) => {
+    const contenthtml = getBuildingMarkerHtml(sampleSubscriptionProviders, sampleLiveliestChatroom, d.buildingName, "./image/popular-bulilding.png");
+    const buildingMarker = addMarker(contenthtml, d.latitude, d.longitude)
+    naver.maps.Event.addListener(buildingMarker, "click", () => {
+      navigate(`/getBuildingProfile/${d.buildingId}`);
+    });
+    buildingMarkersCache.push(buildingMarker);
+    buildingIdSet.add(d.buildingId);
+  });
+  popBuildingMarkers = buildingMarkersCache;
+}
+
+async function fetchSubscriptions(memberId, navigate, toBeFiltered) {
+  const response = await axios_api.get(`${MAIN_API_URL}/buildingProfile/getMemberSubscriptionList`, {
     params: {
       memberId
     }
-  }).then((response) => {
-    const data = response.data;
-    console.log(data);
+  })
+  const data = response.data;
+  console.log(data);
 
-    // TODO: 샘플 데이터 변경
-    const sampleSubscriptionProviders = [ "sample" ];
-    const sampleLiveliestChatroom = {
-      "liveliness": 1,
-      "chatroomName": "sample-chatroom"
-    }
+  // TODO: 샘플 데이터 변경
+  const sampleSubscriptionProviders = [ "sample" ];
+  const sampleLiveliestChatroom = {
+    "liveliness": 1,
+    "chatroomName": "sample-chatroom"
+  }
 
-    const buildingMarkersCache = [];
-    data.forEach((d) => {
+  const buildingMarkersCache = [];
+  data.forEach((d) => {
+    if (!toBeFiltered.has(d.buildingId)) {
       const contenthtml = getBuildingMarkerHtml(sampleSubscriptionProviders, sampleLiveliestChatroom, d.buildingName, "./image/subscription-bulilding.png");
       const buildingMarker = addMarker(contenthtml, d.latitude, d.longitude);
       naver.maps.Event.addListener(buildingMarker, "click", () => {
         navigate(`/getBuildingProfile/${d.buildingId}`);
       });
       buildingMarkersCache.push(buildingMarker);
-    });
-    buildingSubscriptionMarkers = buildingMarkersCache;
-  });
-}
-
-function fetchBuildingsInPositionRange(navigate) {
-  const positionRange = getPositionRange();
-  console.log(positionRange);
-  axios_api.get(`${MAIN_API_URL}/buildingProfile/getBuildingsWithinRange`, {
-    params: positionRange
-  }).then((response) => {
-    const data = response.data;
-    console.log(data);
-
-    // TODO: 샘플 데이터 변경
-    const sampleSubscriptionProviders = [ "sample" ];
-    const sampleLiveliestChatroom = {
-      "liveliness": 1,
-      "chatroomName": "sample-chatroom"
     }
-
-    const buildingMarkersCache = [];
-    data.forEach((d) => {
-      const contenthtml = getBuildingMarkerHtml(sampleSubscriptionProviders, sampleLiveliestChatroom, d.buildingName, "./image/popular-bulilding.png");
-      const buildingMarker = addMarker(contenthtml, d.latitude, d.longitude)
-      naver.maps.Event.addListener(buildingMarker, "click", () => {
-        navigate(`/getBuildingProfile/${d.buildingId}`);
-      });
-      buildingMarkersCache.push(buildingMarker);
-    });
-    popBuildingMarkers = buildingMarkersCache;
   });
+  buildingSubscriptionMarkers = buildingMarkersCache;
 }
 
 function getPositionRange() {
