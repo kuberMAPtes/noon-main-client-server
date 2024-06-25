@@ -5,10 +5,13 @@ import CustomerSupportHeader from './components/CustomerSupportHeader';
 import Footer from '../../components/common/Footer';
 import MessageModal from './components/MessageModal';
 import messages from './metadata/messages';
+import { useSelector } from 'react-redux';
+import AlertModal from './components/AlertModal';
 
 const AddReport = () => {
 
-  const { reporterId, reporteeId } = useParams();
+  const member = useSelector((state) => state.auth.member);
+  const { reporteeId } = useParams();
   const [reportText, setReportText] = useState('');
   const navigate = useNavigate();
 
@@ -22,9 +25,14 @@ const AddReport = () => {
   const [reportModalOpen, setReportModalOpen] = useState(false);
   const addReport = async () => {
 
+    if(reportText==="" || null){
+      toggleNothingToAddModal();
+      return;
+    }
+
     try {
       const response = await axiosInstance.post(`/customersupport/addReport`, {
-        reporterId : reporterId,
+        reporterId : member.memberId,
         reporteeId : reporteeId,
         reportText : reportText,
         reportStatus : 'PEND'
@@ -42,13 +50,11 @@ const AddReport = () => {
   };
 
 
-
-
-
-
-
-
-
+  //신고내용 미입력
+  const [nothingToAddModalOpen, setNothingToAddModalOpen] = useState(false);
+  const toggleNothingToAddModal = () => {
+    setNothingToAddModalOpen(!reportModalOpen);
+  };
 
 
 
@@ -75,6 +81,7 @@ const AddReport = () => {
             <button type="button" onClick={() => navigate(-1)}>취소</button>
             <button onClick={addReport}>신고등록</button>
             <MessageModal isOpen={reportModalOpen} toggle={toggleReportModal} message={messages.addReport}/>
+            <AlertModal isOpen={nothingToAddModalOpen} toggle={toggleNothingToAddModal} message={messages.nothingToAddRoport}/>
           </div>
       </div>
       <Footer />

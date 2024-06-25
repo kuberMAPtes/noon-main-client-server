@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
-import { useNavigate } from 'react-router-dom';
 import '../css/customerSupport.css';
 
-const MessageModal = ({ isOpen, toggle, message }) => {
-  const navigate = useNavigate();
+const AlertModal = ({ isOpen, toggle, message }) => {
+  const [internalIsOpen, setInternalIsOpen] = useState(isOpen);
 
   useEffect(() => {
+    setInternalIsOpen(isOpen);
     if (isOpen) {
       document.body.style.overflow = 'hidden';
     } else {
@@ -18,13 +18,19 @@ const MessageModal = ({ isOpen, toggle, message }) => {
   }, [isOpen]);
 
   const handleConfirm = () => {
+    console.log("???");
+    setInternalIsOpen(false);
     toggle();
-    navigate(-1); 
+  };
+
+  const handleToggle = () => {
+    setInternalIsOpen(!internalIsOpen);
+    toggle();
   };
 
   return (
-    <Modal isOpen={isOpen} toggle={toggle}>
-      <ModalHeader toggle={toggle}><p>{message.title}</p></ModalHeader>
+    <Modal isOpen={internalIsOpen} toggle={handleToggle}>
+      <ModalHeader toggle={handleToggle}><p>{message.title}</p></ModalHeader>
       <ModalBody>
         <p>{message.description}</p>
       </ModalBody>
@@ -35,4 +41,4 @@ const MessageModal = ({ isOpen, toggle, message }) => {
   );
 };
 
-export default MessageModal;
+export default AlertModal;

@@ -1,6 +1,6 @@
-import React from 'react';
-
-
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import axiosInstance from '../../../lib/axiosInstance';
 import {
   Card,
   CardHeader,
@@ -12,37 +12,50 @@ import {
 } from "reactstrap";
 
 const ChatroomList = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const { buildingId } = useParams();
+  const [chatroomList, setChatroomList] = useState([]);
+
+  // 건물 채팅방 목록 가져오기
+  const getChatroomList = async () => {
+    try {
+      const response = await axiosInstance.get(`/buildingProfile/getBuildingChatroomList`, {
+        params: { buildingId: buildingId }
+      });
+      setChatroomList(response.data);
+      console.log("건물의 채팅방 목록: " + JSON.stringify(response.data));
+    } catch (error) {
+      console.error("Error fetching chatroom list:", error);
+    }
+  };
+
+  useEffect(() => {
+    getChatroomList();
+  }, [buildingId]);
+
   return (
-    <>
     <div className="chatroom-list">
       <Row>
         <Col md="12">
           <Card>
             <CardHeader>
+              <CardTitle>채팅방 목록</CardTitle>
             </CardHeader>
             <CardBody>
               <Table responsive>
                 <thead className="text-primary">
                   <tr>
-                    <th>Name</th>
-                    <th>Country</th>
-                    <th>City</th>
-                    <th className="text-right">Salary</th>
+                    <th>채팅방 이름&nbsp;&emsp;&emsp;&emsp;&emsp;</th>
+                    <th>입장 최소 다정온도</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>Dakota Rice</td>
-                    <td>채팅채팅채팅</td>
-                    <td>Oud-Turnhout</td>
-                    <td className="text-right">$36,738</td>
-                  </tr>
-                  <tr>
-                    <td>Minerva Hooper</td>
-                    <td>Curaçao</td>
-                    <td>Sinaai-Waas</td>
-                    <td className="text-right">$23,789</td>
-                  </tr>
+                  {chatroomList.map((chatroom) => (
+                    <tr key={chatroom.chatroomId}>
+                      <td>{chatroom.chatroomName}</td>
+                      <td>{chatroom.chatroomMinTemp}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </Table>
             </CardBody>
@@ -50,7 +63,6 @@ const ChatroomList = () => {
         </Col>
       </Row>
     </div>
-  </>
   );
 };
 
