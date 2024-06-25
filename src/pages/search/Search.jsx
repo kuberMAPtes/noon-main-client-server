@@ -5,10 +5,10 @@ import FeedSearchResult from "./component/FeedSearchResult";
 import BuildingSearchResult from "./component/BuildingSearchResult";
 import ChatroomSearchResult from "./component/ChatroomSearchResult";
 import MemberSearchResult from "./component/MemberSearchResult";
-import searchFeed, { isFeedSearchResultEmpty } from "./axios/searchFeed";
-import searchBuilding, { isBuildingSearchResultEmpty } from "./axios/searchBuilding";
-import searchChatroom, { isChatroomSearchResultEmpty } from "./axios/searchChatroom";
-import searchMember, { isMemberSearchResultEmpty } from "./axios/searchMember";
+import searchFeed from "./axios/searchFeed";
+import searchBuilding from "./axios/searchBuilding";
+import searchChatroom from "./axios/searchChatroom";
+import searchMember from "./axios/searchMember";
 import "../../assets/css/module/search/Search.css";
 import { useSearchParams } from "react-router-dom";
 import Footer from "../../components/common/Footer";
@@ -80,7 +80,6 @@ export default function Search() {
       searchFunction = searchMember
       break;
     default:
-      component = <p>통합검색창</p>;
       searchFunction = () => {}
   }
 
@@ -138,7 +137,7 @@ export default function Search() {
   }
 
   return (
-    <div className="container search-container">
+    <div className="search-container">
       <SearchBar typeCallback={(text) => setSearchKeyword(text)} searchCallback={onSearchBtnClick} />
       <SearchModeTab currentSearchMode={currentSearchMode} onModeChange={onModeChange} />
       {component}
