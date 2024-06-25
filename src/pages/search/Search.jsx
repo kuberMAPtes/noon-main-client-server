@@ -33,10 +33,15 @@ export default function Search() {
   const SAMPLE_MEMBER = "member_2";
 
   const lastFeedElementRef = useCallback((node) => {
+    console.log(node);
     if (observer.current) {
       observer.current.disconnect();
     }
     observer.current = new IntersectionObserver((entries) => {
+      console.log("here");
+      console.log(entries);
+      console.log("hasMore=" + hasMore);
+      console.log("loading=" + loading);
       if (entries[0].isIntersecting && hasMore && !loading) {
         setPage((prevPage) => prevPage + 1);
       }
@@ -45,8 +50,6 @@ export default function Search() {
       observer.current.observe(node);
     }
   }, [hasMore]);
-
-  console.log(searchResult);
 
   let searchFunction;
   let component;
@@ -84,6 +87,9 @@ export default function Search() {
   }
 
   useEffect(() => {
+    console.log("hasMore=" + hasMore);
+    console.log("loading=" + loading);
+    console.log("page=" + page);
     if (hasMore && !loading && page !== 1) {
       setLoading(true);
       
@@ -115,16 +121,13 @@ export default function Search() {
   }
 
   function search() {
+    console.log(loading);
     if (!loading && searchKeyword && searchKeyword !== "") {
-      searchFunction(searchKeyword, page, (data) => {
+      searchFunction(searchKeyword, 1, (data) => {
+        console.log(data);
         queryParams.set(PARAM_KEY_SEARCH_KEYWORD, searchKeyword);
         setPage(1);
         setQueryParams(queryParams);
-        console.log(data);
-        if (!data || data.length === 0) {
-          setHasMore(false);
-          return;
-        }
         const newSearchResult = [...data];
         setSearchResult(newSearchResult);
         setLoading(false);
