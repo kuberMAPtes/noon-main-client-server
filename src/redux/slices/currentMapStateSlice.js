@@ -1,7 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  value: null
+  value: {
+    latitude: 37.566278,
+    longitude: 126.977800,
+    zoomLevel: 15,
+    initialized: false
+  }
 };
 
 const currentMapStateSlice = createSlice({
@@ -9,7 +14,10 @@ const currentMapStateSlice = createSlice({
   initialState,
   reducers: {
     setCurrentMapState(state, action) {
-      state.value = action.payload;
+      state.value = {
+        ...state.value,
+        ...action.payload
+      }
     }
   }
 });
