@@ -71,6 +71,7 @@ import GetMemberProfile from "../pages/member/GetMemberProfile";
 import GetBuildingWiki from "../pages/building/GetBuildingWiki";
 import EditBuildingWiki from "../pages/building/EditBuildingWiki";
 import ApplicantSample from "../pages/building/components/ApplicantSample";
+import FeedVoteForm from "../pages/feed/FeedVoteFormPage";
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -246,8 +247,9 @@ const AppRoutes = () => {
             <Route path="list" element={<FeedList />} />
             <Route path="list/building/:buildingId" element={<FeedBuildingListPage />} />
             <Route path="detail" element={<FeedDetail />} />
-            <Route path="form/:feedId" element={<FeedForm />} /> {/* 피드 수정 (일반만) */}
-            <Route path="form/*" element={<FeedForm />} /> {/* 피드 추가 */}
+            <Route path="form" element={<FeedForm />} /> {/* 일반 피드 추가 */}
+            <Route path="voteForm" element={<FeedVoteForm />} /> {/* 투표 피드 추가 */}
+            <Route path="form/:feedId" element={<FeedForm />} /> {/* 일반 피드 수정 */}
             <Route path="chart" element={<FeedChartPage />} />
             <Route path="main" element={<FeedListHomePage />}/>
             <Route path="" element={<FeedPages />} />

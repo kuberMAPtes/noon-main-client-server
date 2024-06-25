@@ -49,7 +49,7 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
     
     const fetchVotes = async () => {
         try {
-            const response = await axios_api.get('/feed/getVote' + inputFeedId);
+            // const response = await axios_api.get('/feed/getVote' + inputFeedId);
         } catch (error) {
             console.error('투표 목록을 가져오는 중 오류 발생:', error);
         }
@@ -230,7 +230,7 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
 
     return (
         <Container className="feed=form">
-            <Card className="mb-4">
+            <Card>
                 <Card.Body>
                     <Form onSubmit={handleSubmit}>
                         {/* 제목 */}

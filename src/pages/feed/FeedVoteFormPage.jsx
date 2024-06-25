@@ -5,13 +5,13 @@ import { Button } from "react-bootstrap";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import FeedForm from "./component/FeedForm/FeedForm"
+import FeedVoteForm from "./component/FeedForm/FeedVoteForm";
 import SlideUpModal from "./component/FeedForm/SlideUpModal";
 import BasicNavbar from "../../components/common/BasicNavbar";
 import axios_api from "../../lib/axios_api";
 
 /**
- * 피드를 새롭게 추가한다.
+ * 투표 피드를 새롭게 추가한다.
  * @returns 
  */
 const FeedFormPage = () => {
@@ -57,13 +57,12 @@ const FeedFormPage = () => {
                 <SlideUpModal show={showModal} onHide={() => setShowModal(false)} />
             </div>
 
-            <FeedForm
+            <FeedVoteForm
                 existingFeed={selectedFeed}
                 inputWriterId={writerId}
                 inputBuildingId={buildingId}
                 inputFeedId={feedId}
             />
-
             <div>
             <Footer />
             </div>

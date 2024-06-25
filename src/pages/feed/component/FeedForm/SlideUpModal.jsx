@@ -23,7 +23,7 @@ const SlideUpModal = (props) => {
                             <div>일반</div>
                         </Button>
                     </Link>
-                    <Link to="/feed/form/vote" onClick={props.onHide}>
+                    <Link to="/feed/voteForm" onClick={props.onHide}>
                         <Button variant="outline-primary">
                             <FaVoteYea size={50} />
                             <div>투표</div>
