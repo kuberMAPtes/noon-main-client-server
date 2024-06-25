@@ -12,6 +12,7 @@ import searchMember from "./axios/searchMember";
 import "../../assets/css/module/search/Search.css";
 import { useSearchParams } from "react-router-dom";
 import Footer from "../../components/common/Footer";
+import { useSelector } from "react-redux";
 
 
 const PARAM_KEY_SEARCH_MODE = "search-mode";
@@ -30,18 +31,13 @@ export default function Search() {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
-  const SAMPLE_MEMBER = "member_2";
+  const loginMemberId = useSelector((state) => state.auth.member.memberId) || "member_2"; // TODO
 
   const lastFeedElementRef = useCallback((node) => {
-    console.log(node);
     if (observer.current) {
       observer.current.disconnect();
     }
     observer.current = new IntersectionObserver((entries) => {
-      console.log("here");
-      console.log(entries);
-      console.log("hasMore=" + hasMore);
-      console.log("loading=" + loading);
       if (entries[0].isIntersecting && hasMore && !loading) {
         setPage((prevPage) => prevPage + 1);
       }
@@ -87,9 +83,6 @@ export default function Search() {
   }
 
   useEffect(() => {
-    console.log("hasMore=" + hasMore);
-    console.log("loading=" + loading);
-    console.log("page=" + page);
     if (hasMore && !loading && page !== 1) {
       setLoading(true);
       
@@ -108,7 +101,7 @@ export default function Search() {
         }
         setSearchResult(newSearchResult);
         setLoading(false);;
-      }, SAMPLE_MEMBER);
+      }, loginMemberId);
     }
   }, [page]);
 
@@ -121,17 +114,15 @@ export default function Search() {
   }
 
   function search() {
-    console.log(loading);
     if (!loading && searchKeyword && searchKeyword !== "") {
       searchFunction(searchKeyword, 1, (data) => {
-        console.log(data);
         queryParams.set(PARAM_KEY_SEARCH_KEYWORD, searchKeyword);
         setPage(1);
         setQueryParams(queryParams);
         const newSearchResult = [...data];
         setSearchResult(newSearchResult);
         setLoading(false);
-      }, SAMPLE_MEMBER);
+      }, loginMemberId);
     }
   }
 
