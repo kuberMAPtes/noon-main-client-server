@@ -237,7 +237,7 @@ const AppRoutes = () => {
             <Route path="addNotice" element={<AddNotice />} />
             <Route path="getReportList" element={<GetListReport />} />
             <Route path="getReport/:reportId" element={<GetReport />} />
-            <Route path="addReport/:reporterId/:reporteeId" element={<AddReport />} />
+            <Route path="addReport/:reporteeId" element={<AddReport />} />
             <Route path="listImages" element={<ListImages />} />
             <Route path="getImage" element={<GetImage />} />
             <Route path="deleteBadFeed" element={<DeleteBadFeed />} />

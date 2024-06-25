@@ -4,13 +4,14 @@
 	width: 90%;
 	margin-left: auto;
 	margin-right: auto;
-	gap: 12px
+	justify-content: space-between;
 }
 
 .btn--search-mode {
 	background-color: #ff00;
 	color: #000;
 	font-size: 18px;
+	padding: 10px 16px;
 }
 
 .btn--search-mode:hover {

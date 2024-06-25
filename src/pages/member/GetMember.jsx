@@ -205,7 +205,6 @@ const GetMember = () => {
                 onDoubleClick={nicknameInput.handleDoubleClick}
                 onBlur={nicknameInput.handleBlur(member.nickname)}
                 ref={nicknameInput.inputRef}
-                disabled
               />
               <Form.Text className="text-danger">
                 {nicknameValidationMessage && nicknameValidationMessage}
@@ -240,7 +239,6 @@ const GetMember = () => {
                 required
                 isInvalid={!!memberIdValidationMessage}
                 style={{ opacity: 0.6 }}
-                disabled
               />
               {memberIdValidationMessage && (
                 <Form.Text className="text-danger">

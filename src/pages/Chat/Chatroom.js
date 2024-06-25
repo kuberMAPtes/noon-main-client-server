@@ -17,7 +17,9 @@ const Chatroom = () => {
   const [liveParticipants, setLiveParticipants] = useState([]); // 채팅방 실시간 참여자 (from node)
   const [showModal, setShowModal] = useState(false); // 유저 프로필보기 / 추방하기 모달 on/off
   const [selectedParticipant, setSelectedParticipant] = useState(null); // 모달에 유저 정보 전달하기 위함
+  const [showSidebar, setShowSidebar] = useState(false); // 채팅방 정보는 사이드바에 몰아넣기
 
+  
   const member = useSelector((state) => state.auth.member);
   const authorization = useSelector((state) => state.auth.authorization);
   const memberID = member.memberId
@@ -54,7 +56,7 @@ const Chatroom = () => {
   // 접속 유저가 바뀌거나 채팅방 정보가 바뀌면 소켓에 연결하고 기본 세팅을 함
   // socket 들을 등록해서 메세지를 수신할 수 있게도 함
   useEffect(() => {
-    console.log("🦄첫번째 useEffect roomInfo => ", roomInfo);
+    console.log("🦄roomInfo 업데이트로 첫번째 useEffect 실행 => ", roomInfo);
 
     // 소켓 연결 설정
     socketRef.current = io(process.env.REACT_APP_NODE_SERVER_URL, { path: '/socket.io' });
@@ -146,22 +148,16 @@ const Chatroom = () => {
       setLiveParticipants(data);
     })
     
-    // 채팅 메세지 수신   
+    // 채팅 메세지 수신 
     socket.on('specific_chat', (message) => {
       console.log("표시할 메세지 =>", message);
       setReceivedMessage((prevMessages) => [...prevMessages, message]);
     });
 
-    // 입장 메세지 수신
-    socket.on('enter_msg', (enterMsg) => {
-      console.log("표시할 입장메세지 =>", enterMsg);
-      setReceivedMessage((prevMessages) => [...prevMessages, enterMsg]);
-    });
-
-    // 퇴장 메세지 수신
-    socket.on('leave_msg', (leaveMsg) => {
-      console.log("표시할 퇴장메세지 =>", leaveMsg);
-      setReceivedMessage((prevMessages) => [...prevMessages, leaveMsg]);
+    // 공지 메세지 수신
+    socket.on('notice_msg', (noticeMsg) => {
+      console.log("표시할 공지메세지 =>", noticeMsg);
+      setReceivedMessage((prevMessages) => [...prevMessages, noticeMsg]);
     });
 
     // 컴포넌트 언마운트 시 소켓 이벤트 리스너 정리
@@ -171,7 +167,6 @@ const Chatroom = () => {
       socket.off('connect');
     };
   }, [roomInfo]);
-
   
   // 소켓에서 열린 실시간 채팅방 과 실시간 채팅유저정보를 받음
   const initLiveSetting = (socketRoom) => {
@@ -227,32 +222,32 @@ const Chatroom = () => {
     });
   };
 
-  //// 실험중 /////
+  // 채팅방 내보내기
+  function kickRoom(currentChatroomId, targetMemberId) {
 
-  // 유저 프로필로 이동
-  const handleLeftClick = (memberId) => {
-    prompt("씨파")
-    window.confirm("ㅎㅎ")
-  };
-
-  // 추방하기 
-  const handleRightClick = (event,data) => {
-    event.preventDefault(); // 윈도우 기본 우클릭했을 때 나오는 창 안뜨게함
-    console.log("kick!" , data);
-
-    // userNavigation or kick Axios 요청하는함수
-
+    // 강퇴메세지 보내고 소켓에서도 내보내기
+    const socket = socketRef.current;
+    socket.emit('kick_room', memberID, roomInfo.chatroomName, targetMemberId);
+    console.log(`🖐️kickRoom 실행 : ${memberID}가 ${targetMemberId}를 ${currentChatroomId} 에서 내보냄`)
   }
-
+  
   // 이전 페이지에서 넘어와서 redux 데이터를 받는다면? 
   if (!roomInfo) {
     setTimeout(() => window.location.reload(), 1000);
-    return <div>Loading...</div>;
+    return <div>...</div>;
   }
 
+  
   return (
     <div className={module.chatContainer}>
+      <button onClick={() => setShowSidebar(!showSidebar)} className={module.sidebarButton}>
+        {showSidebar ? 'Hide Sidebar' : 'Show Sidebar'}
+      </button>
+
+      {showSidebar && (
       <div className={module.sidebarChat}>
+
+        <br/><br/>
         --------------------
         <p> 로그인 한놈 : {memberID} ({chatroomMemberRole}) </p>
         --------------------
@@ -268,6 +263,7 @@ const Chatroom = () => {
         <div>
           <h2>채팅 참여자 목록 ({participants.length})</h2>
           {console.log("파티시팬트", participants)}
+          {console.log("룸인포", roomInfo)}
           {participants.map((participant, index) => (
             <div key={index}>
               <p>
@@ -282,8 +278,10 @@ const Chatroom = () => {
                 </span>  &nbsp;
                 ({participant.chatroomMemberType }) 
                 <CustomModal
+                  kickRoom = {kickRoom}
                   showModal = {showModal} // showModal on off 정보
                   setShowModal = {setShowModal} // show Modal on off 함수
+                  setParticipants = {setParticipants}
                   roomInfoUpdate={setRoomInfo}  // 강퇴후 채팅방 정보를 업데이트하기 위한 함수
                   currentChatroomID={roomInfo.chatroomID} // 채팅방ID
                   loginMemberRole={chatroomMemberRole}  // 채팅방에서 로그인유저의 권한
@@ -309,6 +307,7 @@ const Chatroom = () => {
         
         <Link to='/chat/myChatroomList'>내 채팅방 목록</Link>
       </div>
+      )}
 
         <div className={module.chat}>
           <div className={module.messages}>
@@ -321,6 +320,7 @@ const Chatroom = () => {
               </div>
             ))}
           </div>
+        <div>
         <input
           type="text"
           value={messageInput}
@@ -332,8 +332,9 @@ const Chatroom = () => {
           }}
           placeholder="메시지를 입력하세요..."
         />
-        <button onClick={sendMessage}>Send</button>
-        <button onClick={leaveRoom}>채팅방 나가기</button>
+        <button onClick={sendMessage} style={{ backgroundColor: '#9BAAF8' }} >Send</button>
+        <button onClick={leaveRoom} style={{ backgroundColor: '#9BAAF8' }}>채팅방 나가기</button>
+        </div>
       </div>
 
     </div>

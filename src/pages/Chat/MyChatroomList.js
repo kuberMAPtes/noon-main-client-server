@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styles from './MyChatroomList.module.css'; // Import CSS module
+import module from './MyChatroomList.module.css'; // Import CSS module
 import { getMyChatrooms } from '../../lib/axios_api';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -15,6 +15,7 @@ const MyChatroomList = () => {
     const memberID = member.memberId;
 
     const [chatrooms, setChatrooms] = useState([]);
+    const [activeChatrooms, setActiveChatrooms] = useState([]);
     const dispatch = useDispatch();
 
     const navigate = useNavigate();
@@ -24,12 +25,14 @@ const MyChatroomList = () => {
             .then(chatrooms => {
                 fetchUnreadMessageCount(chatrooms, memberID)
                     .then(data => {
-                        setChatrooms(data.chatrooms);
+                        setChatrooms(data.chatrooms); // 채팅방 별 안읽은 메세지 저장
+                        setActiveChatrooms(data.activeChatrooms); // 활발한 채팅방 저장
                     })
             })
             .catch(error => console.log(error));
     }, [memberID]);
 
+    // 안읽은 메세지 가져오기
     async function fetchUnreadMessageCount(chatrooms, memberID) {
         const url = `${process.env.REACT_APP_NODE_SERVER_URL}/node/messageUnread`;
 
@@ -62,32 +65,31 @@ const MyChatroomList = () => {
     }
 
     return (
-        <div className={styles.app}> {/* Use styles from CSS module */}
-            <div className={styles.header}>
+        <div className={module.app}>
+            <div className={module.header}>
                 <h1> {member.nickName}'s room</h1>
                 <p>(userId : {memberID}) </p>
                 <p>내 다정온도 : {member.dajungScore}도 </p>
-                <button onClick={addChatroom}>채팅방 개설하기</button>
-                <button onClick={getChatApplyList}>새 대화신청 보기</button>
+                <button onClick={addChatroom} className={module.normalButton}>채팅방 개설하기</button>
+                <button onClick={getChatApplyList} className={module.normalButton}>새 대화신청 보기</button>
             </div>
-            <div className={styles['chatroom-list']}> {/* Use styles from CSS module */}
+            <div className={module.chatroomList}>
                 {chatrooms.map(chatroom => (
-                    <div key={chatroom.chatroomID} className={styles.chatroom}> {/* Use styles from CSS module */}
-                        <div className={styles['chatroom-info']}> {/* Use styles from CSS module */}
-                            <p className={styles['chatroom-name']}>{chatroom.chatroomName} {console.log("채팅찍어보자채팅방", chatrooms)}</p> {/* Use styles from CSS module */}
-                            <p className={styles['chatroom-status']}>방장 : {chatroom.chatroomCreator.memberId} ({chatroom.chatroomMinTemp} 도 이상만)</p> {/* Use styles from CSS module */}
+                    <div key={chatroom.chatroomID} className={module.chatroom}>
+                        <div className={module.chatroomInfo}>
+                            <p className={module.chatroomName}>{chatroom.chatroomName}</p>
+                            <p className={module.chatroomStatus}>방장 : {chatroom.chatroomCreator.memberId} ({chatroom.chatroomMinTemp} 도 이상만)</p>
                             <p>안읽은메세지수 : {chatroom.unreadMessage} </p>
                         </div>
                         <button
                             onClick={() => enterChatroom(chatroom.chatroomID)}
-                            className={chatroom.unreadMessage !== 0 ? styles['active-button'] : ''}
+                            className={chatroom.unreadMessage !== 0 ? module.activeButton : module.normalButton}
                         >
                             입장하기
                         </button>
                     </div>
                 ))}
             </div>
-            
             <Countdown/>
         </div>
     );

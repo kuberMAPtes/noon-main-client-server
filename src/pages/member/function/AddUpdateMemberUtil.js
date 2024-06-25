@@ -70,6 +70,12 @@ export const handleNicknameUpdateChange = async (
       if(response.info === true){
         setNicknameValidationMessage("");
         setIsNicknameValid(true);
+      }else if(response.message ==="금지어가 포함되어 있습니다."){
+        setNicknameValidationMessage("금지어");
+        setIsNicknameValid(false);
+      }else if(response.message === "이미 존재하는 닉네임입니다."){
+        setNicknameValidationMessage("중복됨");
+        setIsNicknameValid(false);
       }else if(response.message){
         setNicknameValidationMessage(response.message);
         setIsNicknameValid(false);
@@ -86,7 +92,7 @@ export const handleNicknameUpdateChange = async (
     setIsNicknameValid(false);
   }
   else {
-    setNicknameValidationMessage("닉네임 : 자음과 모음이 반드시 결합, 2~20자");
+    setNicknameValidationMessage("2~20자");
     setIsNicknameValid(false);
   }
 

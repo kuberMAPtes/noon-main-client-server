@@ -1,7 +1,8 @@
 import { useState, useRef } from 'react';
+import { updateMember } from '../../function/memberAxios';
 
 //value는 
-const useReadOnlyInput = (initialValue) => {
+const useReadOnlyInput = (initialValue,isNicknameValid,memberId) => {
   const [isReadOnly, setIsReadOnly] = useState(true);
   const [value, setValue] = useState(initialValue);
   const inputRef = useRef(null);
@@ -11,9 +12,11 @@ const useReadOnlyInput = (initialValue) => {
     inputRef.current.focus();
   };
 
-  const handleBlur = (originalValue) => (e) => {
-    if (e.target.value === originalValue || e.target.value === '') {
-      setIsReadOnly(true);
+  const handleBlur = (originalValue) => async (e) => {
+    setIsReadOnly(true);
+    alert(e.target.value+"@@ "+originalValue+" @@"+isNicknameValid+"@@ "+memberId);
+    if (e.target.value !== originalValue && e.target.value !== '' && isNicknameValid === true) {
+      await updateMember({ nickname: e.target.value, memberId: memberId})
     }
   };
 
