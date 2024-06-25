@@ -89,10 +89,10 @@ export default function BMap() {
 
     naver.maps.Event.addListener(map, "dragend", (e) => {
       fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, buildingFetchChecked.popBuildingChecked, sampleMember, navigate);
-      console.log(e);
+      const center = map.getCenter();
       dispatch(setCurrentMapState({
-        latitude: e.latlng.y,
-        longitude: e.latlng.x
+        latitude: center.y,
+        longitude: center.x
       }));
     });
 
