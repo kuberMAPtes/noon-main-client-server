@@ -12,6 +12,7 @@ import Footer from "../../components/common/Footer";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentMapState } from "../../redux/slices/currentMapStateSlice";
+import WantBuildingProfile from "../building/components/WantBuildingProfile";
 
 const naver = window.naver;
 
@@ -43,6 +44,16 @@ export default function BMap() {
   const [subscriptionChecked, setSubscriptionChecked] = useState(true);
   const [popBuildingChecked, setPopBuildingChecked] = useState(true);
   const [firstEntry, setFirstEntry] = useState(true);
+  const [wantBuildingProfileModal, setWantBuildingProfileModal] = useState({
+    isOpen: false,
+    onClose: () => {},
+    applicationData: {
+      buildingName: "",
+      roadAddr: "",
+      longitude: 0.0,
+      latitude: 0.0
+    }
+  });
 
   const currentMapState = useSelector((state) => state.currentMapState.value);
 
@@ -75,7 +86,7 @@ export default function BMap() {
     naver.maps.Event.addListener(map, "click", (e) => {
       const latitude = e.latlng.y;
       const longitude = e.latlng.x;
-      fetchBuildingInfo(latitude, longitude);
+      fetchBuildingInfo(latitude, longitude, setWantBuildingProfileModal);
     });
 
     naver.maps.Event.addListener(map, "dragend", (e) => {
@@ -191,6 +202,11 @@ export default function BMap() {
             setPopBuildingChecked={setPopBuildingChecked}
         />
       </div>
+      <WantBuildingProfile
+          isOpen={wantBuildingProfileModal.isOpen}
+          onClose={wantBuildingProfileModal.onClose}
+          applicationData={wantBuildingProfileModal.applicationData}
+      />
       <Footer />
     </div>
   )
@@ -257,7 +273,7 @@ function getCurrentPosition(callback, errorCallback) {
  * @param {number} latitude 
  * @param {number} longitude 
  */
-function fetchBuildingInfo(latitude, longitude) {
+function fetchBuildingInfo(latitude, longitude, setWantBuildingProfileModal) {
   axios_api.get(`${MAIN_API_URL}/buildingProfile/getBuildingProfile`, {
     params: {
       latitude,
@@ -268,7 +284,29 @@ function fetchBuildingInfo(latitude, longitude) {
     console.log(response);
   }).catch((err) => {
     if (is4xxStatus(err.response.status)) {
-      console.log(err.response.data); // TODO: response에 맞게 대응
+      const data = err.response.data;
+      console.log(data);
+      if (data.buildingExisting) {
+        setWantBuildingProfileModal({
+          isOpen: true,
+          onClose: () => setWantBuildingProfileModal({
+            isOpen: false,
+            onClose: () => {},
+            applicationData: {
+              buildingName: "",
+              roadAddr: "",
+              longitude: 0,
+              latitude: 0
+            }
+          }),
+          applicationData: {
+            buildingName: data.place.placeName,
+            roadAddr: data.place.roadAddress,
+            longitude: data.place.latitude,
+            latitude: data.place.longitude
+          }
+        });
+      }
     }
   })
 }
