@@ -146,22 +146,16 @@ const Chatroom = () => {
       setLiveParticipants(data);
     })
     
-    // 채팅 메세지 수신   
+    // 채팅 메세지 수신 
     socket.on('specific_chat', (message) => {
       console.log("표시할 메세지 =>", message);
       setReceivedMessage((prevMessages) => [...prevMessages, message]);
     });
 
-    // 입장 메세지 수신
-    socket.on('enter_msg', (enterMsg) => {
-      console.log("표시할 입장메세지 =>", enterMsg);
+    // 공지 메세지 수신
+    socket.on('notice_msg', (enterMsg) => {
+      console.log("표시할 공지메세지 =>", enterMsg);
       setReceivedMessage((prevMessages) => [...prevMessages, enterMsg]);
-    });
-
-    // 퇴장 메세지 수신
-    socket.on('leave_msg', (leaveMsg) => {
-      console.log("표시할 퇴장메세지 =>", leaveMsg);
-      setReceivedMessage((prevMessages) => [...prevMessages, leaveMsg]);
     });
 
     // 컴포넌트 언마운트 시 소켓 이벤트 리스너 정리
@@ -227,27 +221,18 @@ const Chatroom = () => {
     });
   };
 
-  //// 실험중 /////
-
-  // 유저 프로필로 이동
-  const handleLeftClick = (memberId) => {
-    prompt("씨파")
-    window.confirm("ㅎㅎ")
-  };
-
-  // 추방하기 
-  const handleRightClick = (event,data) => {
-    event.preventDefault(); // 윈도우 기본 우클릭했을 때 나오는 창 안뜨게함
-    console.log("kick!" , data);
-
-    // userNavigation or kick Axios 요청하는함수
-
+  // (개발중) 채팅방 내보내기
+  function kickRoom(roomInfo, targetMemberId) {
+    const socket = socketRef.current;
+    
+    socket.emit('kick_room', memberID, roomInfo.chatroomName, targetMemberId);
+    console.log(`kickRoom 실행 : ${memberID}가 ${targetMemberId}를 ${roomInfo.chatroomName} 에서 내보냄`)
   }
-
+  
   // 이전 페이지에서 넘어와서 redux 데이터를 받는다면? 
   if (!roomInfo) {
     setTimeout(() => window.location.reload(), 1000);
-    return <div>Loading...</div>;
+    return <div>...</div>;
   }
 
   return (
@@ -282,6 +267,7 @@ const Chatroom = () => {
                 </span>  &nbsp;
                 ({participant.chatroomMemberType }) 
                 <CustomModal
+                  kickRoom = {kickRoom}
                   showModal = {showModal} // showModal on off 정보
                   setShowModal = {setShowModal} // show Modal on off 함수
                   roomInfoUpdate={setRoomInfo}  // 강퇴후 채팅방 정보를 업데이트하기 위한 함수
