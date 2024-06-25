@@ -31,7 +31,7 @@ const FeedPages = () => {
               <Link to="form/10010?memberId=member_1">Feed Form(수정)</Link>
             </li>
             <li>
-              <Link to="voteForm?memberId=member_1">투표 게시판</Link>
+              <Link to="voteForm?memberId=member_1&buildingId=10010">투표 게시판</Link>
             </li>
           </ul>
         </nav>

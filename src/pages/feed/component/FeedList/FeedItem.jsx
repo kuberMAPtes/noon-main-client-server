@@ -51,6 +51,7 @@ const FeedItem = ({ data, memberId }) => {
     useEffect(() => {
         const loadAttachment = async () => {
             const attachmentUrl = await AttachmentGetter(feedAttachmentId);
+            console.log(attachmentUrl);
             if (attachmentUrl) {
                 setMainAttachment(attachmentUrl.url);
             } else {
