@@ -71,7 +71,7 @@ import GetMemberProfile from "../pages/member/GetMemberProfile";
 import GetBuildingWiki from "../pages/building/GetBuildingWiki";
 import EditBuildingWiki from "../pages/building/EditBuildingWiki";
 import ApplicantSample from "../pages/building/components/ApplicantSample";
-import FeedVotePage from "../pages/feed/FeedVotePage"; // 투표 게시판 생성
+import FeedVotePage from "../pages/feed/component/FeedForm/FeedVoteForm"; // 투표 게시판 생성
 
 const AppRoutes = () => {
   const location = useLocation();

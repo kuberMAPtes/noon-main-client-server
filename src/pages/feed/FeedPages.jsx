@@ -9,8 +9,9 @@ import Footer from "../../components/common/Footer";
  */
 const FeedPages = () => {
   return (
+    <>
+    <BasicNavbar />
     <div className="container">
-        <BasicNavbar />
         <h2>태스트용 페이지입니다.</h2>
         <nav>
           <ul>
@@ -38,6 +39,7 @@ const FeedPages = () => {
           <Footer />
         </div>
     </div>
+    </>
   );
 };
 
