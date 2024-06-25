@@ -6,6 +6,8 @@ import { is2xxStatus } from "../../util/statusCodeUtil";
 import BasicNavbar from "../../components/common/BasicNavbar";
 import "./css/MemberSetting.css";
 import OpInfoModal from "./component/OpInfoModal";
+import { RiArrowGoBackFill } from "react-icons/ri";
+import { useNavigate } from "react-router-dom";
 
 const PUBLIC_RANGES = [
   {
@@ -38,6 +40,8 @@ export default function MemberSetting() {
     useState("PUBLIC");
   const [opInfoMode, setOpInfoMode] = useState("termsAndPolicy");
   const [opInfoModalVisible, setOpInfoModalVisible] = useState(false);
+
+  const navigate = useNavigate();
 
   const memberId = SAMPLE_MEMBER_ID;
 
@@ -95,8 +99,19 @@ export default function MemberSetting() {
   return (
     <div>
       <BasicNavbar />
+      
       <main className="container member-setting-container">
-        <h1>환경설정</h1>
+        <div class="title-container">
+          <h1>환경설정</h1>
+          <RiArrowGoBackFill
+              style={{
+                  width: "25px", height: "25px"
+              }}
+              onClick={() => {
+                navigate(-1);
+              }}
+          />
+        </div>
         <div className="setting-content-wrapper">
           {
             COMPONENT_INFOS.map((data, idx) => (

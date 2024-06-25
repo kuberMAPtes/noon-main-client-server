@@ -4,8 +4,15 @@
   flex-direction: column;
 }
 
-.member-setting-container h1 {
+.title-container {
   margin-bottom: 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title-container h1 {
+  margin-bottom: 0px;
 }
 
 .pg-dropdown {
