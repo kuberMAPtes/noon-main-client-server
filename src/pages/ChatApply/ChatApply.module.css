@@ -1,0 +1,77 @@
+.chatRequest {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f7f7f7;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.chatHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.chatHeader h1 {
+  color: #4a4a4a;
+  font-size: 1.5em;
+}
+
+.chatVersion {
+  font-size: 0.8em;
+  color: #666666;
+}
+
+.chatBody {
+  padding: 20px;
+}
+
+.chatRobot {
+  margin: 20px 0;
+}
+
+.robotImage {
+  width: 100px;
+  height: 100px;
+}
+
+.chatBody p {
+  font-size: 1.2em;
+  color: #333333;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.acceptButton, .rejectButton {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.acceptButton {
+  background-color: #9BAAF8;
+  color: white;
+}
+
+.acceptButton:hover {
+  background-color: #7A91D1;
+}
+
+.rejectButton {
+  background-color: #ff6b6b;
+  color: white;
+}
+
+.rejectButton:hover {
+  background-color: #e55a5a;
+}

@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { useNavigate  } from 'react-router-dom';
 // import { useMainPage }  from '../../member/component/common'
 
-export const CustomModal = ({showModal, setShowModal, roomInfoUpdate, currentChatroomID, loginMemberRole, targetMember}) => {
+export const CustomModal = ({kickRoom, showModal, setShowModal, setParticipants, roomInfoUpdate, currentChatroomID, loginMemberRole, targetMember}) => {
 
     // console.log("CustomModal 받은 데이터 => ", "채팅방", currentChatroomID, "내권한",loginMemberRole, "조회or내보낼놈",targetMember);
 
@@ -25,7 +25,10 @@ export const CustomModal = ({showModal, setShowModal, roomInfoUpdate, currentCha
         kickChatroom(currentChatroomID, targetMember.chatroomMemberId)
         .then(chatroomData => {
             console.log("사용자를 강퇴했습니다. 업데이트된 채팅방 정보 => ", chatroomData);
-            roomInfoUpdate(chatroomData)
+            kickRoom(currentChatroomID,targetMember.chatroomMemberId)
+            roomInfoUpdate(chatroomData.chatroom)
+            setParticipants(chatroomData.activeChatEntrances)
+            alert(`${targetMember.chatroomMemberId} 손절!`)
         })
         .catch(error => console.log(error));
     
