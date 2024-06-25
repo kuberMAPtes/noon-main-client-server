@@ -1,24 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Card, ListGroup, Container, Badge } from 'react-bootstrap';
-import "../../css/FeedForm.css";
+import { Button, Form, Card, Container, Badge } from 'react-bootstrap';
 import axios_api from '../../../../lib/axios_api';
 import CheckModal from '../Common/CheckModal';
-import navigator from '../../util/Navigator';
+import navigator from '../../util/Navigator'
+import VotePreview from './VotePreview';
 // import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
 
-const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, onSave }) => {
+const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, onSave }) => {
+    const [previewVoteShow, setPreviewVoteShow] = useState(false);
     const [feedData, setFeedData] = useState({
-        writerId: inputWriterId,
-        mainActivate: false,
-        viewCnt: 0,
-        writtenTime: '',
-        modified: false,
         title: '',
         feedText: '',
         updateTagList: [],
-        category: 'GENERAL',
+        category: 'POLL',
         publicRange: 'PUBLIC',
-        attachments: []
+        viewCnt: 0,
+        writtenTime: '',
+        modified: false,
+    });
+
+    const [newVote, setNewVote] = useState({ 
+        question: '', 
+        options: [''] 
     });
 
     // 태그 추가 
@@ -30,45 +33,60 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
 
     // navigator
     const { goToFeedDetail } = navigator();
-
-    // 첨부파일을 삭제할 파일 목록
-    const [deletedFiles, setDeletedFiles] = useState([]);
-
+    
     // @(memberId)를 통해 리다이렉션하기
     // const renderFeedText = (feedText) => renderFeedTextWithLink(feedText);
 
+    /* 투표 관련 */
     useEffect(() => {
-        if (existingFeed) {
-            setFeedData({
-                writerId: existingFeed.writerId,
-                mainActivate: existingFeed.mainActivate,
-                viewCnt: existingFeed.viewCnt,
-                writtenTime: existingFeed.writtenTime,
-                modified: true,
-                title: existingFeed.title,
-                feedText: existingFeed.feedText,
-                updateTagList: existingFeed.updateTagList || [],
-                category: existingFeed.category || 'GENERAL',
-                publicRange: existingFeed.publicRange || 'PUBLIC',
-                attachments: existingFeed.attachments || []
-            });
-        } else {
-            setFeedData({
-                writerId: inputWriterId,
-                mainActivate: false,
-                viewCnt: 0,
-                writtenTime: '',
-                modified: false,
-                title: '',
-                feedText: '',
-                updateTagList: [],
-                category: 'GENERAL',
-                publicRange: 'PUBLIC',
-                attachments: []
-            });
-        }
-    }, [existingFeed, inputWriterId]);
+        fetchVotes();
+    }, []);
 
+    // 투표 미리보기 
+    const handlePreviewVote = () => {
+        setPreviewVoteShow(true);
+    };
+    
+    const fetchVotes = async () => {
+        try {
+            // const response = await axios_api.get('/feed/getVote' + inputFeedId);
+        } catch (error) {
+            console.error('투표 목록을 가져오는 중 오류 발생:', error);
+        }
+    };
+
+    const handleAddVote = async () => {
+        try {
+            await axios_api.post('/feed/addVote', newVote);
+            fetchVotes();
+            setNewVote({ question: '', options: [''] });
+        } catch (error) {
+            console.error('투표를 추가하는 중 오류 발생:', error);
+        }
+    };
+
+    const handleDeleteVote = async (feedId) => {
+        try {
+            await axios_api.post(`/feed/deleteVote/${feedId}`);
+            fetchVotes();
+        } catch (error) {
+            console.error('투표를 삭제하는 중 오류 발생:', error);
+        }
+    };
+
+    const handleOptionChange = (index, value) => {
+        const updatedOptions = [...newVote.options];
+        updatedOptions[index] = value;
+        setNewVote({ ...newVote, options: updatedOptions });
+    };
+
+    const addOption = () => {
+        setNewVote({ ...newVote, options: [...newVote.options, ''] });
+    };
+
+
+    /* 피드 관련 */
+    // 변경 사항 반영
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFeedData({
@@ -97,25 +115,25 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
             console.log(addFeedData);
 
             const feedResponse = await axios_api.post('/feed/addFeed', addFeedData);
-
             const feedId = feedResponse.data;
 
-            const formData = new FormData();
-            feedData.attachments.forEach((file) => {
-                formData.append('multipartFile', file);
-            });
-            
-            if(formData && formData.getAll('multipartFile').length > 0) {
-                await axios_api.post(`/feed/addFeedAttachment/${feedId}`, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                });
+            console.log("feedId : " + feedId);
+
+            const addVoteData = {
+                feedId: feedId,
+                question: newVote.question,
+                options: newVote.options
             }
+
+            const voteResponse = await axios_api.post('/feed/addVote', addVoteData);
+            const voteData = voteResponse.data;
+
+            console.log("voteData : " + voteData);
 
             console.log('피드가 성공적으로 저장되었습니다:', feedResponse.data);
 
             goToFeedDetail(inputWriterId, feedId);
+
         } catch (error) {
             console.error('피드 저장 중 오류 발생:', error);
         }
@@ -134,9 +152,8 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                 title: feedData.title,
                 feedText: feedData.feedText,
                 updateTagList: feedData.updateTagList,
-                feedCategory: feedData.category,
+                feedCategory: 'POLL',
                 publicRange: feedData.publicRange,
-                attachments: feedData.attachments
             };
 
             console.log(updateFeedData);
@@ -144,30 +161,7 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
             const feedResponse = await axios_api.post(`/feed/updateFeed`, updateFeedData);
 
             const feedId = feedResponse.data;
-
-            // 첨부파일 저장
-            const formData = new FormData();
-            feedData.attachments.forEach((file) => {
-                if (file instanceof File) {
-                    formData.append('multipartFile', file);
-                }
-            });
-
-            if(formData && formData.getAll('multipartFile').length > 0) {
-                await axios_api.post(`/feed/addFeedAttachment/${feedId}`, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                });
-            }
-
-            // 삭제된 파일 처리
-            if (deletedFiles.length > 0) {
-                deletedFiles.forEach(async (deleteFile) => {
-                    await axios_api.post(`/feed/deleteFeedAttachment/${deleteFile.attachmentId}`);
-                });
-            }
-
+            
             console.log('피드가 성공적으로 저장되었습니다:', feedResponse.data);
 
             goToFeedDetail(inputWriterId, feedId);
@@ -190,7 +184,7 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
             console.error("HandleSubmit Error 발생 : " + error);
         }
     }
-
+    
     // 모달 창 띄우기
     const handleModalConfirm = async () => {
         try {
@@ -208,52 +202,7 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
         }
     }
 
-    const handleCancel = () => {
-        setFeedData({
-            title: '',
-            feedText: '',
-            tags: [],
-            category: 'GENERAL',
-            publicRange: 'PUBLIC',
-            attachments: []
-        });
-    };
-
-    const handleFileChange = (e) => {
-        const files = Array.from(e.target.files);
-        setFeedData(prevState => ({
-            ...prevState,
-            attachments: [...prevState.attachments, ...files]
-        }));
-    };
-
-    // 미리보기 삭제 시 삭제 리스트에 포함시키기
-    const handleFileRemove = (file) => {
-        if (isUploadedFile(file)) {
-            setDeletedFiles([...deletedFiles, file]); //  사용하여 파일 식별
-        }
-        const updatedFiles = feedData.attachments.filter((attachment) => {
-            if (attachment instanceof File) {
-                return URL.createObjectURL(attachment) !== file.fileUrl;
-            } else {
-                return attachment.fileUrl !== file.fileUrl;
-            }
-        });
-        setFeedData({ ...feedData, attachments: updatedFiles });
-    };
-
-    const isImageOrVideo = (file) => {
-        if (file instanceof File) {
-            const fileType = file.type.split('/')[0];
-            return fileType === 'image' || fileType === 'video';
-        }
-        return file && (file.fileType === 'PHOTO' || file.fileType === 'VIDEO');
-    };
-
-    const isUploadedFile = (file) => {
-        return file.fileUrl !== undefined; // 이미 업로드된 파일은 fileUrl이 존재할 것으로 가정
-    };
-    
+    // 태그 추가 및 삭제
     const handleTagAdd = () => {
         if (tagInput.trim() !== '') {
             setFeedData(prevState => ({
@@ -269,11 +218,22 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
         setFeedData({ ...feedData, updateTagList: updatedTags });
     };
 
+    // 취소
+    const handleCancel = () => {
+        setFeedData({
+            title: '',
+            feedText: '',
+            tags: [],
+            publicRange: 'PUBLIC',
+        });
+    };
+
     return (
-        <Container className="feed-form">
+        <Container className="feed=form">
             <Card>
                 <Card.Body>
                     <Form onSubmit={handleSubmit}>
+                        {/* 제목 */}
                         <Form.Group controlId="feedTitle" className="mb-3">
                             <Form.Label>제목</Form.Label>
                             <Form.Control
@@ -286,6 +246,7 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                             />
                         </Form.Group>
 
+                        {/* 내용 */}
                         <Form.Group controlId="feedText" className="mb-3">
                             <Form.Label>내용</Form.Label>
                             <Form.Control
@@ -298,43 +259,8 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                                 required
                             />
                         </Form.Group>
-                        <br/>
-                        <Form.Group controlId="attachments" className="mb-3">
-                            <Form.Label>첨부 파일</Form.Label>
-                            <Form.Control
-                                type="file"
-                                name="attachments"
-                                multiple
-                                onChange={handleFileChange}
-                            />
-                            <ListGroup className="file-list mt-3">
-                                {feedData.attachments.map((file, index) => (
-                                    <ListGroup.Item key={index} className="d-flex justify-content-between align-items-center">
-                                        {isUploadedFile(file) ? (
-                                            <div className="d-flex align-items-center">
-                                                {isImageOrVideo(file) ? (
-                                                    <img src={file.fileUrl} alt={file.fileUrl} style={{ maxWidth: '50px', maxHeight: '50px', marginRight: '10px' }} />
-                                                ) : (
-                                                    <span>{file.fileUrl}</span>
-                                                )}
-                                                <span>{file.fileUrl}</span>
-                                            </div>
-                                        ) : (
-                                            <div className="d-flex align-items-center">
-                                                {isImageOrVideo(file) ? (
-                                                    <img src={URL.createObjectURL(file)} alt={file.name} style={{ maxWidth: '50px', maxHeight: '50px', marginRight: '10px' }} />
-                                                ) : (
-                                                    <span>{file.name}</span>
-                                                )}
-                                                <span>{file.name}</span>
-                                            </div>
-                                        )}
-                                        <Button variant="danger" size="sm" onClick={() => handleFileRemove(file)}>삭제</Button>
-                                    </ListGroup.Item>
-                                ))}
-                            </ListGroup>
-                        </Form.Group>
 
+                        {/* 태그 추가 */}
                         <Form.Group controlId="feedTags" className="mb-3">
                             <Form.Label>태그</Form.Label>
                             <div className="d-flex">
@@ -355,24 +281,7 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                             </div>
                         </Form.Group>
 
-                        <Form.Group controlId="feedCategory" className="mb-3">
-                            <Form.Label>카테고리</Form.Label>
-                            <Form.Control
-                                as="select"
-                                name="category"
-                                value={feedData.category}
-                                onChange={handleChange}
-                                required
-                            >
-                                <option value="GENERAL">일반</option>
-                                <option value="COMPLIMENT">칭찬하기</option>
-                                <option value="QUESTION">Q&A</option>
-                                <option value="EVENT">이벤트</option>
-                                <option value="POLL">투표</option>
-                                <option value="NOTICE">공지사항</option>
-                            </Form.Control>
-                        </Form.Group>
-
+                        {/* 공개 범위 추가 */}
                         <Form.Group controlId="feedPublicRange" className="mb-3">
                             <Form.Label>공개 범위</Form.Label>
                             <Form.Control
@@ -387,7 +296,32 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                                 <option value="PRIVATE">비공개</option>
                             </Form.Control>
                         </Form.Group>
-
+                        <hr/>
+                        {/* 투표 생성*/}
+                        <Form.Group className="mb-3">
+                            <Form.Label>질문</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="질문을 입력하세요"
+                                value={newVote.question}
+                                onChange={(e) => setNewVote({ ...newVote, question: e.target.value })}
+                            />
+                        </Form.Group>
+                        
+                        {newVote.options.map((option, index) => (
+                            <Form.Group key={index} className="mb-3">
+                                <Form.Label>옵션 {index + 1}</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder={`옵션 ${index + 1}`}
+                                    value={option}
+                                    onChange={(e) => handleOptionChange(index, e.target.value)}
+                                />
+                            </Form.Group>
+                        ))}
+                        <Button variant="danger" onClick={addOption} className="me-2">
+                            옵션 추가
+                        </Button>
                         <Button variant="primary" type="submit" className="mr-2">
                             저장
                         </Button>
@@ -416,8 +350,26 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                 title="피드 수정"
                 content="변화된 일상을 공유할까요?"
             />
+
+            {/* 투표 미리 보기 */}
+            <Button variant="info" onClick={handlePreviewVote} className="me-2">
+                투표 미리 보기
+            </Button>
+
+            {/* Modal : 투표 미리 보기 */}
+            {previewVoteShow && (
+                <VotePreview
+                    question={newVote.question}
+                    options={newVote.options}
+                    onSelectVote={(selectedOption) => {
+                        setPreviewVoteShow(false); // 투표가 끝나면 Modal 닫기
+                    }}
+                />
+            )}
         </Container>
+
+
     );
 };
 
-export default FeedForm;
+export default FeedVoteForm;

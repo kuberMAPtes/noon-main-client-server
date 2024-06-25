@@ -9,8 +9,9 @@ import Footer from "../../components/common/Footer";
  */
 const FeedPages = () => {
   return (
-    <div className="content">
-        <BasicNavbar />
+    <>
+    <BasicNavbar />
+    <div className="container">
         <h2>태스트용 페이지입니다.</h2>
         <nav>
           <ul>
@@ -29,12 +30,16 @@ const FeedPages = () => {
             <li>
               <Link to="form/10010?memberId=member_1">Feed Form(수정)</Link>
             </li>
+            <li>
+              <Link to="voteForm?memberId=member_1">투표 게시판</Link>
+            </li>
           </ul>
         </nav>
         <div>
           <Footer />
         </div>
     </div>
+    </>
   );
 };
 
