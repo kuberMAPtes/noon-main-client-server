@@ -28,8 +28,6 @@ let buildingSubscriptionMarkers;
 
 let placeSearchMarkers;
 
-export const INITIAL_ZOOM_LEVEL = 15;
-
 const buildingFetchChecked = {
   popBuildingChecked: true,
   subscriptionChecked: true
@@ -92,26 +90,16 @@ export default function BMap() {
     naver.maps.Event.addListener(map, "dragend", (e) => {
       fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, buildingFetchChecked.popBuildingChecked, sampleMember, navigate);
       console.log(e);
-      if (!currentMapState) {
-        dispatch(setCurrentMapState({
-          latitude: e.latlng.y,
-          longitude: e.latlng.x,
-          zoomLevel: INITIAL_ZOOM_LEVEL
-        }));
-      } else {
-        dispatch(setCurrentMapState({
-          ...currentMapState,
-          latitude: e.latlng.y,
-          longitude: e.latlng.x
-        }));
-      }
+      dispatch(setCurrentMapState({
+        latitude: e.latlng.y,
+        longitude: e.latlng.x
+      }));
     });
 
     naver.maps.Event.addListener(map, "zoom_changed", (e) => {
       fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, buildingFetchChecked.popBuildingChecked, sampleMember, navigate);
       console.log(e);
       dispatch(setCurrentMapState({
-        ...currentMapState,
         zoomLevel: e
       }));
     });
@@ -120,26 +108,37 @@ export default function BMap() {
   useEffect(() => {
     const mapElement = document.getElementById("map");
     getCurrentPosition((coords) => {
+      const initialMapState = {
+        latitude: currentMapState.initialized ? currentMapState.latitude : coords.latitude,
+        longitude: currentMapState.initialized ? currentMapState.longitude : coords.longitude,
+        zoomLevel: currentMapState.zoomLevel,
+        initialized: true
+      }
       setCurrentPosition({
         latitude: coords.latitude,
         longitude: coords.longitude
       });
       map = new naver.maps.Map(mapElement, {
-        center: currentMapState ? new naver.maps.LatLng(currentMapState.latitude, currentMapState.longitude) : new naver.maps.LatLng(coords.latitude, coords.longitude),
-        zoom: currentMapState?.zoomLevel ? currentMapState.zoomLevel : INITIAL_ZOOM_LEVEL
+        center: new naver.maps.LatLng(initialMapState.latitude, initialMapState.longitude),
+        zoom: initialMapState.zoomLevel
       });
+      dispatch(setCurrentMapState(initialMapState));
+      
       initMap(map);
       setFirstEntry(false);
     }, () => {
       console.error("Geolocation API not supported");
-      if (currentMapState) {
-        map = new naver.maps.Map(mapElement, {
-          center: new naver.maps.LatLng(currentMapState.latitude, currentMapState.longitude),
-          zoom: currentMapState?.zoomLevel ? currentMapState.zoomLevel : INITIAL_ZOOM_LEVEL
-        });
-      } else {
-        map = new naver.maps.Map(mapElement);
+      const initialMapState = {
+        latitude: currentMapState.latitude,
+        longitude: currentMapState.longitude,
+        zoomLevel: currentMapState.zoomLevel,
+        initialized: true
       }
+      map = new naver.maps.Map(mapElement, {
+        center: new naver.maps.LatLng(initialMapState.latitude, initialMapState.longitude),
+        zoom: initialMapState.zoomLevel
+      });
+      dispatch(setCurrentMapState(initialMapState));
       initMap(map);
       setFirstEntry(false);
     });
