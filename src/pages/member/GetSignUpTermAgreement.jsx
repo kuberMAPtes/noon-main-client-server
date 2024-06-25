@@ -49,7 +49,10 @@ const GetSignUpTermAgreement = () => {
 
   return (
     <ForegroundTemplate>
-      <Container className={styles["fullscreen-container"]} {...handlers}>
+      <Container className={styles["fullscreen-container"]}
+      {...handlers}
+      style={{width:"100%",margin:"0px", padding:"0px"}}
+      >
         <Row className="justify-content-center">
           <Col md={8}>
             <Card style={{ position: "relative" }}>

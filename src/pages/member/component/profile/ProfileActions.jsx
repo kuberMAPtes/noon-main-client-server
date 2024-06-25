@@ -1,6 +1,6 @@
 import React from "react";
 import { Row, Col } from "react-bootstrap";
-import { FaUserEdit, FaMapMarkedAlt } from "react-icons/fa";
+import { FaUserEdit, FaMapMarkedAlt, FaUser, FaUserCheck } from "react-icons/fa";
 import { MdMoreHoriz } from "react-icons/md";
 import AnimatedDiv from "../AnimatedDiv";
 import profile from "../../../../assets/css/module/member/GetMemberProfile.module.css";
@@ -53,10 +53,10 @@ const ProfileActions = ({toId,fromId}) => {
             onClick={() => navigate("/member/getMember")}
           >
             <div className={profile["circle-profile-icon"]}>
-              <FaUserEdit />
+              <FaUserCheck />
             </div>
           </div>
-          <div><FaUserPlus/>팔로잉</div>
+          <div><FaUserCheck/>개인정보</div>
         </Col>
         <Col xs={4}>
           <div
@@ -67,7 +67,7 @@ const ProfileActions = ({toId,fromId}) => {
               <FaMapMarkedAlt />
             </div>
           </div>
-          <div><FaMapMarkedAlt />지도보기</div>
+          <div><FaMapMarkedAlt />지도</div>
         </Col>
         <Col xs={4}>
           <div className={`${profile.circle} ${base.hoverStyle}`} onClick={handleToggle}>
