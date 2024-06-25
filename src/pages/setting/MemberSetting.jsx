@@ -126,28 +126,49 @@ export default function MemberSetting() {
             ))
           }
         </div>
-        <button className="btn--apply-setting" type="button" onClick={() => {
-          axios_api.post(`${MAIN_API_URL}/setting/updateSetting/${memberId}`, {
-            memberProfilePublicRange,
-            allFeedPublicRange,
-            buildingSubscriptionPublicRange,
-            receivingAllNotification
-          }).then((response) => {
-            if (is2xxStatus(response.status)) {
-              alert("환경설정이 적용되었습니다");
-            }
-          }).catch((err) => {
-            console.error(err);
-          })
-        }}>변경사항 저장</button>
-        <button className="btn--opinfo" type="button" onClick={() => {
-          setOpInfoMode("termsAndPolicy");
-          setOpInfoModalVisible(true);
-        }}>약관 및 정책</button>
-        <button className="btn--opinfo" type="button" onClick={() => {
-          setOpInfoMode("termsOfUse");
-          setOpInfoModalVisible(true);
-        }}>이용규정</button>
+        <button
+            className="btn--apply-setting"
+            type="button"
+            onClick={() => {
+              axios_api.post(`${MAIN_API_URL}/setting/updateSetting/${memberId}`, {
+                memberProfilePublicRange,
+                allFeedPublicRange,
+                buildingSubscriptionPublicRange,
+                receivingAllNotification
+              }).then((response) => {
+                if (is2xxStatus(response.status)) {
+                  alert("환경설정이 적용되었습니다");
+                }
+              }).catch((err) => {
+                console.error(err);
+              })
+            }}
+            style={{ backgroundColor: "#030722" }}
+        >변경사항 저장</button>
+        <button
+            className="btn--opinfo"
+            type="button"
+            onClick={() => {
+              setOpInfoMode("termsAndPolicy");
+              setOpInfoModalVisible(true);
+            }}
+            style={{
+              color: "#030722",
+              backgroundColor: "#FFFFFD"
+            }}
+        >약관 및 정책</button>
+        <button
+            className="btn--opinfo"
+            type="button"
+            onClick={() => {
+              setOpInfoMode("termsOfUse");
+              setOpInfoModalVisible(true);
+            }}
+            style={{
+              color: "#030722",
+              backgroundColor: "#FFFFFD"
+            }}
+        >이용규정</button>
         <OpInfoModal
             visible={opInfoModalVisible}
             setVisible={setOpInfoModalVisible}
