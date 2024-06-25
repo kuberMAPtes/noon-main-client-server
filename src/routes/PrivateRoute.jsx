@@ -26,11 +26,13 @@ const PrivateRoute = ({ children }) => {
 
   useEffect(() => {
     console.log("@@@@PrivateRoute useEffect 시작 [auth]");
+    console.log("member",JSON.stringify(memberId));
     console.log(authorization);
     console.log("authorization 상태 변경:", authorization);
     //authorization이 undefined >> 아직 authLoader가 처리하기 전
     //authorization이 false >> authLoader가 로그인 안한 유저로 판단
-    if (loading===false && authorization===false && isRedirect && memberId==="") {
+    console.log("loading 상태 변경:", loading, "authorization 상태 변경:",authorization ,"isRedirect 상태 변경:", isRedirect, "memberId 상태 변경:", memberId);
+    if (loading===false && (authorization===false||authorization===undefined) && isRedirect && memberId==="") {
       // alert("리다이렉트했습니다. Redirect false로 변경"+ authorization + isRedirect);
       dispatch(setIsRedirect(false));
       navigate("/member/getAuthMain");

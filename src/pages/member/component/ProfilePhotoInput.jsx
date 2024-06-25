@@ -4,11 +4,12 @@ import module from "../../../assets/css/module/member/GetMemberProfile.module.cs
 const ProfilePhotoInput = ({ profile, defaultPhotoUrl, handleImageUpload }) => {
   const [preview, setPreview] = useState(profile.profilePhotoUrl || defaultPhotoUrl);
 
-  useEffect(()=>{
-    console.log("프로필 사진확인"+ JSON.stringify(profile));
-    alert("프로필 사진확인"+ JSON.stringify(profile));
-    
-  },[profile]);
+  useEffect(() => {
+    console.log("프로필 사진 확인", JSON.stringify(profile.profilePhotoUrl));
+    alert("프로필 사진 확인" + JSON.stringify(profile.profilePhotoUrl));
+    setPreview(profile.profilePhotoUrl || defaultPhotoUrl);
+  }, [profile.profilePhotoUrl,setPreview]);
+
   const handleImageError = (event) => {
     event.target.src = defaultPhotoUrl;
   };
