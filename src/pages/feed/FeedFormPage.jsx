@@ -1,11 +1,14 @@
 import Footer from "../../components/common/Footer";
-import FeedForm from "./component/FeedForm/FeedForm"
+
 import { useEffect, useState } from 'react';
+import { Button } from "react-bootstrap";
+import { Link, Route, Routes, useParams, useSearchParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+
+import FeedForm from "./component/FeedForm/FeedForm"
+import FeedVoteForm from "./component/FeedForm/FeedVoteForm";
 import SlideUpModal from "./component/FeedForm/SlideUpModal";
 import BasicNavbar from "../../components/common/BasicNavbar";
-import { Button } from "react-bootstrap";
-import { useParams, useSearchParams } from "react-router-dom";
-import { useSelector } from "react-redux";
 import axios_api from "../../lib/axios_api";
 
 /**
@@ -50,18 +53,47 @@ const FeedFormPage = () => {
             <BasicNavbar />
             <div className="container">
                 <Button variant="primary" onClick={() => setShowModal(true)}>
-                    추가 피드
+                    피드 종류
                 </Button>
                 <SlideUpModal show={showModal} onHide={() => setShowModal(false)} />
             </div>
 
-            <FeedForm 
-                existingFeed={selectedFeed} 
-                inputWriterId={writerId} 
-                inputBuildingId = {buildingId} 
-                inputFeedId = {feedId}
-            />
-            
+            <Routes>
+                <Route
+                path=""
+                element={
+                    <FeedForm
+                    existingFeed={selectedFeed}
+                    inputWriterId={writerId}
+                    inputBuildingId={buildingId}
+                    inputFeedId={feedId}
+                    />
+                    }
+                />
+                <Route
+                path="/vote"
+                element={
+                    <FeedVoteForm
+                    existingFeed={selectedFeed}
+                    inputWriterId={writerId}
+                    inputBuildingId={buildingId}
+                    inputFeedId={feedId}
+                    />
+                    }
+                />
+                {/* <Route
+                        path="/vote"
+                        element={
+                            <FeedMegaphoneForm>
+                                existingFeed={selectedFeed}
+                                inputWriterId={writerId}
+                                inputBuildingId={buildingId}
+                                inputFeedId={feedId}
+                            />
+                        }
+                    /> */}
+            </Routes>
+
             <div>
             <Footer />
             </div>

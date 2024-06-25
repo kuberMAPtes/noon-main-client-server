@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-import { Badge, Button, Card, Form } from 'react-bootstrap';
+import { Badge, Button, Card } from 'react-bootstrap';
 
+/**
+ * 피드 미리보기 시 사용하는 컴포넌트
+ */
 const VotePreview = ({ question, options, onSelectVote }) => {
     const [selectedOption, setSelectedOption] = useState('');
 
@@ -12,7 +15,7 @@ const VotePreview = ({ question, options, onSelectVote }) => {
         if (selectedOption) {
             onSelectVote(selectedOption);
         } else {
-            alert('옵션을 선택해 주세요.');
+            alert('옵션을 선택해 주세요.'); // 알림
         }
     };
 
@@ -25,12 +28,18 @@ const VotePreview = ({ question, options, onSelectVote }) => {
                         <Button
                             variant={selectedOption === option ? 'primary' : 'outline-primary'}
                             onClick={() => handleOptionChange(option)}
-                            style={{ minWidth: '120px', width: '120px', height: '40px', padding: '5px 10px' }}
+                            style={{
+                                minWidth: '120px',
+                                width: '100%', // 버튼이 전체 너비를 차지하도록 설정
+                                height: '40px',
+                                padding: '5px 10px',
+                                fontSize: '14px', // 고정된 폰트 사이즈
+                            }}
                             className="me-2"
                         >
-                            {option}
+                        {option}
                         </Button>
-                        <Badge bg="secondary">{/* 투표 수를 여기에 표시 */}</Badge>
+                        <Badge bg="secondary">0</Badge>
                     </div>
                 ))}
                 <Button variant="primary" onClick={handleVoteSubmit} className="mt-3">

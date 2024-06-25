@@ -4,7 +4,7 @@ import "../../css/FeedForm.css";
 import axios_api from '../../../../lib/axios_api';
 import CheckModal from '../Common/CheckModal';
 import navigator from '../../util/Navigator';
-import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
+// import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
 
 const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, onSave }) => {
     const [feedData, setFeedData] = useState({
@@ -35,7 +35,7 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
     const [deletedFiles, setDeletedFiles] = useState([]);
 
     // @(memberId)를 통해 리다이렉션하기
-    const renderFeedText = (feedText) => renderFeedTextWithLink(feedText);
+    // const renderFeedText = (feedText) => renderFeedTextWithLink(feedText);
 
     useEffect(() => {
         if (existingFeed) {
@@ -298,9 +298,6 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                                 required
                             />
                         </Form.Group>
-                        <div>
-                            <p style={{ whiteSpace: "pre-wrap" }}>{renderFeedText(feedData.feedText)}</p>
-                        </div>
                         <br/>
                         <Form.Group controlId="attachments" className="mb-3">
                             <Form.Label>첨부 파일</Form.Label>

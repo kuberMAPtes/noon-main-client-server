@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Form, Card, Container, Row, Col, Badge } from 'react-bootstrap';
+import { Button, Form, Card, Container, Badge } from 'react-bootstrap';
 import axios_api from '../../../../lib/axios_api';
-import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
 import CheckModal from '../Common/CheckModal';
 import navigator from '../../util/Navigator'
 import VotePreview from './VotePreview';
+// import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
 
 const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, onSave }) => {
-    const [newVote, setNewVote] = useState({ question: '', options: [''] });
     const [previewVoteShow, setPreviewVoteShow] = useState(false);
     const [feedData, setFeedData] = useState({
         title: '',
@@ -18,6 +17,11 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
         viewCnt: 0,
         writtenTime: '',
         modified: false,
+    });
+
+    const [newVote, setNewVote] = useState({ 
+        question: '', 
+        options: [''] 
     });
 
     // 태그 추가 
@@ -31,8 +35,9 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
     const { goToFeedDetail } = navigator();
     
     // @(memberId)를 통해 리다이렉션하기
-    const renderFeedText = (feedText) => renderFeedTextWithLink(feedText);
+    // const renderFeedText = (feedText) => renderFeedTextWithLink(feedText);
 
+    /* 투표 관련 */
     useEffect(() => {
         fetchVotes();
     }, []);
@@ -41,14 +46,10 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
     const handlePreviewVote = () => {
         setPreviewVoteShow(true);
     };
-
-    const handleSelectVote = (vote) => {
-        setPreviewVoteShow(false); // 선택 후에는 Modal을 닫습니다.
-    };
     
     const fetchVotes = async () => {
         try {
-            const response = await axios_api.get('/feed/getVote');
+            const response = await axios_api.get('/feed/getVote' + inputFeedId);
         } catch (error) {
             console.error('투표 목록을 가져오는 중 오류 발생:', error);
         }
@@ -83,6 +84,9 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
         setNewVote({ ...newVote, options: [...newVote.options, ''] });
     };
 
+
+    /* 피드 관련 */
+    // 변경 사항 반영
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFeedData({
@@ -111,25 +115,25 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
             console.log(addFeedData);
 
             const feedResponse = await axios_api.post('/feed/addFeed', addFeedData);
-
             const feedId = feedResponse.data;
 
-            const formData = new FormData();
-            feedData.attachments.forEach((file) => {
-                formData.append('multipartFile', file);
-            });
-            
-            if(formData && formData.getAll('multipartFile').length > 0) {
-                await axios_api.post(`/feed/addFeedAttachment/${feedId}`, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                });
+            console.log("feedId : " + feedId);
+
+            const addVoteData = {
+                feedId: feedId,
+                question: newVote.question,
+                options: newVote.options
             }
+
+            const voteResponse = await axios_api.post('/feed/addVote', addVoteData);
+            const voteData = voteResponse.data;
+
+            console.log("voteData : " + voteData);
 
             console.log('피드가 성공적으로 저장되었습니다:', feedResponse.data);
 
             goToFeedDetail(inputWriterId, feedId);
+
         } catch (error) {
             console.error('피드 저장 중 오류 발생:', error);
         }
@@ -292,7 +296,7 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
                                 <option value="PRIVATE">비공개</option>
                             </Form.Control>
                         </Form.Group>
-                        
+                        <hr/>
                         {/* 투표 생성*/}
                         <Form.Group className="mb-3">
                             <Form.Label>질문</Form.Label>
@@ -329,41 +333,6 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
                 </Card.Body>
             </Card>
 
-            {/* {selectedVote && (
-                <Card className="mt-4">
-                    <Card.Header>투표 수정</Card.Header>
-                    <Card.Body>
-                        <Form>
-                            <Form.Group className="mb-3">
-                                <Form.Label>질문</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="질문을 입력하세요"
-                                    value={selectedVote.question}
-                                    onChange={(e) => setSelectedVote({ ...selectedVote, question: e.target.value })}
-                                />
-                            </Form.Group>
-                            {selectedVote.options.map((option, index) => (
-                                <Form.Group key={index} className="mb-3">
-                                    <Form.Label>옵션 {index + 1}</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        placeholder={`옵션 ${index + 1}`}
-                                        value={option}
-                                        onChange={(e) => {
-                                            const updatedOptions = [...selectedVote.options];
-                                            updatedOptions[index] = e.target.value;
-                                            setSelectedVote({ ...selectedVote, options: updatedOptions });
-                                        }}
-                                    />
-                                </Form.Group>
-                            ))}
-                            <Button variant="primary" onClick={handleUpdateVote}>수정 완료</Button>
-                        </Form>
-                    </Card.Body>
-                </Card>
-            )} */}
-
             {/* Modal : addFeed*/}
             <CheckModal 
                 show={feedAddShow}
@@ -393,7 +362,6 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
                     question={newVote.question}
                     options={newVote.options}
                     onSelectVote={(selectedOption) => {
-                        handleSelectVote({ question: newVote.question, selectedOption });
                         setPreviewVoteShow(false); // 투표가 끝나면 Modal 닫기
                     }}
                 />
