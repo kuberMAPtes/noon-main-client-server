@@ -22,6 +22,8 @@ const axiosInstance = axios.create({
 
 //   }, response => response);
 
+let refreshingAvailabe = true;
+
 axiosInstance.interceptors.response.use((response) => {
   console.log(response);
   return response;
@@ -29,16 +31,21 @@ axiosInstance.interceptors.response.use((response) => {
   console.log(error);
   if (error.response && error.response.status === 403) {
     console.log("403 Forbidden");
-    try {
+    if (refreshingAvailabe) {
+      refreshingAvailabe = false;
+      try {
         await axios.get(`${process.env.REACT_APP_API_BASE_URL}/member/refresh`, {
           withCredentials: true
         });
         const originalRequestConfig = error.config;
+        refreshingAvailabe = true;
         return axiosInstance.request(originalRequestConfig);
-    } catch (err) {
-        alert("로그인이 필요합니다.");
-        window.location.href = "/member/getAuthMain";
-        return Promise.reject(error);
+      } catch (err) {
+          alert("로그인이 필요합니다.");
+          window.location.href = "/member/getAuthMain";
+          refreshingAvailabe = true;
+          return Promise.reject(error);
+      }
     }
   }
   return Promise.reject(error);
