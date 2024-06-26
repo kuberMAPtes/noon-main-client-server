@@ -25,6 +25,7 @@ const SlideUpModal = ({ show, onHide }) => {
 
     const feedFormURL = `/feed/form?memberId=${writerId}&buildingId=${buildingId}`;
     const voteFormURL = `/feed/voteForm?memberId=${writerId}&buildingId=${buildingId}`;
+    const megaphoneFormURL = `/feed/megaphoneForm?memberId=${writerId}&buildingId=${buildingId}`;
 
     console.log("SlideUpModal writerId : ", writerId, "buildingId : ", buildingId);  // 디버깅 로그
     
@@ -49,7 +50,7 @@ const SlideUpModal = ({ show, onHide }) => {
                         <div>투표</div>
                     </Button>
                      {/* 미정 */}
-                    <Button variant="outline-primary" onClick={() => handleLinkClick(feedFormURL)}>
+                    <Button variant="outline-primary" onClick={() => handleLinkClick(megaphoneFormURL)}>
                         <FaBullhorn size={50} />
                         <div>확성기</div>
                     </Button>
