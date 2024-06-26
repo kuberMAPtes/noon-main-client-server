@@ -10,9 +10,7 @@ import {
   CardBody,
   CardFooter,
   CardTitle,
-  FormGroup,
-  Form,
-  Input,
+  CardText,
   Row,
   Col,
 } from "reactstrap";
@@ -43,6 +41,9 @@ const BuildingInfo = () => {
   // 구독자 수
   const [subscriber, setSubscriber] = useState(0);
 
+  // 구독자 목록
+  const [subscribers, setSubscribers] = useState([]);
+
   // 건물 정보 가져오기
   const getBuildingProfile = async () => {
     const response = await axiosInstance.get(`/buildingProfile/getBuildingProfile`, {
@@ -52,13 +53,22 @@ const BuildingInfo = () => {
     console.log("건물 정보: " + profile);
   };
 
-  // 구독자 수 가져오기
+  // 구독자 수 가져오기 : Deprecated
   const getSubscriberCnt = async () => {
     const response = await axiosInstance.get(`/buildingProfile/getSubscriberCnt`, {
       params: { buildingId: buildingId }
     });
     setSubscriber(response.data);
     console.log("구독자 수: " + response.data);
+  };
+
+  //구독자 목록 가져오기 
+  const getSubscribers = async () => {
+    const response = await axiosInstance.get(`/buildingProfile/getSubscribers`, {
+      params: { buildingId: buildingId }
+    });
+    setSubscribers(response.data);
+    console.log("구독자 목록: " + response.data);
   };
 
   // 회원의 구독여부 체크
@@ -108,13 +118,12 @@ const BuildingInfo = () => {
       console.error("REACT_APP_WIKI_BASE_URL is not defined");
       return;
     }
-    const url = `${baseUrl}sample`; // 테스트를 위해 sample로. 추후 수정 `${baseUrl}${buildingId}`
-    window.location.href = url;
+    
+    navigate('../getBuildingWiki/'+buildingId);
+    
   };
 
-
    // 피드 요약 결과 가져오기
-   /* 테스트를 위해 스프링 스케줄러의 역할을 이것으로 대신함 */
    const getSummary = async () => {
     const response = await axiosInstance.get(`/buildingProfile/getSummary`, {
       params: { buildingId : buildingId }
@@ -131,46 +140,58 @@ const BuildingInfo = () => {
   useEffect(() => {
     if (buildingId) {
       getBuildingProfile();
-      getSubscriberCnt();
+      getSubscriberCnt(); //Deprecated
+      getSubscribers();
       getSubscriptionStatus();
     }
   }, [buildingId]);
 
   useEffect(() => {
-    getSubscriberCnt();
+    getSubscriberCnt(); //Deprecated
+    getSubscribers();
   }, [subscription]);
 
-  useEffect(() => {
+  useEffect(() => {}, [profile]);
 
-  }, [profile]);
+  const [clickedButton, setClickedButton] = useState(null);
+
+  const handleButtonClick = (buttonName) => {
+    setClickedButton(buttonName);
+    setTimeout(() => setClickedButton(null), 200);
+  };
 
   return (
-    <>
+    <>  
       <div className="content">
-      <Row style={{ width: '103%', height: '90%' }} className="justify-content-center align-items-center">
+        <Row style={ {margin: "0 auto",marginTop:"20px", width: '95%', height: '90%' }} className="justify-content-center align-items-center">
           <Col md="4">
             <Card className="card-user">
               <div className="image"></div>
-              <CardBody>
-                <div className="author">
-                  <h5 className="title">{profile.buildingName}</h5>
-                  <p className="description">{profile.roadAddr}</p>
-                </div>
-                <p className="description text-center">
-                  {profile.feedAiSummary}
-                </p>
 
-                {/* 테스트를 위해 스프링 스케줄러의 역할을 이것으로 대신함 */}
-                <Button
-                  block
-                  style={{ backgroundColor: '#9BAAF8', borderColor: '#9BAAF8' }}
-                  onClick={getSummary}
-                >
-                  피드 요약 보기
-                </Button>
+              <CardTitle>{profile.buildingName}</CardTitle>
+              <CardText>{profile.roadAddr}</CardText>
 
+              <Card style={{ width: "80%", margin: "0 auto", marginBottom: '20px'}}>
+                <CardBody>
+                  <p className="description text-center">
+                    {profile.feedAiSummary}
+                  </p>
+                  <Button
+                    block
+                    style={{
+                      backgroundColor: clickedButton === 'summary' ? '#f3f0ff' : '#9BAAF8',
+                      borderColor: '#9BAAF8'
+                    }}
+                    onClick={() => {
+                      handleButtonClick('summary');
+                      getSummary();
+                    }}
+                  >
+                    피드 요약
+                  </Button>
+                </CardBody>
+              </Card>
 
-              </CardBody>
               <CardFooter>
                 <hr />
                 <div className="button-container">
@@ -181,26 +202,71 @@ const BuildingInfo = () => {
                         <small>구독자 수</small>
                       </h5>
                     </Col>
-                    <Col className="ml-auto mr-auto" lg="4" md="6" xs="6">
+                    <Col className="ml-auto mr-auto" lg="3" md="6" xs="6">
                       <Button
                         block
-                        style={{ backgroundColor: '#9BAAF8', borderColor: '#9BAAF8' }}
-                        onClick={() => addOrDeleteSubscription()}
+                        style={{
+                          backgroundColor: clickedButton === 'subscribe' ? '#f3f0ff' : '#9BAAF8',
+                          borderColor: '#9BAAF8'
+                        }}
+                        onClick={() => {
+                          handleButtonClick('subscribe');
+                          addOrDeleteSubscription();
+                        }}
                       >
                         {subscription ? '구독취소' : '구독'}
                       </Button>
                     </Col>
-                    <Col md="4">
-                      <Button
-                        block
-                        style={{ backgroundColor: '#9BAAF8', borderColor: '#9BAAF8' }}
-                        onClick={getWikipage}
-                      >
-                        건물 위키 보기
-                      </Button>
-                    </Col>
                   </Row>
+                  <div style={{ overflowX: 'auto', whiteSpace: 'nowrap', marginTop: '10px' }}>
+                    {subscribers.map((subscriber, index) => (
+                      <div 
+                        key={subscriber.memberId} 
+                        style={{ 
+                          display: 'inline-block', 
+                          textAlign: 'center', 
+                          marginRight: '10px', 
+                          border: '1px solid #ccc', 
+                          padding: '10px', 
+                          borderRadius: '5px'
+                        }}
+                      >
+                        <img
+                          src={subscriber.profilePhotoUrl}
+                          alt={subscriber.nickname}
+                          style={{
+                            borderRadius: '50%',
+                            width: '50px',
+                            height: '50px',
+                            display: 'block',
+                            margin: '0 auto',
+                          }}
+                        />
+                        <p style={{ margin: '5px 0 0 0' }}>{subscriber.nickname}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
+              </CardFooter>
+            </Card>
+
+            <Card style={{ width: "95%", margin: "0 auto", marginBottom: '20px'}}>
+              <CardTitle tag="h5">WIKI</CardTitle>
+              <CardText>건물 정보를 더 자세히 알아보세요!</CardText>
+              <CardFooter>
+                <Button
+                  block
+                  style={{
+                    backgroundColor: clickedButton === 'wiki' ? '#f3f0ff' : '#9BAAF8',
+                    borderColor: '#9BAAF8'
+                  }}
+                  onClick={() => {
+                    handleButtonClick('wiki');
+                    getWikipage();
+                  }}
+                >
+                  위키 보러가기
+                </Button>
               </CardFooter>
             </Card>
           </Col>
@@ -208,6 +274,20 @@ const BuildingInfo = () => {
       </div>
     </>
   );
+};
+
+const styles = {
+  subscriberPhotos: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: '10px',
+  },
+  profilePhoto: {
+    width: '50px',
+    height: '50px',
+    borderRadius: '50%',
+    margin: '0 5px',
+  },
 };
 
 export default BuildingInfo;

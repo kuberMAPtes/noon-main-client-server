@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../../../lib/axiosInstance';
 import {
   Card,
@@ -15,6 +15,7 @@ const ChatroomList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const { buildingId } = useParams();
   const [chatroomList, setChatroomList] = useState([]);
+  const navigate = useNavigate();
 
   // 건물 채팅방 목록 가져오기
   const getChatroomList = async () => {
@@ -29,37 +30,45 @@ const ChatroomList = () => {
     }
   };
 
+  const handleChatroom = async (chatroomID) => {
+    navigate('../../chat/chatroom?chatroomID='+chatroomID)
+  }
+
   useEffect(() => {
     getChatroomList();
   }, [buildingId]);
 
   return (
     <div className="chatroom-list">
-      <Row>
+      <Row style={{ marginTop: '30px'}}>
         <Col md="12">
-          <Card>
+          <Card style={{ marginBottom: '80px', margin: "0 auto",width:'90%'}}>
             <CardHeader>
               <CardTitle>채팅방 목록</CardTitle>
             </CardHeader>
-            <CardBody>
+
+            {chatroomList.map((chatroom) => (
+            <Card>
+              <CardBody>
               <Table responsive>
-                <thead className="text-primary">
-                  <tr>
-                    <th>채팅방 이름&nbsp;&emsp;&emsp;&emsp;&emsp;</th>
-                    <th>입장 최소 다정온도</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {chatroomList.map((chatroom) => (
-                    <tr key={chatroom.chatroomId}>
-                      <td>{chatroom.chatroomName}</td>
-                      <td>{chatroom.chatroomMinTemp}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-            </CardBody>
-          </Card>
+                  <tbody >
+                      <tr key={chatroom.chatroomID} onClick={()=>handleChatroom(chatroom.chatroomID)}>
+                        <td><b style={{ fontSize: '20px'}}>{chatroom.chatroomName}</b></td>
+                        <td style={{  textAlign: 'right' }}> 최소 온도&nbsp;<b style={{ fontSize: '25px'}}>&nbsp;{chatroom.chatroomMinTemp}</b></td>
+                      </tr>
+                  </tbody>
+                  </Table>
+              </CardBody>
+            </Card>
+            ))}
+
+          </Card >
+          
+
+          
+
+
+
         </Col>
       </Row>
     </div>
