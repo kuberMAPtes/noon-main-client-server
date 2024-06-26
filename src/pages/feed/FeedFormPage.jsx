@@ -61,8 +61,6 @@ const FeedFormPage = () => {
                     <SlideUpModal 
                         show={showModal} 
                         onHide={() => setShowModal(false)} 
-                        memberId={writerId}  
-                        buildingId={buildingId}
                     />
                 </div>
             )}
