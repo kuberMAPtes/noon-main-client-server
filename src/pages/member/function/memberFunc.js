@@ -47,20 +47,20 @@ export const clearAllCookies = () => {
 };
 
 export const renderLoginError = (validationError, loginError) => {
-    if (!validationError && loginError) {
-      if (typeof loginError === "string") {
-        return loginError;
-      } else {
-        if (loginError.loginWay && loginError.loginWay !== "normal") {
-          return "소셜 로그인 계정으로는 일반 로그인을 할 수 없습니다.";
-        }
-        return (
-          <>
-            {loginError.message}
-            {loginError.info && <div>{loginError.info}</div>}
-          </>
-        );
-      }
+
+  if(loginError?.message === "로그인 시도 횟수 초과 30초간 잠금상태입니다."){
+    return loginError?.message;
+  }else {
+      // if (typeof loginError === "string") {
+      //   return loginError;
+      // } else {
+      //   return (
+      //     <>
+      //       {loginError.message}
+      //       {loginError.info && <div>{loginError.info}</div>}
+      //     </>
+      //   );
+      // }
+    return validationError;
     }
-    return null;
   };

@@ -10,37 +10,43 @@ const BlockMemberRelationshipButton = ({
   fromId,
   toId
 }) => {
-
   const [relationshipFourType, setrelationshipFourType] = useState("");
+  
+  const fetchMemberRelationship = useCallback(async() => {
+    const result = await getBlockMemberRelationship(fromId, toId);
+    // alert("result : " + result);
+    // result가 NONE FOLLOWER FOLLOWING MUTUAL
+    if(result==="NONE"){
+      setrelationshipFourType("NONE");
+    }else if(result==="BLOCKER"){
+      setrelationshipFourType("BLOCKER");
+    }else if(result==="BLOCKING"){
+      setrelationshipFourType("BLOCKING");
+    }else if(result==="MUTUAL"){
+      setrelationshipFourType("MUTUAL");
+    }
+  },[fromId,toId]);
 
   useEffect(()=>{
-    const fetchMemberRelationship = async() => {
-      const result = await getBlockMemberRelationship(fromId, toId);
-
-      // alert("result : " + result);
-      // result가 NONE FOLLOWER FOLLOWING MUTUAL
-      if(result==="NONE"){
-        setrelationshipFourType("NONE");
-      }else if(result==="BLOCKER"){
-        setrelationshipFourType("BLOCKER");
-      }else if(result==="BLOCKING"){
-        setrelationshipFourType("BLOCKING");
-      }else if(result==="MUTUAL"){
-        setrelationshipFourType("MUTUAL");
-      }
-    }
     fetchMemberRelationship();
-  },[fromId, toId]);
-
-  const memoHandleBlockCancelClickSimple = useCallback(
-    (otherId) => handleBlockCancelClickSimple(fromId, otherId),
-    [fromId]
-  );
+  },[fromId, toId, fetchMemberRelationship]);
 
   const memoHandleBlockClickSimple = useCallback(
-    (otherId) => handleBlockClickSimple(fromId, otherId),
-    [fromId]
+    async (otherId) => {
+      handleBlockClickSimple(fromId, otherId);
+      fetchMemberRelationship(); // 상태를 업데이트하여 즉시 반영
+    },
+    [fromId,fetchMemberRelationship]
   );
+
+  const memoHandleBlockCancelClickSimple = useCallback(
+    async (otherId) => {
+      await handleBlockCancelClickSimple(fromId, otherId);
+      fetchMemberRelationship(); // 상태를 업데이트하여 즉시 반영
+    },
+    [fromId,fetchMemberRelationship]
+  );
+
   
 
   let blockMemberRelationshipButton = null;
@@ -50,7 +56,7 @@ const BlockMemberRelationshipButton = ({
         <NormalButton
           size="sm"
           className={module.buttonColorMutual}
-          style={{ width: "100%",margin:"0px 0px 0px 0px",padding:"0px",textAlign:"left" }}
+          style={{ width: "100%",margin:"20px 0px 20px 0px",padding:"0px",textAlign:"left" }}
           onClick={()=>memoHandleBlockCancelClickSimple(toId)}
         >
           <span style={{paddingRight:"20%"}}></span><MdOutlineReportGmailerrorred/><span style={{paddingLeft:"20%"}}>차단해제</span>

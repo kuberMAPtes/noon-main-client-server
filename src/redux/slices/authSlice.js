@@ -38,7 +38,7 @@ export const login = createAsyncThunk(
         // 여기서 회원가입도 같이 함.
         console.log("구글 로그인 처리중 :: loginData:", loginData);
         // alert("구글 로그인 처리중 :: loginData:" + JSON.stringify(loginData?.member));
-        alert("로그인 되었습니다.");
+        // alert("로그인 되었습니다.");
         const info = await googleLogin(loginData?.member); //여기 member에는 authorizeCode도 있음
 
         console.log("구글 로그인 처리중 response:", info);
@@ -48,9 +48,17 @@ export const login = createAsyncThunk(
 
         // 일반 로그인 처리
         // 일반 로그인은 회원가입은 같이 하지 않는다.
-        const info = await Login(loginData?.member);
-        console.log("로그인처리중 response:", info);
-        returnMember = info;
+        let data = "";
+        if(loginData?.member){
+          data = await Login(loginData?.member);
+        }
+        console.log("로그인처리중 response:", data);
+        if(data.message === "로그인 업무"){
+        returnMember = data.info;
+        }else{
+          alert("authSlice에서 message :: "+data.message);
+          return thunkAPI.rejectWithValue({message : data.message});
+        }
         //alert("returnMember 로그인합니다" + returnMember);
         
       }
@@ -64,15 +72,13 @@ export const login = createAsyncThunk(
         Cookies.remove("Member-ID"); //로그인 성공했으면 쿠키 삭제 카카오로그인시 사용
         Cookies.remove("IV"); //로그인 성공했으면 쿠키 삭제 카카오로그인시 사용
 
-        const result = { member: returnMember, authorization: true };
-
         // setTokenCookie(returnMember);
 
         if (!(loginData?.loginWay === "signUp")) {
           //alert("네비게이트메인페이지");
           navigateMainPage(returnMember?.memberId, navigate);
         }
-        return result;
+        return { member: returnMember, authorization: true };
       }
       //잘못된경우
       console.log("56번째줄authSlice member" + returnMember);
@@ -166,6 +172,7 @@ const authSlice = createSlice({
         state.authorization = true;
         console.log("State.authorization", action.payload.authorization);
         state.loginStatus = "succeeded";
+        state.loginError = null;
         state.member = action.payload.member;
       })
       .addCase(login.rejected, (state, action) => {

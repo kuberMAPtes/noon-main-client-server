@@ -7,14 +7,14 @@ const useReadOnlyInput = (initialValue,isNicknameValid,memberId) => {
   const [value, setValue] = useState(initialValue);
   const inputRef = useRef(null);
 
-  const handleDoubleClick = () => {
+  const handleClick = () => {
     setIsReadOnly(false);
     inputRef.current.focus();
   };
 
   const handleBlur = (originalValue) => async (e) => {
     setIsReadOnly(true);
-    alert(e.target.value+"@@ "+originalValue+" @@"+isNicknameValid+"@@ "+memberId);
+    // alert(e.target.value+"@@ "+originalValue+" @@"+isNicknameValid+"@@ "+memberId);
     if (e.target.value !== originalValue && e.target.value !== '' && isNicknameValid === true) {
       await updateMember({ nickname: e.target.value, memberId: memberId})
     }
@@ -25,7 +25,7 @@ const useReadOnlyInput = (initialValue,isNicknameValid,memberId) => {
     value,
     isReadOnly,
     inputRef,
-    handleDoubleClick,
+    handleClick,
     handleBlur,
   };
 };
