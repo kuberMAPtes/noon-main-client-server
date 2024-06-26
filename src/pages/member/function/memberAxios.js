@@ -1,4 +1,5 @@
 import axiosInstance from "../../../lib/axiosInstance";
+import profilePhotoGetter from "./profilePhotoGetter";
 
 // 인증번호 전송
 export const sendAuthentificationNumber = async (phoneNumber) => {
@@ -362,7 +363,22 @@ export const getMemberProfile = async (fromId, toId) => {
       toId,
     });
     console.log("getMemberProfile 응답:", response.data);
-    return response.data.info;
+    const profile = response.data.info;
+    // if (memberProfile.profilePhotoUrl && memberProfile.profilePhotoUrl.includes("https://noon-storage-bucket")) {
+    if(profile.profilePhotoUrl && profile.profilePhotoUrl.includes("https://noon-storage-bucket")){
+      
+      const getProfilePhotoUrl = async () => {
+        try {
+          const {url} = await profilePhotoGetter(toId);
+          profile.profilePhotoUrl = url;
+        } catch(error){
+          console.error("getProfilePhotoUrl error:", error);
+        }
+      }
+      getProfilePhotoUrl();
+    }
+
+    return profile;
   } catch (error) {
     console.error("getMemberProfile error:", error);
     return null

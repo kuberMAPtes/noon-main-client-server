@@ -11,7 +11,7 @@ import UseProfile from "./component/profile/UseProfile";
 import module from "../member/component/css/profile.module.css";
 
 const GetMemberProfile = () => {
-  const { profile, toId, fromId, initialPage, isDenied } = UseProfile();
+  const { profile,setProfile, toId, fromId, initialPage, isDenied } = UseProfile();
   const { feeds, hasMore, setPage } = UseProfileFetchFeeds(
     profile.feedDtoList,
     toId,
@@ -59,6 +59,7 @@ const GetMemberProfile = () => {
                 toId={toId}
                 fromId={fromId}
                 profile={profile}
+                setProfile={setProfile}
                 feeds={feeds}
                 buildingSubscriptionCount={buildingSubscriptionCount}
                 followerCount={followerCount}

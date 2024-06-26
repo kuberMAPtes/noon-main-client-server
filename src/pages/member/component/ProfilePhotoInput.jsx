@@ -8,7 +8,7 @@ const ProfilePhotoInput = ({ profile, defaultPhotoUrl, handleImageUpload }) => {
     console.log("프로필 사진 확인", JSON.stringify(profile.profilePhotoUrl));
     // alert("프로필 사진 확인" + JSON.stringify(profile.profilePhotoUrl));
     setPreview(profile.profilePhotoUrl || defaultPhotoUrl);
-  }, [profile.profilePhotoUrl,setPreview]);
+  }, [profile.profilePhotoUrl]);
 
   const handleImageError = (event) => {
     event.target.src = defaultPhotoUrl;
