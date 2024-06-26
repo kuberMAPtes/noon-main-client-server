@@ -6,6 +6,8 @@ import $ from "jquery";
 import Footer from "../../../components/common/Footer";
 import styles from "../../../assets/css/module/building/wiki/EditBuildingWiki.module.css";
 import { Button } from "react-bootstrap";
+import { IoNewspaperOutline } from "react-icons/io5";
+import { IoPaperPlane } from "react-icons/io5";
 
 export default function EditBuildingWiki() {
   const { buildingId } = useParams();
@@ -56,9 +58,30 @@ export default function EditBuildingWiki() {
   }, [content, textareaRef.current]);
 
   return (
-    <div className="container">
+    <div className={styles.container}>
+      <div className={styles.btnContainer}>
+        <IoNewspaperOutline
+            className={styles.btn}
+            onClick={() => {
+              navigate(`/getBuildingWiki/${buildingId}`);
+            }}  
+        />
+        <IoPaperPlane
+            className={styles.btn}
+            onClick={() => {
+              axios_api.post(`${BUILDING_WIKI_BASE_PATH}/editPage/${buildingId}`, content)
+                  .then((response) => {
+                    alert("변경사항이 저장되었습니다.");
+                    navigate(`/getBuildingWiki/${buildingId}`);
+                  })
+                  .catch((err) => {
+                    console.error(err);
+                  });
+            }}
+        />
+      </div>
       <div id="wiki-edit-container" className={styles.wikiEditContainer}>
-        <h2>{buildingName}</h2>
+        <h2 className={styles.headTitle}>{buildingName}</h2>
         <textarea
             className={styles.wikiTextArea}
             name="wpTextbox1"
@@ -68,16 +91,6 @@ export default function EditBuildingWiki() {
               setContent({...content, wpTextbox1: e.target.value});
             }} 
         />
-        <Button onClick={() => {
-          axios_api.post(`${BUILDING_WIKI_BASE_PATH}/editPage/${buildingId}`, content)
-              .then((response) => {
-                alert("변경사항이 저장되었습니다.");
-                navigate(-1);
-              })
-              .catch((err) => {
-                console.error(err);
-              });
-        }}>변경사항 저장</Button>
       </div>
       <Footer />
     </div>

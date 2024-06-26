@@ -58,7 +58,7 @@
   top: 12px;
   display: flex;
   flex-direction: row;
-  gap: 6px;
+  gap: 12px;
 }
 
 .btn {
