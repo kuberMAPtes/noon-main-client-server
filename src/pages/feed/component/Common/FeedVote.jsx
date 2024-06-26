@@ -11,18 +11,14 @@ const VotePreview = ({ feedId }) => {
     const [selectedOption, setSelectedOption] = useState('');
 
     useEffect(() => {
-        // 여기서 feedId를 이용하여 서버에서 투표 데이터를 가져오는 로직을 구현해야 함
-        // 예를 들어, axios를 사용하여 비동기로 데이터를 가져오는 예제를 보여드리겠습니다.
         const fetchVoteData = async () => {
             try {
-                // axios를 사용하여 특정 feedId에 대한 투표 데이터를 가져온다고 가정
                 const response = await axios_api.get(`/api/vote/${feedId}`);
                 const { question, options } = response.data;
                 setQuestion(question);
                 setOptions(options);
             } catch (error) {
                 console.error('투표 데이터를 가져오는 중 오류 발생:', error);
-                // 에러 처리 로직을 추가할 수 있음
             }
         };
 
@@ -35,7 +31,6 @@ const VotePreview = ({ feedId }) => {
 
     const handleVoteSubmit = () => {
         if (selectedOption) {
-            // 선택한 옵션 처리 로직을 여기에 추가
             console.log('선택한 옵션:', selectedOption);
         } else {
             alert('옵션을 선택해 주세요.');
