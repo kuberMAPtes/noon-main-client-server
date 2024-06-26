@@ -224,6 +224,7 @@ const AppRoutes = () => {
             {/* <Route path="test" element={<Test/>}/> */}
         </Route>
         <Route path="/map" element={<BMap />} />
+        <Route path="/map/:ownerIdOfMapInfo" element={<BMap />} />
         <Route path="/search" element={<Search />} />
         <Route path="/getBuildingProfile/:buildingId" element={<GetBuilding />} />
         <Route path="/getBuildingWiki/:buildingId" element={<GetBuildingWiki />} />
