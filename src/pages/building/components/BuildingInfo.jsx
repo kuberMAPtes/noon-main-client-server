@@ -112,6 +112,22 @@ const BuildingInfo = () => {
     window.location.href = url;
   };
 
+
+   // 피드 요약 결과 가져오기
+   /* 테스트를 위해 스프링 스케줄러의 역할을 이것으로 대신함 */
+   const getSummary = async () => {
+    const response = await axiosInstance.get(`/buildingProfile/getSummary`, {
+      params: { buildingId : buildingId }
+    });
+    console.log("피드 요약 결과: ", response.data);
+
+    setProfile(prevProfile => ({
+      ...prevProfile,
+      feedAiSummary: response.data
+    }));
+
+  };
+
   useEffect(() => {
     if (buildingId) {
       getBuildingProfile();
@@ -124,10 +140,14 @@ const BuildingInfo = () => {
     getSubscriberCnt();
   }, [subscription]);
 
+  useEffect(() => {
+
+  }, [profile]);
+
   return (
     <>
       <div className="content">
-        <Row>
+      <Row style={{ width: '103%', height: '90%' }} className="justify-content-center align-items-center">
           <Col md="4">
             <Card className="card-user">
               <div className="image"></div>
@@ -139,6 +159,17 @@ const BuildingInfo = () => {
                 <p className="description text-center">
                   {profile.feedAiSummary}
                 </p>
+
+                {/* 테스트를 위해 스프링 스케줄러의 역할을 이것으로 대신함 */}
+                <Button
+                  block
+                  style={{ backgroundColor: '#9BAAF8', borderColor: '#9BAAF8' }}
+                  onClick={getSummary}
+                >
+                  피드 요약 보기
+                </Button>
+
+
               </CardBody>
               <CardFooter>
                 <hr />

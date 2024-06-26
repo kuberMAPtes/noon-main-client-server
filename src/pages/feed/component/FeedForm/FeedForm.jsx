@@ -3,7 +3,8 @@ import { Form, Button, Card, ListGroup, Container, Badge } from 'react-bootstrap
 import "../../css/FeedForm.css";
 import axios_api from '../../../../lib/axios_api';
 import CheckModal from '../Common/CheckModal';
-import useNavigator from '../../util/Navigator';
+import navigator from '../../util/Navigator';
+// import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
 
 const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, onSave }) => {
     const [feedData, setFeedData] = useState({
@@ -19,6 +20,8 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
         publicRange: 'PUBLIC',
         attachments: []
     });
+
+    // 태그 추가 
     const [tagInput, setTagInput] = useState('');
 
     // Feed Add, Update Modal 관련
@@ -26,11 +29,13 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
     const [feedUpdateShow, setFeedUpdateShow] = useState(false);
 
     // navigator
-    const { goToFeedDetail } = useNavigator();
-
+    const { goToFeedDetail } = navigator();
 
     // 첨부파일을 삭제할 파일 목록
     const [deletedFiles, setDeletedFiles] = useState([]);
+
+    // @(memberId)를 통해 리다이렉션하기
+    // const renderFeedText = (feedText) => renderFeedTextWithLink(feedText);
 
     useEffect(() => {
         if (existingFeed) {
@@ -186,6 +191,7 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
         }
     }
 
+    // 모달 창 띄우기
     const handleModalConfirm = async () => {
         try {
             if (inputFeedId) {
@@ -273,6 +279,7 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                             <Form.Control
                                 type="text"
                                 name="title"
+                                placeholder="제목을 입력하세요"
                                 value={feedData.title}
                                 onChange={handleChange}
                                 required
@@ -285,12 +292,13 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                                 as="textarea"
                                 name="feedText"
                                 rows={3}
+                                placeholder="내용을 입력하세요"
                                 value={feedData.feedText}
                                 onChange={handleChange}
                                 required
                             />
                         </Form.Group>
-
+                        <br/>
                         <Form.Group controlId="attachments" className="mb-3">
                             <Form.Label>첨부 파일</Form.Label>
                             <Form.Control

@@ -4,17 +4,14 @@ import ImageGrid from './components/OneImage';
 import '../CustomerSupport/css/image-grid.css';
 import axiosInstance from '../../lib/axiosInstance';
 import Footer from '../../components/common/Footer';
-
-
-
+import LoadingModal from './components/LoadingModal';
+import '../building/css/tab-navigation.css';
 
 const getImageList = async (currentPage, filterTab, setAttachmentList, setLoading) => {
-
   setLoading(true);
   try {
-    
     const response = await axiosInstance.get(`/customersupport/${filterTab === "bad" ? 'getFilteredListByAI' : 'getImageList'}`, {
-      params: { currentPage: currentPage }  
+      params: { currentPage: currentPage }
     });
     
     console.log("attachmentList : " + JSON.stringify(response.data));
@@ -26,21 +23,39 @@ const getImageList = async (currentPage, filterTab, setAttachmentList, setLoadin
   }
 }
 
-
-
 const ListImages = () => {
-    const [currentPage, setCurrentPage] = useState(1);
-    const [filterTab, setFilterTab] = useState("all");
-    const [attachmentList, setAttachmentList] = useState([]);
-    const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [filterTab, setFilterTab] = useState("all");
+  const [attachmentList, setAttachmentList] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [gridClass, setGridClass] = useState('grid-2-columns'); // 기본 2열 그리드
+  const [endOfImages, setEndOfImages] = useState(false);
 
-    const handleTabChange = (tab) => {
-      setFilterTab(tab);
-    };
+  const handleTabChange = (tab) => {
+    setFilterTab(tab);
+  };
+
+  const handleGridChange = (gridType) => {
+    setGridClass(gridType);
+  };
+
+  const handleGoUp = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleScroll = () => {
+    const bottom = Math.ceil(window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight;
+    setEndOfImages(bottom);
+  };
 
   useEffect(() => {
     getImageList(currentPage, filterTab, setAttachmentList, setLoading);
   }, [filterTab]);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
     <div>
@@ -50,27 +65,33 @@ const ListImages = () => {
           style={{ ...styles.tabButton, ...(filterTab === "all" ? styles.activeTab : {}) }}
           onClick={() => handleTabChange("all")}
         >
-          <span role="img" aria-label="all">📸</span>
+          <span role="img" aria-label="all"><i style={{ color: "#9BAAF8" }} className="fa-solid fa-images"></i>&nbsp;ALL</span>
         </button>
         <button
           style={{ ...styles.tabButton, ...(filterTab === "bad" ? styles.activeTab : {}) }}
           onClick={() => handleTabChange("bad")}
         >
-          <span role="img" aria-label="bad">⚠️</span>
+          <span role="img" aria-label="bad"><i style={{ color: "#9BAAF8" }} className="fa-solid fa-triangle-exclamation"></i>&nbsp;BAD</span>
         </button>
       </div>
       <div style={styles.grid}>
         {loading ? (
-          <div style={styles.loading}>이미지 로딩 중...</div> 
+          <LoadingModal show={loading} />
         ) : (
-          <ImageGrid attachmentList={attachmentList} />
+          <div className={`image-grid-container ${gridClass}`}>
+            <ImageGrid attachmentList={attachmentList} />
+          </div>
         )}
       </div>
-    
-      <Footer/>
-    </div>
+      {endOfImages && (
+        <div style={styles.endMessage}>End of images</div>
+      )}
 
-    
+      <button className="create-button" onClick={handleGoUp}>
+        <i className="fa fa-arrow-up"></i>
+      </button>
+      <Footer />
+    </div>
   );
 };
 
@@ -79,26 +100,34 @@ const styles = {
     display: 'flex',
     justifyContent: 'space-around',
     width: '100%',
-    /*marginBottom: '10px',*/
   },
   tabButton: {
     backgroundColor: 'transparent',
     border: 'none',
-    color: '#fff',
+    color: '#030722',
     fontSize: '20px',
   },
   activeTab: {
-    borderBottom: '2.5px solid #030722',
-    width: '25%', 
+    borderBottom: '3px solid #D9D9D9',
+    width: '35%', 
   },
   grid: {
-    width: '100%',
+    width: '92%',
+    margin: '0 auto', 
+    marginBottom: '120px', 
   },
   loading: {
-    color: '#111',
+    color: '#D9D9D9',
     fontSize: '20px',
     textAlign: 'center',
   },
+  endMessage: {
+    textAlign: 'center',
+    color: '#030722',
+    fontSize: '18px',
+    padding: '0px',
+    marginBottom: '0px'
+  }
 };
 
 export default ListImages;

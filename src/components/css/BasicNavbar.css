@@ -1,0 +1,11 @@
+.navbar {
+    background-color: #9BAAF8 !important; /* 배경색 */
+}
+  
+.navbar-brand {
+    color: #030722 !important; /* Navbar.Brand 글자색 */
+}
+
+.nav-link {
+    color: #030722 !important; /* Nav.Link 글자색 */
+}

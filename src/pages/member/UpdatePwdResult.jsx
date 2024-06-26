@@ -2,6 +2,8 @@ import React from "react";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "../../assets/css/module/member/base.module.css";
+import {motion} from "framer-motion";
+import styles from "../../assets/css/module/member/base.module.css";
 const UpdatePwdResult = () => {
   const { result } = useParams();
   const navigate = useNavigate();
@@ -20,16 +22,24 @@ const UpdatePwdResult = () => {
           {result === "fail" && (
             <h1 className="mb-4">비밀번호 변경에 실패하셨습니다.</h1>
           )}
-          <Button
-            variant="info"
-            type="button"
-            className="typicalButtonColor w-50"
-            onClick={() => {
-              navigate("/member/loginForm");
-            }}
-          >
-            로그인 하러 가기
-          </Button>
+              <div className="mt-4">
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: [0, 1, 0] }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                >
+                  <Link to="/member/loginForm">
+                    <Button className={styles.typicalButtonColor}>
+                      <strong>로그인 하기</strong>
+                    </Button>
+                  </Link>
+                </motion.div>
+              </div>
+          
         </Col>
       </Row>
     </Container>

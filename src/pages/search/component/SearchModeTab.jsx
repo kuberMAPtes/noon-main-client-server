@@ -1,7 +1,6 @@
 import "../../../assets/css/module/search/component/SearchModeTab.css";
 
 export const modes = {
-  INTEGRATION: 1,
   FEED: 2,
   BUILDING: 3,
   CHATROOM: 4,
@@ -9,7 +8,6 @@ export const modes = {
 };
 
 const tabTitles = {
-  1: "통합",
   2: "피드",
   3: "건물",
   4: "채팅방",

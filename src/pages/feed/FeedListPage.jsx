@@ -9,6 +9,7 @@ import Loading from './component/FeedList/FeedLoading';
 import './css/FeedList.css';
 import axios_api from '../../lib/axios_api';
 import { useSelector } from 'react-redux';
+import FeedDropdown from './component/FeedList/FeedDropdown';
 
 /**
  * 회원 아이디를 통해서 개인으로 관련이 있는 피드 목록을 가져온다.

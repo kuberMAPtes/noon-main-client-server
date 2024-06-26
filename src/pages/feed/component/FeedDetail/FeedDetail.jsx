@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../css/FeedDetail.css';
 
 import { Image, Badge, Button, Card, CardBody, CardSubtitle, CardText, CardTitle, Form, ListGroup, ListGroupItem } from 'react-bootstrap';
@@ -9,8 +9,12 @@ import { MdDelete } from "react-icons/md";
 import LikedUsersList from './LikedUsersList';
 import axios_api from '../../../../lib/axios_api';
 import Navigator from '../../util/Navigator'
-import useNavigator from '../../util/Navigator';
+import navigator from '../../util/Navigator';
 import CheckModal from '../Common/CheckModal';
+import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
+import AttachmentGetter from '../../util/AttachmentGetter';
+import styles from "../../css/FeedItemAndDetail.module.css"; // css 적용
+import FeedCategoryGetter from '../../util/FeedCategoryGetter';
 
 const FeedDetail = ({ data, memberId }) => {
     // 데이터
@@ -20,15 +24,15 @@ const FeedDetail = ({ data, memberId }) => {
         writerId,
         writerNickname,
         writerProfile,
-        writtenTime,
+        writtenTime, // 포멧팅
         feedText,
         buildingId,
         buildingName,
         like,
         likeCount,
         bookmark,
-        bookmarkCount,
         popularity,
+        feedCategory,
         mainActivated,
         viewCnt,
         attachments = [],
@@ -39,7 +43,9 @@ const FeedDetail = ({ data, memberId }) => {
     const [liked, setLiked] = useState(like); // 좋아요 여부
     const [bookmarked, setBookmarked] = useState(bookmark); // 북마크 여부
 
+    // 데이터 처리
     const writtenTimeReplace = data.writtenTime.replace('T', ' '); // 날짜 포멧팅
+    const feedCategoryName = FeedCategoryGetter(feedCategory); // 카테고리 변환
 
     const {goToMemberProfile, goToBuildingProfile, backHistory} = Navigator();
 
@@ -58,7 +64,30 @@ const FeedDetail = ({ data, memberId }) => {
     const [deleteCommentId, setDeleteCommentId] = useState(null);
 
     // 피드 수정 화면으로 이동
-    const { goToFeedForm } = useNavigator();
+    const { goToFeedForm } = navigator();
+
+    // 맴버 프로필 리다이렉팅
+    const renderFeedText = (feedText) => renderFeedTextWithLink(feedText);
+
+    const [attachmentUrls, setAttachmentUrls] = useState([]); // 첨부파일 URL 목록
+
+    // 첨부파일 적용
+    useEffect(() => {
+        const fetchAttachments = async () => {
+            const urls = await Promise.all(
+                attachments.map(async (attachment) => {
+                    // console.log(attachment);
+                    const url = await AttachmentGetter(attachment.attachmentId);
+                    // console.log({ attachmentId: attachment.attachmentId, url });
+                    return { attachmentId: attachment.attachmentId, url };
+                })
+            );
+            setAttachmentUrls(urls.filter(urlObj => urlObj.url)); // 유효한 URL만 설정
+        };
+
+        fetchAttachments();
+    }, [attachments]);
+
 
     // 댓글 추가 내용 만들기
     const handleCommentChange = (e) => {
@@ -148,24 +177,28 @@ const FeedDetail = ({ data, memberId }) => {
                     <div className="d-flex justify-content-between align-items-center">
                         <div className="d-flex align-items-center">
                             <Image src={writerProfile || 'https://via.placeholder.com/50'} roundedCircle width="50" height="50" className="mr-3" />
-                            <div onClick={() => goToMemberProfile(writerId)} style={{ cursor: 'pointer', display: 'inline' }}>&nbsp; {writerNickname}</div>
+                            <div onClick={() => goToMemberProfile(writerId)} className={styles.headerContainer}>&nbsp; {writerNickname}</div>
                         </div>
-                        <div>
+                        <div className={styles.iconContainer}>
                             { memberId && memberId === writerId && (
-                                <>
+                                <div className={styles.iconContainer}>
                                     <span onClick={() => setFeedDeleteShow(true)} style={{ cursor: 'pointer', marginRight: '10px' }}>
                                             <MdDelete size='32'/> {/* 피드 삭제 : Modal 열기*/}
                                     </span>
                                     <span onClick={() => goToFeedForm(writerId, feedId)} style={{ cursor: 'pointer', marginRight: '10px' }}>
                                         <GrUpdate size='32'/> {/* 피드 수정 */}
                                     </span>
-                                </>
+                                </div>
                             )}
+
+                            {/* 피드 좋아요 */}
                             <span onClick={handleLikeClick} style={{ cursor: 'pointer', marginRight: '10px' }}>
-                                {liked ? <FaHeart color="red" size='32'/> : <FaRegHeart size='32'/>} {/* 피드 좋아요 */}
+                                {liked ? <FaHeart color="red" size='24'/> : <FaRegHeart size='24'/>} 
                             </span> 
+
+                            {/* 피드 북마크 */}
                             <span onClick={handleBookmarkClick} style={{ cursor: 'pointer' }}>
-                                {bookmarked ? <FaBookmark color="gold" size='32' /> : <FaRegBookmark size='32' />} {/* 피드 북마크 */}
+                                {bookmarked ? <FaBookmark color="gold" size='24' /> : <FaRegBookmark size='24' />} 
                             </span>
                         </div>
                     </div>
@@ -173,11 +206,18 @@ const FeedDetail = ({ data, memberId }) => {
                     <CardSubtitle>
                         {writtenTimeReplace} | <div onClick={() => goToBuildingProfile(buildingId)} style={{ cursor: 'pointer', display: 'inline' }}>{buildingName}</div>  
                     </CardSubtitle>
+                    {/* 피드 카테고리 */}
+                    <div className={styles.feedCategoryDetail}>{feedCategoryName}</div>
                     <br/>
+
+                    {/* 제목 */}
                     <CardTitle tag="h2">
                             {title}
                         </CardTitle>
-                    <CardText>{feedText}</CardText>
+
+                    {/* 내용 */}
+                    
+                    <p style={{ whiteSpace: "pre-wrap" }}><CardText>{renderFeedText(feedText)}</CardText></p>
                     { tags && tags.length > 0 && (
                         <div className="tags">
                             {tags.map((tag) => (
@@ -187,6 +227,7 @@ const FeedDetail = ({ data, memberId }) => {
                                 ))}
                         </div>
                     )}
+
                     {/* Body */}
                     <div className="feed-stats">
                         <p onClick={handleShowLikedUsersClick} style={{ cursor: 'pointer' }}
@@ -199,18 +240,26 @@ const FeedDetail = ({ data, memberId }) => {
                 </CardBody>
             </Card>
 
+            {/* 첨부 파일 */}
             <Card>
                 <CardBody>
-                    {attachments.map((attachment) => (
-                        <div key={attachment.attachmentId} className="mb-3">
-                            <img
-                                // src={attachment.fileUrl}
-                                src = "https://picsum.photos/200/300?grayscale​" 
-                                alt={`Attachment ${attachment.attachmentId}`}
-                                className="attachment-img"
-                            />
-                        </div>
-                    ))}
+                {attachmentUrls.map((attachmentUrl, index) => (
+                    <div key={index}>
+                    {attachmentUrl.url.type === "image" && (
+                        <img
+                            src={attachmentUrl.url.url}
+                            alt={`Attachment ${attachmentUrl.attachmentId}`}
+                            className="attachment-img"
+                        />
+                    )}
+                    {attachmentUrl.url.type === "video" && (
+                        <video width="240" height="180" controls>
+                            <source src={attachmentUrl.url.url} type="video/mp4" />
+                            Your browser does not support the video tag.
+                        </video>
+                    )}
+                    </div>
+                ))}
                 </CardBody>
             </Card>
 

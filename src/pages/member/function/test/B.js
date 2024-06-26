@@ -1,92 +1,75 @@
-import React from 'react';
-import { Container, Row, Col, Image, Button, ListGroup } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useState } from "react";
+import { Image, Container, Row, Col } from "react-bootstrap";
+import module from "../../../../assets/css/module/member/GetMemberProfile.module.css";
+const ProfilePhoto = ({ profile, defaultPhotoUrl, handleImageUpload }) => {
+  const [preview, setPreview] = useState(profile.profilePhotoUrl || defaultPhotoUrl);
 
-const followers = [
-  {
-    username: '34915_g380',
-    name: '',
-    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSg3ya9qxUA7YtK-RHIkePuc-IhSgFlOf_7YA&s", // Replace with actual image path
-  },
-  {
-    username: 'stephane6585',
-    name: '',
-    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSg3ya9qxUA7YtK-RHIkePuc-IhSgFlOf_7YA&s", // Replace with actual image path
-  },
-  {
-    username: 'dh0opestjko',
-    name: '김하린',
-    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSg3ya9qxUA7YtK-RHIkePuc-IhSgFlOf_7YA&s", // Replace with actual image path
-  },
-  {
-    username: '8c269sw39i',
-    name: '',
-    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSg3ya9qxUA7YtK-RHIkePuc-IhSgFlOf_7YA&s", // Replace with actual image path
-  },
-  {
-    username: 'kms12002',
-    name: 'kms',
-    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSg3ya9qxUA7YtK-RHIkePuc-IhSgFlOf_7YA&s", // Replace with actual image path
-  },
-  {
-    username: 'rlagpwjdyu',
-    name: '나영',
-    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSg3ya9qxUA7YtK-RHIkePuc-IhSgFlOf_7YA&s"
-  },
-  {
-    username: '__sulfur.min',
-    name: '황성민',
-    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSg3ya9qxUA7YtK-RHIkePuc-IhSgFlOf_7YA&s"
-  },
-  {
-    username: 's._.hhh',
-    name: '김세현',
-    imgSrc: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSg3ya9qxUA7YtK-RHIkePuc-IhSgFlOf_7YA&s"
-  },
-  {
-    username: 'blazeful_kbs',
-    name: '김범섭',
-    imgSrc: 'path/to/image9.jpg', // Replace with actual image path
-  }
-];
+  useState(()=> {
+    alert("프로필 사진확인"+ JSON.stringify(profile));
+  },[])
 
-const defaultPhotoUrl = `${process.env.PUBLIC_URL}/image/defaultMemberProfilePhoto.png`;
+  const handleImageError = (event) => {
+    event.target.src = defaultPhotoUrl;
+  };
 
-const InstagramFollowersView = () => {
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result);
+        handleImageUpload(file);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const triggerFileInput = () => {
+    document.getElementById("file-input").click();
+  };
+
   return (
-    <Container fluid className="p-3">
-      <Row className="mb-3">
-        <Col className="text-center">
-          <h4>팔로워 119명</h4>
-          <h4>팔로잉 392명</h4>
-        </Col>
-      </Row>
-      <ListGroup>
-        {followers.map((follower, index) => (
-          <ListGroup.Item key={index} className="d-flex align-items-center justify-content-between">
-            <Row className="align-items-center" style={{width:"100%"}}>
-              <Col xs={2}>
-                <Image
-                src={follower.imgSrc || defaultPhotoUrl}
-                style={{width:"100px", height:"100px"}}
-                roundedCircle fluid />
-              </Col>
-              <Col xs={6}>
-                <div>{follower.username}</div>
-                <div className="text-muted">{follower.name}</div>
-              </Col>
-              <Col xs={2}>
-                <Button variant="link" size="sm">팔로우</Button>
-              </Col>
-              <Col xs={2}>
-                <Button variant="danger" size="sm">삭제</Button>
-              </Col>
-            </Row>
-          </ListGroup.Item>
-        ))}
-      </ListGroup>
-    </Container>
+    <div style={{ textAlign: "center" }}>
+      <Image
+        src={preview}
+        roundedCircle
+        className={`mb-3 ${module.fixedMargin} ${module.profilePhoto}`}
+        style={{ cursor: "pointer" }}
+        onError={handleImageError}
+        onClick={triggerFileInput}
+      />
+      <input
+        type="file"
+        id="file-input"
+        accept="image/*"
+        style={{ display: "none" }}
+        onChange={handleFileChange}
+      />
+    </div>
   );
 };
 
-export default InstagramFollowersView;
+const B = () => {
+  const profile = {
+    profilePhotoUrl: "https://picsum.photos/id/237/200/300",
+    // 기타 프로필 정보
+  };
+
+  const defaultPhotoUrl = "https://fastly.picsum.photos/id/23/3887/4899.jpg?hmac=2fo1Y0AgEkeL2juaEBqKPbnEKm_5Mp0M2nuaVERE6eE";
+
+  const handleImageUpload = (file) => {
+    // 여기서 파일 업로드 로직을 구현합니다.
+    console.log("업로드할 파일:", file);
+    // 예: 파일을 서버에 업로드하고 URL을 받아서 상태를 업데이트합니다.
+  };
+
+  return (
+          <ProfilePhoto
+            profile={profile}
+            defaultPhotoUrl={defaultPhotoUrl}
+            handleImageUpload={handleImageUpload}
+          />
+  );
+};
+
+export default B;

@@ -71,6 +71,7 @@ import GetMemberProfile from "../pages/member/GetMemberProfile";
 import GetBuildingWiki from "../pages/building/GetBuildingWiki";
 import EditBuildingWiki from "../pages/building/EditBuildingWiki";
 import ApplicantSample from "../pages/building/components/ApplicantSample";
+import FeedVoteForm from "../pages/feed/FeedVoteFormPage";
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -207,7 +208,7 @@ const AppRoutes = () => {
             />
           </Route>
           <Route path="chat">
-            <Route path="chatroomCreation" element={<ChatRoomCreation />} />
+            <Route path="chatroomCreation/:buildingId" element={<ChatRoomCreation />} />
             <Route path="chatroom" element={<Chatroom />} />
             <Route path="myChatroomList" element={<MyChatroomList />} />
             <Route path="ChatApplyList" element={<ChatApplyList />} />
@@ -236,7 +237,7 @@ const AppRoutes = () => {
             <Route path="addNotice" element={<AddNotice />} />
             <Route path="getReportList" element={<GetListReport />} />
             <Route path="getReport/:reportId" element={<GetReport />} />
-            <Route path="addReport/:reporterId/:reporteeId" element={<AddReport />} />
+            <Route path="addReport/:reporteeId" element={<AddReport />} />
             <Route path="listImages" element={<ListImages />} />
             <Route path="getImage" element={<GetImage />} />
             <Route path="deleteBadFeed" element={<DeleteBadFeed />} />
@@ -244,10 +245,11 @@ const AppRoutes = () => {
           <Route path="/setting" element={<MemberSetting />} />
           <Route path="/feed">
             <Route path="list" element={<FeedList />} />
-            <Route path="list/building" element={<FeedBuildingListPage />} />
+            <Route path="list/building/:buildingId" element={<FeedBuildingListPage />} />
             <Route path="detail" element={<FeedDetail />} />
-            <Route path="form" element={<FeedForm />} /> {/*피드 추가*/}
-            <Route path="form/:feedId" element={<FeedForm />} /> {/*피드 수정*/}
+            <Route path="form" element={<FeedForm />} /> {/* 일반 피드 추가 */}
+            <Route path="voteForm" element={<FeedVoteForm />} /> {/* 투표 피드 추가 */}
+            <Route path="form/:feedId" element={<FeedForm />} /> {/* 일반 피드 수정 */}
             <Route path="chart" element={<FeedChartPage />} />
             <Route path="main" element={<FeedListHomePage />}/>
             <Route path="" element={<FeedPages />} />

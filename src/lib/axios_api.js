@@ -11,6 +11,24 @@ const axios_api = axios.create({
     withCredentials: true
 });
 
+axios_api.interceptors.response.use((response) => {
+    console.log(response);
+    return response;
+}, async (error) => {
+    if (error.response && error.response.status === 403) {
+        try {
+            await axios.get(`${BASE_URL}/member/refresh`);
+            const originalRequestConfig = error.config;
+            return axios_api.request(originalRequestConfig);
+        } catch(err) {
+            // alert("로그인이 필요합니다.");
+            // window.location.href = "/member/getAuthMain";
+            return Promise.reject(error);
+        }
+    }
+    return Promise.reject(error);
+});
+
 // 채팅방 생성
 export const addChatroom = async(chatRoomData) => {
     try {

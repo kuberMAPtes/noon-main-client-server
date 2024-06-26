@@ -1,7 +1,7 @@
 const messages = {
     blur: {
-      title: '블러 안내',
-      description: '이미지를 성공적으로 블러처리 하였습니다.',
+      title: '블러 관련 안내',
+      description: '성공적으로 처리 하였습니다.',
     },
     deleteFeed: {
         title: '피드 삭제 안내',
@@ -22,6 +22,10 @@ const messages = {
     reportProcessing: {
         title: '신고 처리 안내',
         description: '신고를 성공적으로 처리하였습니다.',
+    },
+    nothingToAddRoport: {
+      title: '신고 내용 미입력',
+      description: '신고를 입력하세요.',
     },
     contact: {
       title: 'Contact Us',

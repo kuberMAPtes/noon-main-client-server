@@ -68,6 +68,8 @@ const AddPhoneNumberAuthentification = () => {
   }, [verifiedState]);
 
   const handleUpdatePhoneNumber = async (phoneNumber,memberId, verifiedState, navigate, toUrl) => {
+    // alert("phoneNumber"+phoneNumber+"memberId"+memberId+"verifiedState"+verifiedState+"toUrl"+toUrl)
+
     if (verifiedState === "success" && toUrl === "updatePhoneNumber" && memberId) {
 
       const response = await updatePhoneNumber({phoneNumber,memberId});
@@ -75,9 +77,10 @@ const AddPhoneNumberAuthentification = () => {
       if(response === true){
       const secretId = encryptedData;
       const secretIv = ivData;
+      // alert("휴대폰 번호 등록에 성공했습니다.");
       navigate(`/member/getMemberProfile/${secretId}/${secretIv}`);
       }else{
-        alert("휴대폰 번호 등록에 실패했습니다.");
+        // alert("휴대폰 번호 등록에 실패했습니다.");
       }
     }
   };
@@ -103,7 +106,9 @@ const AddPhoneNumberAuthentification = () => {
           if(messageObject?.result?.error==="허용되지 않은 IP주소 입니다."){
             setPhoneNumberValidationMessage("허용되지 않은 IP주소 입니다.");
           }else{
-            setPhoneNumberValidationMessage(response.message);
+            console.log("response.message", response.message);
+            setPhoneNumberValidationMessage("유효하지 않은 전화번호 입니다.");
+            
           }
           
           setIsPhoneNumberValid(false);
@@ -124,24 +129,24 @@ const AddPhoneNumberAuthentification = () => {
 
   return (
     <ForegroundTemplate>
-      <Container className="mt-5">
-        <Row className="justify-content-center">
-          <Col md={6}>
+      <Container className="mt-5" style={{padding:"0px",margin:"0px 0px 0px 32px",width:"100%"}}>
+        <Row className="justify-content-center" style={{padding:"0px",width:"100%"}}>
+          <Col md={6} style={{padding:"0px", width:"100%"}} >
             <h2 className="mb-4">
               휴대폰 인증
               <span className="inline-text" style={{ fontSize: "15px" }}>
-                {toUrl === "addMember" && "회원가입"}
-                {toUrl === "getMemberId" && "아이디 찾기"}
-                {toUrl === "updatePwd" && "비밀번호 찾기"}
-                {toUrl === "updatePhoneNumber" && "휴대폰 번호 등록 및 변경"}
+                {toUrl === "addMember" && "(회원가입)"}
+                {toUrl === "getMemberId" && "(아이디 찾기)"}
+                {toUrl === "updatePwd" && "(비밀번호 찾기)"}
+                {toUrl === "updatePhoneNumber" && "(휴대폰 번호 등록 및 변경)"}
               </span>
             </h2>
-            <Form>
-              <Form.Group controlId="formPhoneNumber">
-                <Form.Label className={styles.labelBold}>
+            <Form style={{width:"100%"}}>
+              <Form.Group controlId="formPhoneNumber" style={{width:"80%"}}>
+                <Form.Label className={styles.labelBold} style={{width:"80%"}}>
                   휴대폰 번호
                 </Form.Label>
-                <div className="d-flex">
+                <div className="d-flex" style={{width:"100%"}}>
                   <input
                     type="text"
                     placeholder="010-1234-5678"
@@ -158,6 +163,7 @@ const AddPhoneNumberAuthentification = () => {
                     maxLength={13} // 하이픈 포함 최대 13자
                     disabled={verifiedState === "success"}
                   />
+                  &emsp;&emsp;&emsp;
                   <Button
                     variant="outline-secondary"
                     onClick={() =>
@@ -169,6 +175,7 @@ const AddPhoneNumberAuthentification = () => {
                         setIsRunning
                       )
                     }
+                    style={{width:"30%"}}
                     disabled={
                       !isPhoneNumberValid || verifiedState === "success"
                     }
@@ -197,8 +204,9 @@ const AddPhoneNumberAuthentification = () => {
               <Form.Group controlId="formAuthNumber" className="mt-4">
                 <Form.Label className={styles.labelBold}>인증번호</Form.Label>
                 {certificationRequested && (
-                  <div className={`d-flex ${styles.timerText}`}>
+                  <div className={`d-flex ${styles.timerText}`}  style={{width:"80%"}}>
                     <input
+                      style={{width:"80%"}}
                       type="text"
                       placeholder="1234"
                       value={authNumber}
@@ -207,10 +215,11 @@ const AddPhoneNumberAuthentification = () => {
                       maxLength={4}
                       disabled={verifiedState === "success"}
                     />
+                    &emsp;&emsp;
                     {timeLeft !== 0 ? (
                       <span className="text-muted">{formatTime(timeLeft)}</span>
                     ) : (
-                      <span className="text-muted">인증번호 만료</span>
+                      <span className="text-muted" style={{width:"35%"}}>인증번호 만료</span>
                     )}
                   </div>
                 )}

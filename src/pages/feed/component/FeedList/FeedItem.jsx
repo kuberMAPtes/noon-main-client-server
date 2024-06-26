@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../css/FeedItem.css';
 
 import { Card, CardBody, CardImg, CardText, CardTitle } from 'react-bootstrap';
 import { FaHeart, FaRegHeart, FaBookmark, FaRegBookmark } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
 import { toggleLike, toggleBookmark } from '../../axios/FeedAxios';
 import useNavigator from '../../util/Navigator'
+import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
+import AttachmentGetter from '../../util/AttachmentGetter';
+import FeedCategoryGetter from '../../util/FeedCategoryGetter';
+import styles from "../../css/FeedItemAndDetail.module.css"; // css 적용
 
 const FeedItem = ({ data, memberId }) => {
 
@@ -19,19 +22,23 @@ const FeedItem = ({ data, memberId }) => {
         writerNickname,
         like,
         bookmark,
+        feedCategory,
         mainActivated,
         writtenTime,        // 포멧팅 처리
-        feedAttachmentURL,  // 일단 임시 이미지로 대체
+        feedAttachmentId,
     } = data;
 
     const [liked, setLiked] = useState(like);
     const [bookmarked, setBookmarked] = useState(bookmark);
+    const [mainAttachment, setMainAttachment] = useState(null);
 
     const {goToMemberProfile, goToBuildingProfile, goToFeedDetail} = useNavigator();
 
     // 데이터 처리
-    const writtenTimeReplace = data.writtenTime.replace('T', ' ');
+    const writtenTimeReplace = data.writtenTime.replace('T', ' '); // 날짜 포멧팅
+    const feedCategoryName = FeedCategoryGetter(feedCategory); // 카테고리 변환
 
+    const renderFeedText = (feedText) => renderFeedTextWithLink(feedText);
 
     const handleLikeClick = () => {
         toggleLike(liked, setLiked, feedId, memberId);
@@ -40,28 +47,49 @@ const FeedItem = ({ data, memberId }) => {
     const handleBookmarkClick = () => {
         toggleBookmark(bookmarked, setBookmarked, feedId, memberId);
     }
-    
+
+    useEffect(() => {
+        const loadAttachment = async () => {
+            const attachmentUrl = await AttachmentGetter(feedAttachmentId);
+            if (attachmentUrl) {
+                setMainAttachment(attachmentUrl.url);
+            } else {
+                setMainAttachment(null);
+            }
+        };
+
+        loadAttachment();
+
+    }, [feedAttachmentId])
+
     return (
         <div>
             <Card>
                 <CardBody>
                     {/* Header */}
-                    <div className="d-flex justify-content-between align-items-center">
+                    <div className={styles.headerContainer}>
+                        {/* 제목 */}
                         <CardTitle tag="h2" onClick={() => goToFeedDetail(memberId, feedId)} style={{ cursor: 'pointer' }}>
                             {title}
                         </CardTitle>
-                        <div>
-                            <span onClick={handleLikeClick} style={{ cursor: 'pointer', marginRight: '10px' }}>
-                                {liked ? <FaHeart color="red" size='32'/> : <FaRegHeart size='32'/>}
+                        <div className={styles.iconContainer}>
+                            {/* 피드 카테고리 */}
+                            <div className={styles.feedCategory}>{feedCategoryName}</div>
+
+                            {/* 좋아요 */}
+                            <span onClick={handleLikeClick}>
+                                {liked ? <FaHeart color="red" size='24'/> : <FaRegHeart size='24'/>}
                             </span>
-                            <span onClick={handleBookmarkClick} style={{ cursor: 'pointer' }}>
-                                {bookmarked ? <FaBookmark color="gold" size='32' /> : <FaRegBookmark size='32' />}
+
+                            {/* 북마크 */}
+                            <span onClick={handleBookmarkClick}>
+                                {bookmarked ? <FaBookmark color="gold" size='24' /> : <FaRegBookmark size='24' />}
                             </span>
                         </div>
                     </div>
 
                     {/* Body */}
-                    <CardText>{feedText}</CardText>
+                    <p style={{ whiteSpace: "pre-wrap" }}><CardText>{renderFeedText(feedText)}</CardText></p>
                     <CardText>
                         <small className="text-muted">
                              {writtenTimeReplace}
@@ -74,14 +102,16 @@ const FeedItem = ({ data, memberId }) => {
                         </small>
                     </CardText>
                 </CardBody>
-                <CardImg
+                {mainAttachment && (
+                    <CardImg
                     alt={feedId}
-                    src="https://picsum.photos/200/300?grayscale​"  // 임시 사진
+                    src={mainAttachment}
                     style={{
                         height: 300
                     }}
                     width="100%"
-                />
+                    />
+                )}
             </Card>
         </div>
     );

@@ -30,8 +30,8 @@ const LoginButtons = ({ onLoginClick,onGoogleLoginClick }) => {
   };
 
   return (
-    <Container className={styles.loginButtons}>
-      <Row className="justify-content-center">
+    <Container className={styles.loginButtons} style={{width:"100%",height:"100%",margin:"0px", padding:"0px"}}>
+      <Row className="justify-content-center" style={{width:"100%",height:"100%",margin:"0px", padding:"0px"}}>
         <Col xs={12} md={8} lg={6} className="text-center">
           <div className={styles.logo}>
             <NoonLogo />
@@ -69,7 +69,7 @@ const LoginButtons = ({ onLoginClick,onGoogleLoginClick }) => {
           >
             아이디 찾기
           </Link>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <Link to="/member/IdFormToUpdatePwd" style={{ fontSize: "0.6rem" }}>
             비밀번호 재설정
           </Link>

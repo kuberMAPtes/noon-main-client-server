@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { Card, Row, Col, Image, ProgressBar, Button } from "react-bootstrap";
+import { Card, Row, Col, Image, ProgressBar, Button, Form } from "react-bootstrap";
 import ProfileStats from "./ProfileStats";
 import ProfileActions from "./ProfileActions";
 import LogoutForm from "../LogoutForm";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import useEncryptId from "../common/useEncryptId";
+import NormalButton from "../NormalButton";
+import module from "../../../../assets/css/module/member/GetMemberProfile.module.css";
+import useMainPage from "../common/useMainPage";
+import NicknameInput from "../NicknameInput";
+import { handleKeyDown, handleNicknameUpdateChange } from "../../function/AddUpdateMemberUtil";
+import ProfilePhotoInput from "../ProfilePhotoInput";
+import { updateProfilePhotoUrl } from "../../function/memberAxios";
 
 //4가지 파라미터 다 WAS에서 받아야함
 //> setProfile등등..필요
@@ -22,17 +29,23 @@ const ProfileBody = ({
   const [dajungTemperature, setDajungTemperature] = useState("");
   const defaultPhotoUrl = `${process.env.PUBLIC_URL}/image/defaultMemberProfilePhoto.png`;
   const member = useSelector((state) => state.auth.member);
-  const { encryptedData, ivData } = useEncryptId(member?.memberId);
-  const navigate = useNavigate();
 
+  const mainPageUrl = useMainPage(member.memberId);
+  const [nickname, setNickname] = useState(member.nickname);
+  const [nicknameValidationMessage, setNicknameValidationMessage] = useState("");
+  const [isNicknameValid, setIsNicknameValid] = useState(false);
   const handleImageError = (e) => {
     e.target.src = defaultPhotoUrl;
   };
-  const handleUpdatePhoneNumber = () => {
-    // alert("휴대폰 번호를 등록합니다.");
-    navigate(
-      `/member/AddPhoneNumberAuthentification/updatePhoneNumber?secretId=${encryptedData}&secretIv=${ivData}`
-    );
+  
+  const handleImageUpload = async (file) => {
+    try {
+      const updatedProfilePhotoUrl = await updateProfilePhotoUrl(member.memberId, file);
+      // 여기서 상태를 업데이트하여 새로운 프로필 사진 URL을 반영합니다.
+      console.log("업로드된 파일 URL:", updatedProfilePhotoUrl);
+    } catch (error) {
+      console.error("파일 업로드 오류:", error);
+    }
   };
 
   useEffect(() => {
@@ -49,28 +62,43 @@ const ProfileBody = ({
     }
   }, [profile.dajungScore]);
 
+
+  if (!profile.nickname) {
+    return null;
+  }
+
   return (
     <Card>
-      <Card.Body>
+      <Card.Body style={{border: "2px solid #91A7FF", borderRadius:"7px"}}>
         <Row className="mb-3">
-          <Col xs={4} className="d-flex flex-column align-items-center">
-            <Image
-              src={profile.profilePhotoUrl || defaultPhotoUrl}
-              roundedCircle
-              className="mb-3"
-              style={{ width: "150px", height: "150px", textAlign: "center" }}
-              onError={handleImageError}
-            />
+          <Col xs={4} className="d-flex flex-column align-items-center" style={{margin:"0px"}}>
+          <ProfilePhotoInput
+            profile={profile}
+            defaultPhotoUrl={defaultPhotoUrl}
+            handleImageUpload={handleImageUpload}
+          />
             <Card.Title
               style={{
-                fontSize: "20px",
+                fontSize: "15px",
                 fontWeight: "bold",
                 textAlign: "center",
               }}
             >
-              {profile.nickname}
+            <Form>
+              <NicknameInput
+                nickname={nickname}
+                setNickname={setNickname}
+                nicknameValidationMessage={nicknameValidationMessage}
+                setNicknameValidationMessage={setNicknameValidationMessage}
+                isNicknameValid={isNicknameValid}
+                setIsNicknameValid={setIsNicknameValid}
+                mainPageUrl={mainPageUrl}
+                handleKeyDown={handleKeyDown}
+                handleNicknameUpdateChange={handleNicknameUpdateChange}
+                member={member}
+              />
+          </Form>
             </Card.Title>
-
             <LogoutForm />
             
           </Col>
@@ -90,19 +118,25 @@ const ProfileBody = ({
                 <div className="d-flex flex-column align-items-center">
                   <ProgressBar
                     now={profile.dajungScore}
-                    style={{ width: "100%", height: "1rem" }}
-                  />
+                    style={{ width: "100%", height: "1rem"}}
+                  ><div
+                  style={{
+                    background:"#ff8787",
+                    width: `${profile.dajungScore}%`,
+                    height: `100%`
+                  }}
+                  ></div></ProgressBar>
                   <div>{dajungTemperature}</div>
                 </div>
               </Col>
             </Row>
             <Row>
               <Col xs={12}>
-                <hr />
+                소개
               </Col>
             </Row>
-            <Row>
-              <Col xs={12}>{profile.profileIntro}</Col>
+            <Row style={{minHeight:"20%"}}>
+              <Col xs={12} style={{border: "2px solid #91A7FF", borderRadius:"7px"}}>{profile.profileIntro}</Col>
             </Row>
             {toId !== fromId && (
               <Row>
@@ -112,27 +146,9 @@ const ProfileBody = ({
                 </Col>
               </Row>
             )}
-            {toId === fromId &&
-              member.phoneNumber &&
-              member.phoneNumber.endsWith("X") && (
-                <Row>
-                  <Col xs={12}>
-                    <Button
-                      style={{ width: "100%" }}
-                      onClick={handleUpdatePhoneNumber}
-                    >
-                      휴대폰 번호 등록
-                    </Button>
-                    <span style={{ fontSize: "13px" }}>
-                      💥휴대폰 번호를 등록하지 않으시면 아이디 및 비밀번호 찾기
-                      서비스를 이용하실 수 없습니다.
-                    </span>
-                  </Col>
-                </Row>
-              )}
           </Col>
           <Col xs={12}>
-            <hr />
+            <hr style={{border: "1px solid #91A7FF"}} />
           </Col>
         </Row>
         <ProfileStats
