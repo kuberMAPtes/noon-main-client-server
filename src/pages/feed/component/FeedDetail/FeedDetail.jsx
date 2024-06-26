@@ -8,13 +8,13 @@ import { GrUpdate } from "react-icons/gr";
 import { MdDelete } from "react-icons/md";
 import LikedUsersList from './LikedUsersList';
 import axios_api from '../../../../lib/axios_api';
-import Navigator from '../../util/Navigator'
 import navigator from '../../util/Navigator';
 import CheckModal from '../Common/CheckModal';
 import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
 import AttachmentGetter from '../../util/AttachmentGetter';
 import styles from "../../css/FeedItemAndDetail.module.css"; // css 적용
 import FeedCategoryGetter from '../../util/FeedCategoryGetter';
+import FeedVote from '../FeedForm/FeedVote';
 
 const FeedDetail = ({ data, memberId }) => {
     // 데이터
@@ -47,7 +47,8 @@ const FeedDetail = ({ data, memberId }) => {
     const writtenTimeReplace = data.writtenTime.replace('T', ' '); // 날짜 포멧팅
     const feedCategoryName = FeedCategoryGetter(feedCategory); // 카테고리 변환
 
-    const {goToMemberProfile, goToBuildingProfile, backHistory} = Navigator();
+    // 네비게이션 관리
+    const {goToMemberProfile, goToBuildingProfile, backHistory, goToFeedForm} = navigator();
 
     // 댓글 추가 관리
     const [newComment, setNewComment] = useState('');
@@ -63,9 +64,6 @@ const FeedDetail = ({ data, memberId }) => {
     const [commentDeleteShow, setcommentDeleteShow] = useState(false); // Modal창 여부
     const [deleteCommentId, setDeleteCommentId] = useState(null);
 
-    // 피드 수정 화면으로 이동
-    const { goToFeedForm } = navigator();
-
     // 맴버 프로필 리다이렉팅
     const renderFeedText = (feedText) => renderFeedTextWithLink(feedText);
 
@@ -76,9 +74,7 @@ const FeedDetail = ({ data, memberId }) => {
         const fetchAttachments = async () => {
             const urls = await Promise.all(
                 attachments.map(async (attachment) => {
-                    // console.log(attachment);
                     const url = await AttachmentGetter(attachment.attachmentId);
-                    // console.log({ attachmentId: attachment.attachmentId, url });
                     return { attachmentId: attachment.attachmentId, url };
                 })
             );
@@ -169,6 +165,8 @@ const FeedDetail = ({ data, memberId }) => {
         }
     }
 
+    const isPollCategory = feedCategory === 'POLL'; // 투표 카테고리에 대한 예외
+
     return (
         <div className="container">
             <Card>
@@ -241,28 +239,32 @@ const FeedDetail = ({ data, memberId }) => {
             </Card>
 
             {/* 첨부 파일 OR 투표 */}
-            <Card>
-                <CardBody>
-                {attachmentUrls.map((attachmentUrl, index) => (
-                    <div key={index}>
-                    {attachmentUrl.url.type === "image" && (
-                        <img
-                            src={attachmentUrl.url.url}
-                            alt={`Attachment ${attachmentUrl.attachmentId}`}
-                            className="attachment-img"
-                        />
-                    )}
-                    {attachmentUrl.url.type === "video" && (
-                        <video width="240" height="180" controls>
-                            <source src={attachmentUrl.url.url} type="video/mp4" />
-                            Your browser does not support the video tag.
-                        </video>
-                    )}
-                    </div>
-                ))}
-                </CardBody>
-            </Card>
-
+            { !isPollCategory ? (
+                <Card>
+                    <CardBody>
+                    {attachmentUrls.map((attachmentUrl, index) => (
+                        <div key={index}>
+                        {attachmentUrl.url.type === "image" && (
+                            <img
+                                src={attachmentUrl.url.url}
+                                alt={`Attachment ${attachmentUrl.attachmentId}`}
+                                className="attachment-img"
+                            />
+                        )}
+                        {attachmentUrl.url.type === "video" && (
+                            <video width="240" height="180" controls>
+                                <source src={attachmentUrl.url.url} type="video/mp4" />
+                                Your browser does not support the video tag.
+                            </video>
+                        )}
+                        </div>
+                    ))}
+                    </CardBody>
+                </Card>
+                ) : (
+                    <FeedVote feedId={feedId} />
+                )
+            }   
             <Card>
                 <CardBody>
                     <CardTitle tag="h3">댓글</CardTitle>
