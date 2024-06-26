@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios_api from "../../lib/axios_api";
 import Footer from "../../components/common/Footer";
 import $ from "jquery";
 import wikiStyles from "../../assets/css/module/building/GetBuildingWiki.module.css";
 import "../../assets/css/module/building/GetBuildingWiki.css";
+import { FaPencil } from "react-icons/fa6";
+import { RiArrowGoBackFill } from "react-icons/ri";
 
 export const BUILDING_WIKI_BASE_PATH = "/buildingWiki";
 
@@ -13,6 +15,8 @@ export default function GetBuildingWiki() {
 
   const [buildingName, setBuildingName] = useState("");
   const [content, setContent] = useState();
+
+  const navigate = useNavigate();
   
   useEffect(() => {
     function fetchPageHtml() {
@@ -49,6 +53,16 @@ export default function GetBuildingWiki() {
 
   return (
     <div id="wiki-container" className={wikiStyles.container}>
+      <div className={wikiStyles.btnContainer}>
+        <FaPencil
+            className={wikiStyles.btn}
+            onClick={() => navigate(`/editBuildingWiki/${buildingId}`)}
+        />
+        <RiArrowGoBackFill
+            className={wikiStyles.btn}
+            onClick={() => navigate(`/getBuildingProfile/${buildingId}`)}
+        />
+      </div>
       <Footer />
       <h1>{buildingName}</h1>
       <hr className={wikiStyles.contentSeparator} />
