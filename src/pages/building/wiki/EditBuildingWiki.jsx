@@ -15,6 +15,8 @@ export default function EditBuildingWiki() {
   const [buildingName, setBuildingName] = useState("");
   const [content, setContent] = useState();
 
+  const [errorExists, setErrorExists] = useState(false);
+
   const textareaRef = useRef(null);
 
   const navigate = useNavigate();
@@ -24,6 +26,7 @@ export default function EditBuildingWiki() {
   useEffect(() => {
     axios_api.get(`${BUILDING_WIKI_BASE_PATH}/getEditPage/${buildingId}`)
         .then((response) => {
+          setErrorExists(false);
           const data = response.data;
           setBuildingName(data.buildingName);
           const fetched = $(data.htmlContent).find("#editform");
@@ -48,7 +51,10 @@ export default function EditBuildingWiki() {
             mode: fetched.find(`input[name="mode"]`).val(),
             wpUltimateParam: fetched.find(`input[name="wpUltimateParam"]`).val()
           });
-        })
+        }).catch((err) => {
+          console.log(err);
+          setErrorExists(true);
+        });
   }, []);
 
   useEffect(() => {
@@ -59,39 +65,49 @@ export default function EditBuildingWiki() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.btnContainer}>
-        <IoNewspaperOutline
-            className={styles.btn}
-            onClick={() => {
-              navigate(`/getBuildingWiki/${buildingId}`);
-            }}  
-        />
-        <IoPaperPlane
-            className={styles.btn}
-            onClick={() => {
-              axios_api.post(`${BUILDING_WIKI_BASE_PATH}/editPage/${buildingId}`, content)
-                  .then((response) => {
-                    alert("변경사항이 저장되었습니다.");
+      {
+        errorExists ? (
+          <div className={styles.wikiEditContainer}>
+            <h2 className={styles.headTitle}>404 Not Found</h2>
+          </div>
+        ) : (
+          <>
+            <div className={styles.btnContainer}>
+              <IoNewspaperOutline
+                  className={styles.btn}
+                  onClick={() => {
                     navigate(`/getBuildingWiki/${buildingId}`);
-                  })
-                  .catch((err) => {
-                    console.error(err);
-                  });
-            }}
-        />
-      </div>
-      <div id="wiki-edit-container" className={styles.wikiEditContainer}>
-        <h2 className={styles.headTitle}>{buildingName}</h2>
-        <textarea
-            className={styles.wikiTextArea}
-            name="wpTextbox1"
-            ref={textareaRef}
-            onChange={(e) => {
-              console.log(e.target.value);
-              setContent({...content, wpTextbox1: e.target.value});
-            }} 
-        />
-      </div>
+                  }}  
+              />
+              <IoPaperPlane
+                  className={styles.btn}
+                  onClick={() => {
+                    axios_api.post(`${BUILDING_WIKI_BASE_PATH}/editPage/${buildingId}`, content)
+                        .then((response) => {
+                          alert("변경사항이 저장되었습니다.");
+                          navigate(`/getBuildingWiki/${buildingId}`);
+                        })
+                        .catch((err) => {
+                          console.error(err);
+                        });
+                  }}
+              />
+            </div>
+            <div id="wiki-edit-container" className={styles.wikiEditContainer}>
+              <h2 className={styles.headTitle}>{buildingName}</h2>
+              <textarea
+                  className={styles.wikiTextArea}
+                  name="wpTextbox1"
+                  ref={textareaRef}
+                  onChange={(e) => {
+                    console.log(e.target.value);
+                    setContent({...content, wpTextbox1: e.target.value});
+                  }} 
+              />
+            </div>
+          </>
+        )
+      }
       <Footer />
     </div>
   );

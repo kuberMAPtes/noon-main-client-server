@@ -33,8 +33,8 @@ export default function GetBuildingWiki() {
         setContent(fetched);
       }).catch((err) => {
         console.log(err);
-        setBuildingName("");
-        setContent(`<p className="mw-parser-output">404 Not Found</p>`);
+        setBuildingName("Page Error");
+        setContent($(`<p className="mw-parser-output">404 Not Found</p>`));
       })
     }
 
