@@ -15,14 +15,18 @@ axios_api.interceptors.response.use((response) => {
     console.log(response);
     return response;
 }, async (error) => {
+    console.log(error);
     if (error.response && error.response.status === 403) {
+        console.log("403 Forbidden");
         try {
-            await axios.get(`${BASE_URL}/member/refresh`);
+            await axios.get(`${BASE_URL}/member/refresh`, {
+                withCredentials: true
+            });
             const originalRequestConfig = error.config;
             return axios_api.request(originalRequestConfig);
-        } catch(err) {
-            // alert("로그인이 필요합니다.");
-            // window.location.href = "/member/getAuthMain";
+        } catch (err) {
+            alert("로그인이 필요합니다.");
+            window.location.href = "/member/getAuthMain";
             return Promise.reject(error);
         }
     }
