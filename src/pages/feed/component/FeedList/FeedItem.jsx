@@ -128,7 +128,7 @@ const FeedItem = ({ data, memberId }) => {
                     />
                 )}
                 {isPollCategory && (
-                    <FeedVote feedId={feedId} />
+                    <FeedVote feedId={feedId} memberId={memberId} />
                 )}
             </Card>
         </div>

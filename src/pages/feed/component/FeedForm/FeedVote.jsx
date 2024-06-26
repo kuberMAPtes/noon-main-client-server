@@ -5,12 +5,13 @@ import axios_api from '../../../../lib/axios_api';
 /**
  * 실제 피드에서 사용하는 투표
  */
-const FeedVote = ({ feedId }) => {
+const FeedVote = ({ feedId, memberId }) => {
     const [question, setQuestion] = useState('');
     const [options, setOptions] = useState([]);
-    const [votes, getVotes] = useState([]);
+    const [votes, setVotes] = useState([]);
     const [selectedOption, setSelectedOption] = useState('');
 
+    // 투표에 대한 데이터 갱신
     useEffect(() => {
         const fetchVoteData = async () => {
             try {
@@ -18,7 +19,9 @@ const FeedVote = ({ feedId }) => {
                 const { question, options, votes } = response.data;
                 setQuestion(question);
                 setOptions(options);
-                getVotes(votes);
+                setVotes(votes && votes.length === options.length ? votes : new Array(options.length).fill(0));
+                console.log("Fetched options: ", options);
+                console.log("Fetched votes: ", votes);
 
             } catch (error) {
                 console.error('투표 데이터를 가져오는 중 오류 발생:', error);
@@ -32,9 +35,22 @@ const FeedVote = ({ feedId }) => {
         setSelectedOption(option);
     };
 
-    const handleVoteSubmit = () => {
-        if (selectedOption) {
-            console.log('선택한 옵션:', selectedOption);
+    const handleVoteSubmit = async () => {
+        if (selectedOption !== '') {
+            try {
+                const chosenOptionIndex = options.indexOf(selectedOption);
+                const response = await axios_api.post('/feed/addVoting', {
+                    feedId,
+                    memberId,
+                    chosenOption: chosenOptionIndex
+                });
+                const { votes } = response.data;
+                setVotes(votes);
+                console.log("Updated votes: ", votes);
+                
+            } catch (error) {
+                console.error('투표를 제출하는 중 오류 발생:', error);
+            }
         } else {
             alert('옵션을 선택해 주세요.');
         }
@@ -44,7 +60,7 @@ const FeedVote = ({ feedId }) => {
         <Card className="mb-4">
             <Card.Header>{question}</Card.Header>
             <Card.Body>
-                {!(options === null) && options.map((option, index) => (
+                {options && options.map((option, index) => (
                     <div key={index} className="d-flex align-items-center mb-2">
                         <Button
                             variant={selectedOption === option ? 'primary' : 'outline-primary'}
@@ -60,7 +76,7 @@ const FeedVote = ({ feedId }) => {
                         >
                             {option}
                         </Button>
-                        <Badge bg="secondary">{votes[index]}</Badge>
+                        <Badge bg="secondary">{votes[index] !== undefined ? votes[index] : 0}</Badge>
                     </div>
                 ))}
                 <Button variant="primary" onClick={handleVoteSubmit} className="mt-3">

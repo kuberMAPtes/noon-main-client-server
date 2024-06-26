@@ -262,7 +262,7 @@ const FeedDetail = ({ data, memberId }) => {
                     </CardBody>
                 </Card>
                 ) : (
-                    <FeedVote feedId={feedId} />
+                    <FeedVote feedId={feedId} memberId={memberId}/>
                 )
             }   
             <Card>
