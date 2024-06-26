@@ -10,7 +10,8 @@
 }
 
 .toctitle h2 {
-  font-size: 32px;
+  margin-top: 0px;
+  font-size: 40px;
   margin-left: 0px;
 }
 
@@ -21,12 +22,25 @@
 
 .toc li {
   list-style-type: none;
+  font-size: 16px;
+}
+
+.toc li li {
+  text-indent: 1em;
+}
+
+.toc li li li {
+  text-indent: 2em;
+}
+
+.toc li li li li {
+  text-indent: 3em;
+}
+
+.toc li li li li li {
+  text-indent: 4em;
 }
 
 .toc li a {
   text-decoration: none;
-}
-
-.toc li a span {
-  font-size: 18px;
 }

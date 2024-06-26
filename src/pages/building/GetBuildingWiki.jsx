@@ -26,7 +26,6 @@ export default function GetBuildingWiki() {
                 .find("#bodyContent")
                 .find(".mw-parser-output")
                 .attr("class", `${wikiStyles.contentContainer}`);
-        console.log(fetched);
         setContent(fetched);
       }).catch((err) => {
         console.log(err);
@@ -43,6 +42,7 @@ export default function GetBuildingWiki() {
   useEffect(() => {
     if (content) {
       $(document).find(".mw-parser-output").remove();
+      content.find(".mw-editsection").remove();
       $(document).find("#wiki-container").append(content);
     }
   }, [content]);
