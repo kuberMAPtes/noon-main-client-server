@@ -10,6 +10,7 @@ import AttachmentGetter from '../../util/AttachmentGetter';
 import FeedCategoryGetter from '../../util/FeedCategoryGetter';
 import styles from "../../css/FeedItemAndDetail.module.css"; // css 적용
 import { FcApproval } from "react-icons/fc";
+import FeedVote from '../FeedForm/FeedVote';
 
 const FeedItem = ({ data, memberId }) => {
 
@@ -39,7 +40,8 @@ const FeedItem = ({ data, memberId }) => {
     const writtenTimeReplace = data.writtenTime.replace('T', ' '); // 날짜 포멧팅
     const feedCategoryName = FeedCategoryGetter(feedCategory); // 카테고리 변환
     const isNoticeCategory = feedCategory === 'NOTICE'; // 공지 카테고리에 대한 예외
-    
+    const isPollCategory = feedCategory === 'POLL'; // 투표 카테고리에 대한 예외
+
     const renderFeedText = (feedText) => renderFeedTextWithLink(feedText);
 
     const handleLikeClick = () => {
@@ -124,6 +126,9 @@ const FeedItem = ({ data, memberId }) => {
                     }}
                     width="100%"
                     />
+                )}
+                {isPollCategory && (
+                    <FeedVote feedId={feedId} memberId={memberId} />
                 )}
             </Card>
         </div>
