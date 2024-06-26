@@ -25,6 +25,7 @@ const MyChatroomList = () => {
             .then(chatrooms => {
                 fetchUnreadMessageCount(chatrooms, memberID)
                     .then(data => {
+                        console.log("node 서버", process.env.REACT_APP_NODE_SERVER_URL, "에서 읽은메세지 요청중");
                         setChatrooms(data.chatrooms); // 채팅방 별 안읽은 메세지 저장
                         setActiveChatrooms(data.activeChatrooms); // 활발한 채팅방 저장
                     })
