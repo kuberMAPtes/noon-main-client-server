@@ -125,8 +125,8 @@ const styles = {
     textAlign: 'center',
     color: '#030722',
     fontSize: '18px',
-    padding: '0px',
-    marginBottom: '0px'
+    padding: '10px',
+    marginBottom: '20px'
   }
 };
 
