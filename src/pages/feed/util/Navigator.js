@@ -38,12 +38,20 @@ const useNavigator = () => {
     navigate(-1);
   });
 
+  const goToDetailNotice = useCallback(
+    (feedId) => {
+      navigate(`/customerSupport/getNotice/${feedId}`);
+    },
+    [navigate]
+  );
+
   return {
     goToFeedDetail,
     goToMemberProfile,
     goToBuildingProfile,
     goToFeedForm,
     backHistory,
+    goToDetailNotice,
   };
 };
 

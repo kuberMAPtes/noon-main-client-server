@@ -228,17 +228,16 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
     };
 
     // 미리보기 삭제 시 삭제 리스트에 포함시키기
-    const handleFileRemove = (file) => {
+    const handleFileRemove = (index) => {
+        const file = feedData.attachments[index];
+
         if (isUploadedFile(file)) {
             setDeletedFiles([...deletedFiles, file]); //  사용하여 파일 식별
         }
-        const updatedFiles = feedData.attachments.filter((attachment) => {
-            if (attachment instanceof File) {
-                return URL.createObjectURL(attachment) !== file.fileUrl;
-            } else {
-                return attachment.fileUrl !== file.fileUrl;
-            }
-        });
+
+        // 인덱스를 사용하여 파일 목록에서 해당 파일 삭제
+        const updatedFiles = feedData.attachments.filter((_, i) => i !== index);
+
         setFeedData({ ...feedData, attachments: updatedFiles });
     };
 
@@ -329,7 +328,7 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                                                 <span>{file.name}</span>
                                             </div>
                                         )}
-                                        <Button variant="danger" size="sm" onClick={() => handleFileRemove(file)}>삭제</Button>
+                                        <Button variant="danger" size="sm" onClick={() => handleFileRemove(index)}>삭제</Button>
                                     </ListGroup.Item>
                                 ))}
                             </ListGroup>
