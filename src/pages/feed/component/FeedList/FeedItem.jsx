@@ -4,7 +4,7 @@ import '../../css/FeedItem.css';
 import { Card, CardBody, CardImg, CardText, CardTitle } from 'react-bootstrap';
 import { FaHeart, FaRegHeart, FaBookmark, FaRegBookmark } from 'react-icons/fa';
 import { toggleLike, toggleBookmark } from '../../axios/FeedAxios';
-import useNavigator from '../../util/Navigator'
+import navigate from '../../util/Navigator'
 import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
 import AttachmentGetter from '../../util/AttachmentGetter';
 import FeedCategoryGetter from '../../util/FeedCategoryGetter';
@@ -32,7 +32,7 @@ const FeedItem = ({ data, memberId }) => {
     const [bookmarked, setBookmarked] = useState(bookmark);
     const [mainAttachment, setMainAttachment] = useState(null);
 
-    const {goToMemberProfile, goToBuildingProfile, goToFeedDetail} = useNavigator();
+    const {goToMemberProfile, goToBuildingProfile, goToFeedDetail} = navigate();
 
     // 데이터 처리
     const writtenTimeReplace = data.writtenTime.replace('T', ' '); // 날짜 포멧팅
