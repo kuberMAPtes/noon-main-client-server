@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios_api from "../../lib/axios_api";
-import Footer from "../../components/common/Footer";
+import axios_api from "../../../lib/axios_api";
+import Footer from "../../../components/common/Footer";
 import $ from "jquery";
-import wikiStyles from "../../assets/css/module/building/GetBuildingWiki.module.css";
-import "../../assets/css/module/building/GetBuildingWiki.css";
+import wikiStyles from "../../../assets/css/module/building/wiki/GetBuildingWiki.module.css"
+import "../../../assets/css/module/building/wiki/GetBuildingWiki.css"
 import { FaPencil } from "react-icons/fa6";
 import { RiArrowGoBackFill } from "react-icons/ri";
 
