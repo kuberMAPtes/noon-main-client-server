@@ -21,6 +21,7 @@ const ProfileBody = ({
   toId,
   fromId,
   profile,
+  setProfile,
   feeds,
   buildingSubscriptionCount,
   followerCount,
@@ -28,10 +29,9 @@ const ProfileBody = ({
 }) => {
   const [dajungTemperature, setDajungTemperature] = useState("");
   const defaultPhotoUrl = `${process.env.PUBLIC_URL}/image/defaultMemberProfilePhoto.png`;
-  const member = useSelector((state) => state.auth.member);
-
-  const mainPageUrl = useMainPage(member.memberId);
-  const [nickname, setNickname] = useState(member.nickname);
+  // const member = useSelector((state) => state.auth.member);
+  // const mainPageUrl = useMainPage(member.memberId);
+  const [nickname, setNickname] = useState(profile.nickname);
   const [nicknameValidationMessage, setNicknameValidationMessage] = useState("");
   const [isNicknameValid, setIsNicknameValid] = useState(false);
   const handleImageError = (e) => {
@@ -40,13 +40,17 @@ const ProfileBody = ({
   
   const handleImageUpload = async (file) => {
     try {
-      const updatedProfilePhotoUrl = await updateProfilePhotoUrl(member.memberId, file);
+      const updatedProfilePhotoUrl = await updateProfilePhotoUrl(toId, file);
       // 여기서 상태를 업데이트하여 새로운 프로필 사진 URL을 반영합니다.
       console.log("업로드된 파일 URL:", updatedProfilePhotoUrl);
     } catch (error) {
       console.error("파일 업로드 오류:", error);
     }
   };
+
+  useEffect(() => {
+    setNickname(profile.nickname);
+  }, [profile.nickname]);
 
   useEffect(() => {
     if (profile.dajungScore >= 80) {
@@ -68,22 +72,21 @@ const ProfileBody = ({
   }
 
   return (
-    <Card>
+    <Card style={{ position: 'relative' }}>
       <Card.Body style={{border: "2px solid #91A7FF", borderRadius:"7px"}}>
-        <Row className="mb-3">
-          <Col xs={4} className="d-flex flex-column align-items-center" style={{margin:"0px"}}>
+      <Row className="mb-3 align-items-center">
+          <Col xs={2} className="d-flex justify-content-start" style={{ position: 'absolute', left: 0,top: 0, padding:0 }}>
+            <LogoutForm />
+          </Col>
+          <Col xs={12} className="d-flex flex-column align-items-center" style={{margin:"0px"}}>
           <ProfilePhotoInput
             profile={profile}
             defaultPhotoUrl={defaultPhotoUrl}
             handleImageUpload={handleImageUpload}
           />
-            <Card.Title
-              style={{
-                fontSize: "10px",
-                fontWeight: "bold",
-                textAlign: "center",
-              }}
-            >
+          </Col>
+          <Col xs={12}>
+            <Card.Title>
             <Form>
               <NicknameInput
                 nickname={nickname}
@@ -92,24 +95,24 @@ const ProfileBody = ({
                 setNicknameValidationMessage={setNicknameValidationMessage}
                 isNicknameValid={isNicknameValid}
                 setIsNicknameValid={setIsNicknameValid}
-                mainPageUrl={mainPageUrl}
+                // mainPageUrl={mainPageUrl}
                 handleKeyDown={handleKeyDown}
                 handleNicknameUpdateChange={handleNicknameUpdateChange}
-                member={member}
+                toId={toId}
+                profile={profile}
+                setProfile={setProfile}
               />
           </Form>
             </Card.Title>
-            <LogoutForm />
-            
           </Col>
-          <Col xs={8}>
+          <Col xs={12}>
             <Row>
               <Col
                 xs={3}
                 style={{
                   fontSize: "14px",
-                  padding: "0px",
-                  textAlign: "center",
+                  padding: "0px 12px",
+                  textAlign: "left",
                 }}
               >
                 다정 온도
