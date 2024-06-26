@@ -7,7 +7,7 @@ import { getChatroom } from '../../lib/axios_api';
 import { setChatroomData } from '../../store/store';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import Countdown from '../../lib/Countdown';
+import Countdown from '../../lib/Countdown'
 
 const MyChatroomList = () => {
     const member = useSelector((state) => state.auth.member);
