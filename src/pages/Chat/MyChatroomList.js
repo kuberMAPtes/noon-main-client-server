@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import module from './MyChatroomList.module.css'; // Import CSS module
-import { getMyChatrooms } from '../../lib/axios_api';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { getChatroom } from '../../lib/axios_api';
+import { getChatroom , getMyChatrooms } from '../Chat/function/axios_api'
 import { setChatroomData } from '../../store/store';
 import { useSelector } from 'react-redux';
 import axios from 'axios';

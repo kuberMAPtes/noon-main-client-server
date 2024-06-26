@@ -1,15 +1,4 @@
-import axios from 'axios';
-import { MAIN_API_URL } from "../../../util/constants"
-
-const BASE_URL = MAIN_API_URL;
-
-const axios_api = axios.create({
-    baseURL: BASE_URL,
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    withCredentials: true
-});
+import axios_api from '../../../lib/axios_api';
 
 // 채팅방 생성
 export const addChatroom = async(chatRoomData) => {
