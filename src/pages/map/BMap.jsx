@@ -34,13 +34,15 @@ const buildingFetchChecked = {
 }
 
 export default function BMap() {
+  const {ownerIdOfMapInfo} = useParams();
+
   const [queryParams, setQueryParams] = useSearchParams();
 
   const [placeSearchKeyword, setPlaceSearchKeyword] =
       useState(queryParams.has(PARAM_KEY_SEARCH_KEYWORD) ? queryParams.get(PARAM_KEY_SEARCH_KEYWORD) : "");
   const [currentPosition, setCurrentPosition] = useState(undefined);
   const [subscriptionChecked, setSubscriptionChecked] = useState(true);
-  const [popBuildingChecked, setPopBuildingChecked] = useState(true);
+  const [popBuildingChecked, setPopBuildingChecked] = useState(ownerIdOfMapInfo === undefined);
   const [firstEntry, setFirstEntry] = useState(true);
   const [wantBuildingProfileModal, setWantBuildingProfileModal] = useState({
     isOpen: false,
@@ -62,7 +64,6 @@ export default function BMap() {
 
   const navigate = useNavigate();
 
-  const {ownerIdOfMapInfo} = useParams();
   const loginMember = useSelector((state) => state.auth.member);
 
   // TODO: Replace sample with real
