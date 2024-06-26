@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import axios_api from "../../lib/axios_api";
 import Footer from "../../components/common/Footer";
 import $ from "jquery";
+import wikiStyles from "../../assets/css/module/building/GetBuildingWiki.module.css";
+import "../../assets/css/module/building/GetBuildingWiki.css";
 
 export const BUILDING_WIKI_BASE_PATH = "/buildingWiki";
 
@@ -17,7 +19,13 @@ export default function GetBuildingWiki() {
       axios_api.get(`${BUILDING_WIKI_BASE_PATH}/getPage/${buildingId}`).then((response) => {
         const data = response.data;
         setBuildingName(data.buildingName);
-        const fetched = $(data.htmlContent).find("#bodyContent").find(".mw-parser-output").attr("class", "mw-parser-output");
+        console.log(wikiStyles.contentContainer);
+        console.log(typeof(wikiStyles.contentContainer));
+        const fetched =
+            $(data.htmlContent)
+                .find("#bodyContent")
+                .find(".mw-parser-output")
+                .attr("class", `${wikiStyles.contentContainer}`);
         console.log(fetched);
         setContent(fetched);
       }).catch((err) => {
@@ -40,9 +48,10 @@ export default function GetBuildingWiki() {
   }, [content]);
 
   return (
-    <div id="wiki-container" className="container">
+    <div id="wiki-container" className={wikiStyles.container}>
       <Footer />
-      <h2>{buildingName}</h2>
+      <h1>{buildingName}</h1>
+      <hr className={wikiStyles.contentSeparator} />
     </div>
   );
 }
