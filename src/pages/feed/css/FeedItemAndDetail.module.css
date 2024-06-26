@@ -1,12 +1,14 @@
 /*
-FeedItem, FeedDetail에 적용
+    FeedItem, FeedDetail에 적용
 */
+
 .feedCategory {
     border: 1px solid #ccc; /* 구분선 */
     border-radius: 4px; /* 둥근 모서리 */
     padding: 5px 10px; /* 패딩 */
     background-color: #f8f9fa; /* 배경색 */
     font-weight: bold; /* 텍스트 굵게 */
+    color:black !important;
 }
 
 .feedCategoryDetail {
@@ -35,4 +37,17 @@ FeedItem, FeedDetail에 적용
 .iconContainer span {
     margin-left: 10px;
     cursor: pointer;
+}
+
+.feedItemNotionColor {
+    background-color: #7966ca !important; /* 우선 순위 적용 */
+    color: white !important;
+}
+
+.noticeText {
+    color: white !important;
+}
+
+.textMuted {
+    color: inherit;
 }
