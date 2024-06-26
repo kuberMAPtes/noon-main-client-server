@@ -22,9 +22,9 @@ let intervalId;
 
 let memberMarker;
 
-let popBuildingMarkers;
+let popBuildingMarkers = new Map();
 
-let buildingSubscriptionMarkers;
+let buildingSubscriptionMarkers = new Map();
 
 let placeSearchMarkers;
 
@@ -155,13 +155,13 @@ export default function BMap() {
     return () => {
       clearInterval(intervalId);
       if (memberMarker) {
-        clearMarkers([memberMarker]);
+        memberMarker.setMap(null);
       }
       memberMarker = undefined;
       clearMarkers(popBuildingMarkers);
-      popBuildingMarkers = undefined;
+      popBuildingMarkers = new Map();
       clearMarkers(buildingSubscriptionMarkers);
-      buildingSubscriptionMarkers = undefined;
+      buildingSubscriptionMarkers = new Map();
     }
   }, []);
 
@@ -189,7 +189,7 @@ export default function BMap() {
       <div id="map">
         <SearchBar
             typeCallback={(text) => setPlaceSearchKeyword(text)}
-            searchCallback={() => searchPlaceList(placeSearchKeyword, onFetchPlace, queryParams, setQueryParams)}
+            searchCallback={() => searchPlaceList(placeSearchKeyword, onSearchPlace, queryParams, setQueryParams)}
           />
         <button
             type="button"
@@ -241,7 +241,7 @@ function searchPlaceList(searchKeyword, callback, queryParams, setQueryParams) {
  *   longitude: number;
  * }[]} places 
  */
-function onFetchPlace(places) {
+function onSearchPlace(places) {
   console.log(places);
   clearMarkers(placeSearchMarkers);
   const placeSearchMarkersCache = [];
@@ -319,19 +319,17 @@ function fetchBuildingInfo(latitude, longitude, setWantBuildingProfileModal) {
  * @param {string} memberId
  */
 async function fetchBuildingMarkers(subscriptionChecked, popBuildingChecked, memberId, navigate) {
-  clearMarkers(buildingSubscriptionMarkers);
-  clearMarkers(popBuildingMarkers);
-
-  const buildingIdSet = new Set();
-
   if (popBuildingChecked) {
-    await fetchBuildingsInPositionRange(navigate, buildingIdSet);
+    await fetchBuildingsInPositionRange(navigate);
+  } else {
+    console.log("here");
+    clearMarkers(popBuildingMarkers);
   }
 
-  console.log(buildingIdSet);
-
   if (subscriptionChecked) {
-    await fetchSubscriptions(memberId, navigate, buildingIdSet);
+    await fetchSubscriptions(memberId, navigate);
+  } else {
+    clearMarkers(buildingSubscriptionMarkers);
   }
 }
 
@@ -359,7 +357,7 @@ function addMarker(html, latitude, longitude) {
   });
 }
 
-async function fetchBuildingsInPositionRange(navigate, buildingIdSet) {
+async function fetchBuildingsInPositionRange(navigate) {
   const positionRange = getPositionRange();
   console.log(positionRange);
   const response = await axios_api.get(`${MAIN_API_URL}/buildingProfile/getBuildingsWithinRange`, {
@@ -375,20 +373,26 @@ async function fetchBuildingsInPositionRange(navigate, buildingIdSet) {
     "chatroomName": "sample-chatroom"
   }
 
-  const buildingMarkersCache = [];
+  const buildingMarkersCache = new Set();
+  
   data.forEach((d) => {
+    const buildingId = d.buildingId;
+    buildingMarkersCache.add(buildingId);
+    if (popBuildingMarkers.has(buildingId)) {
+      return;
+    }
+
     const contenthtml = getBuildingMarkerHtml(sampleSubscriptionProviders, sampleLiveliestChatroom, d.buildingName, "/image/popular-bulilding.png");
     const buildingMarker = addMarker(contenthtml, d.latitude, d.longitude)
     naver.maps.Event.addListener(buildingMarker, "click", () => {
       navigate(`/getBuildingProfile/${d.buildingId}`);
     });
-    buildingMarkersCache.push(buildingMarker);
-    buildingIdSet.add(d.buildingId);
+    popBuildingMarkers.set(buildingId, buildingMarker);
   });
-  popBuildingMarkers = buildingMarkersCache;
+  clearMarkers(popBuildingMarkers, buildingMarkersCache);
 }
 
-async function fetchSubscriptions(memberId, navigate, toBeFiltered) {
+async function fetchSubscriptions(memberId, navigate) {
   console.log(memberId);
   const response = await axios_api.get(`${MAIN_API_URL}/buildingProfile/getMemberSubscriptionList`, {
     params: {
@@ -405,18 +409,23 @@ async function fetchSubscriptions(memberId, navigate, toBeFiltered) {
     "chatroomName": "sample-chatroom"
   }
 
-  const buildingMarkersCache = [];
+  const buildingMarkersCache = new Set();
   data.forEach((d) => {
-    if (!toBeFiltered.has(d.buildingId)) {
+    const buildingId = d.buildingId;
+    if (!popBuildingMarkers.has(buildingId)) {
+      buildingMarkersCache.add(buildingId);
+      if (buildingSubscriptionMarkers.has(buildingId)) {
+        return;
+      }
       const contenthtml = getBuildingMarkerHtml(sampleSubscriptionProviders, sampleLiveliestChatroom, d.buildingName, "/image/subscription-bulilding.png");
       const buildingMarker = addMarker(contenthtml, d.latitude, d.longitude);
       naver.maps.Event.addListener(buildingMarker, "click", () => {
         navigate(`/getBuildingProfile/${d.buildingId}`);
       });
-      buildingMarkersCache.push(buildingMarker);
+      buildingSubscriptionMarkers.set(buildingId, buildingMarker);
     }
   });
-  buildingSubscriptionMarkers = buildingMarkersCache;
+  clearMarkers(buildingSubscriptionMarkers, buildingMarkersCache);
 }
 
 function getPositionRange() {
@@ -433,10 +442,19 @@ function getPositionRange() {
   };
 }
 
-function clearMarkers(markers) {
-  if (markers) {
-    markers.forEach((b) => {
-      b.setMap(null);
-    });
+/**
+ * 
+ * @param {Map} markers 
+ * @param {Set<number>} toRemain 
+ */
+function clearMarkers(markers, toRemain) {
+  console.log(markers);
+  console.log(toRemain);
+  for (let marker of markers) {
+    const [buildingId, markerInstance] =  marker;
+    if (!toRemain || !toRemain.has(buildingId)) {
+      markerInstance.setMap(null);
+      markers.delete(buildingId);
+    }
   }
 }
