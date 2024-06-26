@@ -9,7 +9,7 @@ import { getBuildingMarkerHtml, getPlaceSearchMarkerHtml } from "./contant/marke
 import mapStyles from "../../assets/css/module/map/BMap.module.css";
 import "../../assets/css/module/map/BMap.css";
 import Footer from "../../components/common/Footer";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentMapState } from "../../redux/slices/currentMapStateSlice";
 import WantBuildingProfile from "../building/components/WantBuildingProfile";
@@ -62,8 +62,11 @@ export default function BMap() {
 
   const navigate = useNavigate();
 
+  const {ownerIdOfMapInfo} = useParams();
+  const loginMember = useSelector((state) => state.auth.member);
+
   // TODO: Replace sample with real
-  const sampleMember = "member_1";
+  const member = ownerIdOfMapInfo ? ownerIdOfMapInfo : loginMember.memberId;
 
   /**
    * 
@@ -88,7 +91,7 @@ export default function BMap() {
     });
 
     naver.maps.Event.addListener(map, "dragend", (e) => {
-      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, buildingFetchChecked.popBuildingChecked, sampleMember, navigate);
+      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, buildingFetchChecked.popBuildingChecked, member, navigate);
       const center = map.getCenter();
       dispatch(setCurrentMapState({
         latitude: center.y,
@@ -97,7 +100,7 @@ export default function BMap() {
     });
 
     naver.maps.Event.addListener(map, "zoom_changed", (e) => {
-      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, buildingFetchChecked.popBuildingChecked, sampleMember, navigate);
+      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, buildingFetchChecked.popBuildingChecked, member, navigate);
       console.log(e);
       dispatch(setCurrentMapState({
         zoomLevel: e
@@ -164,7 +167,7 @@ export default function BMap() {
 
   useEffect(() => {
     if (!firstEntry) {
-      fetchBuildingMarkers(subscriptionChecked, popBuildingChecked, sampleMember, navigate);
+      fetchBuildingMarkers(subscriptionChecked, popBuildingChecked, member, navigate);
     }
   }, [popBuildingChecked, subscriptionChecked, firstEntry]);
 
@@ -192,7 +195,7 @@ export default function BMap() {
             type="button"
             className={mapStyles.myLocationButton}
             onClick={() => currentPosition && map && map.setCenter(new naver.maps.LatLng(currentPosition.latitude, currentPosition.longitude))}>
-          <img src="./image/my-location.png" alt="my-location" /> 
+          <img src="/image/my-location.png" alt="my-location" /> 
         </button>
         <FetchTypeToggle
             subscriptionChecked={subscriptionChecked}
@@ -374,7 +377,7 @@ async function fetchBuildingsInPositionRange(navigate, buildingIdSet) {
 
   const buildingMarkersCache = [];
   data.forEach((d) => {
-    const contenthtml = getBuildingMarkerHtml(sampleSubscriptionProviders, sampleLiveliestChatroom, d.buildingName, "./image/popular-bulilding.png");
+    const contenthtml = getBuildingMarkerHtml(sampleSubscriptionProviders, sampleLiveliestChatroom, d.buildingName, "/image/popular-bulilding.png");
     const buildingMarker = addMarker(contenthtml, d.latitude, d.longitude)
     naver.maps.Event.addListener(buildingMarker, "click", () => {
       navigate(`/getBuildingProfile/${d.buildingId}`);
@@ -386,6 +389,7 @@ async function fetchBuildingsInPositionRange(navigate, buildingIdSet) {
 }
 
 async function fetchSubscriptions(memberId, navigate, toBeFiltered) {
+  console.log(memberId);
   const response = await axios_api.get(`${MAIN_API_URL}/buildingProfile/getMemberSubscriptionList`, {
     params: {
       memberId
@@ -404,7 +408,7 @@ async function fetchSubscriptions(memberId, navigate, toBeFiltered) {
   const buildingMarkersCache = [];
   data.forEach((d) => {
     if (!toBeFiltered.has(d.buildingId)) {
-      const contenthtml = getBuildingMarkerHtml(sampleSubscriptionProviders, sampleLiveliestChatroom, d.buildingName, "./image/subscription-bulilding.png");
+      const contenthtml = getBuildingMarkerHtml(sampleSubscriptionProviders, sampleLiveliestChatroom, d.buildingName, "/image/subscription-bulilding.png");
       const buildingMarker = addMarker(contenthtml, d.latitude, d.longitude);
       naver.maps.Event.addListener(buildingMarker, "click", () => {
         navigate(`/getBuildingProfile/${d.buildingId}`);
