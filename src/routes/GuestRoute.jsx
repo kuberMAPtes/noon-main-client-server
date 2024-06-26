@@ -9,7 +9,7 @@ import { navigateMainPage } from '../util/mainPageUri';
 const GuestRoute = ({ children }) => {
     
     const authorization = useSelector((state) => state.auth.authorization);
-    const memberId = useSelector((state) => state.auth.member.memberId);
+    const member = useSelector((state) => state.auth.member);
     const isRedirect = useSelector((state) => state.auth.isRedirect);
     const loading = useSelector((state) => state.auth.loading);//AuthLoader가 비동기요청을 처리한 후 > false
     //동적URI가 필요
@@ -21,13 +21,13 @@ const GuestRoute = ({ children }) => {
     const navigate = useNavigate();
 
     
-    console.log("#### GuestRoute 렌더링 authorization, memberId, uri, IsFirst구독", authorization, memberId,IsFirst);
+    console.log("#### GuestRoute 렌더링 authorization, memberId, uri, IsFirst구독", authorization, member,IsFirst);
     //부작용 로직이다. 렌더링은 UI에 집중하고 부작용은 useEffect에 집중
     useEffect(() => {
         console.log("@@@@ GuestRoute useEffect 시작")
-        if (authorization && memberId && isRedirect) {
+        if (authorization && member&& member?.memberId && isRedirect) {
             // alert("로그인한 사용자는 입장이 안됩니다.(리다이렉트를 false로..)"+authorization+"::"+memberId+"::"+isRedirect);
-            navigateMainPage(memberId,navigate);
+            navigateMainPage(member?.memberId,navigate);
             // const { encryptedData, ivData } = encryptWithLv(memberId);
             // const encryptedToId = encodeURIComponent(encryptedData);
             // const IV = encodeURIComponent(ivData);
@@ -36,7 +36,7 @@ const GuestRoute = ({ children }) => {
             dispatch(setIsRedirect(false));
         }
         setIsFirst(false);
-    }, [authorization, memberId]);
+    }, [authorization, member, isRedirect, navigate, dispatch]);
 
     if (IsFirst===true || loading === true){
         return null;

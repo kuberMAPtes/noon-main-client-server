@@ -79,7 +79,7 @@ const ProfileBody = ({
           />
             <Card.Title
               style={{
-                fontSize: "15px",
+                fontSize: "10px",
                 fontWeight: "bold",
                 textAlign: "center",
               }}
@@ -138,14 +138,6 @@ const ProfileBody = ({
             <Row style={{minHeight:"20%"}}>
               <Col xs={12} style={{border: "2px solid #91A7FF", borderRadius:"7px"}}>{profile.profileIntro}</Col>
             </Row>
-            {toId !== fromId && (
-              <Row>
-                <Col xs={12}>
-                  <Button style={{ width: "49%" }}>그룹채팅방 초대</Button>
-                  <Button style={{ width: "51%" }}>1대1채팅방 초대</Button>
-                </Col>
-              </Row>
-            )}
           </Col>
           <Col xs={12}>
             <hr style={{border: "1px solid #91A7FF"}} />

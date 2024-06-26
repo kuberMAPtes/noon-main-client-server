@@ -27,15 +27,26 @@ const LoginForm = () => {
       loginWay: "normal",
     };
 
-    // const validationMessage = validateLoginForm(memberId, pwd);
-    // if (validationMessage) {
-    //   setValidationError(validationMessage);
-    //   return;
-    // }
+    const validationMessage = validateLoginForm(memberId, pwd);
+    if (validationMessage) {
+      setValidationError(validationMessage);
+      return;
+    }
 
     try {
       console.log("로그인 하기 전 store.auth.member :: ", storeMemberId);
-      await dispatch(login({ loginData, navigate }));
+      const resultAction = await dispatch(login({ loginData, navigate }));
+      // alert("resultAction"+JSON.stringify(resultAction));
+      const message = resultAction.payload?.message;
+      // alert("로그인 처리중입니다."+message);
+      if(message){
+        // alert(message);
+        setValidationError(message);//이때 로그인에러값과 validation  error값이 같아진다.
+        return;
+      }else{
+        setValidationError("");
+        return;
+      }
     } catch (error) {
       console.error("Failed to login:", error);
     }
@@ -65,6 +76,8 @@ const LoginForm = () => {
             <Form.Group controlId="memberId">
               <Form.Label>Member ID</Form.Label>
               <Form.Control
+                minLength={6}
+                maxLength={40}
                 type="text"
                 value={memberId}
                 onChange={(e) => setMemberId(e.target.value)}
@@ -76,6 +89,8 @@ const LoginForm = () => {
             <Form.Group controlId="password">
               <Form.Label>Password</Form.Label>
               <Form.Control
+                minLength={8}
+                maxLength={16}
                 type="password"
                 value={pwd}
                 onChange={(e) => setPassword(e.target.value)}
@@ -92,12 +107,17 @@ const LoginForm = () => {
             >
               로그인
             </Button>
-            {validationError && (
+            {(validationError && !loginError) && (
               <Alert variant="danger" className="mt-3">
                 {validationError}
               </Alert>
             )}
-            {!validationError && loginError && (
+            {(!validationError && loginError) && (
+              <Alert variant="danger" className="mt-3">
+                {loginError.message}
+              </Alert>
+            )}
+            {(validationError && loginError) && (
               <Alert variant="danger" className="mt-3">
                 {renderLoginError(validationError, loginError)}
               </Alert>

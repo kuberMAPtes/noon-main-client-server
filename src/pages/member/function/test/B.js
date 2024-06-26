@@ -5,7 +5,7 @@ const ProfilePhoto = ({ profile, defaultPhotoUrl, handleImageUpload }) => {
   const [preview, setPreview] = useState(profile.profilePhotoUrl || defaultPhotoUrl);
 
   useState(()=> {
-    alert("프로필 사진확인"+ JSON.stringify(profile));
+    // alert("프로필 사진확인"+ JSON.stringify(profile));
   },[])
 
   const handleImageError = (event) => {

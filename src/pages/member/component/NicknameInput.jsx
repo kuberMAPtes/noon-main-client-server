@@ -49,7 +49,7 @@ const NicknameInput = ({
         required
         isInvalid={!!nicknameValidationMessage}
         readOnly={nicknameInput.isReadOnly}
-        onDoubleClick={nicknameInput.handleDoubleClick}
+        onClick={nicknameInput.handleClick}
         onBlur={nicknameInput.handleBlur(member.nickname)}
         ref={nicknameInput.inputRef}
       />

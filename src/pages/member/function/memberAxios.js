@@ -135,10 +135,10 @@ export const Login = async (loginRequestDto) => {
     console.log("login 요청:", loginRequestDto);
     const response = await axiosInstance.post(`/member/login`, loginRequestDto);
     console.log("login 응답 response :", response);
-    return response.data.info;
+    return response.data;
   } catch (error) {
     console.error("login error:", error);
-    return null
+    return error.response.data;
   }
 };
 // 구글 로그인
@@ -243,7 +243,7 @@ export const updateMember = async (memberDto) => {
     console.log("updateMember 요청:",memberDto);
     const response = await axiosInstance.post(`/member/updateMember`,memberDto);
     console.log("updateMember 응답:",response.data);
-    alert("결과 response.data" + JSON.stringify(response.data));
+    // alert("결과 response.data" + JSON.stringify(response.data));
     return response.data;
   } catch(error) {
     console.error("updateMember error:", error);
@@ -292,7 +292,7 @@ export const updatePhoneNumber = async (phoneNumberDto) => {
     console.log("updatePhoneNumber 요청:",phoneNumberDto);
     const response = await axiosInstance.post(`/member/updatePhoneNumber`,phoneNumberDto);
     console.log("updatePhoneNumber 응답:",response);
-    alert("updatePhoneNumber 응답:"+JSON.stringify(response));
+    // alert("updatePhoneNumber 응답:"+JSON.stringify(response));
     return response.data.info;
   }catch(error){
     console.error("updatePhoneNumber error:",error);
