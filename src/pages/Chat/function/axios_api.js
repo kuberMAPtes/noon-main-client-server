@@ -135,4 +135,20 @@ export const newChatApplyList = async(memberId) => {
     }
 }
 
+// 채팅방 자동삭제 시간 받아오기 (반환 : )
+export const chatroomDeleteTime = async()=>{
+    console.log("chatroomDeleteTime fetching 중....! get data => ")
+
+    try{
+        const response = await axios_api.get(`/adminChatroom/chatroomDeleteTime`)
+        console.log('chatroomDeleteTime fetching 결과 :', response.data);
+
+        return response.data;
+
+    } catch (error){
+        console.error("Error fetching chatroomDeleteTime", error);
+        throw error;  // Re-throw the error so it can be handled by the caller      
+    }
+}
+
 export default axios_api;
