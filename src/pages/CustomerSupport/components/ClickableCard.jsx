@@ -4,12 +4,23 @@ import { useNavigate } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import '../css/customerSupport.css';
 
-const ClickableCard = ({ path, iconClass, category, title }) => {
+const ClickableCard = ({ path, iconClass, category, title, onClick, active }) => {
   const navigate = useNavigate();
 
+  const cardStyle = {
+    cursor: 'pointer',
+    backgroundColor: active ? '#007bff' : '', 
+    color: active ? '#fff' : '', 
+    margin: '10px', 
+    padding: '20px', 
+    border: '1px solid #ddd', 
+    borderRadius: '5px', 
+    textAlign: 'center', 
+  };
+
   return (
-    <Col lg="3" md="6" sm="6" onClick={() => navigate(path)} className="clickable-col">
-      <Card className="card-stats">
+    <Col lg="3" md="6" sm="6" onClick={() => { onClick(path); navigate(path); }} className="clickable-col">
+      <Card className="card-stats" style={cardStyle}>
         <CardBody className="d-flex flex-column align-items-center">
           <Row className="w-100">
             <Col className="d-flex flex-column align-items-center">
