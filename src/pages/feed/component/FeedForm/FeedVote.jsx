@@ -3,9 +3,9 @@ import { Badge, Button, Card } from 'react-bootstrap';
 import axios_api from '../../../../lib/axios_api';
 
 /**
- * 피드 미리보기 시 사용하는 컴포넌트
+ * 피드 미리보기시 사용하는 컴포넌트
  */
-const VotePreview = ({ feedId }) => {
+const FeedVote = ({ feedId }) => {
     const [question, setQuestion] = useState('');
     const [options, setOptions] = useState([]);
     const [selectedOption, setSelectedOption] = useState('');
@@ -68,4 +68,4 @@ const VotePreview = ({ feedId }) => {
     );
 };
 
-export default VotePreview;
+export default FeedVote;
