@@ -5,7 +5,6 @@ import FeedItem from './component/FeedList/FeedItem';
 import Dropdown from './component/FeedList/FeedDropdown';
 import FeedNotFound from './component/FeedNotFound';
 import Loading from './component/FeedList/FeedLoading';
-import FeedDisplayBoard from './component/FeedList/FeedDisplayBoard';
 
 import axios_api from '../../lib/axios_api';
 import { useSelector } from 'react-redux';
@@ -92,7 +91,6 @@ const FeedListPage = () => {
     return (
         <div>
             <div className='container'>
-            <FeedDisplayBoard text="흠 그정돈가" />
             <Dropdown onSelect={handleSelect} />
             {!loading && feeds.length === 0 ? (
                 <FeedNotFound />

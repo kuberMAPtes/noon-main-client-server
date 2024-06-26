@@ -7,6 +7,7 @@ import Loading from './component/FeedList/FeedLoading';
 
 import Footer from '../../components/common/Footer';
 import BasicNavbar from '../../components/common/BasicNavbar';
+import FeedDisplayBoard from './component/FeedList/FeedDisplayBoard';
 
 import './css/FeedList.css';
 import axios_api from '../../lib/axios_api';
@@ -118,6 +119,7 @@ const FeedBuildingListPage = () => {
     return (
         <div>
             <FeedPopularyRanking feeds={ranking} />
+            <FeedDisplayBoard buildingId={buildingId} />
             <div className='container'>
                 <div className="row">
                     {feeds.map((feed, index) => (
