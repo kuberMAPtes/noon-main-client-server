@@ -8,14 +8,16 @@ const ClickableCard = ({ path, iconClass, category, title, onClick, active }) =>
   const navigate = useNavigate();
 
   const cardStyle = {
+    width: "100%",
     cursor: 'pointer',
     backgroundColor: active ? '#007bff' : '', 
     color: active ? '#fff' : '', 
-    margin: '10px', 
-    padding: '20px', 
+    margin: '0px', 
+    padding: '0px', 
     border: '1px solid #ddd', 
     borderRadius: '5px', 
     textAlign: 'center', 
+    margin: '0 auto' 
   };
 
   return (
