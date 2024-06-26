@@ -206,6 +206,7 @@ const FeedDetail = ({ data, memberId }) => {
                     <CardSubtitle>
                         {writtenTimeReplace} | <div onClick={() => goToBuildingProfile(buildingId)} style={{ cursor: 'pointer', display: 'inline' }}>{buildingName}</div>  
                     </CardSubtitle>
+
                     {/* 피드 카테고리 */}
                     <div className={styles.feedCategoryDetail}>{feedCategoryName}</div>
                     <br/>
@@ -216,7 +217,6 @@ const FeedDetail = ({ data, memberId }) => {
                         </CardTitle>
 
                     {/* 내용 */}
-                    
                     <p style={{ whiteSpace: "pre-wrap" }}><CardText>{renderFeedText(feedText)}</CardText></p>
                     { tags && tags.length > 0 && (
                         <div className="tags">
@@ -240,7 +240,7 @@ const FeedDetail = ({ data, memberId }) => {
                 </CardBody>
             </Card>
 
-            {/* 첨부 파일 */}
+            {/* 첨부 파일 OR 투표 */}
             <Card>
                 <CardBody>
                 {attachmentUrls.map((attachmentUrl, index) => (

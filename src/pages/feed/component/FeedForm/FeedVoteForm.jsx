@@ -55,25 +55,6 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
         }
     };
 
-    const handleAddVote = async () => {
-        try {
-            await axios_api.post('/feed/addVote', newVote);
-            fetchVotes();
-            setNewVote({ question: '', options: [''] });
-        } catch (error) {
-            console.error('투표를 추가하는 중 오류 발생:', error);
-        }
-    };
-
-    const handleDeleteVote = async (feedId) => {
-        try {
-            await axios_api.post(`/feed/deleteVote/${feedId}`);
-            fetchVotes();
-        } catch (error) {
-            console.error('투표를 삭제하는 중 오류 발생:', error);
-        }
-    };
-
     const handleOptionChange = (index, value) => {
         const updatedOptions = [...newVote.options];
         updatedOptions[index] = value;

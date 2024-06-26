@@ -6,7 +6,7 @@ const ProfilePhotoInput = ({ profile, defaultPhotoUrl, handleImageUpload }) => {
 
   useEffect(() => {
     console.log("프로필 사진 확인", JSON.stringify(profile.profilePhotoUrl));
-    alert("프로필 사진 확인" + JSON.stringify(profile.profilePhotoUrl));
+    // alert("프로필 사진 확인" + JSON.stringify(profile.profilePhotoUrl));
     setPreview(profile.profilePhotoUrl || defaultPhotoUrl);
   }, [profile.profilePhotoUrl,setPreview]);
 

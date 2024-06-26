@@ -27,6 +27,8 @@ const FeedFormPage = () => {
     // 2. buildingId
     const buildingId = searchParams.get('buildingId');
 
+    console.log("FeedFormPage writerId : " + writerId, "buildingId : " + buildingId);
+
     // 3. feedid
     const params = useParams()
     const feedId = params.feedId || null;
@@ -50,12 +52,18 @@ const FeedFormPage = () => {
     return (
         <div>
             <BasicNavbar />
-            <div className="container">
-                <Button variant="primary" onClick={() => setShowModal(true)}>
-                    피드 종류
-                </Button>
-                <SlideUpModal show={showModal} onHide={() => setShowModal(false)} />
-            </div>
+            {/* 피드를 새로 추가할 때만 생성 */}
+            {feedId ? '' : (
+                <div className="container">
+                    <Button variant="primary" onClick={() => setShowModal(true)}>
+                        피드 종류
+                    </Button>
+                    <SlideUpModal 
+                        show={showModal} 
+                        onHide={() => setShowModal(false)} 
+                    />
+                </div>
+            )}
 
             <FeedForm
                 existingFeed={selectedFeed}

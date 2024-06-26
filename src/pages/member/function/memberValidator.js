@@ -42,6 +42,10 @@ export const validateLoginForm = (memberId, pwd) => {
     return "비밀번호에 3번 이상 연속된 문자열이 포함될 수 없습니다.";
   }
 
+  if (pwd ==="social_sign_up"){
+    return "소셜로그인은 일반 로그인 하실 수 없습니다.";
+  }
+
   return null;
 };
 //존재하면 안되는 것들. 회원가입 전 조회시 아이디가 있으면 NO checkFunction에 따라 다름. checkMemberId

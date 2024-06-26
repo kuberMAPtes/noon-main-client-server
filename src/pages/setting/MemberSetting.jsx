@@ -6,6 +6,8 @@ import { is2xxStatus } from "../../util/statusCodeUtil";
 import BasicNavbar from "../../components/common/BasicNavbar";
 import "./css/MemberSetting.css";
 import OpInfoModal from "./component/OpInfoModal";
+import { RiArrowGoBackFill } from "react-icons/ri";
+import { useNavigate } from "react-router-dom";
 
 const PUBLIC_RANGES = [
   {
@@ -38,6 +40,8 @@ export default function MemberSetting() {
     useState("PUBLIC");
   const [opInfoMode, setOpInfoMode] = useState("termsAndPolicy");
   const [opInfoModalVisible, setOpInfoModalVisible] = useState(false);
+
+  const navigate = useNavigate();
 
   const memberId = SAMPLE_MEMBER_ID;
 
@@ -95,8 +99,19 @@ export default function MemberSetting() {
   return (
     <div>
       <BasicNavbar />
-      <main className="container">
-        <h1>환경설정</h1>
+      
+      <main className="container member-setting-container">
+        <div class="title-container">
+          <h1>환경설정</h1>
+          <RiArrowGoBackFill
+              style={{
+                  width: "25px", height: "25px"
+              }}
+              onClick={() => {
+                navigate(-1);
+              }}
+          />
+        </div>
         <div className="setting-content-wrapper">
           {
             COMPONENT_INFOS.map((data, idx) => (
@@ -111,28 +126,49 @@ export default function MemberSetting() {
             ))
           }
         </div>
-        <button className="btn--apply-setting" type="button" onClick={() => {
-          axios_api.post(`${MAIN_API_URL}/setting/updateSetting/${memberId}`, {
-            memberProfilePublicRange,
-            allFeedPublicRange,
-            buildingSubscriptionPublicRange,
-            receivingAllNotification
-          }).then((response) => {
-            if (is2xxStatus(response.status)) {
-              alert("환경설정이 적용되었습니다");
-            }
-          }).catch((err) => {
-            console.error(err);
-          })
-        }}>변경사항 저장</button>
-        <button className="btn--opinfo" type="button" onClick={() => {
-          setOpInfoMode("termsAndPolicy");
-          setOpInfoModalVisible(true);
-        }}>약관 및 정책</button>
-        <button className="btn--opinfo" type="button" onClick={() => {
-          setOpInfoMode("termsOfUse");
-          setOpInfoModalVisible(true);
-        }}>이용규정</button>
+        <button
+            className="btn--apply-setting"
+            type="button"
+            onClick={() => {
+              axios_api.post(`${MAIN_API_URL}/setting/updateSetting/${memberId}`, {
+                memberProfilePublicRange,
+                allFeedPublicRange,
+                buildingSubscriptionPublicRange,
+                receivingAllNotification
+              }).then((response) => {
+                if (is2xxStatus(response.status)) {
+                  alert("환경설정이 적용되었습니다");
+                }
+              }).catch((err) => {
+                console.error(err);
+              })
+            }}
+            style={{ backgroundColor: "#030722" }}
+        >변경사항 저장</button>
+        <button
+            className="btn--opinfo"
+            type="button"
+            onClick={() => {
+              setOpInfoMode("termsAndPolicy");
+              setOpInfoModalVisible(true);
+            }}
+            style={{
+              color: "#030722",
+              backgroundColor: "#FFFFFD"
+            }}
+        >약관 및 정책</button>
+        <button
+            className="btn--opinfo"
+            type="button"
+            onClick={() => {
+              setOpInfoMode("termsOfUse");
+              setOpInfoModalVisible(true);
+            }}
+            style={{
+              color: "#030722",
+              backgroundColor: "#FFFFFD"
+            }}
+        >이용규정</button>
         <OpInfoModal
             visible={opInfoModalVisible}
             setVisible={setOpInfoModalVisible}

@@ -22,12 +22,31 @@ const TabNavigation = () => {
   return (
     <div className="tab-navigation-container">
       <div className="tabs">
-        <button onClick={() => setActiveTab('feed')} className={activeTab === 'feed' ? 'active' : ''}>
-          <i className="fa fa-th"></i>
-        </button>
-        <button onClick={() => setActiveTab('chat')} className={activeTab === 'chat' ? 'active' : ''}>
-          <i className="fa fa-comment"></i>
-        </button>
+      <button 
+        onClick={(e) => {
+          e.target.style.backgroundColor = '#f3f0ff';
+          setTimeout(() => {
+            e.target.style.backgroundColor = 'transparent';
+          }, 200);
+          setActiveTab('feed');
+        }} 
+        className={activeTab === 'feed' ? 'active' : ''}
+      >
+        <i className="fa fa-th"></i>
+      </button>
+      <button 
+        onClick={(e) => {
+          e.target.style.backgroundColor = '#f3f0ff';
+          setTimeout(() => {
+            e.target.style.backgroundColor = 'transparent';
+          }, 200);
+          setActiveTab('chat');
+        }} 
+        className={activeTab === 'chat' ? 'active' : ''}
+      >
+        <i className="fa fa-comment"></i>
+      </button>
+
       </div>
       <div className="tab-content">
         {activeTab === 'feed' ? <FeedBuildingListPage /> : <ChatroomList />}
@@ -35,6 +54,10 @@ const TabNavigation = () => {
       <button className="create-button" onClick={handleCreationLink}>
         <i className="fa fa-plus"></i>
       </button>
+
+
+
+      
     </div>
   );
 };
