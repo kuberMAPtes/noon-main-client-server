@@ -254,7 +254,8 @@ const Chatroom = () => {
 
         <div>
           <h2>채팅방 이름: {roomInfo.chatroomName}</h2>
-          <p><strong>ID:</strong> {roomInfo.chatroomID}</p>
+          <p><strong>채팅방 ID:</strong> {roomInfo.chatroomID}</p>
+          <p><stroing>건물 ID:</stroing> {roomInfo.buildingId}</p>
           <p><strong>다정온도 제한:</strong> {roomInfo.chatroomMinTemp}°C</p>
           <p><strong>방장:</strong> {roomInfo.chatroomCreatorId}</p>
           <p><strong>채팅방 종류:</strong> {roomInfo.chatroomType}</p>

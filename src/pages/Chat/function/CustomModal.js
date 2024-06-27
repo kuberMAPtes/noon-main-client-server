@@ -49,7 +49,7 @@ export const CustomModal = ({kickRoom, showModal, setShowModal, setParticipants,
                 <div className={styles.customModal} onClick={handleBackgroundClick}>
                     <div className={styles.modalContent}>
                         <h2 className={styles.modalContentTitle}>작업 선택</h2>
-                        <button className={styles.modalContentButton} onClick={handleUserInfo}>유저정보</button>
+                        <button className={styles.modalContentButton} onClick={handleUserInfo} >유저정보</button>
                         {loginMemberRole === 'OWNER' && <button className={styles.modalContentButton} onClick={handleBanUser}>강퇴하기</button> }
                         <button className={styles.modalContentButton} onClick={() => setShowModal(false)}>취소</button>
                     </div>

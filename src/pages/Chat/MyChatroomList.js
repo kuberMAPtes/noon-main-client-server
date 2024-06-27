@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import module from './MyChatroomList.module.css'; // Import CSS module
+    import module from './MyChatroomList.module.css'; // Import CSS module
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { getChatroom , getMyChatrooms } from '../Chat/function/axios_api'
@@ -14,7 +14,6 @@ const MyChatroomList = () => {
     const memberID = member.memberId;
 
     const [chatrooms, setChatrooms] = useState([]);
-    const [activeChatrooms, setActiveChatrooms] = useState([]);
     const dispatch = useDispatch();
 
     const navigate = useNavigate();
@@ -22,19 +21,33 @@ const MyChatroomList = () => {
     useEffect(() => {
         getMyChatrooms(memberID)
             .then(chatrooms => {
-                fetchUnreadMessageCount(chatrooms, memberID)
-                    .then(data => {
-                        console.log("node 서버", process.env.REACT_APP_NODE_SERVER_URL, "에서 읽은메세지 요청중");
-                        setChatrooms(data.chatrooms); // 채팅방 별 안읽은 메세지 저장
-                        setActiveChatrooms(data.activeChatrooms); // 활발한 채팅방 저장
+                fetchUnreadMessageCountAndActiveRooms(chatrooms, memberID)
+                    .then(response => {
+                        console.log("node 서버", response);
+
+                        // chatrooms 배열의 각 원소에 대해 activeRooms 배열에서 일치하는 chatroomID를 찾고 famous 속성을 추가함
+                        const updatedChatrooms = response.chatrooms.map(room => {
+                            // activeRooms 배열에서 현재 room의 chatroomID와 일치하는 객체를 찾음
+                            const foundActiveRoom = response.activeRooms.find(activeRoom => activeRoom.chatroomID === String(room.chatroomID));
+                        
+                            if (foundActiveRoom) {
+                            // activeRooms 배열에 일치하는 chatroomID가 있으면 famous 값을 1로 설정한 객체를 반환
+                            return {...room, famous: 1};
+                            } else {
+                            // 일치하는 chatroomID가 없으면 그대로 반환
+                            return room;
+                            }
+                        });
+                        console.log(updatedChatrooms);
+                        setChatrooms(updatedChatrooms); // 채팅방 별 안읽은 메세지 저장
                     })
             })
             .catch(error => console.log(error));
     }, [memberID]);
 
     // 안읽은 메세지 가져오기
-    async function fetchUnreadMessageCount(chatrooms, memberID) {
-        const url = `${process.env.REACT_APP_NODE_SERVER_URL}/node/messageUnread`;
+    async function fetchUnreadMessageCountAndActiveRooms(chatrooms, memberID) {
+        const url = `${process.env.REACT_APP_NODE_SERVER_URL}/node/messageUnreadAndActiverooms`;
 
         try {
             const response = await axios.post(url, {
@@ -46,6 +59,22 @@ const MyChatroomList = () => {
 
         } catch (error) {
             console.error('Error fetching unread messages count:', error);
+            return null;
+        }
+    }
+
+    // 활발한 채팅방 가져오기
+    async function fetchActiveRooms(chatrooms, memberID) {
+        const url = `${process.env.REACT_APP_NODE_SERVER_URL}/node/activeRooms`;
+
+        try {
+            const response = await axios.get(url);
+
+            console.log("활발한넘",response.data);
+            return response.data;
+
+        } catch (error) {
+            console.error('Error fetching activerRooms count:', error);
             return null;
         }
     }
@@ -78,7 +107,7 @@ const MyChatroomList = () => {
                 {chatrooms.map(chatroom => (
                     <div key={chatroom.chatroomID} className={module.chatroom}>
                         <div className={module.chatroomInfo}>
-                            <p className={module.chatroomName}>{chatroom.chatroomName} ({chatroom.chatroomEntrancesSize})</p>
+                            <p className={module.chatroomName}>{chatroom.chatroomName} ({chatroom.chatroomEntrancesSize}) {chatroom.famous === 1 ? <span className={`${module.sparkle}`}>🔥</span> : ''}</p>
                             <p className={module.chatroomStatus}>방장 : {chatroom.chatroomCreator.memberId} ({chatroom.chatroomMinTemp} 도 이상만)</p>
                             <p>안읽은메세지수 : {chatroom.unreadMessage} </p>
                         </div>
