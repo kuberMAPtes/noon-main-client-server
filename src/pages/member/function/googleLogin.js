@@ -18,7 +18,8 @@ export const handleGoogleLogin = async (dispatch,navigate) => {
     if (info?.email && info?.email !== "") {
       const loginData = {
         memberData: {
-          authorizeCode: info?.accessToken,
+          idToken: token?.idToken,
+          oauthIdToken: token?.oauthIdToken,
           refreshToken: token?.refreshToken,
           memberId: info?.email,
           nickname: info?.displayName,
