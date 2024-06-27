@@ -16,12 +16,20 @@ const FeedVote = ({ feedId, memberId }) => {
         const fetchVoteData = async () => {
             try {
                 const response = await axios_api.get(`/feed/getVote/${feedId}`);
-                const { question, options, votes } = response.data;
+                const { question, options, votes, voterIds } = response.data;
                 setQuestion(question);
                 setOptions(options);
-                setVotes(votes && votes.length === options.length ? votes : new Array(options.length).fill(0));
-                console.log("Fetched options: ", options);
-                console.log("Fetched votes: ", votes);
+                if(options) {
+                    setVotes(votes && votes.length === options.length ? votes : new Array(options.length).fill(0));
+                } 
+                // console.log("Fetched options: ", options);
+                // console.log("Fetched votes: ", votes);
+
+                // 선택한 투표 내용 그대로 고정함
+                if(voterIds && voterIds[memberId] !== undefined) {
+                    const selectedOptionIndex = voterIds[memberId];
+                    setSelectedOption(options[selectedOptionIndex]);
+                }
 
             } catch (error) {
                 console.error('투표 데이터를 가져오는 중 오류 발생:', error);
@@ -42,12 +50,14 @@ const FeedVote = ({ feedId, memberId }) => {
                 const response = await axios_api.post('/feed/addVoting', {
                     feedId,
                     memberId,
+                    options,
                     chosenOption: chosenOptionIndex
                 });
+                
                 const { votes } = response.data;
                 setVotes(votes);
-                console.log("Updated votes: ", votes);
-                
+                // console.log("Updated votes: ", votes);
+
             } catch (error) {
                 console.error('투표를 제출하는 중 오류 발생:', error);
             }
