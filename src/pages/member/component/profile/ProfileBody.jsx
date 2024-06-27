@@ -10,9 +10,10 @@ import NormalButton from "../NormalButton";
 import module from "../../../../assets/css/module/member/GetMemberProfile.module.css";
 import useMainPage from "../common/useMainPage";
 import NicknameInput from "../NicknameInput";
-import { handleKeyDown, handleNicknameUpdateChange } from "../../function/AddUpdateMemberUtil";
+import { handleKeyDown, handleNicknameUpdateChange, handleProfileIntroUpdateChange } from "../../function/AddUpdateMemberUtil";
 import ProfilePhotoInput from "../ProfilePhotoInput";
 import { updateProfilePhotoUrl } from "../../function/memberAxios";
+import ProfileIntroInput from "../ProfileIntroInput";
 
 //4가지 파라미터 다 WAS에서 받아야함
 //> setProfile등등..필요
@@ -34,6 +35,13 @@ const ProfileBody = ({
   const [nickname, setNickname] = useState(profile.nickname);
   const [nicknameValidationMessage, setNicknameValidationMessage] = useState("");
   const [isNicknameValid, setIsNicknameValid] = useState(false);
+
+  const [profileIntro, setProfileIntro] = useState(profile.profileIntro);
+  const [profileIntroValidationMessage, setProfileIntroValidationMessage] = useState("");
+  const [isProfileIntroValid, setIsProfileIntroValid] = useState(false);
+
+
+
   const handleImageError = (e) => {
     e.target.src = defaultPhotoUrl;
   };
@@ -139,7 +147,22 @@ const ProfileBody = ({
               </Col>
             </Row>
             <Row style={{minHeight:"20%"}}>
-              <Col xs={12} style={{border: "2px solid #91A7FF", borderRadius:"7px"}}>{profile.profileIntro}</Col>
+              {/* <Col xs={12} style={{border: "2px solid #91A7FF", borderRadius:"7px"}}>&nbsp;{profile.profileIntro}</Col> */}
+              <Form>
+                <ProfileIntroInput
+                  profileIntro={profileIntro}
+                  setProfileIntro={setProfileIntro}
+                  profileIntroValidationMessage={profileIntroValidationMessage}
+                  setProfileIntroValidationMessage={setProfileIntroValidationMessage}
+                  isProfileIntroValid={isProfileIntroValid}
+                  setIsProfileIntroValid={setIsProfileIntroValid}
+                  handleKeyDown={handleKeyDown}
+                  handleProfileIntroUpdateChange={handleProfileIntroUpdateChange}
+                  toId={toId}
+                  profile={profile}
+                  setProfile={setProfile}
+                />
+              </Form>
             </Row>
           </Col>
           <Col xs={12}>

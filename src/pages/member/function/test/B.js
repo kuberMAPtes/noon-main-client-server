@@ -50,25 +50,10 @@ const ProfilePhoto = ({ profile, defaultPhotoUrl, handleImageUpload }) => {
 };
 
 const B = () => {
-  const profile = {
-    profilePhotoUrl: "https://picsum.photos/id/237/200/300",
-    // 기타 프로필 정보
-  };
-
-  const defaultPhotoUrl = "https://fastly.picsum.photos/id/23/3887/4899.jpg?hmac=2fo1Y0AgEkeL2juaEBqKPbnEKm_5Mp0M2nuaVERE6eE";
-
-  const handleImageUpload = (file) => {
-    // 여기서 파일 업로드 로직을 구현합니다.
-    console.log("업로드할 파일:", file);
-    // 예: 파일을 서버에 업로드하고 URL을 받아서 상태를 업데이트합니다.
-  };
-
+  
+  // Initialize the FirebaseUI Widget using Firebase.
   return (
-          <ProfilePhoto
-            profile={profile}
-            defaultPhotoUrl={defaultPhotoUrl}
-            handleImageUpload={handleImageUpload}
-          />
+    <></>
   );
 };
 

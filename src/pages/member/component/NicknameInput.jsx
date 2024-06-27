@@ -19,6 +19,18 @@ const NicknameInput = ({
   setProfile,
 }) => {
   const nicknameInput = useReadOnlyInput(profile.nickname,isNicknameValid,toId,profile,setProfile);
+  // 새로운 키 다운 핸들러 함수
+
+  const handleNicknameKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault(); // 폼 제출 방지
+      nicknameInput.handleBlur(profile.nickname)();
+    }
+    // 기존의 handleKeyDown 함수가 있다면 여기서 호출
+    if (handleKeyDown) {
+      handleKeyDown(e);
+    }
+  };
 
   return (
     <Form.Group controlId="formNickname" className="mb-3">
@@ -51,7 +63,7 @@ const NicknameInput = ({
           textAlign: "center",
           opacity: "0.6"
         }}
-        onKeyDown={handleKeyDown}
+        onKeyDown={handleNicknameKeyDown}
         required
         isInvalid={!!nicknameValidationMessage}
         readOnly={nicknameInput.isReadOnly}
