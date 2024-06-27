@@ -12,6 +12,7 @@ import NoonLogo from "../../../assets/css/NoonLogo";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { MdCelebration } from "react-icons/md";
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 const LoginButtons = ({ onLoginClick,onGoogleLoginClick }) => {
   const dispatch = useDispatch();
   const loginStatus = useSelector((state) => state.auth.loginStatus);
@@ -49,7 +50,7 @@ const LoginButtons = ({ onLoginClick,onGoogleLoginClick }) => {
             className={styles.loginButton}
             onClick={onGoogleLoginClick}
           >
-            <GoogleLogo className="me-2" />
+          <GoogleLogo className="me-2" />
             Google로 시작하기
           </Button>
           <hr />

@@ -39,7 +39,7 @@ export const login = createAsyncThunk(
         console.log("구글 로그인 처리중 :: loginData:", loginData);
         // alert("구글 로그인 처리중 :: loginData:" + JSON.stringify(loginData?.member));
         // alert("로그인 되었습니다.");
-        const info = await googleLogin(loginData?.member); //여기 member에는 authorizeCode도 있음
+        const info = await googleLogin(loginData?.memberData); //여기 member에는 authorizeCode도 있음
 
         console.log("구글 로그인 처리중 response:", info);
         returnMember = info;
