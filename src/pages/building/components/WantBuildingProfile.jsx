@@ -87,6 +87,7 @@ const WantBuildingProfile = ({ isOpen, onClose, applicationData }) => {
         setApplicantList(response.data);
       } else {
         console.error("Expected an array but got:", response.data);
+        setApplicantList([]);
       }
     } catch (error) {
       console.error("Error fetching subscribers:", error);
