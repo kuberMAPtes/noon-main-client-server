@@ -13,14 +13,14 @@ import { useSelector } from 'react-redux';
  * 회원 아이디를 통해서 개인으로 관련이 있는 피드 목록을 가져온다.
  * @returns 자신이 작성한 피드, 좋아요와 북마크를 누른 피드, 구독한 건물에 대한 피드(총 4가지)를 가져온다
  */
-const FeedListPage = () => {
+const FeedListPage = ({toId,feeds,setFeeds}) => {
     const [searchParams] = useSearchParams();
-    const memberIdFromStore = useSelector((state) => state.auth.member.memberId);
-    const memberIdFromURL = searchParams.get('memberId');
-    const memberId = memberIdFromStore || memberIdFromURL;
+    // const memberIdFromStore = useSelector((state) => state.auth.member.memberId);
+    // const memberIdFromURL = searchParams.get('memberId');
+    // const memberId = memberIdFromStore || memberIdFromURL;
     const initialPage = searchParams.get('page') || 1;
-
-    const [feeds, setFeeds] = useState([]);
+    const memberId = toId || searchParams.get('memberId');
+    // const [feeds, setFeeds] = useState([]);
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [page, setPage] = useState(Number(initialPage));
@@ -49,7 +49,7 @@ const FeedListPage = () => {
         setLoading(false);
     };
 
-    // 콜백 함수 정의 : 실행될 때마다 상태 초기화
+    //콜백 함수 정의 : 실행될 때마다 상태 초기화
     const handleSelect = (url) => {
         setFeeds([]);
         setPage(1);
@@ -68,7 +68,7 @@ const FeedListPage = () => {
         fetchData(fetchUrl, page);
     }, [page, fetchUrl]);
 
-    // 무한스크롤 구현 (IntersectionObserver)
+       // 무한스크롤 구현 (IntersectionObserver)
     const lastFeedElementRef = useCallback((node) => {
         if (observer.current) observer.current.disconnect();
         observer.current = new IntersectionObserver((entries) => {

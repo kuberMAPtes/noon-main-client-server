@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container, Row, Col, Button, Card } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import UseProfileFetchFeeds from "./component/profile/UseProfileFetchFeeds";
@@ -9,14 +9,16 @@ import useFetchMemberRelationshipList from "./component/common/useFetchMemberRel
 import UseProfileBuildingSubscriptions from "./component/profile/UseProfileBuildingSubscriptions";
 import UseProfile from "./component/profile/UseProfile";
 import module from "../member/component/css/profile.module.css";
+import FeedListPage from "../feed/FeedListPage";
 
 const GetMemberProfile = () => {
   const { profile,setProfile, toId, fromId, initialPage, isDenied } = UseProfile();
-  const { feeds, hasMore, setPage } = UseProfileFetchFeeds(
+  const { feeds, setFeeds, hasMore, setPage } = UseProfileFetchFeeds(
     profile.feedDtoList,
     toId,
     initialPage
   );
+
   const { buildingSubscriptionCount } = UseProfileBuildingSubscriptions({
     toId,
   });
@@ -24,7 +26,7 @@ const GetMemberProfile = () => {
     fromId,
     toId
   );
-  const lastFeedElementRef = UseProfileInfiniteScroll(hasMore, setPage);
+  // const lastFeedElementRef = UseProfileInfiniteScroll(hasMore, setPage);
 
   return (
     <Container
@@ -50,7 +52,7 @@ const GetMemberProfile = () => {
           >
             회원프로필을 볼 수 없습니다.
             <ProfileBody />
-            <ProfileFeedList lastFeedElementRef={lastFeedElementRef} />
+            {/* <ProfileFeedList toId={toId} feeds={feeds} lastFeedElementRef={lastFeedElementRef} /> */}
           </div>
         ) : (
           <>
@@ -67,10 +69,11 @@ const GetMemberProfile = () => {
               />
             </Col>
             <Col xs={12} sm={12} md={12} lg={12}>
-              <ProfileFeedList
-                feeds={feeds}
-                lastFeedElementRef={lastFeedElementRef}
-              />
+            {/* <ProfileFeedList
+            toId={toId}
+            feeds={feeds}
+            lastFeedElementRef={lastFeedElementRef} /> */}
+            <FeedListPage toId={toId} feeds={feeds} setFeeds={setFeeds}/>
             </Col>
           </>
         )}

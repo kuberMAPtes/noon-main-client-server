@@ -148,7 +148,7 @@ const ProfileBody = ({
         </Row>
         <ProfileStats
           toId={toId}
-          feeds={feeds}
+          feeds={profile.feedDtoList}
           buildingSubscriptionCount={buildingSubscriptionCount}
           followerCount={followerCount}
           followingCount={followingCount}
