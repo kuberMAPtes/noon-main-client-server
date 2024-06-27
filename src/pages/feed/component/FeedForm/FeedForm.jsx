@@ -366,9 +366,6 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                                 <option value="GENERAL">일반</option>
                                 <option value="COMPLIMENT">칭찬하기</option>
                                 <option value="QUESTION">Q&A</option>
-                                <option value="EVENT">이벤트</option>
-                                <option value="POLL">투표</option>
-                                <option value="NOTICE">공지사항</option>
                             </Form.Control>
                         </Form.Group>
 
