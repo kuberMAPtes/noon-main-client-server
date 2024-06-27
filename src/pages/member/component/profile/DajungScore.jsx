@@ -8,7 +8,7 @@ import { updateDajungScore } from "../../function/memberAxios";
 
 const MySwal = withReactContent(Swal);
 
-const DajungScore = ({ profile, setProfile,toId }) => {
+const DajungScore = ({ profile, setProfile, toId , fromId }) => {
   const [showModal, setShowModal] = useState(false);
   const [dajungTemperature, setDajungTemperature] = useState("");
 
@@ -38,7 +38,7 @@ const DajungScore = ({ profile, setProfile,toId }) => {
 
     const dajungScoreDto = {memberId : toId, dajungScore : profile.dajungScore + 1};
     const response = await updateDajungScore(dajungScoreDto);
-    alert("이거보세요오오오"+JSON.stringify(response)+"toId"+toId+"profile.dajungScore"+profile.dajungScore);
+    // alert("이거보세요오오오"+JSON.stringify(response)+"toId"+toId+"profile.dajungScore"+profile.dajungScore);
 
     MySwal.fire({
       title: `${profile.nickname}회원님의\n다정온도가 상승하였습니다`,
@@ -71,7 +71,7 @@ const DajungScore = ({ profile, setProfile,toId }) => {
             <ProgressBar
               now={profile.dajungScore}
               style={{ width: "100%", height: "1rem", cursor: "pointer" }}
-              onClick={handleShow}
+              onClick={toId !== fromId ? handleShow : null}
             >
               <div
                 style={{

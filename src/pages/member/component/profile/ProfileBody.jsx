@@ -170,6 +170,7 @@ const ProfileBody = ({
             profile={profile}
             setProfile={setProfile}
             toId={toId}
+            fromId={fromId}
             />
             <Row>
               <Col xs={12}>프로필 소개</Col>
