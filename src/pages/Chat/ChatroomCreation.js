@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './ChatRoomCreation.css';
 import { useNavigate, useParams } from 'react-router-dom';
-import { addChatroom } from '../../lib/axios_api'
+import { addChatroom } from '../Chat/function/axios_api';
 import { addChatroomData } from '../../store/store';
 import { useDispatch , useSelector } from 'react-redux';
 

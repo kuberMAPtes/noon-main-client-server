@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { FaBullhorn, FaVoteYea } from 'react-icons/fa';
-import { MdFeed } from "react-icons/md";
+import { MdFeed, MdEventAvailable } from "react-icons/md";
 import { useSelector } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
@@ -25,6 +25,7 @@ const SlideUpModal = ({ show, onHide }) => {
 
     const feedFormURL = `/feed/form?memberId=${writerId}&buildingId=${buildingId}`;
     const voteFormURL = `/feed/voteForm?memberId=${writerId}&buildingId=${buildingId}`;
+    const megaphoneFormURL = `/feed/megaphoneForm?memberId=${writerId}&buildingId=${buildingId}`;
 
     console.log("SlideUpModal writerId : ", writerId, "buildingId : ", buildingId);  // 디버깅 로그
     
@@ -48,10 +49,14 @@ const SlideUpModal = ({ show, onHide }) => {
                         <FaVoteYea size={50} />
                         <div>투표</div>
                     </Button>
-                     {/* 미정 */}
-                    <Button variant="outline-primary" onClick={() => handleLinkClick(feedFormURL)}>
+                    <Button variant="outline-primary" onClick={() => handleLinkClick(megaphoneFormURL)}>
                         <FaBullhorn size={50} />
                         <div>확성기</div>
+                    </Button>
+                    {/* 미정 */}
+                    <Button variant="outline-primary" onClick={() => handleLinkClick(megaphoneFormURL)}>
+                        <MdEventAvailable size={50} />
+                        <div>이벤트</div>
                     </Button>
                 </div>
             </Modal.Body>

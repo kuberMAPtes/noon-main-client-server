@@ -68,10 +68,11 @@ import FeedChartPage from '../pages/feed/FeedChartPage';
 import FeedBuildingListPage from '../pages/feed/FeedBuildingListPage';
 import FeedListHomePage from '../pages/feed/FeedListHomePage';
 import GetMemberProfile from "../pages/member/GetMemberProfile";
-import GetBuildingWiki from "../pages/building/GetBuildingWiki";
-import EditBuildingWiki from "../pages/building/EditBuildingWiki";
+import GetBuildingWiki from "../pages/building/wiki/GetBuildingWiki";
+import EditBuildingWiki from "../pages/building/wiki/EditBuildingWiki";
 import ApplicantSample from "../pages/building/components/ApplicantSample";
 import FeedVoteForm from "../pages/feed/FeedVoteFormPage";
+import FeedMegaphoneForm from "../pages/feed/FeedMegaphoneFormPage";
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -224,6 +225,7 @@ const AppRoutes = () => {
             {/* <Route path="test" element={<Test/>}/> */}
         </Route>
         <Route path="/map" element={<BMap />} />
+        <Route path="/map/:ownerIdOfMapInfo" element={<BMap />} />
         <Route path="/search" element={<Search />} />
         <Route path="/getBuildingProfile/:buildingId" element={<GetBuilding />} />
         <Route path="/getBuildingWiki/:buildingId" element={<GetBuildingWiki />} />
@@ -249,6 +251,7 @@ const AppRoutes = () => {
             <Route path="detail" element={<FeedDetail />} />
             <Route path="form" element={<FeedForm />} /> {/* 일반 피드 추가 */}
             <Route path="voteForm" element={<FeedVoteForm />} /> {/* 투표 피드 추가 */}
+            <Route path="megaphoneForm" element={<FeedMegaphoneForm />} /> {/* 확성기 피드 추가 */}
             <Route path="form/:feedId" element={<FeedForm />} /> {/* 일반 피드 수정 */}
             <Route path="chart" element={<FeedChartPage />} />
             <Route path="main" element={<FeedListHomePage />}/>

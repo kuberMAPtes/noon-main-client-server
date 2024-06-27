@@ -113,14 +113,7 @@ const BuildingInfo = () => {
   };
 
   const getWikipage = () => {
-    const baseUrl = process.env.REACT_APP_WIKI_BASE_URL;
-    if (!baseUrl) {
-      console.error("REACT_APP_WIKI_BASE_URL is not defined");
-      return;
-    }
-    
-    navigate('../getBuildingWiki/'+buildingId);
-    
+    navigate(`/getBuildingWiki/${buildingId}`);
   };
 
    // 피드 요약 결과 가져오기

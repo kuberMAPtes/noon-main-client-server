@@ -28,7 +28,7 @@ const UseProfileFetchFeeds = (feedDtoList, toId, initialPage) => {
     fetchData(toId, page);
   }, [page, toId, fetchData]);
 
-  return { feeds, loading, hasMore, setPage };
+  return { feeds, setFeeds, loading, hasMore, setPage };
 };
 
 export default UseProfileFetchFeeds;

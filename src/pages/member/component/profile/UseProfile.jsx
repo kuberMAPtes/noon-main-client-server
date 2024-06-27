@@ -52,7 +52,7 @@ const UseProfile = () => {
     }
   }, [authorization, toId, fromId, isDenied]);
 
-  return { profile, toId, fromId, initialPage, isDenied };
+  return { profile,setProfile, toId, fromId, initialPage, isDenied };
 };
 
 export default UseProfile;

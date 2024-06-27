@@ -4,6 +4,8 @@ import AuthLoader from "./components/common/AuthLoader";
 import "./App.css";
 import "./assets/css/font.css";
 import { useEffect } from "react";
+import Footer from './components/common/Footer';
+import BasicNavbar from './components/common/BasicNavbar';
 
 function App() {
   function setScreenSize() {
@@ -16,7 +18,9 @@ function App() {
 
   return (
     <AuthLoader>
-      <AppRoutes />
+      {/* <BasicNavbar/> */}
+        <AppRoutes />
+      <Footer/>
     </AuthLoader>
   );
 }

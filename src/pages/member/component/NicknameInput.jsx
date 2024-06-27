@@ -12,12 +12,13 @@ const NicknameInput = ({
   setNicknameValidationMessage,
   isNicknameValid,
   setIsNicknameValid,
-  mainPageUrl,
   handleKeyDown,
   handleNicknameUpdateChange,
-  member,
+  toId,
+  profile,
+  setProfile,
 }) => {
-  const nicknameInput = useReadOnlyInput(member.nickname,isNicknameValid,member.memberId);
+  const nicknameInput = useReadOnlyInput(profile.nickname,isNicknameValid,toId,profile,setProfile);
 
   return (
     <Form.Group controlId="formNickname" className="mb-3">
@@ -31,26 +32,31 @@ const NicknameInput = ({
       </Form.Label>
       <Form.Control
         type="text"
-        placeholder={member.nickname}
+        placeholder={profile.nickname}
         name="nickname"
         value={nickname}
         maxLength={20}
         onChange={(e) =>
           handleNicknameUpdateChange(
             e,
-            member.nickname,
+            profile.nickname,
             setNickname,
             setNicknameValidationMessage,
             setIsNicknameValid
           )
         }
-        style={{ opacity: 0.6 }}
+        style={{
+          fontSize: "13px",
+          fontWeight: "bold",
+          textAlign: "center",
+          opacity: "0.6"
+        }}
         onKeyDown={handleKeyDown}
         required
         isInvalid={!!nicknameValidationMessage}
         readOnly={nicknameInput.isReadOnly}
         onClick={nicknameInput.handleClick}
-        onBlur={nicknameInput.handleBlur(member.nickname)}
+        onBlur={nicknameInput.handleBlur(profile.nickname)}
         ref={nicknameInput.inputRef}
       />
       <Form.Text className="text-danger">

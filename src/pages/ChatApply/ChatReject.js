@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { chatReject } from '../../lib/axios_api';
+import { chatReject } from '../Chat/function/axios_api';
 import styles from './ChatApply.module.css';
 
 const ChatReject = () => {
