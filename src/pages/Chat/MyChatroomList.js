@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import module from './MyChatroomList.module.css'; // Import CSS module
-import { getMyChatrooms } from '../../lib/axios_api';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { getChatroom } from '../../lib/axios_api';
+import { getChatroom , getMyChatrooms } from '../Chat/function/axios_api'
 import { setChatroomData } from '../../store/store';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import Countdown from '../../lib/Countdown';
+import Countdown from '../../lib/Countdown'
 
 const MyChatroomList = () => {
     const member = useSelector((state) => state.auth.member);
@@ -68,17 +67,18 @@ const MyChatroomList = () => {
     return (
         <div className={module.app}>
             <div className={module.header}>
-                <h1> {member.nickName}'s room</h1>
+                <h1> {member.nickname}'s room</h1>
                 <p>(userId : {memberID}) </p>
                 <p>내 다정온도 : {member.dajungScore}도 </p>
                 <button onClick={addChatroom} className={module.normalButton}>채팅방 개설하기</button>
                 <button onClick={getChatApplyList} className={module.normalButton}>새 대화신청 보기</button>
             </div>
+            <Countdown/>
             <div className={module.chatroomList}>
                 {chatrooms.map(chatroom => (
                     <div key={chatroom.chatroomID} className={module.chatroom}>
                         <div className={module.chatroomInfo}>
-                            <p className={module.chatroomName}>{chatroom.chatroomName}</p>
+                            <p className={module.chatroomName}>{chatroom.chatroomName} ({chatroom.chatroomEntrancesSize})</p>
                             <p className={module.chatroomStatus}>방장 : {chatroom.chatroomCreator.memberId} ({chatroom.chatroomMinTemp} 도 이상만)</p>
                             <p>안읽은메세지수 : {chatroom.unreadMessage} </p>
                         </div>
@@ -91,7 +91,6 @@ const MyChatroomList = () => {
                     </div>
                 ))}
             </div>
-            <Countdown/>
         </div>
     );
 };

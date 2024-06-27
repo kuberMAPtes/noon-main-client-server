@@ -1,15 +1,4 @@
-import axios from 'axios';
-import { MAIN_API_URL } from "../../../util/constants"
-
-const BASE_URL = MAIN_API_URL;
-
-const axios_api = axios.create({
-    baseURL: BASE_URL,
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    withCredentials: true
-});
+import axios_api from '../../../lib/axios_api';
 
 // 채팅방 생성
 export const addChatroom = async(chatRoomData) => {
@@ -142,6 +131,22 @@ export const newChatApplyList = async(memberId) => {
         return response.data;
     } catch (error){
         console.error("Error fetching newChatApplyList", error);
+        throw error;  // Re-throw the error so it can be handled by the caller      
+    }
+}
+
+// 채팅방 자동삭제 시간 받아오기 (반환 : )
+export const chatroomDeleteTime = async()=>{
+    console.log("chatroomDeleteTime fetching 중....! get data => ")
+
+    try{
+        const response = await axios_api.get(`/adminChatroom/chatroomDeleteTime`)
+        console.log('chatroomDeleteTime fetching 결과 :', response.data);
+
+        return response.data;
+
+    } catch (error){
+        console.error("Error fetching chatroomDeleteTime", error);
         throw error;  // Re-throw the error so it can be handled by the caller      
     }
 }
