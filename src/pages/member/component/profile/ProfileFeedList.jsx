@@ -1,8 +1,8 @@
 import React, { useRef } from 'react';
-import FeedItemByMember from '../FeedItemByMember';
 import module from '../css/profileFeedList.module.css';
+import FeedItem from '../../../feed/component/FeedList/FeedItem';
 
-const ProfileFeedList = ({ feeds, lastFeedElementRef }) => {
+const ProfileFeedList = ({ toId, feeds, lastFeedElementRef }) => {
 
   const setRef = (el, index) => {
     if (feeds.length === index + 1) {
@@ -15,10 +15,10 @@ const ProfileFeedList = ({ feeds, lastFeedElementRef }) => {
       {feeds.map((feed, index) => (
         <div
           key={feed.feedId ?? `feed-${index}`}
-          className={`col-12 mb-4 ${module.heightSize}`}
+          className={`col-12 mb-4`}
           ref={(el) => setRef(el, index)}
         >
-          <FeedItemByMember data={feed} />
+          <FeedItem data={feed} memberId={toId} />
         </div>
       ))}
     </>
