@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { FaBullhorn, FaVoteYea } from 'react-icons/fa';
-import { MdFeed } from "react-icons/md";
+import { MdFeed, MdEventAvailable } from "react-icons/md";
 import { useSelector } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
@@ -49,10 +49,14 @@ const SlideUpModal = ({ show, onHide }) => {
                         <FaVoteYea size={50} />
                         <div>투표</div>
                     </Button>
-                     {/* 미정 */}
                     <Button variant="outline-primary" onClick={() => handleLinkClick(megaphoneFormURL)}>
                         <FaBullhorn size={50} />
                         <div>확성기</div>
+                    </Button>
+                    {/* 미정 */}
+                    <Button variant="outline-primary" onClick={() => handleLinkClick(megaphoneFormURL)}>
+                        <MdEventAvailable size={50} />
+                        <div>이벤트</div>
                     </Button>
                 </div>
             </Modal.Body>

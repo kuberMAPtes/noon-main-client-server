@@ -1,6 +1,6 @@
 import React from 'react';
 
-const CategoryButtonComponent = () => {
+const FeedCalendar = () => {
     return (
         <div>
             
@@ -8,4 +8,4 @@ const CategoryButtonComponent = () => {
     );
 };
 
-export default CategoryButtonComponent;
+export default FeedCalendar;

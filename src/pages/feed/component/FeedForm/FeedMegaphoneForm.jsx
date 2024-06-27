@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Button, Form, Card, Container, Badge } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Button, Form, Card, Container } from 'react-bootstrap';
 import axios_api from '../../../../lib/axios_api';
 import CheckModal from '../Common/CheckModal';
 import navigator from '../../util/Navigator'
-import VotePreview from './VotePreview';
 import { Label } from 'reactstrap';
+import { buildCreateSlice } from '@reduxjs/toolkit';
 // import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
 
 const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, onSave }) => {
-    const [previewVoteShow, setPreviewVoteShow] = useState(false);
     const [feedData, setFeedData] = useState({
         title: '',
         feedText: '',
@@ -20,52 +19,15 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
         modified: false,
     });
 
-    const [newVote, setNewVote] = useState({ 
-        question: '', 
-        options: [''] 
-    });
-
-    // 태그 추가 
-    const [tagInput, setTagInput] = useState('');
-
     // Feed Add, Update Modal 관련
     const [feedAddShow, setFeedAddShow] = useState(false);
     const [feedUpdateShow, setFeedUpdateShow] = useState(false);
 
     // navigator
-    const { goToFeedDetail } = navigator();
+    const { goToFeedDetail, goToBuildingProfile } = navigator();
     
     // @(memberId)를 통해 리다이렉션하기
     // const renderFeedText = (feedText) => renderFeedTextWithLink(feedText);
-
-    /* 투표 관련 */
-    useEffect(() => {
-        fetchVotes();
-    }, []);
-
-    // 투표 미리보기 
-    const handlePreviewVote = () => {
-        setPreviewVoteShow(true);
-    };
-    
-    const fetchVotes = async () => {
-        try {
-            // const response = await axios_api.get('/feed/getVote' + inputFeedId);
-        } catch (error) {
-            console.error('투표 목록을 가져오는 중 오류 발생:', error);
-        }
-    };
-
-    const handleOptionChange = (index, value) => {
-        const updatedOptions = [...newVote.options];
-        updatedOptions[index] = value;
-        setNewVote({ ...newVote, options: updatedOptions });
-    };
-
-    const addOption = () => {
-        setNewVote({ ...newVote, options: [...newVote.options, ''] });
-    };
-
 
     /* 피드 관련 */
     // 변경 사항 반영
@@ -101,20 +63,10 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
 
             console.log("feedId : " + feedId);
 
-            const addVoteData = {
-                feedId: feedId,
-                question: newVote.question,
-                options: newVote.options
-            }
-
-            const voteResponse = await axios_api.post('/feed/addVote', addVoteData);
-            const voteData = voteResponse.data;
-
-            console.log("voteData : " + voteData);
-
             console.log('피드가 성공적으로 저장되었습니다:', feedResponse.data);
 
-            goToFeedDetail(inputWriterId, feedId);
+            // goToFeedDetail(inputWriterId, feedId);
+            goToBuildingProfile(inputBuildingId);
 
         } catch (error) {
             console.error('피드 저장 중 오류 발생:', error);
@@ -146,7 +98,8 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
             
             console.log('피드가 성공적으로 저장되었습니다:', feedResponse.data);
 
-            goToFeedDetail(inputWriterId, feedId);
+            // goToFeedDetail(inputWriterId, feedId);
+            goToBuildingProfile(inputBuildingId);
         } catch (error) {
             console.error('피드 수정 중 오류 발생:', error);
         }
@@ -183,22 +136,6 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
             console.error("HandleModalConfirm Error 발생 : " + error);
         }
     }
-
-    // 태그 추가 및 삭제
-    const handleTagAdd = () => {
-        if (tagInput.trim() !== '') {
-            setFeedData(prevState => ({
-                ...prevState,
-                updateTagList: [...prevState.updateTagList, tagInput.trim()]
-            }));
-            setTagInput('');
-        }
-    };
-
-    const handleTagRemove = (tagText) => {
-        const updatedTags = feedData.updateTagList.filter(t => t !== tagText);
-        setFeedData({ ...feedData, updateTagList: updatedTags });
-    };
 
     // 취소
     const handleCancel = () => {
