@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "../../../assets/css/module/search/component/MemberSearchResult.css";
 import { useNavigate } from "react-router-dom";
-import useEncryptId from "../../member/component/common/useEncryptId";
+import useEncryptId from "../../member/component/hook/useEncryptId";
 
 const SAMPLE_DATA = [];
 
@@ -11,7 +11,7 @@ for (let i = 0; i < 5; i++) {
     memberId: `memberId-${i}`,
     nickname: `nickname-${i}`,
     following: `following-${i}`,
-    followed: `followed-${i}`
+    followed: `followed-${i}`,
   });
 }
 
@@ -36,13 +36,12 @@ for (let i = 0; i < 5; i++) {
  */
 export default function MemberSearchResult({
   searchResult,
-  infScrollTargetRef
+  infScrollTargetRef,
 }) {
-
   return (
     <div className="scroll list-container">
-      {
-        searchResult && searchResult.map((data, idx) => (
+      {searchResult &&
+        searchResult.map((data, idx) => (
           <MemberSearchResultItem
             key={`member-data-${idx}`}
             profilePhotoUrl={data.profilePhotoUrl}
@@ -50,10 +49,11 @@ export default function MemberSearchResult({
             nickname={data.nickname}
             following={data.following}
             followed={data.followed}
-            infScrollTargetRef={idx + 1 === searchResult.length ? infScrollTargetRef : null}
+            infScrollTargetRef={
+              idx + 1 === searchResult.length ? infScrollTargetRef : null
+            }
           />
-        ))
-      }
+        ))}
     </div>
   );
 }
@@ -77,15 +77,17 @@ function MemberSearchResultItem({
   profileIntro,
   follower,
   following,
-  infScrollTargetRef
+  infScrollTargetRef,
 }) {
   const navigate = useNavigate();
-  const {encryptedData, ivData} =useEncryptId(memberId);
+  const { encryptedData, ivData } = useEncryptId(memberId);
   return (
     <div
-        ref={infScrollTargetRef}
-        className="member-item-container"
-        onClick={() => navigate(`/member/getMemberProfile/${encryptedData}/${ivData}`)}
+      ref={infScrollTargetRef}
+      className="member-item-container"
+      onClick={() =>
+        navigate(`/member/getMemberProfile/${encryptedData}/${ivData}`)
+      }
     >
       <img src={profilePhotoUrl} alt="Profile" />
       <div className="member-name-container">

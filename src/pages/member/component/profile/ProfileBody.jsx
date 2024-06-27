@@ -1,19 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { Card, Row, Col, Image, ProgressBar, Button, Form } from "react-bootstrap";
+import {
+  Card,
+  Row,
+  Col,
+  Image,
+  ProgressBar,
+  Button,
+  Form,
+} from "react-bootstrap";
 import ProfileStats from "./ProfileStats";
 import ProfileActions from "./ProfileActions";
 import LogoutForm from "../LogoutForm";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import useEncryptId from "../common/useEncryptId";
+import useEncryptId from "../hook/useEncryptId";
 import NormalButton from "../NormalButton";
 import module from "../../../../assets/css/module/member/GetMemberProfile.module.css";
-import useMainPage from "../common/useMainPage";
+import useMainPage from "../hook/useMainPage";
 import NicknameInput from "../NicknameInput";
-import { handleKeyDown, handleNicknameUpdateChange, handleProfileIntroUpdateChange } from "../../function/AddUpdateMemberUtil";
+import {
+  handleNicknameUpdateChange,
+  handleProfileIntroUpdateChange,
+} from "../../function/AddUpdateMemberUtil";
 import ProfilePhotoInput from "../ProfilePhotoInput";
 import { updateProfilePhotoUrl } from "../../function/memberAxios";
 import ProfileIntroInput from "../ProfileIntroInput";
+import DajungScore from "./DajungScore";
 
 //4가지 파라미터 다 WAS에서 받아야함
 //> setProfile등등..필요
@@ -28,24 +40,24 @@ const ProfileBody = ({
   followerCount,
   followingCount,
 }) => {
-  const [dajungTemperature, setDajungTemperature] = useState("");
+  // const [dajungTemperature, setDajungTemperature] = useState("");
   const defaultPhotoUrl = `${process.env.PUBLIC_URL}/image/defaultMemberProfilePhoto.png`;
   // const member = useSelector((state) => state.auth.member);
   // const mainPageUrl = useMainPage(member.memberId);
   const [nickname, setNickname] = useState(profile.nickname);
-  const [nicknameValidationMessage, setNicknameValidationMessage] = useState("");
+  const [nicknameValidationMessage, setNicknameValidationMessage] =
+    useState("");
   const [isNicknameValid, setIsNicknameValid] = useState(false);
 
   const [profileIntro, setProfileIntro] = useState(profile.profileIntro);
-  const [profileIntroValidationMessage, setProfileIntroValidationMessage] = useState("");
+  const [profileIntroValidationMessage, setProfileIntroValidationMessage] =
+    useState("");
   const [isProfileIntroValid, setIsProfileIntroValid] = useState(false);
-
-
 
   const handleImageError = (e) => {
     e.target.src = defaultPhotoUrl;
   };
-  
+
   const handleImageUpload = async (file) => {
     try {
       const updatedProfilePhotoUrl = await updateProfilePhotoUrl(toId, file);
@@ -61,112 +73,139 @@ const ProfileBody = ({
   }, [profile.nickname]);
 
   useEffect(() => {
-    if (profile.dajungScore >= 80) {
-      setDajungTemperature("매우 따뜻함");
-    } else if (profile.dajungScore >= 60) {
-      setDajungTemperature("따뜻함");
-    } else if (profile.dajungScore >= 40) {
-      setDajungTemperature("보통");
-    } else if (profile.dajungScore >= 20) {
-      setDajungTemperature("차가움");
-    } else {
-      setDajungTemperature("매우 차가움");
-    }
-  }, [profile.dajungScore]);
+    setProfileIntro(profile.profileIntro);
+  }, [profile.profileIntro]);
 
+  // useEffect(() => {
+  //   if (profile.dajungScore >= 80) {
+  //     setDajungTemperature("매우 따뜻함");
+  //   } else if (profile.dajungScore >= 60) {
+  //     setDajungTemperature("따뜻함");
+  //   } else if (profile.dajungScore >= 40) {
+  //     setDajungTemperature("보통");
+  //   } else if (profile.dajungScore >= 20) {
+  //     setDajungTemperature("차가움");
+  //   } else {
+  //     setDajungTemperature("매우 차가움");
+  //   }
+  // }, [profile.dajungScore]);
 
   if (!profile.nickname) {
     return null;
   }
 
   return (
-    <Card style={{ position: 'relative' }}>
-      <Card.Body style={{border: "2px solid #91A7FF", borderRadius:"7px"}}>
-      <Row className="mb-3 align-items-center">
-          <Col xs={2} className="d-flex justify-content-start" style={{ position: 'absolute', left: 0,top: 0, padding:0 }}>
+    <Card style={{ position: "relative" }}>
+      <Card.Body style={{ border: "2px solid #91A7FF", borderRadius: "7px" }}>
+        <Row className="mb-3 align-items-center">
+          <Col
+            xs={2}
+            className="d-flex justify-content-start"
+            style={{ position: "absolute", left: 0, top: 0, padding: 0 }}
+          >
             <LogoutForm />
           </Col>
-          <Col xs={12} className="d-flex flex-column align-items-center" style={{margin:"0px"}}>
-          <ProfilePhotoInput
-            profile={profile}
-            defaultPhotoUrl={defaultPhotoUrl}
-            handleImageUpload={handleImageUpload}
-          />
-          </Col>
+
+          {toId === fromId ? (
+            <Col
+              xs={12}
+              className="d-flex flex-column align-items-center"
+              style={{ margin: "0px" }}
+            >
+              <Image
+                src={profile.profilePhotoUrl || defaultPhotoUrl}
+                roundedCircle
+                className={`mb-3 ${module.fixedMargin} ${module.profilePhoto}`}
+                style={{ textAlign: "center" }}
+                onError={handleImageError}
+              />
+            </Col>
+          ) : (
+            <Col
+              xs={12}
+              className="d-flex flex-column align-items-center"
+              style={{ margin: "0px" }}
+            >
+              <ProfilePhotoInput
+                profile={profile}
+                defaultPhotoUrl={defaultPhotoUrl}
+                handleImageUpload={handleImageUpload}
+              />
+            </Col>
+          )}
+
           <Col xs={12}>
             <Card.Title>
-            <Form>
-              <NicknameInput
-                nickname={nickname}
-                setNickname={setNickname}
-                nicknameValidationMessage={nicknameValidationMessage}
-                setNicknameValidationMessage={setNicknameValidationMessage}
-                isNicknameValid={isNicknameValid}
-                setIsNicknameValid={setIsNicknameValid}
-                // mainPageUrl={mainPageUrl}
-                handleKeyDown={handleKeyDown}
-                handleNicknameUpdateChange={handleNicknameUpdateChange}
-                toId={toId}
-                profile={profile}
-                setProfile={setProfile}
-              />
-          </Form>
+              {toId === fromId ? (
+                <Form>
+                  <NicknameInput
+                    nickname={nickname}
+                    setNickname={setNickname}
+                    nicknameValidationMessage={nicknameValidationMessage}
+                    setNicknameValidationMessage={setNicknameValidationMessage}
+                    isNicknameValid={isNicknameValid}
+                    setIsNicknameValid={setIsNicknameValid}
+                    // mainPageUrl={mainPageUrl}
+                    handleNicknameUpdateChange={handleNicknameUpdateChange}
+                    toId={toId}
+                    profile={profile}
+                    setProfile={setProfile}
+                  />
+                </Form>
+              ) : (
+                <div
+                  style={{
+                    fontSize: "15px",
+                    fontWeight: "bold",
+                    textAlign: "center",
+                  }}
+                >
+                  {profile.nickname}
+                </div>
+              )}
             </Card.Title>
           </Col>
           <Col xs={12}>
+            <DajungScore
+            profile={profile}
+            setProfile={setProfile}
+            toId={toId}
+            />
             <Row>
-              <Col
-                xs={3}
-                style={{
-                  fontSize: "14px",
-                  padding: "0px 12px",
-                  textAlign: "left",
-                }}
-              >
-                다정 온도
-              </Col>
-              <Col xs={9}>
-                <div className="d-flex flex-column align-items-center">
-                  <ProgressBar
-                    now={profile.dajungScore}
-                    style={{ width: "100%", height: "1rem"}}
-                  ><div
-                  style={{
-                    background:"#ff8787",
-                    width: `${profile.dajungScore}%`,
-                    height: `100%`
-                  }}
-                  ></div></ProgressBar>
-                  <div>{dajungTemperature}</div>
-                </div>
-              </Col>
+              <Col xs={12}>프로필 소개</Col>
             </Row>
-            <Row>
-              <Col xs={12}>
-                소개
-              </Col>
-            </Row>
-            <Row style={{minHeight:"20%"}}>
+            <Row style={{ minHeight: "20%" }}>
               {/* <Col xs={12} style={{border: "2px solid #91A7FF", borderRadius:"7px"}}>&nbsp;{profile.profileIntro}</Col> */}
               <Form>
                 <ProfileIntroInput
                   profileIntro={profileIntro}
                   setProfileIntro={setProfileIntro}
                   profileIntroValidationMessage={profileIntroValidationMessage}
-                  setProfileIntroValidationMessage={setProfileIntroValidationMessage}
+                  setProfileIntroValidationMessage={
+                    setProfileIntroValidationMessage
+                  }
                   isProfileIntroValid={isProfileIntroValid}
                   setIsProfileIntroValid={setIsProfileIntroValid}
-                  handleKeyDown={handleKeyDown}
-                  handleProfileIntroUpdateChange={handleProfileIntroUpdateChange}
+                  handleProfileIntroUpdateChange={
+                    handleProfileIntroUpdateChange
+                  }
                   toId={toId}
                   profile={profile}
                   setProfile={setProfile}
                 />
               </Form>
             </Row>
+            <Row style={{ minHeight: "20%" }}>
+              <Col
+                xs={12}
+                style={{ border: "2px solid #91A7FF", borderRadius: "7px" }}
+              >
+                {profile.profileIntro}
+              </Col>
+            </Row>
           </Col>
           <Col xs={12}>
-            <hr style={{border: "1px solid #91A7FF"}} />
+            <hr style={{ border: "1px solid #91A7FF" }} />
           </Col>
         </Row>
         <ProfileStats

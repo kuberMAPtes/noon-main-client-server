@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import useDecryptId from "../common/useDecryptId";
-import useGetInitialPage from "../common/useGetInitialPage";
+import useDecryptId from "../hook/useDecryptId";
+import useGetInitialPage from "../hook/useGetInitialPage";
 
 const UseGetMemberRelationshipLists = () => {
   const { initialPage } = useGetInitialPage();

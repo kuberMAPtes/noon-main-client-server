@@ -7,7 +7,7 @@ import {
   decryptWithLvWithUri,
   encryptWithLvWithUri,
 } from "../../../../util/crypto";
-import useEncryptId from "../common/useEncryptId";
+import useEncryptId from "../hook/useEncryptId";
 import { FaUserPlus } from "react-icons/fa";
 import { BsBuildings } from "react-icons/bs";
 import { MdDynamicFeed } from "react-icons/md";
@@ -50,7 +50,10 @@ const ProfileStats = ({
         <div className={profile.circle}>
           <div className={profile["circle-text"]}>{feedCount}</div>
         </div>
-        <div><MdDynamicFeed/>피드 수</div>
+        <div>
+          <MdDynamicFeed />
+          피드 수
+        </div>
       </Col>
       <Col>
         <div className={profile.circle}>
@@ -58,19 +61,28 @@ const ProfileStats = ({
             {buildingSubscriptionCount}
           </div>
         </div>
-        <div><BsBuildings/>구독한 건물</div>
+        <div>
+          <BsBuildings />
+          구독한 건물
+        </div>
       </Col>
       <Col>
         <div className={profile.circle} onClick={handleFollowerClick}>
           <div className={profile["circle-text"]}>{followerCount}</div>
         </div>
-        <div><FaUserPlus/>팔로워</div>
+        <div>
+          <FaUserPlus />
+          팔로워
+        </div>
       </Col>
       <Col>
         <div className={profile.circle} onClick={handleFollowingClick}>
           <div className={profile["circle-text"]}>{followingCount}</div>
         </div>
-        <div><FaUserPlus/>팔로잉</div>
+        <div>
+          <FaUserPlus />
+          팔로잉
+        </div>
       </Col>
     </Row>
   );

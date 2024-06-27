@@ -13,15 +13,21 @@ import {
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import ForegroundTemplate from "../../components/common/ForegroundTemplate";
 import styles2 from "../../assets/css/module/member/base.module.css";
-import useDecryptId from "./component/common/useDecryptId";
-import useDecrypteIdUrl from "./component/common/useDecrypteIdUrl";
-import useEncryptId from "./component/common/useEncryptId";
-import { checkPhoneNumber, checkPhoneNumberAndMemberId, getMemberIdByPhoneNumber, updatePhoneNumber } from "./function/memberAxios";
+import useDecryptId from "./component/hook/useDecryptId";
+import useDecrypteIdUrl from "./component/hook/useDecrypteIdUrl";
+import useEncryptId from "./component/hook/useEncryptId";
+import {
+  checkPhoneNumber,
+  checkPhoneNumberAndMemberId,
+  getMemberIdByPhoneNumber,
+  updatePhoneNumber,
+} from "./function/memberAxios";
 import { validatePhoneNumber } from "./function/memberValidator";
 import { useSelector } from "react-redux";
 const AddPhoneNumberAuthentification = () => {
   const [phoneNumber, setPhoneNumber] = useState(""); //휴대폰번호
-  const [phoneNumberValidationMessage, setPhoneNumberValidationMessage] =useState(""); //번호 형식 검사 : 통과하면 "" 통과하지 못하면 메세지
+  const [phoneNumberValidationMessage, setPhoneNumberValidationMessage] =
+    useState(""); //번호 형식 검사 : 통과하면 "" 통과하지 못하면 메세지
   const [authNumber, setAuthNumber] = useState(""); //인증번호
   const [certificationRequested, setCertificationRequested] = useState(false); // 인증번호 전송 여부 초기화만 false 그 이후 true
   const [timeLeft, setTimeLeft] = useState(0); // 타이머 3분 = 180초
@@ -31,9 +37,9 @@ const AddPhoneNumberAuthentification = () => {
   const [verifiedState, setIsVerified] = useState("pending"); // 인증 상태 pending,success,fail
 
   const { toUrl } = useParams(); //addMember 또는 getMemberId 또는 updatePwd 또는 updatePhoneNumber
-  const { memberId } = useDecrypteIdUrl();//URL파라미터에서 가져옴
+  const { memberId } = useDecrypteIdUrl(); //URL파라미터에서 가져옴
   const { encryptedData, ivData } = useEncryptId(memberId);
-  const member = useSelector((state)=>state.auth.member);
+  const member = useSelector((state) => state.auth.member);
 
   //toUrl이 getMemberId면 getMemberId/memberId로 바꿔져야함. 인증하면
   const navigate = useNavigate();
@@ -67,19 +73,28 @@ const AddPhoneNumberAuthentification = () => {
     }
   }, [verifiedState]);
 
-  const handleUpdatePhoneNumber = async (phoneNumber,memberId, verifiedState, navigate, toUrl) => {
+  const handleUpdatePhoneNumber = async (
+    phoneNumber,
+    memberId,
+    verifiedState,
+    navigate,
+    toUrl
+  ) => {
     // alert("phoneNumber"+phoneNumber+"memberId"+memberId+"verifiedState"+verifiedState+"toUrl"+toUrl)
 
-    if (verifiedState === "success" && toUrl === "updatePhoneNumber" && memberId) {
+    if (
+      verifiedState === "success" &&
+      toUrl === "updatePhoneNumber" &&
+      memberId
+    ) {
+      const response = await updatePhoneNumber({ phoneNumber, memberId });
 
-      const response = await updatePhoneNumber({phoneNumber,memberId});
-
-      if(response === true){
-      const secretId = encryptedData;
-      const secretIv = ivData;
-      // alert("휴대폰 번호 등록에 성공했습니다.");
-      navigate(`/member/getMemberProfile/${secretId}/${secretIv}`);
-      }else{
+      if (response === true) {
+        const secretId = encryptedData;
+        const secretIv = ivData;
+        // alert("휴대폰 번호 등록에 성공했습니다.");
+        navigate(`/member/getMemberProfile/${secretId}/${secretIv}`);
+      } else {
         // alert("휴대폰 번호 등록에 실패했습니다.");
       }
     }
@@ -90,48 +105,53 @@ const AddPhoneNumberAuthentification = () => {
     const formattedPhoneNumber = formatPhoneNumber(input);
     setPhoneNumber(formattedPhoneNumber);
 
-    if(formattedPhoneNumber.length === 13){
-      
-      if(member){
+    if (formattedPhoneNumber.length === 13) {
+      if (member) {
         const response = await checkPhoneNumber(formattedPhoneNumber);
         // const response = { info: true };
-  
+
         if (!validatePhoneNumber(formattedPhoneNumber)) {
           setPhoneNumberValidationMessage("유효하지 않은 전화번호 형식입니다.");
           setIsPhoneNumberValid(false);
         } else if (response.info !== true) {
           console.log("response", response);
           // alert(response?.message);
-          const messageObject = JSON.parse(response.message); 
-          if(messageObject?.result?.error==="허용되지 않은 IP주소 입니다."){
+          const messageObject = JSON.parse(response.message);
+          if (messageObject?.result?.error === "허용되지 않은 IP주소 입니다.") {
             setPhoneNumberValidationMessage("허용되지 않은 IP주소 입니다.");
-          }else{
+          } else {
             console.log("response.message", response.message);
             setPhoneNumberValidationMessage("유효하지 않은 전화번호 입니다.");
-            
           }
-          
+
           setIsPhoneNumberValid(false);
         } else {
           setPhoneNumberValidationMessage("");
           setIsPhoneNumberValid(true);
         }
-      }else{
-      setPhoneNumberValidationMessage("휴대폰 번호를 등록하기 위해 회원가입을 진행해주세요.");
-      setIsPhoneNumberValid(false);
-      }
-    }else {
-        setPhoneNumberValidationMessage("");
+      } else {
+        setPhoneNumberValidationMessage(
+          "휴대폰 번호를 등록하기 위해 회원가입을 진행해주세요."
+        );
         setIsPhoneNumberValid(false);
+      }
+    } else {
+      setPhoneNumberValidationMessage("");
+      setIsPhoneNumberValid(false);
     }
-
-  }
+  };
 
   return (
     <ForegroundTemplate>
-      <Container className="mt-5" style={{padding:"0px",margin:"0px 0px 0px 32px",width:"100%"}}>
-        <Row className="justify-content-center" style={{padding:"0px",width:"100%"}}>
-          <Col md={6} style={{padding:"0px", width:"100%"}} >
+      <Container
+        className="mt-5"
+        style={{ padding: "0px", margin: "0px 0px 0px 32px", width: "100%" }}
+      >
+        <Row
+          className="justify-content-center"
+          style={{ padding: "0px", width: "100%" }}
+        >
+          <Col md={6} style={{ padding: "0px", width: "100%" }}>
             <h2 className="mb-4">
               휴대폰 인증
               <span className="inline-text" style={{ fontSize: "15px" }}>
@@ -141,24 +161,31 @@ const AddPhoneNumberAuthentification = () => {
                 {toUrl === "updatePhoneNumber" && "(휴대폰 번호 등록 및 변경)"}
               </span>
             </h2>
-            <Form style={{width:"100%"}}>
-              <Form.Group controlId="formPhoneNumber" style={{width:"80%"}}>
-                <Form.Label className={styles.labelBold} style={{width:"80%"}}>
+            <Form style={{ width: "100%" }}>
+              <Form.Group controlId="formPhoneNumber" style={{ width: "80%" }}>
+                <Form.Label
+                  className={styles.labelBold}
+                  style={{ width: "80%" }}
+                >
                   휴대폰 번호
                 </Form.Label>
-                <div className="d-flex" style={{width:"100%"}}>
+                <div className="d-flex" style={{ width: "100%" }}>
                   <input
                     type="text"
                     placeholder="010-1234-5678"
                     value={phoneNumber}
-                    onChange={toUrl!=="updatePhoneNumber" ? (e) =>
-                      handlePhoneNumberChange(
-                        e,
-                        setPhoneNumber,
-                        setPhoneNumberValidationMessage,
-                        setIsPhoneNumberValid,
-                        toUrl
-                      ) : handlePhoneNumberChange2}
+                    onChange={
+                      toUrl !== "updatePhoneNumber"
+                        ? (e) =>
+                            handlePhoneNumberChange(
+                              e,
+                              setPhoneNumber,
+                              setPhoneNumberValidationMessage,
+                              setIsPhoneNumberValid,
+                              toUrl
+                            )
+                        : handlePhoneNumberChange2
+                    }
                     className={styles.inputUnderline}
                     maxLength={13} // 하이픈 포함 최대 13자
                     disabled={verifiedState === "success"}
@@ -175,7 +202,7 @@ const AddPhoneNumberAuthentification = () => {
                         setIsRunning
                       )
                     }
-                    style={{width:"30%"}}
+                    style={{ width: "30%" }}
                     disabled={
                       !isPhoneNumberValid || verifiedState === "success"
                     }
@@ -190,7 +217,7 @@ const AddPhoneNumberAuthentification = () => {
                 )}
                 {isPhoneNumberValid && (
                   <Form.Text className="text-success">
-                    {toUrl === "addMember" && 
+                    {toUrl === "addMember" &&
                       "회원가입을 하기 위해 메세지를 보냅니다."}
                     {toUrl === "getMemberId" &&
                       "아이디를 찾기 위해 메세지를 보냅니다."}
@@ -204,9 +231,12 @@ const AddPhoneNumberAuthentification = () => {
               <Form.Group controlId="formAuthNumber" className="mt-4">
                 <Form.Label className={styles.labelBold}>인증번호</Form.Label>
                 {certificationRequested && (
-                  <div className={`d-flex ${styles.timerText}`}  style={{width:"80%"}}>
+                  <div
+                    className={`d-flex ${styles.timerText}`}
+                    style={{ width: "80%" }}
+                  >
                     <input
-                      style={{width:"80%"}}
+                      style={{ width: "80%" }}
                       type="text"
                       placeholder="1234"
                       value={authNumber}
@@ -219,7 +249,9 @@ const AddPhoneNumberAuthentification = () => {
                     {timeLeft !== 0 ? (
                       <span className="text-muted">{formatTime(timeLeft)}</span>
                     ) : (
-                      <span className="text-muted" style={{width:"35%"}}>인증번호 만료</span>
+                      <span className="text-muted" style={{ width: "35%" }}>
+                        인증번호 만료
+                      </span>
                     )}
                   </div>
                 )}
@@ -278,7 +310,13 @@ const AddPhoneNumberAuthentification = () => {
                   type="button"
                   className={`${styles2.typicalButtonColor} ${styles2.miniFont}`}
                   onClick={() =>
-                    handleUpdatePhoneNumber(phoneNumber,memberId, verifiedState, navigate, toUrl)
+                    handleUpdatePhoneNumber(
+                      phoneNumber,
+                      memberId,
+                      verifiedState,
+                      navigate,
+                      toUrl
+                    )
                   }
                 >
                   전화번호 등록 및 변경하기
