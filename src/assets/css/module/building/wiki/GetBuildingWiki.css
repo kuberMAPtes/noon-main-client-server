@@ -1,0 +1,46 @@
+.toc {
+  margin-left: 5%;
+  border: 2px solid #ced4da;
+  width: fit-content;
+  background-color: #e9ecef;
+  padding: 24px 7%;
+  margin-left: auto;
+  margin-right: 5vw;
+  margin-bottom: 30px;
+}
+
+.toctitle h2 {
+  margin-top: 0px;
+  font-size: 40px;
+  margin-left: 0px;
+}
+
+.toc ul {
+  padding-left: 0px;
+  margin-bottom: 0px;
+}
+
+.toc li {
+  list-style-type: none;
+  font-size: 16px;
+}
+
+.toc li li {
+  text-indent: 1em;
+}
+
+.toc li li li {
+  text-indent: 2em;
+}
+
+.toc li li li li {
+  text-indent: 3em;
+}
+
+.toc li li li li li {
+  text-indent: 4em;
+}
+
+.toc li a {
+  text-decoration: none;
+}

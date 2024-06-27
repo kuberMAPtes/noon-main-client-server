@@ -1,0 +1,77 @@
+.container {
+  width: 100vw;
+  padding: 0px 8vw;
+  margin-top: 5vh;
+  height: 82vh;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow-y: scroll;
+  position: relative;
+}
+
+.container h1 {
+  font-size: 64px;
+  margin-left: 24px;
+  margin-bottom: 0px;
+}
+
+.contentSeparator {
+  border: 2px solid #030722;
+}
+
+.contentContainer h2,
+.contentContainer h3,
+.contentContainer h4,
+.contentContainer h5,
+.contentContainer h6 {
+  margin-top: 48px;
+  padding-left: 12px;
+  margin-bottom: 1rem;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #030722;
+}
+
+.contentContainer h2 {
+  font-size: 44px;
+}
+
+.contentContainer h3 {
+  font-size: 34px;
+}
+
+.contentContainer h4 {
+  font-size: 28px;
+}
+
+.contentContainer h5 {
+  font-size: 24px;
+}
+
+.contentContainer h6 {
+  font-size: 20px;
+}
+
+.btnContainer {
+  position: absolute;
+  right: 10vw;
+  top: 12px;
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+}
+
+.btn {
+  width: 40px;
+  height: 40px;
+  padding: 6px 6px;
+  border-radius: 4px;
+  color: #9BAAF8;
+  border: 1px solid #9BAAF8;
+}
+
+.btn:hover {
+  color: #FFFFFD;
+  background-color: #9BAAF8;
+  cursor: pointer;
+}
