@@ -45,6 +45,36 @@ export const handleNicknameChange = async (
     "닉네임 : 자음과 모음이 반드시 결합, 2~20자"
   );
 };
+export const handleProfileIntroUpdateChange = async (
+  e,
+  profileIntro,
+  setProfileIntro,
+  setProfileIntroValidationMessage,
+  setIsProfileIntroValid
+) => {
+  console.log("setProfileIntro", typeof setProfileIntro);
+  console.log(
+    "setProfileIntroValidationMessage",
+    typeof setProfileIntroValidationMessage
+  );
+
+  const input = e.target.value;
+  setProfileIntro(input);
+
+  if (input === profileIntro) {
+    setProfileIntroValidationMessage("");
+    setIsProfileIntroValid(false);
+  } else if (input === "") {
+    setProfileIntroValidationMessage("");
+    setIsProfileIntroValid(true);
+  }else if (input.length >= 150){
+    setProfileIntroValidationMessage("150자 이하로 입력하세요.");
+    setIsProfileIntroValid(false);
+  }else if (input.lenth >=0 && input.length < 150){
+    setProfileIntroValidationMessage("");
+    setIsProfileIntroValid(true);
+  }
+};
 export const handleNicknameUpdateChange = async (
   e,
   nickname,
