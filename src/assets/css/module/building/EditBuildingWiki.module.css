@@ -1,9 +1,0 @@
-.wikiEditContainer {
-  height: 80vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.wikiTextArea {
-  flex: 1;
-}
