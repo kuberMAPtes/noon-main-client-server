@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios_api from "../../../lib/axios_api";
-import Footer from "../../../components/common/Footer";
 import $ from "jquery";
 import wikiStyles from "../../../assets/css/module/building/wiki/GetBuildingWiki.module.css"
 import "../../../assets/css/module/building/wiki/GetBuildingWiki.css"
@@ -63,7 +62,6 @@ export default function GetBuildingWiki() {
             onClick={() => navigate(`/getBuildingProfile/${buildingId}`)}
         />
       </div>
-      <Footer />
       <h1>{buildingName}</h1>
       <hr className={wikiStyles.contentSeparator} />
     </div>
