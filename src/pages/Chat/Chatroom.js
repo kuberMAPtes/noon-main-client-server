@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import io from 'socket.io-client';
 import module from './Chatroom.module.css'; // 스타일 파일을 import 합니다
-import { getChatroom } from '../Chat/function/axios_api'
+import { getChatroom, addChatEntrance } from '../Chat/function/axios_api'
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useNavigate  } from 'react-router-dom';
@@ -70,6 +70,21 @@ const Chatroom = () => {
       // 채팅방 정보(roomInfo) 없으면 요청 후 useEffect 종료
       getChatroom(chatroomID)
       .then(data => {
+        //chatEntranceInfo 에 memberID 가 없으면 ParticiPants 에 등록하기
+        const chatEntrancesInfo = data.ChatEntrancesInfo;
+        const chatEntranceChecked = chatEntrancesInfo.find(entrance => entrance.chatroomMemberId === memberID);
+   
+        if(!chatEntranceChecked){
+          addChatEntrance(chatroomID, memberID)
+          .then(chatEntrance => {
+            chatEntrancesInfo.push(chatEntrance);
+            console.log("newEntrance 추가된 participants", chatEntrancesInfo);
+          })
+          .catch(error => {
+            console.error("채팅 입장 추가 실패:", error);
+          });
+        }
+
         setRoomInfo(data.ChatroomInfo);
         setParticipants(data.ChatEntrancesInfo);
       })
@@ -77,7 +92,6 @@ const Chatroom = () => {
 
       return ;
     }
-
     // 채팅을 위해 노드서버와 웹소켓연결
     socket.on('connect', async () => {
       console.log('Connected to server', roomInfo.chatroomName);
@@ -265,17 +279,18 @@ const Chatroom = () => {
           <h2>채팅 참여자 목록 ({participants.length})</h2>
           {console.log("파티시팬트", participants)}
           {console.log("룸인포", roomInfo)}
+          {console.log("셀렉티드 파티시팬트", selectedParticipant)}
           {participants.map((participant, index) => (
             <div key={index}>
               <p>
                 <strong>memberID:</strong>{' '} &nbsp;
                 <span onClick={() => { 
                   setShowModal(true);
-                  setSelectedParticipant(participant);
+                  setSelectedParticipant(participant.chatroomMember);
                   }} 
                   className={module.clickable} 
                 > 
-                  {participant.chatroomMemberId}
+                  {participant.chatroomMember.nickname} ({participant.chatroomMember.memberId})
                 </span>  &nbsp;
                 ({participant.chatroomMemberType }) 
                 <CustomModal

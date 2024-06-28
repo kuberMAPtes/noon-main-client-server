@@ -4,18 +4,21 @@ import { kickChatroom } from './axios_api'
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useNavigate  } from 'react-router-dom';
+import useMainPage from '../../member/component/common/useMainPage';
 // import { useMainPage }  from '../../member/component/common'
 
 export const CustomModal = ({kickRoom, showModal, setShowModal, setParticipants, roomInfoUpdate, currentChatroomID, loginMemberRole, targetMember}) => {
-
+    // console.log("유저정보를 확인합니다 => 요새끼 ", targetMember);
     // console.log("CustomModal 받은 데이터 => ", "채팅방", currentChatroomID, "내권한",loginMemberRole, "조회or내보낼놈",targetMember);
+    
+    const navigate = useNavigate(); // useNavigate 훅 사용
+    const memberProfileUrl = useMainPage(targetMember? targetMember.memberId : null)
 
     // 유저 정보로 이동
     const handleUserInfo = () => {
-        console.log("유저정보를 확인합니다 => 요새끼 ", targetMember);
+        console.log("유저정보를 확인합니다 => 요새끼 ", targetMember.memberId);
 
-        // <Link to=targetMemberID.....></Link>      
-
+        navigate(memberProfileUrl);
         setShowModal(false);
     };
 

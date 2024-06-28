@@ -45,6 +45,22 @@ export const getMyChatrooms = async (memberId) => {
     }
 };
 
+// 채팅멤버 추가 (by roomId, memberId)
+export const addChatEntrance = async (roomId, memberId) => {
+    try {
+        console.log("addChatEntrance fetching 중....! get data => ", memberId)
+
+        const response = await axios_api.get(`/chatroom/enterChatroom?roomId=${roomId}&memberId=${memberId}`);
+        console.log('addChatEntrance fetching 결과 :', response.data);
+
+        return response.data;      
+        
+    } catch (error) {
+        console.error("Error fetching addChatEntrance", error);
+        throw error;  // Re-throw the error so it can be handled by the caller
+    }
+}
+
 // 채팅방 정보 불러오기 (by chatroomId)
 export const getChatroom = async (chatRoomId) => {
     console.log("getChatroom fetching 중....! get data => ", chatRoomId)
