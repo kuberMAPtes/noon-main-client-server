@@ -59,7 +59,6 @@ const PrivateRoute = ({ children }) => {
   return (
     <>
       {children}
-      <Footer />
     </>
   );
 };

@@ -108,105 +108,21 @@ const AppRoutes = () => {
           <Route path="/b" element={<B />}></Route>
           <Route path="/testComponent" element={<TestComponent />}></Route>
           <Route path="/member">
-            <Route
-              path="getAuthMain"
-              element={
-                <GuestRoute>
-                  <GetAuthMain />
-                </GuestRoute>
-              }
-            />
-            <Route
-              path="getSignUpTermAgreement"
-              element={
-                <GuestRoute>
-                  <GetSignUpTermAgreement />
-                </GuestRoute>
-              }
-            />
-            <Route
-              path="addPhoneNumberAuthentification/:toUrl"
-              element={
-                <AddPhoneNumberAuthentification />
-              }
-            />
-            {/* 로그인한 상태로 AddPhoneNumberAuthentification가고 싶다? 비밀번호 변경하고 싶다면... */}
-
-            <Route
-              path="addMember"
-              element={
-                <GuestRoute>
-                  <AddMember />
-                </GuestRoute>
-              }
-            />
+            <Route path="getAuthMain" element={<GuestRoute><GetAuthMain /></GuestRoute>} />
+            <Route path="getSignUpTermAgreement" element={<GuestRoute><GetSignUpTermAgreement /></GuestRoute>} />
+            <Route path="addPhoneNumberAuthentification/:toUrl" element={<AddPhoneNumberAuthentification />} />
+            <Route path="addMember" element={<GuestRoute><AddMember /></GuestRoute>} />
             <Route path="postcode" element={<Postcode />} />
             <Route path="addMemberResult" element={<AddMemberResult />} />
-
-            <Route
-              path="loginForm"
-              element={
-                <GuestRoute>
-                  <LoginForm />
-                </GuestRoute>
-              }
-            />
-
+            <Route path="loginForm" element={<GuestRoute><LoginForm /></GuestRoute>} />
             <Route path="kakaoNav/:memberId" element={<KakaoNav />} />
-            <Route
-              path="IdFormToUpdatePwd"
-              element={
-                  <IdFormToUpdatePwd />
-              }
-            />
-            <Route
-              path="updatePwd"
-              element={
-                <PrivateRoute>
-                  <UpdatePwd />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="updatePwdResult/:result"
-              element={
-                <PrivateRoute>
-                  <UpdatePwdResult />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="getMember"
-              element={
-                <PrivateRoute>
-                  <GetMember />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="getMemberId/:memberId"
-              element={
-                <GuestRoute>
-                  <GetMemberId />
-                </GuestRoute>
-              }
-            />
-            <Route
-              path="getMemberProfile/:secretId/:secretIv"
-              element={
-                <PrivateRoute>
-                  <GetMemberProfile />
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="getMemberRelationshipList/:secretId/:secretIv"
-              element={
-                <PrivateRoute>
-                  <GetMemberRelationshipList />
-                </PrivateRoute>
-              }
-            />
+            <Route path="IdFormToUpdatePwd" element={<IdFormToUpdatePwd />} />
+            <Route path="updatePwd" element={<PrivateRoute><UpdatePwd /></PrivateRoute>} />
+            <Route path="updatePwdResult/:result" element={<PrivateRoute><UpdatePwdResult /></PrivateRoute>} />
+            <Route path="getMember" element={<PrivateRoute><GetMember /></PrivateRoute>} />
+            <Route path="getMemberId/:memberId" element={<GuestRoute><GetMemberId /></GuestRoute>} />
+            <Route path="getMemberProfile/:secretId/:secretIv" element={<PrivateRoute><GetMemberProfile /></PrivateRoute>} />
+            <Route path="getMemberRelationshipList/:secretId/:secretIv" element={<PrivateRoute><GetMemberRelationshipList /></PrivateRoute>} />
           </Route>
           <Route path="chat">
             <Route path="chatroomCreation/:buildingId" element={<ChatRoomCreation />} />
@@ -251,7 +167,6 @@ const AppRoutes = () => {
             <Route path="detail" element={<FeedDetail />} />
             <Route path="form" element={<FeedForm />} /> {/* 일반 피드 추가 */}
             <Route path="voteForm" element={<FeedVoteForm />} /> {/* 투표 피드 추가 */}
-            <Route path="megaphoneForm" element={<FeedMegaphoneForm />} /> {/* 확성기 피드 추가 */}
             <Route path="form/:feedId" element={<FeedForm />} /> {/* 일반 피드 수정 */}
             <Route path="chart" element={<FeedChartPage />} />
             <Route path="main" element={<FeedListHomePage />}/>

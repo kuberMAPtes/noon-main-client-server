@@ -30,7 +30,7 @@ const NicknameInput = ({
   const handleNicknameKeyDown = (e) => {
     if (e.key === "Enter") {
       e.preventDefault(); // 폼 제출 방지
-      nicknameInput.handleBlur(profile.nickname)();
+      nicknameInput.handleBlur(profile.nickname)(e);
     }
   };
 

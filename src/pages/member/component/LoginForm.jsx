@@ -112,17 +112,7 @@ const LoginForm = () => {
             >
               로그인
             </Button>
-            {(validationError && !loginError) && (
-              <Alert variant="danger" className="mt-3">
-                {validationError}
-              </Alert>
-            )}
-            {(!validationError && loginError) && (
-              <Alert variant="danger" className="mt-3">
-                {loginError.message}
-              </Alert>
-            )}
-            {(validationError && loginError) && (
+            {(validationError) && (
               <Alert variant="danger" className="mt-3">
                 {renderLoginError(validationError, loginError)}
               </Alert>
