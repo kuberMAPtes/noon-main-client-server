@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import CustomerSupportHeader from './components/CustomerSupportHeader';
+import Header from '../../components/common/Header';
 import Footer from '../../components/common/Footer';
 import UpdateUnlockTimeModal from '../CustomerSupport/components/UpdateUnlockTimeModal';
 import MessageModal from './components/MessageModal';
@@ -18,17 +18,22 @@ import {
   Badge,
   Row,
   Col,
+  Nav,
+  NavItem,
+  NavLink,
+  TabContent,
+  TabPane
 } from "reactstrap";
+import classnames from 'classnames';
+import { CardFooter, CardTitle } from 'react-bootstrap';
 
-
-
-
-const handleBlur = async (attachment, setLoading, setAttachmentList, setBlurModalOpen) => {
+const handleBlur = async (attachment, blurIntensity, setLoading, setAttachmentList, setBlurModalOpen) => {
   console.log('블러 처리하기' + JSON.stringify(attachment));
+  console.log('블러 수준:'+blurIntensity);
 
   setLoading(true);
   try {
-    const response = await axiosInstance.post(`/customersupport/addBlurFile`, {
+    const response = await axiosInstance.post(`/customersupport/addBlurFile?blurIntensity=`+blurIntensity, {
       attachmentId: attachment.attachmentId
     });
 
@@ -42,10 +47,6 @@ const handleBlur = async (attachment, setLoading, setAttachmentList, setBlurModa
     setBlurModalOpen(true);
   }
 }; /// end of handleBlur
-
-
-
-
 
 const handleCancleBlur = async (attachment, setLoading, setAttachmentList, setBlurModalOpen) => {
   console.log('블러 취소하기' + JSON.stringify(attachment));
@@ -66,11 +67,6 @@ const handleCancleBlur = async (attachment, setLoading, setAttachmentList, setBl
     setBlurModalOpen(true);
   }
 }; /// end of handleBlur
-
-
-
-
-
 
 const handleDelete = async (attachment, unlockDuration) => {
   console.log('피드 삭제 및 계정 잠금' + JSON.stringify(attachment));
@@ -101,11 +97,11 @@ const GetImage = () => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [blurModalOpen, setBlurModalOpen] = useState(false);
   const [showBlurMessageModal, setShowBlurMessageModal] = useState(false);
+  const [activeTab, setActiveTab] = useState('2');
 
   const [feed, setFeed] = useState(null);
   console.log("첨부파일 정보: " + JSON.stringify(attachment));
 
-  //피드 정보 조회
   const getFeed = async () => {
     console.log("getFeed");
     setLoading(true);
@@ -135,8 +131,8 @@ const GetImage = () => {
     setDeleteModalOpen(!deleteModalOpen);
   };
 
-  const handleBlurClick = async () => {
-    await handleBlur(attachment, setLoading, setAttachmentList, setShowBlurMessageModal);
+  const handleBlurClick = async (blurIntensity) => {
+    await handleBlur(attachment, blurIntensity, setLoading, setAttachmentList, setShowBlurMessageModal);
   };
 
   const handleCancleBlurClick = async () => {
@@ -155,78 +151,106 @@ const GetImage = () => {
     navigate(`../../feed/detail?feedId=${feed.feedId}`);
   }
 
+  const toggleTab = tab => {
+    if(activeTab !== tab) setActiveTab(tab);
+  }
+
   return (
     <div>
-      <CustomerSupportHeader title="사진 상세보기" />
+      <Header title="사진 상세보기" />
 
-      <Row style={{ width: '103%', height: '100%' }} className="justify-content-center align-items-center">
-        <Col md="12">
-          <Card>
-            <CardHeader onClick={handleGetFeed}  style={{ textAlign: 'right', paddingTop: '20px', paddingBottom: '20px' }} >
-              피드 확인하러가기&nbsp; <i className="fa-solid fa-right-from-bracket">&nbsp; </i>
-            </CardHeader> {/* {attachment.attachmentId} */}
-            <CardBody>
-              <Table responsive>
-                <thead className="text-primary">
+      <Card>
+       <CardHeader onClick={handleGetFeed}  style={{ textAlign: 'right', paddingTop: '20px', paddingBottom: '20px' }} >
+         피드 확인하러가기&nbsp; <i className="fa-solid fa-right-from-bracket">&nbsp; </i>
+       </CardHeader>  
+        <CardBody>
+           <Table responsive>
+              <thead className="text-primary">
+                <tr>
+                  <th className="text-right">게시자</th>
+                  <th className="text-right">피드 등록 일자</th>
+                  <th className="text-right">조회수</th>
+                </tr>
+              </thead>
+              <tbody>
+                {feed && (
                   <tr>
-                    <th className="text-right">게시자</th>
-                    <th className="text-right">피드 등록 일자</th>
-                    <th className="text-right">조회수</th>
+                    <td>{feed.writerNickname}</td>
+                    <td>{feed.writtenTime}</td>
+                    <td>{feed.viewCnt}</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {feed && (
-                    <tr>
-                      <td>{feed.writerNickname}</td>
-                      <td>{feed.writtenTime}</td>
-                      <td>{feed.viewCnt}</td>
-                    </tr>
-                  )}
-                </tbody>
-              </Table>
-            </CardBody>
-            
+                )}
+              </tbody>
+            </Table>
+        </CardBody>
 
-            <div style={styles.imageContainer}>
+        <CardBody>
+          <div style={styles.imageContainer}>
+            <Card>
+              <CardHeader>
+                <div>
+                  {attachment.blurredFileUrl == null?
+                    <Badge color="primary" style={styles.badge}>
+                      블러 처리전
+                    </Badge>  
+                    :
+                    <Badge color="danger" style={styles.badge}>
+                      블러 처리됨
+                    </Badge>  
+                  }
+                </div>
+              </CardHeader>
+              <CardBody>
+                <img src={attachment.fileUrl} alt="피드 사진" style={styles.image} />
+              </CardBody>
+            </Card>
+          </div>
+        </CardBody>
 
-              <img src={attachment.fileUrl} alt="피드 사진" style={styles.image} />
-              
-              <div style={styles.badgeContainer}>
-                {attachment.blurredFileUrl == null?
-                  <Badge color="primary" style={styles.badge} >
-                    블러 처리전
-                  </Badge>  
-                  :
-                  <Badge color="danger" style={styles.badge} >
-                    블러 처리됨
-                  </Badge>  
-                }
-              </div>
+        <CardBody>
+          <Nav tabs>
+            <CardHeader>블러 수준</CardHeader>
+            <NavItem>
+              <NavLink
+                className={classnames({ active: activeTab === '1' })}
+                onClick={() => { toggleTab('1'); }}>
+                약
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink
+                className={classnames({ active: activeTab === '2' })}
+                onClick={() => { toggleTab('2'); }}>
+                중
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink
+                className={classnames({ active: activeTab === '3' })}
+                onClick={() => { toggleTab('3'); }}>
+                강
+              </NavLink>
+            </NavItem>
+          </Nav>
+        </CardBody>
 
-            </div>
-            <div style={styles.buttonContainer}>
-                {attachment.blurredFileUrl == null?
-                  <button onClick={handleBlurClick} style={styles.button}>블러 처리</button>  
-                  :
-                  <button onClick={handleCancleBlurClick} style={styles.button}>블러 취소</button>  
-                }
-              <MessageModal isOpen={showBlurMessageModal} toggle={toggleBlurMessageModal} message={messages.blur} />
+        <CardFooter>
+          <div style={styles.buttonContainer}>
+            {attachment.blurredFileUrl == null?
+              <button onClick={() => handleBlurClick(activeTab)} style={styles.button}>블러 처리</button>  
+              :
+              <button onClick={handleCancleBlurClick} style={styles.button}>블러 취소</button>  
+            }
+            <MessageModal isOpen={showBlurMessageModal} toggle={toggleBlurMessageModal} message={messages.blur} />
 
-              <button onClick={toggleDeleteModal} style={styles.button}>
-                피드 삭제
-              </button>
-              <UpdateUnlockTimeModal isOpen={deleteModalOpen} toggle={toggleDeleteModal} onSubmit={handleUnlockSubmit} />
-            </div>
+            <button onClick={toggleDeleteModal} style={styles.button}>
+              피드 삭제
+            </button>
+            <UpdateUnlockTimeModal isOpen={deleteModalOpen} toggle={toggleDeleteModal} onSubmit={handleUnlockSubmit} />
+          </div>
+        </CardFooter>
 
-
-
-          </Card>
-        </Col>
-      </Row>
-
-      
-
-      <Footer />
+      </Card>
 
       <LoadingModal show={loading} />
     </div>
@@ -240,17 +264,17 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-    minHeight: '55vh', 
-    position: 'relative', // 추가
+    minHeight: '50vh', 
+    position: 'relative', 
   },
   image: {
-    maxWidth: '85%',
+    maxWidth: '100%',
     maxHeight: '50vh',
     borderRadius: '5px',
   },
   buttonContainer: {
     display: 'flex',
-    justifyContent: 'center', // 가운데 정렬
+    justifyContent: 'center', 
     width: '100%',
     height: '30%',
     marginBottom: '50px'
@@ -261,17 +285,10 @@ const styles = {
     color: '#fff',
     margin: '10px',
     padding: '10px 20px',
-    borderRadius: '5px',
+    borderRadius: '50px',
     cursor: 'pointer',
-    width: '30%',
+    width: '45%',
     height: '30%',
-  },
-  badgeContainer: {
-    position: 'absolute',
-    top: '-20px', // 이미지의 끝에서 위로 20px
-    left: '20%',
-    transform: 'translateX(-50%)',
-    zIndex: 10,
   },
   badge: {
     width: '100px',

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axiosInstance from '../../../lib/axiosInstance';
 import { useSelector } from 'react-redux';
+import useMainPage from '../../member/component/common/useMainPage';
+import { Link } from 'react-router-dom';
 
 import {
   Button,
@@ -20,6 +22,11 @@ const BuildingInfo = () => {
   
   // 회원 정보
   const member = useSelector((state) => state.auth.member);
+
+  // 프로필 이동
+  const [selectedMemberId, setSelectedMemberId] = useState(null); 
+  const mainPageUrl = useMainPage(selectedMemberId);
+
 
   // 회원의 구독 여부
   const [subscription, setSubscription] = useState(false);
@@ -215,6 +222,7 @@ const BuildingInfo = () => {
                     {subscribers.map((subscriber, index) => (
                       <div 
                         key={subscriber.memberId} 
+                        onClick={() => setSelectedMemberId(subscriber.memberId)}
                         style={{ 
                           display: 'inline-block', 
                           textAlign: 'center', 
@@ -239,6 +247,15 @@ const BuildingInfo = () => {
                       </div>
                     ))}
                   </div>
+
+                  {selectedMemberId && (
+                    <div style={styles.linkContainer}>
+                      <Link to={mainPageUrl}>
+                        <button style={{backgroundColor: "#B8C6E3"}}>이 회원의 프로필 GO</button>
+                      </Link>
+                    </div>
+                  )}
+
                 </div>
               </CardFooter>
             </Card>
