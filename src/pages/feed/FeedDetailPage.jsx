@@ -53,7 +53,7 @@ const FeedDetailPage = () => {
     if(!feed) {
         return (
             <div>
-                <BasicNavbar />
+                {/* <BasicNavbar /> */}
                 <FeedNotFound/>
             </div>
         );
@@ -61,7 +61,7 @@ const FeedDetailPage = () => {
 
     return (
         <div>
-            <BasicNavbar />
+            {/* <BasicNavbar /> */}
             <FeedDetail data={feed} memberId = {memberId} />
             <div>
                 <Footer />

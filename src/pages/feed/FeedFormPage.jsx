@@ -51,7 +51,7 @@ const FeedFormPage = () => {
 
     return (
         <div>
-            <BasicNavbar />
+            {/* <BasicNavbar /> */}
             {/* 피드를 새로 추가할 때만 생성 */}
             {feedId ? '' : (
                 <div className="container">
