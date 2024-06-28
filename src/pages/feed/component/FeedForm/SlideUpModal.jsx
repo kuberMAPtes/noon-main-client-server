@@ -53,11 +53,6 @@ const SlideUpModal = ({ show, onHide }) => {
                         <FaBullhorn size={50} />
                         <div>확성기</div>
                     </Button>
-                    {/* 미정 */}
-                    <Button variant="outline-primary" onClick={() => handleLinkClick(megaphoneFormURL)}>
-                        <MdEventAvailable size={50} />
-                        <div>이벤트</div>
-                    </Button>
                 </div>
             </Modal.Body>
             <Modal.Footer>

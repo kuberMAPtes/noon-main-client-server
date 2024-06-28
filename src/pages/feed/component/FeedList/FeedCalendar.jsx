@@ -60,3 +60,4 @@ const FeedCalendar = () => {
 };
 
 export default FeedCalendar;
+
