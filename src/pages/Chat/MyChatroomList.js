@@ -99,7 +99,6 @@ const MyChatroomList = () => {
                 <h1> {member.nickname}'s room</h1>
                 <p>(userId : {memberID}) </p>
                 <p>내 다정온도 : {member.dajungScore}도 </p>
-                <button onClick={addChatroom} className={module.normalButton}>채팅방 개설하기</button>
                 <button onClick={getChatApplyList} className={module.normalButton}>새 대화신청 보기</button>
             </div>
             <Countdown/>
