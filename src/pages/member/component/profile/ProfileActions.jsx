@@ -1,6 +1,11 @@
 import React from "react";
 import { Row, Col } from "react-bootstrap";
-import { FaUserEdit, FaMapMarkedAlt, FaUser, FaUserCheck } from "react-icons/fa";
+import {
+  FaUserEdit,
+  FaMapMarkedAlt,
+  FaUser,
+  FaUserCheck,
+} from "react-icons/fa";
 import { MdMoreHoriz } from "react-icons/md";
 import AnimatedDiv from "../AnimatedDiv";
 import profile from "../../../../assets/css/module/member/GetMemberProfile.module.css";
@@ -8,14 +13,14 @@ import { Link, useNavigate } from "react-router-dom";
 import base from "../../../../assets/css/module/member/base.module.css";
 import NormalButton from "../NormalButton";
 import { useSelector } from "react-redux";
-import useEncryptId from "../common/useEncryptId";
+import useEncryptId from "../../hook/useEncryptId";
 import BlockMemberRelationshipButton from "../memberRelationshipList/BlockMemberRelationshipButton";
 import MemberRelationshipButton from "../memberRelationshipList/MemberRelationshipButton";
 import { BsFillChatDotsFill } from "react-icons/bs";
 import { IoSettingsOutline } from "react-icons/io5";
 import { RiCustomerServiceLine } from "react-icons/ri";
 import { AiFillAlert } from "react-icons/ai";
-const ProfileActions = ({toId,fromId}) => {
+const ProfileActions = ({ toId, fromId }) => {
   const [showMenu, setShowMenu] = React.useState(false);
   const member = useSelector((state) => state.auth.member);
   const { encryptedData, ivData } = useEncryptId(member?.memberId);
@@ -94,11 +99,13 @@ const ProfileActions = ({toId,fromId}) => {
           <Row style={{ margin: "0px", padding: "0px" }}>
             <AnimatedDiv onClick={() => navigate("/setting")}>
               <IoSettingsOutline />
-              <span style={{ paddingRight: "16%" }}></span>환경설정으로..<span style={{ paddingRight: "14%" }}></span>
+              <span style={{ paddingRight: "16%" }}></span>환경설정으로..
+              <span style={{ paddingRight: "14%" }}></span>
             </AnimatedDiv>
             <AnimatedDiv onClick={() => navigate("/customerSupport")}>
               <RiCustomerServiceLine />
-              <span style={{ paddingRight: "20%" }}></span>고객지원<span style={{ paddingRight: "20%" }}></span>
+              <span style={{ paddingRight: "20%" }}></span>고객지원
+              <span style={{ paddingRight: "20%" }}></span>
             </AnimatedDiv>
 
             {fromId !== toId && (
@@ -107,7 +114,9 @@ const ProfileActions = ({toId,fromId}) => {
                   style={{ width: "100%" }}
                   onClick={() => navigate(`report/addReport/${toId}`)}
                 >
-                  <AiFillAlert/><span style={{ paddingRight: "20%" }}></span>신고하기<span style={{ paddingRight: "20%" }}></span>
+                  <AiFillAlert />
+                  <span style={{ paddingRight: "20%" }}></span>신고하기
+                  <span style={{ paddingRight: "20%" }}></span>
                 </AnimatedDiv>
               </>
             )}

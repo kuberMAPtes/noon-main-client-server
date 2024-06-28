@@ -3,7 +3,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
 import { FaHome, FaComments, FaMap, FaSearch, FaUser } from "react-icons/fa";
 import styles from "../../assets/css/module/Footer.module.css";
-import useEncryptId from "../../pages/member/component/common/useEncryptId";
+import useEncryptId from "../../pages/member/hook/useEncryptId";
 import { useSelector } from "react-redux";
 
 const Footer = () => {
@@ -26,41 +26,81 @@ const Footer = () => {
       <Container fluid>
         <Row className={`text-center ${styles["row-no-link-style"]}`}>
           <Col>
-            <Link to="/feed/main" style={isActive("/feed/main") ? footerStyles.activeLink : footerStyles.link}>
+            <Link
+              to="/feed/main"
+              style={
+                isActive("/feed/main")
+                  ? footerStyles.activeLink
+                  : footerStyles.link
+              }
+            >
               <FaHome size={24} />
               <div style={footerStyles.linkText}>홈</div>
             </Link>
           </Col>
           <Col>
-            <Link to="/chat/myChatroomList" style={isActive("/chat/myChatroomList") ? footerStyles.activeLink : footerStyles.link}>
+            <Link
+              to="/chat/myChatroomList"
+              style={
+                isActive("/chat/myChatroomList")
+                  ? footerStyles.activeLink
+                  : footerStyles.link
+              }
+            >
               <FaComments size={24} />
               <div style={footerStyles.linkText}>채팅</div>
             </Link>
           </Col>
           <Col>
-            <Link to="/map" style={isActive("/map") ? footerStyles.activeLink : footerStyles.link}>
+            <Link
+              to="/map"
+              style={
+                isActive("/map") ? footerStyles.activeLink : footerStyles.link
+              }
+            >
               <FaMap size={24} />
               <div style={footerStyles.linkText}>지도</div>
             </Link>
           </Col>
           <Col>
-            <Link to="/search" style={isActive("/search") ? footerStyles.activeLink : footerStyles.link}>
+            <Link
+              to="/search"
+              style={
+                isActive("/search")
+                  ? footerStyles.activeLink
+                  : footerStyles.link
+              }
+            >
               <FaSearch size={24} />
               <div style={footerStyles.linkText}>검색</div>
             </Link>
           </Col>
           <Col>
-            {memberRole === 'MEMBER' ?
-              <Link to={`/member/getMemberProfile/${secretId}/${secretIv}`} style={isActive(`/member/getMemberProfile/${secretId}/${secretIv}`) ? footerStyles.activeLink : footerStyles.link}>
+            {memberRole === "MEMBER" ? (
+              <Link
+                to={`/member/getMemberProfile/${secretId}/${secretIv}`}
+                style={
+                  isActive(`/member/getMemberProfile/${secretId}/${secretIv}`)
+                    ? footerStyles.activeLink
+                    : footerStyles.link
+                }
+              >
                 <FaUser size={24} />
                 <div style={footerStyles.linkText}>프로필</div>
               </Link>
-              :
-              <Link to={`/customerSupport`} style={isActive(`/customerSupport`) ? footerStyles.activeLink : footerStyles.link}>
+            ) : (
+              <Link
+                to={`/customerSupport`}
+                style={
+                  isActive(`/customerSupport`)
+                    ? footerStyles.activeLink
+                    : footerStyles.link
+                }
+              >
                 <FaUser size={24} />
                 <div style={footerStyles.linkText}>고객지원</div>
               </Link>
-            }
+            )}
           </Col>
         </Row>
       </Container>

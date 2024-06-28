@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { decryptWithLv } from "../../util/crypto";
 import Cookies from "js-cookie";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import {
@@ -13,10 +12,7 @@ import {
   handleKeyDown,
   handleNicknameUpdateChange,
 } from "./function/AddUpdateMemberUtil";
-import styles from "../../assets/css/module/member/AddMember.module.css";
-import styles2 from "../../assets/css/module/member/base.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import BackgroundTemplate from "../../components/common/BackgroundTemplate";
 import {
   FaArrowRight,
   FaCheck,
@@ -27,10 +23,10 @@ import {
   FaUser,
   FaUserPlus,
 } from "react-icons/fa";
-import useReadOnlyInput from "./component/common/useReadOnlyInput";
+import useReadOnlyInput from "./hook/useReadOnlyInput";
 import NormalButton from "./component/NormalButton";
 import { navigateMainPage } from "../../util/mainPageUri";
-import useMainPage from "./component/common/useMainPage";
+import useMainPage from "./hook/useMainPage";
 
 const GetMember = () => {
   // 각 필드의 상태와 유효성 메시지, 유효성 플래그 관리
@@ -89,11 +85,11 @@ const GetMember = () => {
 
   const handlePwdUpdateClick = () => {
     // alert("handleClick실행 :: "+isMemberIdValid);
-      //휴대폰번호로 네비게이션
-      if(member.memberId){
+    //휴대폰번호로 네비게이션
+    if (member.memberId) {
       sessionStorage.setItem("w", memberId); // 세션 스토리지에 memberId 저장
       navigate("/member/addPhoneNumberAuthentification/" + "updatePwd");
-      }
+    }
   };
 
   // useEffect(() => {
@@ -133,10 +129,9 @@ const GetMember = () => {
 
   const handleClick = (memberId) => {
     if (memberId) {
-      navigateMainPage(memberId,navigate);
+      navigateMainPage(memberId, navigate);
     }
   };
-
 
   return (
     <Container
@@ -176,10 +171,10 @@ const GetMember = () => {
                 &nbsp;닉네임&nbsp;&nbsp;
                 {isNicknameValid && <FaCheck />}
                 <Link to={mainPageUrl}>
-                {/* <NormalButton style={{ width: "60px", height: "30px" }} onClick={()=>handleClick(member.memberId)}> */}
-                <NormalButton style={{ width: "60px", height: "30px" }}>
-                  변경
-                </NormalButton>
+                  {/* <NormalButton style={{ width: "60px", height: "30px" }} onClick={()=>handleClick(member.memberId)}> */}
+                  <NormalButton style={{ width: "60px", height: "30px" }}>
+                    변경
+                  </NormalButton>
                 </Link>
               </Form.Label>
               <Form.Control

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { decryptWithLv } from '../../../../util/crypto';
+import { decryptWithLv } from '../../../util/crypto';
 
 const useDecrypteIdUrl = () => {
 

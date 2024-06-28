@@ -1,63 +1,148 @@
+/* 전체 화면 컨테이너 */
 .app {
-    font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  background-color: #FFFFFD;
+  padding: 10px;
 }
 
-.activeButton {
-    /* 안 읽은 메시지가 0이 아닐 때 버튼의 기본 스타일 */
-    animation: blink 1.5s ease-in-out infinite alternate;
+/* 헤더 */
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #9BAAF8;
+  color: white;
+  border-radius: 10px;
+  margin-bottom: 20px;
 }
 
+.header h1 {
+  margin: 10px 0;
+}
+
+.header p {
+  margin: 5px 0;
+}
+
+/* 일반 버튼 */
 .normalButton {
-    background-color: #9BAAF8 ;
+  padding: 10px 20px;
+  background-color: #f2f2f2;
+  color: #333;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 5px;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.normalButton:hover {
+  background-color: #e0e0e0;
+  transform: scale(1.05);
+}
+
+/* 활성화된 버튼 */
+.activeButton {
+  padding: 10px 20px;
+  background-color: #9BAAF8;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 5px;
+  transition: background-color 0.3s, transform 0.3s;
+  animation: sparkle 1s infinite alternate;
 }
 
 .activeButton:hover {
-    /* 안 읽은 메시지가 0이 아닐 때 호버 시 적용할 스타일 */
-    background-color: lightblue;
-    color: white;
-    cursor: pointer;
+  background-color: #7a89f5;
+  transform: scale(1.05);
 }
 
-@keyframes blink {
-    0%, 100% {
-        background-color: #9BAAF8; /* 버튼 기본 색상 */
-        opacity: 1;
-    }
-    50% {
-        background-color: #d11875; /* 깜빡이는 색상 */
-        opacity: 0.7;
-    }
+@keyframes sparkle {
+  0% { background-color: #9BAAF8; }
+  50% { background-color: #7a89f5; }
+  100% { background-color: #9BAAF8; }
 }
 
-.header {
-    background-color: #f1f1f1;
-    padding: 20px;
-    text-align: center;
-}
-
+/* 채팅방 리스트 */
 .chatroomList {
-    padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 10px;
+  overflow-y: auto;
 }
 
 .chatroom {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #f9f9f9;
 }
 
 .chatroomInfo {
-    display: flex;
-    flex-direction: column;
+  flex: 1;
+  margin-right: 10px;
 }
 
 .chatroomName {
-    font-size: 18px;
-    font-weight: bold;
+  font-weight: bold;
+  margin: 0;
 }
 
 .chatroomStatus {
-    font-size: 14px;
-    color: green;
+  color: #666;
+  margin: 0;
+}
+
+/* 스파클 */
+.sparkle {
+  color: #f39c12;
+  margin-left: 5px;
+  animation: sparkle 1s infinite alternate;
+  position: relative;
+}
+
+.sparkle:hover::after {
+  content: '1시간내 활발한 채팅방입니다';
+  position: absolute;
+  top: -8px;
+  left: 25px;
+  background-color: #9BAAF8;
+  color: #fff;
+  padding: 5px;
+  border-radius: 5px;
+  white-space: nowrap;
+  font-size: 12px;
+  z-index: 10;
+}
+
+@keyframes sparkle {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* 라이브 인디케이터 */
+.liveIndicator {
+  width: 10px;
+  background-color: rgb(95, 235, 95);
+  border-radius: 50%;
+  margin-left: 5px;
+  animation: blink 2s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }

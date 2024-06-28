@@ -4,6 +4,8 @@ import "../../css/FeedForm.css";
 import axios_api from '../../../../lib/axios_api';
 import CheckModal from '../Common/CheckModal';
 import navigator from '../../util/Navigator';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css'; // 달력 전용 css
 // import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
 
 const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, onSave }) => {
@@ -23,6 +25,13 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
 
     // 태그 추가 
     const [tagInput, setTagInput] = useState('');
+
+    // 이벤트 날짜 상태
+    const [eventDate, setEventDate] = useState(null);
+
+    const handleDateChange = (date) => {
+        setEventDate(date);
+    };
 
     // Feed Add, Update Modal 관련
     const [feedAddShow, setFeedAddShow] = useState(false);
@@ -91,7 +100,8 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                 feedText: feedData.feedText,
                 updateTagList: feedData.updateTagList,
                 feedCategory: feedData.category,
-                publicRange: feedData.publicRange
+                publicRange: feedData.publicRange,
+                eventDate: eventDate.toISOString()
             };
 
             console.log(addFeedData);
@@ -136,7 +146,8 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                 updateTagList: feedData.updateTagList,
                 feedCategory: feedData.category,
                 publicRange: feedData.publicRange,
-                attachments: feedData.attachments
+                attachments: feedData.attachments,
+                eventDate: eventDate
             };
 
             console.log(updateFeedData);
@@ -367,11 +378,24 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                                 <option value="COMPLIMENT">칭찬하기</option>
                                 <option value="QUESTION">Q&A</option>
                                 <option value="EVENT">이벤트</option>
-                                <option value="POLL">투표</option>
-                                <option value="NOTICE">공지사항</option>
+                                <option value="SHARE">나눔</option>
+                                <option value="HELP_REQUEST">도움 요청</option>
                             </Form.Control>
                         </Form.Group>
-
+                        {feedData.category === 'EVENT' && (
+                        <Form.Group controlId="eventDate" className="mb-3">
+                            <Form.Label>이벤트 날짜</Form.Label>
+                            <DatePicker
+                                selected={eventDate}
+                                onChange={handleDateChange}
+                                dateFormat="yyyy/MM/dd h:mm aa"
+                                showTimeSelect
+                                timeFormat="HH:mm"
+                                timeIntervals={15}
+                                className="form-control"
+                            />
+                        </Form.Group>
+                        )}
                         <Form.Group controlId="feedPublicRange" className="mb-3">
                             <Form.Label>공개 범위</Form.Label>
                             <Form.Control

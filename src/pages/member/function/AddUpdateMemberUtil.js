@@ -70,7 +70,8 @@ export const handleProfileIntroUpdateChange = async (
   }else if (input.length >= 150){
     setProfileIntroValidationMessage("150자 이하로 입력하세요.");
     setIsProfileIntroValid(false);
-  }else if (input.lenth >=0 && input.length < 150){
+  }else if (input.length >=0 && input.length < 150){
+    // alert("참이다.")
     setProfileIntroValidationMessage("");
     setIsProfileIntroValid(true);
   }

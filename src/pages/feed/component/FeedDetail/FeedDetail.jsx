@@ -97,6 +97,7 @@ const FeedDetail = ({ data, memberId }) => {
         const newCommentEntity = {
             feedId: feedId,
             memberId: memberId,
+            memberNickname : '',
             commentId : 0,
             commentText: newComment,
             writtenTime: new Date().toISOString(),
@@ -110,7 +111,8 @@ const FeedDetail = ({ data, memberId }) => {
             const response = await axios_api.post(url, newCommentEntity)
             console.log(response.data);
 
-            newCommentEntity.commentId = response.data;
+            newCommentEntity.commentId = response.data.commentId;
+            newCommentEntity.memberNickname = response.data.memberNickname;
         } catch (e) {
             console.log(e);
         }
@@ -274,7 +276,7 @@ const FeedDetail = ({ data, memberId }) => {
                                 <div className='d-flex align-items-center'>
                                     <Image src={comment.memberProfile || 'https://via.placeholder.com/50'} roundedCircle width="50" height="50" className="mr-3" />
                                     <div>
-                                        <strong>&nbsp; {comment.memberId}</strong> &nbsp;
+                                        <strong onClick={() => goToMemberProfile(comment.memberId)}>&nbsp; {comment.memberNickname}</strong> &nbsp;
                                         <span className="text-muted" style={{ fontSize: '0.9em' }}>{new Date(comment.writtenTime).toLocaleString()}</span>
                                         <div>&nbsp; {comment.commentText}</div>
                                     </div>
