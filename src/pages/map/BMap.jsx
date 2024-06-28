@@ -5,7 +5,7 @@ import FetchTypeToggle from "./component/FetchTypeToggle";
 import axios_api from "../../lib/axios_api";
 import { MAIN_API_URL } from "../../util/constants";
 import { is2xxStatus, is4xxStatus } from "../../util/statusCodeUtil";
-import { getBuildingMarkerHtml, getPlaceSearchMarkerHtml } from "./contant/markerHtml";
+import { getBuildingMarkerHtml, getPlaceSearchMarkerHtml, getSubscriptionMarkerHtml } from "./contant/markerHtml";
 import mapStyles from "../../assets/css/module/map/BMap.module.css";
 import "../../assets/css/module/map/BMap.css";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
@@ -93,7 +93,7 @@ export default function BMap() {
     });
 
     naver.maps.Event.addListener(map, "dragend", (e) => {
-      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, buildingFetchChecked.popBuildingChecked, member, navigate);
+      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, buildingFetchChecked.popBuildingChecked, member, navigate, currentMarkerDisplayMode);
       const center = map.getCenter();
       dispatch(setCurrentMapState({
         latitude: center.y,
@@ -102,7 +102,7 @@ export default function BMap() {
     });
 
     naver.maps.Event.addListener(map, "zoom_changed", (e) => {
-      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, buildingFetchChecked.popBuildingChecked, member, navigate);
+      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, buildingFetchChecked.popBuildingChecked, member, navigate, currentMarkerDisplayMode);
       console.log(e);
       dispatch(setCurrentMapState({
         zoomLevel: e
@@ -169,9 +169,16 @@ export default function BMap() {
 
   useEffect(() => {
     if (!firstEntry) {
-      fetchBuildingMarkers(subscriptionChecked, popBuildingChecked, member, navigate);
+      fetchBuildingMarkers(subscriptionChecked, popBuildingChecked, member, navigate, currentMarkerDisplayMode);
     }
-  }, [popBuildingChecked, subscriptionChecked, firstEntry]);
+  }, [subscriptionChecked, firstEntry]);
+
+  useEffect(() => {
+    if (!firstEntry) {
+      clearMarkers(popBuildingMarkers);
+      fetchBuildingMarkers(subscriptionChecked, popBuildingChecked, member, navigate, currentMarkerDisplayMode);
+    }
+  }, [currentMarkerDisplayMode]);
 
   useEffect(() => {
     if (currentPosition) { 
@@ -327,9 +334,9 @@ function fetchBuildingInfo(latitude, longitude, setWantBuildingProfileModal) {
  * @param {boolean} popBuildingChecked 
  * @param {string} memberId
  */
-async function fetchBuildingMarkers(subscriptionChecked, popBuildingChecked, memberId, navigate) {
+async function fetchBuildingMarkers(subscriptionChecked, popBuildingChecked, memberId, navigate, curretMarkerDisplayMode) {
   if (popBuildingChecked) {
-    await fetchBuildingsInPositionRange(navigate);
+    await fetchBuildingsInPositionRange(navigate, curretMarkerDisplayMode);
   } else {
     console.log("here");
     clearMarkers(popBuildingMarkers);
@@ -366,7 +373,11 @@ function addMarker(html, latitude, longitude) {
   });
 }
 
-async function fetchBuildingsInPositionRange(navigate) {
+async function fetchBuildingsInPositionRange(navigate, currentMarkerDisplayMode) {
+  if (currentMarkerDisplayMode === MARKER_MODES.DISPLAY_NONE) {
+    clearMarkers(popBuildingMarkers);
+    return;
+  }
   const positionRange = getPositionRange();
   console.log(positionRange);
   const response = await axios_api.get(`${MAIN_API_URL}/buildingProfile/getBuildingsWithinRange`, {
@@ -376,7 +387,6 @@ async function fetchBuildingsInPositionRange(navigate) {
   console.log(data);
 
   // TODO: 샘플 데이터 변경
-  const sampleSubscriptionProviders = [ "sample" ];
   const sampleLiveliestChatroom = {
     "liveliness": 1,
     "chatroomName": "sample-chatroom"
@@ -391,7 +401,7 @@ async function fetchBuildingsInPositionRange(navigate) {
       return;
     }
 
-    const contenthtml = getBuildingMarkerHtml(sampleSubscriptionProviders, sampleLiveliestChatroom, d.buildingName, "/image/popular-bulilding.png");
+    const contenthtml = getBuildingMarkerHtml(sampleLiveliestChatroom, d.buildingName, currentMarkerDisplayMode);
     const buildingMarker = addMarker(contenthtml, d.latitude, d.longitude)
     naver.maps.Event.addListener(buildingMarker, "click", () => {
       navigate(`/getBuildingProfile/${d.buildingId}`);
@@ -426,7 +436,7 @@ async function fetchSubscriptions(memberId, navigate) {
       if (buildingSubscriptionMarkers.has(buildingId)) {
         return;
       }
-      const contenthtml = getBuildingMarkerHtml(sampleSubscriptionProviders, sampleLiveliestChatroom, d.buildingName, "/image/subscription-bulilding.png");
+      const contenthtml = getSubscriptionMarkerHtml(sampleSubscriptionProviders, d.buildingName);
       const buildingMarker = addMarker(contenthtml, d.latitude, d.longitude);
       naver.maps.Event.addListener(buildingMarker, "click", () => {
         navigate(`/getBuildingProfile/${d.buildingId}`);

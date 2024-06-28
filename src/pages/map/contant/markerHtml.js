@@ -1,3 +1,5 @@
+import { MARKER_MODES } from "../component/MarkerModeButtonGroup";
+
 const liveliness = {
   1: "#e03131",
   2: "#f08c00",
@@ -17,15 +19,30 @@ const liveliness = {
  * @param {string} markerImage
  */
 export function getBuildingMarkerHtml(
-    subscriptionProviderList,
     liveliestChatroom,
     buildingName,
-    markerImage = "./image/marker.png"
+    currentMarkerDisplayMode
 ) {
+  let content;
+  switch (currentMarkerDisplayMode) {
+    case MARKER_MODES.DISPLAY_BUILDING_NAME:
+      content = `<div>${buildingName}</div>`;
+      break;
+    case MARKER_MODES.DISPLAY_LIVELIEST_CHATROOM:
+      content = `<div>${liveliestChatroom.chatroomName}</div>`
+      break;
+    default:
+      content = `<div></div>`;
+  }
+  return getCommonHtml(content, "/image/popular-bulilding.png");
+}
+
+export function getSubscriptionMarkerHtml(subscriptionProviderList, buildingName) {
   const content = `
+    <div>${subscriptionProviderList[0]}</div>
     <div>${buildingName}</div>
   `;
-  return getCommonHtml(content, markerImage);
+  return getCommonHtml(content, "/image/subscription-bulilding.png");
 }
 
 /**
