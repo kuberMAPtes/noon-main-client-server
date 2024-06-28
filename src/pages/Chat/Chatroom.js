@@ -72,9 +72,11 @@ const Chatroom = () => {
       .then(data => {
         //chatEntranceInfo 에 memberID 가 없으면 ParticiPants 에 등록하기
         const chatEntrancesInfo = data.ChatEntrancesInfo;
-        const chatEntranceChecked = chatEntrancesInfo.find(entrance => entrance.chatroomMemberId === memberID);
-   
-        if(!chatEntranceChecked){
+        const chatEntranceChecked = chatEntrancesInfo.find(entrance => entrance.chatroomMember.memberId === memberID);
+        
+       if(!chatEntranceChecked){
+        console.log(chatEntrancesInfo , " <= 여기에 멤버아이디 ", memberID, " 가 없으므로 chackEntranceChecked 를 추가하려고합니다 => ",chatEntranceChecked )
+ 
           addChatEntrance(chatroomID, memberID)
           .then(chatEntrance => {
             chatEntrancesInfo.push(chatEntrance);

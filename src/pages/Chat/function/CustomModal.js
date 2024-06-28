@@ -4,7 +4,7 @@ import { kickChatroom } from './axios_api'
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { useNavigate  } from 'react-router-dom';
-import useMainPage from '../../member/component/common/useMainPage';
+import useMainPage from '../../member/hook/useMainPage';
 // import { useMainPage }  from '../../member/component/common'
 
 export const CustomModal = ({kickRoom, showModal, setShowModal, setParticipants, roomInfoUpdate, currentChatroomID, loginMemberRole, targetMember}) => {
