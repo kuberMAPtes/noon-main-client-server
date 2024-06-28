@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axiosInstance from '../../../lib/axiosInstance';
 import { useSelector } from 'react-redux';
-import useMainPage from '../../member/component/common/useMainPage';
+import useMainPage from '../../member/hook/useMainPage';
 import { Link } from 'react-router-dom';
 
 import {

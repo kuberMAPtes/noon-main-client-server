@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import useMainPage from '../../member/component/common/useMainPage';
+import useMainPage from '../../member/hook/useMainPage';
 
 const WantBuildingProfile = ({ isOpen, onClose, applicationData }) => {
   const activationThreshold = 2;
