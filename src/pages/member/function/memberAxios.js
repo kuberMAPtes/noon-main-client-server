@@ -61,9 +61,10 @@ export const checkMemberId = async (memberId) => {
 };
 
 // 회원 닉네임 확인
-export const checkNickname = async (nickname) => {
+export const checkNickname = async (inputNickname) => {
   try {
-    console.log("checkNickName 요청:", { nickname });
+    const nickname = encodeURIComponent(inputNickname);
+    console.log("checkNickName 요청:", { inputNickname });
     const response = await axiosInstance.get(`/member/checkNickname`, {
       params: { nickname },
     });

@@ -1,7 +1,7 @@
 // src/utils/memberValidator.js
 
 const PHONE_NUMBER_PATTERN = /^01(?:0|1|[6-9])-(?:\d{3}|\d{4})-\d{4}$/;
-const NICKNAME_PATTERN = /^[a-zA-Z0-9가-힣_ ]{2,20}$/;
+const NICKNAME_PATTERN = /^[a-zA-Z0-9가-힣_ ()\[\]]{2,20}$/;
 const MEMBER_ID_PATTERN =
   /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z][a-zA -Z0-9_]{6,40}$/;
 

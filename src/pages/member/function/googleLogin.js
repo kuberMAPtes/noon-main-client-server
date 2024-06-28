@@ -12,7 +12,7 @@ export const handleGoogleLogin = async (dispatch,navigate) => {
     const auth = getAuth();
     const response = await signInWithPopup(auth, provider);
     console.log("signInWithPopup 호출 완료:", response);
-    alert("response : "+response);
+    // alert("response : "+response);
     const info = response?.user;
     const token = response?._tokenResponse;
     if (info?.email && info?.email !== "") {
