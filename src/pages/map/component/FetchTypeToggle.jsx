@@ -16,12 +16,6 @@ export default function FetchTypeToggle({
       >
         <div>구독</div>
       </div>
-      <div
-          className={`check-container${popBuildingChecked ? "" : " unchecked"}`}
-          onClick={() => setPopBuildingChecked((prevState) => !prevState)}
-      >
-        <div>인기</div>
-      </div>
     </div>
   );
 }
