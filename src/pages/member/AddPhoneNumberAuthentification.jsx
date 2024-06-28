@@ -13,9 +13,9 @@ import {
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import ForegroundTemplate from "../../components/common/ForegroundTemplate";
 import styles2 from "../../assets/css/module/member/base.module.css";
-import useDecryptId from "./component/hook/useDecryptId";
-import useDecrypteIdUrl from "./component/hook/useDecrypteIdUrl";
-import useEncryptId from "./component/hook/useEncryptId";
+import useDecryptId from "./hook/useDecryptId";
+import useDecrypteIdUrl from "./hook/useDecrypteIdUrl";
+import useEncryptId from "./hook/useEncryptId";
 import {
   checkPhoneNumber,
   checkPhoneNumberAndMemberId,

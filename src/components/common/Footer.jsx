@@ -3,7 +3,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
 import { FaHome, FaComments, FaMap, FaSearch, FaUser } from "react-icons/fa";
 import styles from "../../assets/css/module/Footer.module.css";
-import useEncryptId from "../../pages/member/component/hook/useEncryptId";
+import useEncryptId from "../../pages/member/hook/useEncryptId";
 import { useSelector } from "react-redux";
 
 const Footer = () => {

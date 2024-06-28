@@ -13,7 +13,7 @@ import { Link, useNavigate } from "react-router-dom";
 import base from "../../../../assets/css/module/member/base.module.css";
 import NormalButton from "../NormalButton";
 import { useSelector } from "react-redux";
-import useEncryptId from "../hook/useEncryptId";
+import useEncryptId from "../../hook/useEncryptId";
 import BlockMemberRelationshipButton from "../memberRelationshipList/BlockMemberRelationshipButton";
 import MemberRelationshipButton from "../memberRelationshipList/MemberRelationshipButton";
 import { BsFillChatDotsFill } from "react-icons/bs";

@@ -7,7 +7,7 @@ import {
   decryptWithLvWithUri,
   encryptWithLvWithUri,
 } from "../../../../util/crypto";
-import useEncryptId from "../hook/useEncryptId";
+import useEncryptId from "../../hook/useEncryptId";
 import { FaUserPlus } from "react-icons/fa";
 import { BsBuildings } from "react-icons/bs";
 import { MdDynamicFeed } from "react-icons/md";

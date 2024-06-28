@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams, useSearchParams } from "react-router-dom";
 import { getMemberProfile } from "../../function/memberAxios";
-import useGetInitialPage from "../hook/useGetInitialPage";
-import useDecryptId from "../hook/useDecryptId";
+import useGetInitialPage from "../../hook/useGetInitialPage";
+import useDecryptId from "../../hook/useDecryptId";
 
 const UseProfile = () => {
   const { initialPage } = useGetInitialPage();

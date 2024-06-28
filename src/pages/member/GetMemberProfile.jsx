@@ -5,7 +5,7 @@ import UseProfileFetchFeeds from "./component/profile/UseProfileFetchFeeds";
 import UseProfileInfiniteScroll from "./component/profile/UseProfileInfiniteScroll";
 import ProfileFeedList from "./component/profile/ProfileFeedList";
 import ProfileBody from "./component/profile/ProfileBody";
-import useFetchMemberRelationshipList from "./component/hook/useFetchMemberRelationshipList";
+import useFetchMemberRelationshipList from "./hook/useFetchMemberRelationshipList";
 import UseProfileBuildingSubscriptions from "./component/profile/UseProfileBuildingSubscriptions";
 import UseProfile from "./component/profile/UseProfile";
 import module from "../member/component/css/profile.module.css";

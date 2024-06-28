@@ -13,10 +13,10 @@ import ProfileActions from "./ProfileActions";
 import LogoutForm from "../LogoutForm";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import useEncryptId from "../hook/useEncryptId";
+import useEncryptId from "../../hook/useEncryptId";
 import NormalButton from "../NormalButton";
 import module from "../../../../assets/css/module/member/GetMemberProfile.module.css";
-import useMainPage from "../hook/useMainPage";
+import useMainPage from "../../hook/useMainPage";
 import NicknameInput from "../NicknameInput";
 import {
   handleNicknameUpdateChange,
@@ -167,10 +167,10 @@ const ProfileBody = ({
           </Col>
           <Col xs={12}>
             <DajungScore
-            profile={profile}
-            setProfile={setProfile}
-            toId={toId}
-            fromId={fromId}
+              profile={profile}
+              setProfile={setProfile}
+              toId={toId}
+              fromId={fromId}
             />
             <Row>
               <Col xs={12}>프로필 소개</Col>

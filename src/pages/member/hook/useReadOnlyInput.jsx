@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { updateMember } from '../../function/memberAxios';
+import { updateMember } from '../function/memberAxios';
 
 const useReadOnlyInput = (
   initialValue,

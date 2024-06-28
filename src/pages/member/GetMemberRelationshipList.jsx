@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
-import useInfiniteScrolls from "./component/hook/useInfiniteScrolls";
-import useFetchMemberRelationshipList from "./component/hook/useFetchMemberRelationshipList";
+import useInfiniteScrolls from "./hook/useInfiniteScrolls";
+import useFetchMemberRelationshipList from "./hook/useFetchMemberRelationshipList";
 import UseGetMemberRelationshipLists from "./component/memberRelationshipList/UseGetMemberRelationshipLists";
 import {
   initialBlockingList,

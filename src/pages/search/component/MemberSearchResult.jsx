@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "../../../assets/css/module/search/component/MemberSearchResult.css";
 import { useNavigate } from "react-router-dom";
-import useEncryptId from "../../member/component/hook/useEncryptId";
+import useEncryptId from "../../member/hook/useEncryptId";
 
 const SAMPLE_DATA = [];
 

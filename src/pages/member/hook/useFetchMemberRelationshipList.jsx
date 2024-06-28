@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { getMemberRelationshipList } from "../../function/memberAxios";
+import { getMemberRelationshipList } from "../function/memberAxios";
 
 
 const useFetchMemberRelationshipList = (fromId, toId, initialPage) => {

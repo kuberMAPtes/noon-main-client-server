@@ -2,7 +2,7 @@ import React from "react";
 import { Form } from "react-bootstrap";
 import { FaCheck, FaUser } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import useReadOnlyInput from "./hook/useReadOnlyInput";
+import useReadOnlyInput from "../hook/useReadOnlyInput";
 
 const ProfileIntroInput = ({
   profileIntro,

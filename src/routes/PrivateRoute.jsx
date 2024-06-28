@@ -5,7 +5,7 @@ import Footer from "../components/common/Footer";
 import { setIsRedirect } from "../redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";
 import { navigateMainPage } from "../util/mainPageUri";
-import useEncryptId from "../pages/member/component/hook/useEncryptId";
+import useEncryptId from "../pages/member/hook/useEncryptId";
 
 const PrivateRoute = ({ children }) => {
   const authorization = useSelector((state) => state.auth.authorization);

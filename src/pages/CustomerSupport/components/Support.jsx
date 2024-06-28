@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import ClickableCard from "./ClickableCard";
 import { Link } from "react-router-dom";
 import BuildingChart from "./BuildingChart";
-import useMainPage from "../../member/component/hook/useMainPage";
+import useMainPage from "../../member/hook/useMainPage";
 import { Row, Col, Container, Card } from "reactstrap";
 
 const Support = ({ isAdmin }) => {
