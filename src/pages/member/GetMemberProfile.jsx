@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Button, Card } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import UseProfileFetchFeeds from "./component/profile/UseProfileFetchFeeds";
@@ -10,10 +10,13 @@ import UseProfileBuildingSubscriptions from "./component/profile/UseProfileBuild
 import UseProfile from "./component/profile/UseProfile";
 import module from "../member/component/css/profile.module.css";
 import FeedListPage from "../feed/FeedListPage";
+import { useDispatch, useSelector } from "react-redux";
+import { setFooterEnbaled } from "../../redux/slices/footerEnabledSlice";
 
 const GetMemberProfile = () => {
   const { profile, setProfile, toId, fromId, initialPage, isDenied,denialMessage } =
     UseProfile();
+
   const { feeds, setFeeds, hasMore, setPage } = UseProfileFetchFeeds(
     profile.feedDtoList,
     toId,
@@ -61,13 +64,13 @@ const GetMemberProfile = () => {
                 followingCount={followingCount}
               />
             </Col>
-            <Col xs={12} sm={12} md={12} lg={12}>
-              {/* <ProfileFeedList
+            {/* <Col xs={12} sm={12} md={12} lg={12}>
+              <ProfileFeedList
             toId={toId}
             feeds={feeds}
-            lastFeedElementRef={lastFeedElementRef} /> */}
+            lastFeedElementRef={lastFeedElementRef} />
               <FeedListPage toId={toId} feeds={feeds} setFeeds={setFeeds} />
-            </Col>
+            </Col> */}
           </>
         ) : (
           <>

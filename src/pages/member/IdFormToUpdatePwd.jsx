@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import MemberIdInput from "./component/MemberIdInput";
 import { handleMemberIdChangeExisted } from "./function/AddUpdateMemberUtil";
@@ -6,6 +6,8 @@ import { TbUserSearch } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import styles from "../../assets/css/module/member/base.module.css";
+import { useDispatch } from "react-redux";
+import { setFooterEnbaled } from "../../redux/slices/footerEnabledSlice";
 const IdFormToUpdatePwd = () => {
   const [memberId, setMemberId] = useState("");
   const [isMemberIdValid, setIsMemberIdValid] = useState(false);
@@ -14,6 +16,14 @@ const IdFormToUpdatePwd = () => {
     useState("");
 
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(setFooterEnbaled(false));
+    return () => {
+      dispatch(setFooterEnbaled(true));
+    }
+  }, [dispatch]);
 
   const handleClick = () => {
     // alert("handleClick실행 :: "+isMemberIdValid);

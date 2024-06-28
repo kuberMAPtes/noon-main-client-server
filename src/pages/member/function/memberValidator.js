@@ -7,7 +7,7 @@ const MEMBER_ID_PATTERN =
 
 const PWD_PATTERN = /^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9!@#\$%\^&\*_]{8,16}$/;
 const SEQUENTIAL_PATTERN =
-  /(abc|bcd|cde|def|efg|fgh|ghi|hij|ijk|jkl|klm|lmn|mno|nop|opq|pqr|qrs|rst|stu|tuv|uvw|vwx|wxy|xyz|cba|dcb|edc|fed|gfe|hgf|ihg|jih|kji|lkj|mlk|nml|onm|pon|qpo|rqp|srq|tsr|uts|vut|wvu|yxw|zyx|123|234|345|456|567|678|789|890|012|321|432|543|654|765|876|987|098|210)/;
+  /(abc|bcd|cde|def|efg|fgh|ghi|hij|ijk|jkl|klm|lmn|mno|nop|opq|pqr|qrs|rst|stu|tuv|uvw|vwx|wxy|xyz|cba|dcb|edc|fed|gfe|hgf|ihg|jih|kji|lkj|mlk|nml|onm|pon|qpo|rqp|srq|tsr|uts|vut|wvu|yxw|zyx|123|234|345|456|567|678|789|890|012|321|432|543|654|765|876|987|098|210|111|222|333|444|555|666|777|888|999|000)/;
 
 export const validatePhoneNumber = (phoneNumber) => {
   return PHONE_NUMBER_PATTERN.test(phoneNumber);
@@ -22,11 +22,10 @@ export const validateMemberId = (memberId) => {
 };
 
 export const validatePwd = (pwd) => {
-  return PWD_PATTERN.test(pwd);
+  return (PWD_PATTERN.test(pwd) && (SEQUENTIAL_PATTERN.test(pwd) === false));
 };
-
-export const containsSequentialPattern = (input) => {
-  return SEQUENTIAL_PATTERN.test(input);
+export const containsSequentialPattern = (pwd) => {
+  return SEQUENTIAL_PATTERN.test(pwd);
 };
 
 export const validateLoginForm = (memberId, pwd) => {

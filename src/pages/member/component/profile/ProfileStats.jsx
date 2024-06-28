@@ -59,7 +59,7 @@ const ProfileStats = ({
       <Col>
         <div
           className={`${profile.circle} ${base.hoverStyle}`}
-          onClick={() => navigate(`/map/${toId}}`)}
+          onClick={() => navigate(`/map/${toId}`)}
         >
           <div className={profile["circle-text"]}>
             {buildingSubscriptionCount}

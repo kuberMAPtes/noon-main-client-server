@@ -11,8 +11,11 @@ import { Button, Col, Container, Image, ListGroup, Row } from "react-bootstrap";
 import module from "./component/css/getMemberRelationshipList.module.css";
 import {
   handleBlockCancelClick,
+  handleBlockCancelClickSimple,
   handleFollowCancelClick,
+  handleFollowCancelClickSimple,
   handleFollowClick,
+  handleFollowClickSimple,
 } from "./function/MemberRelationshipUtil";
 import { getMemberRelationship } from "./function/memberAxios";
 import { navigateMainPage } from "../../util/mainPageUri";
@@ -57,7 +60,8 @@ const GetMemberRelationshipList = () => {
     setActiveTab(relationshipType);
   };
 
-  useEffect(() => {
+  const fetchRelationships = useCallback(async () => {
+
     const newMyFollowingList = [];
     const newMyFollowerList = [];
     let newMyMutualFollowingList = [];
@@ -65,74 +69,74 @@ const GetMemberRelationshipList = () => {
     const newYourFollowerList = [];
     const newYourBlockingList = [];
 
-    const fetchRelationships = async () => {
-      const promises = memberRelationshipList.map(
-        async (memberRelationship) => {
-          if (
-            toId === memberRelationship.fromMember.memberId &&
-            memberRelationship.relationshipType === "FOLLOW"
-          ) {
-            newYourFollowingList.push(memberRelationship);
-          } else if (
-            toId === memberRelationship.toMember.memberId &&
-            memberRelationship.relationshipType === "FOLLOW"
-          ) {
-            newYourFollowerList.push(memberRelationship);
-          } else if (
-            toId === memberRelationship.fromMember.memberId &&
-            memberRelationship.relationshipType === "BLOCK"
-          ) {
-            newYourBlockingList.push(memberRelationship);
-          }
-
-          let otherId;
-          if (memberRelationship.fromMember.memberId !== toId) {
-            otherId = memberRelationship.fromMember.memberId;
-          } else {
-            otherId = memberRelationship.toMember.memberId;
-          }
-
-          const response = await getMemberRelationship(fromId, otherId);
-          if (response === "NONE") {
-            return;
-          } else if (response === "FOLLOWER") {
-            newMyFollowerList.push(memberRelationship);
-          } else if (response === "FOLLOWING") {
-            newMyFollowingList.push(memberRelationship);
-          } else if (response === "MUTUAL") {
-            newMyMutualFollowingList.push(memberRelationship);
-          }
+    const promises = memberRelationshipList.map(
+      async (memberRelationship) => {
+        if (
+          toId === memberRelationship.fromMember.memberId &&
+          memberRelationship.relationshipType === "FOLLOW"
+        ) {
+          newYourFollowingList.push(memberRelationship);
+        } else if (
+          toId === memberRelationship.toMember.memberId &&
+          memberRelationship.relationshipType === "FOLLOW"
+        ) {
+          newYourFollowerList.push(memberRelationship);
+        } else if (
+          toId === memberRelationship.fromMember.memberId &&
+          memberRelationship.relationshipType === "BLOCK"
+        ) {
+          newYourBlockingList.push(memberRelationship);
         }
-      );
 
-      // 모든 비동기 작업이 완료될 때까지 기다림
-      await Promise.all(promises);
+        let otherId;
+        if (memberRelationship.fromMember.memberId !== toId) {
+          otherId = memberRelationship.fromMember.memberId;
+        } else {
+          otherId = memberRelationship.toMember.memberId;
+        }
 
-      // newMyMutualFollowingList = newMyMutualFollowingList.slice(0,newMyMutualFollowingList.length/2);
+        const response = await getMemberRelationship(fromId, otherId);
+        if (response === "NONE") {
+          return;
+        } else if (response === "FOLLOWER") {
+          newMyFollowerList.push(memberRelationship);
+        } else if (response === "FOLLOWING") {
+          newMyFollowingList.push(memberRelationship);
+        } else if (response === "MUTUAL") {
+          newMyMutualFollowingList.push(memberRelationship);
+        }
+      }
+    );
 
-      console.log("newMyFollowingList", newMyFollowingList);
-      console.log("newMyFollowerList", newMyFollowerList);
-      console.log("newMyMutualFollowingList", newMyMutualFollowingList);
-      console.log("newYourFollowingList", newYourFollowingList);
-      console.log("newYourFollowerList", newYourFollowerList);
-      console.log("newYourBlockingList", newYourBlockingList);
-      // alert("멈춰!");
-      // 리스트를 업데이트
-      setYourRelationshipLists({
-        followingList: newYourFollowingList,
-        followerList: newYourFollowerList,
-        blockingList: newYourBlockingList,
-      });
+    // 모든 비동기 작업이 완료될 때까지 기다림
+    await Promise.all(promises);
 
-      setMyRelationshipLists({
-        followingList: newMyFollowingList,
-        followerList: newMyFollowerList,
-        mutualFollowingList: newMyMutualFollowingList,
-      });
-    };
+    // newMyMutualFollowingList = newMyMutualFollowingList.slice(0,newMyMutualFollowingList.length/2);
 
+    console.log("newMyFollowingList", newMyFollowingList);
+    console.log("newMyFollowerList", newMyFollowerList);
+    console.log("newMyMutualFollowingList", newMyMutualFollowingList);
+    console.log("newYourFollowingList", newYourFollowingList);
+    console.log("newYourFollowerList", newYourFollowerList);
+    console.log("newYourBlockingList", newYourBlockingList);
+    // alert("멈춰!");
+    // 리스트를 업데이트
+    setYourRelationshipLists({
+      followingList: newYourFollowingList,
+      followerList: newYourFollowerList,
+      blockingList: newYourBlockingList,
+    });
+
+    setMyRelationshipLists({
+      followingList: newMyFollowingList,
+      followerList: newMyFollowerList,
+      mutualFollowingList: newMyMutualFollowingList,
+    });
+  },[fromId, toId, memberRelationshipList, setYourRelationshipLists, setMyRelationshipLists]);
+
+  useEffect(() => {
     fetchRelationships();
-  }, [memberRelationshipList, toId, fromId]);
+  }, [memberRelationshipList, toId, fromId,fetchRelationships]);
 
   //이거는 fromId와 관련이 없음. toId와 목록의 회원들에 관련 있음. 3개의 버튼을 누르는 것 뿐임.
   const getActiveList = useCallback(() => {
@@ -151,24 +155,27 @@ const GetMemberRelationshipList = () => {
   const defaultPhotoUrl = `${process.env.PUBLIC_URL}/image/defaultMemberProfilePhoto.png`;
 
   const memoHandleFollowClick = useCallback(
-    (otherId) => {
-      console.log("fromId:", fromId);
-      console.log("otherId:", otherId);
-      console.log("otherId type:", typeof otherId); // toId의 데이터 타입 확인
-      // alert("팔로우 클릭 " + fromId + " " + otherId + " " + refetchData);
-      handleFollowClick(fromId, otherId, refetchData);
+    async (otherId) => {
+      await handleFollowClick(fromId, otherId, refetchData);
+      fetchRelationships();
     },
-    [fromId, refetchData]
+    [fromId,fetchRelationships, refetchData]
   );
 
   const memoHandleFollowCancelClick = useCallback(
-    (otherId) => handleFollowCancelClick(fromId, otherId, refetchData),
-    [fromId, refetchData]
+    async (otherId) => {
+      await handleFollowCancelClick(fromId, otherId, refetchData);
+      fetchRelationships();
+    },
+    [fromId,fetchRelationships, refetchData]
   );
 
   const memoHandleBlockCancelClick = useCallback(
-    (otherId) => handleBlockCancelClick(fromId, otherId, refetchData),
-    [fromId, refetchData]
+    async (otherId) => {
+      await handleBlockCancelClick(fromId, otherId, refetchData);
+      fetchRelationships();
+    },
+    [fromId,fetchRelationships, refetchData]
   );
 
   // 서로 관계 확인 및 팔로우/언팔로우 버튼 생성 로직
@@ -179,11 +186,22 @@ const GetMemberRelationshipList = () => {
   const MemberRelationshipButton = ({
     myRelationshipLists,
     memberRelationship,
+    activeTab
   }) => {
     let memberRelationshipButtton = null;
+
     if (
       myRelationshipLists?.mutualFollowingList?.includes(memberRelationship)
     ) {
+      if(activeTab==="follower"){
+        if(fromId === memberRelationship.fromMember.memberId){//!@#!@#!@#
+          return <></>
+        }
+      }else{
+        if(fromId === memberRelationship.toMember.memberId){//!@#!@#!@#
+          return <></>
+        }
+      }
       memberRelationshipButtton = (
         <Col xs={2}>
           <button
@@ -196,14 +214,14 @@ const GetMemberRelationshipList = () => {
               height: "40px",
             }}
             onClick={
-              fromId === memberRelationship.fromMember.memberId
+              activeTab === "follower"
                 ? () =>
                     memoHandleFollowCancelClick(
-                      memberRelationship?.toMember?.memberId
+                      memberRelationship?.fromMember?.memberId
                     )
                 : () =>
                     memoHandleFollowCancelClick(
-                      memberRelationship?.fromMember?.memberId
+                      memberRelationship?.toMember?.memberId
                     )
             }
           >
@@ -215,6 +233,15 @@ const GetMemberRelationshipList = () => {
     } else if (
       myRelationshipLists?.followingList?.includes(memberRelationship)
     ) {
+      if(activeTab==="follower"){
+        if(fromId === memberRelationship.fromMember.memberId){//!@#!@#!@#
+          return <></>
+        }
+      }else{
+        if(fromId === memberRelationship.toMember.memberId){//!@#!@#!@#
+          return <></>
+        }
+      }
       memberRelationshipButtton = (
         <Col xs={2}>
           <Button
@@ -227,14 +254,14 @@ const GetMemberRelationshipList = () => {
               height: "40px",
             }}
             onClick={
-              fromId === memberRelationship.fromMember.memberId
+              activeTab === "follower"
                 ? () =>
                     memoHandleFollowCancelClick(
-                      memberRelationship?.toMember?.memberId
+                      memberRelationship?.fromMember?.memberId
                     )
                 : () =>
                     memoHandleFollowCancelClick(
-                      memberRelationship?.fromMember?.memberId
+                      memberRelationship?.toMember?.memberId
                     )
             }
           >
@@ -243,6 +270,15 @@ const GetMemberRelationshipList = () => {
         </Col>
       );
     } else {
+      if(activeTab==="follower"){
+        if(fromId === memberRelationship.fromMember.memberId){//!@#!@#!@#
+          return <></>
+        }
+      }else{
+        if(fromId === memberRelationship.toMember.memberId){//!@#!@#!@#
+          return <></>
+        }
+      }
       memberRelationshipButtton = (
         <Col xs={2}>
           <button
@@ -255,14 +291,14 @@ const GetMemberRelationshipList = () => {
               height: "40px",
             }}
             onClick={
-              fromId === memberRelationship.fromMember.memberId
+              activeTab === "follower"
                 ? () =>
                     memoHandleFollowClick(
-                      memberRelationship?.toMember?.memberId
+                      memberRelationship?.fromMember?.memberId
                     )
                 : () =>
                     memoHandleFollowClick(
-                      memberRelationship?.fromMember?.memberId
+                      memberRelationship?.toMember?.memberId
                     )
             }
           >
@@ -377,6 +413,7 @@ const GetMemberRelationshipList = () => {
                   <MemberRelationshipButton
                     myRelationshipLists={myRelationshipLists}
                     memberRelationship={memberRelationship}
+                    activeTab={"follower"}
                   />
                 </Row>
               </ListGroup.Item>
@@ -414,6 +451,7 @@ const GetMemberRelationshipList = () => {
                   <MemberRelationshipButton
                     myRelationshipLists={myRelationshipLists}
                     memberRelationship={memberRelationship}
+                    activeTab={"following"}
                   />
                 </Row>
               </ListGroup.Item>
