@@ -101,7 +101,7 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                 updateTagList: feedData.updateTagList,
                 feedCategory: feedData.category,
                 publicRange: feedData.publicRange,
-                eventDate: eventDate
+                eventDate: eventDate.toISOString()
             };
 
             console.log(addFeedData);
@@ -388,7 +388,10 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                             <DatePicker
                                 selected={eventDate}
                                 onChange={handleDateChange}
-                                dateFormat="yyyy/MM/dd"
+                                dateFormat="yyyy/MM/dd h:mm aa"
+                                showTimeSelect
+                                timeFormat="HH:mm"
+                                timeIntervals={15}
                                 className="form-control"
                             />
                         </Form.Group>
