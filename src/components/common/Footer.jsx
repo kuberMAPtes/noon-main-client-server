@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
-import { FaHome, FaComments, FaMap, FaSearch, FaUser } from "react-icons/fa";
+import { FaHome, FaComments, FaMap, FaSearch, FaUser, FaFacebook } from "react-icons/fa";
 import styles from "../../assets/css/module/Footer.module.css";
 import useEncryptId from "../../pages/member/hook/useEncryptId";
 import { useSelector } from "react-redux";
@@ -25,19 +25,14 @@ const Footer = () => {
     <footer style={footerStyles.footer}>
       <Container fluid>
         <Row className={`text-center ${styles["row-no-link-style"]}`}>
-          <Col>
-            <Link
-              to="/feed/main"
-              style={
-                isActive("/feed/main")
-                  ? footerStyles.activeLink
-                  : footerStyles.link
-              }
-            >
+
+        <Col>
+          <Link to="/map" style={isActive("/map") ? footerStyles.activeLink : footerStyles.link}>
               <FaHome size={24} />
               <div style={footerStyles.linkText}>홈</div>
             </Link>
           </Col>
+         
           <Col>
             <Link
               to="/chat/myChatroomList"
@@ -52,16 +47,13 @@ const Footer = () => {
             </Link>
           </Col>
           <Col>
-            <Link
-              to="/map"
-              style={
-                isActive("/map") ? footerStyles.activeLink : footerStyles.link
-              }
-            >
-              <FaMap size={24} />
-              <div style={footerStyles.linkText}>지도</div>
+
+            <Link to="/feed/main" style={isActive("/feed/main") ? footerStyles.activeLink : footerStyles.link}>
+              <FaFacebook size={24} />
+              <div style={footerStyles.linkText}>피드</div>
             </Link>
           </Col>
+
           <Col>
             <Link
               to="/search"

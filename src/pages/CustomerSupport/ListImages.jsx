@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import CustomerSupportHeader from './components/CustomerSupportHeader';
+import Header from '../../components/common/Header'
 import ImageGrid from './components/OneImage';
 import '../CustomerSupport/css/image-grid.css';
 import axiosInstance from '../../lib/axiosInstance';
@@ -59,7 +59,7 @@ const ListImages = () => {
 
   return (
     <div>
-      <CustomerSupportHeader title={filterTab === "all" ? '모든 피드 사진 목록' : '유해 피드 사진 목록'} />
+      <Header title={filterTab === "all" ? '모든 피드 사진 목록' : '유해 피드 사진 목록'} />
       <div style={styles.tabs}>
         <button
           style={{ ...styles.tabButton, ...(filterTab === "all" ? styles.activeTab : {}) }}
@@ -108,7 +108,7 @@ const styles = {
     fontSize: '20px',
   },
   activeTab: {
-    borderBottom: '3px solid #D9D9D9',
+    borderBottom: '3px solid #030722',
     width: '35%', 
   },
   grid: {
