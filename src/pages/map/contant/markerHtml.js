@@ -23,8 +23,6 @@ export function getBuildingMarkerHtml(
     markerImage = "./image/marker.png"
 ) {
   const content = `
-    <div>${subscriptionProviderList[0]}</div>
-    <div>${liveliestChatroom.chatroomName}</div>
     <div>${buildingName}</div>
   `;
   return getCommonHtml(content, markerImage);
