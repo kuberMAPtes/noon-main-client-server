@@ -101,7 +101,7 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                 updateTagList: feedData.updateTagList,
                 feedCategory: feedData.category,
                 publicRange: feedData.publicRange,
-                eventDate: eventDate.toISOString()
+                eventDate: eventDate
             };
 
             console.log(addFeedData);

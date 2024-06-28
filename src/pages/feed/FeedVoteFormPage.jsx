@@ -49,7 +49,7 @@ const FeedFormPage = () => {
 
     return (
         <div>
-            <BasicNavbar />
+            {/* <BasicNavbar /> */}
             <div className="container">
                 <Button variant="primary" onClick={() => setShowModal(true)}>
                     피드 종류
