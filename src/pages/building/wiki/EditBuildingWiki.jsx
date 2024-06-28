@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios_api from "../../../lib/axios_api";
 import { BUILDING_WIKI_BASE_PATH } from "./GetBuildingWiki";
 import $ from "jquery";
-import Footer from "../../../components/common/Footer";
 import styles from "../../../assets/css/module/building/wiki/EditBuildingWiki.module.css";
 import { Button } from "react-bootstrap";
 import { IoNewspaperOutline } from "react-icons/io5";
@@ -108,7 +107,6 @@ export default function EditBuildingWiki() {
           </>
         )
       }
-      <Footer />
     </div>
   );
 }

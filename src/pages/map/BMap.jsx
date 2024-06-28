@@ -8,7 +8,6 @@ import { is2xxStatus, is4xxStatus } from "../../util/statusCodeUtil";
 import { getBuildingMarkerHtml, getPlaceSearchMarkerHtml } from "./contant/markerHtml";
 import mapStyles from "../../assets/css/module/map/BMap.module.css";
 import "../../assets/css/module/map/BMap.css";
-import Footer from "../../components/common/Footer";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentMapState } from "../../redux/slices/currentMapStateSlice";
@@ -210,7 +209,6 @@ export default function BMap() {
           onClose={wantBuildingProfileModal.onClose}
           applicationData={wantBuildingProfileModal.applicationData}
       />
-      <Footer />
     </div>
   )
 }
