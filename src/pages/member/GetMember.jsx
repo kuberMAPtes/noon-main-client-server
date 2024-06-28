@@ -172,9 +172,9 @@ const GetMember = () => {
                 {isNicknameValid && <FaCheck />}
                 <Link to={mainPageUrl}>
                   {/* <NormalButton style={{ width: "60px", height: "30px" }} onClick={()=>handleClick(member.memberId)}> */}
-                  <NormalButton style={{ width: "60px", height: "30px" }}>
+                  {/* <NormalButton style={{ width: "60px", height: "30px" }}>
                     변경
-                  </NormalButton>
+                  </NormalButton> */}
                 </Link>
               </Form.Label>
               <Form.Control
@@ -183,23 +183,7 @@ const GetMember = () => {
                 name="nickname"
                 value={nickname}
                 maxLength={20}
-                onChange={(e) =>
-                  handleNicknameUpdateChange(
-                    e,
-                    member.nickname,
-                    setNickname,
-                    setNicknameValidationMessage,
-                    setIsNicknameValid
-                  )
-                }
-                style={{ opacity: 0.6 }}
-                onKeyDown={handleKeyDown}
-                required
-                isInvalid={!!nicknameValidationMessage}
-                readOnly={nicknameInput.isReadOnly}
-                onDoubleClick={nicknameInput.handleDoubleClick}
-                onBlur={nicknameInput.handleBlur(member.nickname)}
-                ref={nicknameInput.inputRef}
+                readOnly
               />
               <Form.Text className="text-danger">
                 {nicknameValidationMessage && nicknameValidationMessage}
@@ -222,18 +206,7 @@ const GetMember = () => {
                 name="memberId"
                 value={member.memberId}
                 maxLength={24}
-                onChange={(e) =>
-                  handleMemberIdChange(
-                    e,
-                    setMemberId,
-                    setMemberIdValidationMessage,
-                    setIsMemberIdValid
-                  )
-                }
-                onKeyDown={handleKeyDown}
-                required
-                isInvalid={!!memberIdValidationMessage}
-                style={{ opacity: 0.6 }}
+                readOnly
               />
               {memberIdValidationMessage && (
                 <Form.Text className="text-danger">
@@ -256,7 +229,7 @@ const GetMember = () => {
                   onClick={handlePwdUpdateClick}
                   style={{ width: "60px", height: "30px" }}
                 >
-                  변경
+                  재설정
                 </NormalButton>
               </Form.Label>
               <Form.Control
@@ -265,86 +238,40 @@ const GetMember = () => {
                 name="pwd"
                 maxLength={16}
                 value={pwd}
-                onChange={(e) =>
-                  handlePwdChange(
-                    e,
-                    setPwd,
-                    setPwdValidationMessage,
-                    setIsPwdValid
-                  )
-                }
-                onKeyDown={handleKeyDown}
                 required
-                isInvalid={!!pwdValidationMessage}
-                style={{ opacity: 0.6 }}
-                disabled
+                readOnly
               />
               {pwdValidationMessage && (
                 <Form.Text className="text-danger">
                   {pwdValidationMessage}
                 </Form.Text>
               )}
+              <Form.Text>
+                비밀번호는 회원님의 개인정보 보호를 위하여<br/> 찾을 수 없고 재설정만 가능합니다.
+              </Form.Text>
             </Form.Group>
-
-            {/* <Form.Group controlId="formAddress" className="mb-3">
-              <Form.Label
+            <Form.Group>
+            <Form.Label
                 style={{
-                  border: !!address && !!detailedAddress && "#91a7ff",
-                  color: !!address && !!detailedAddress && "#91a7ff",
+                  border: isPwdValid && "#91a7ff",
+                  color: isPwdValid && "#91a7ff",
                 }}
               >
-                <FaMapMarkerAlt />
-                &nbsp;주소&nbsp;&nbsp;
-                {!!address && !!detailedAddress && <FaCheck />}
+                <FaLock />
+                &nbsp;전화번호&nbsp;&nbsp;
               </Form.Label>
-              <div className={styles.addressGroup}>
-                <Form.Control
-                  type="text"
-                  placeholder="주소를 입력하세요"
-                  onKeyDown={handleKeyDown}
-                  name="address"
-                  value={address}
-                  required
-                  readOnly
-                  className={styles.addressInput}
-                  style={{ opacity: 0.6 }}
-                />
-                <Form.Control
-                  className={styles.zonecodeText}
-                  disabled
-                  onKeyDown={handleKeyDown}
-                  value={zonecode}
-                  style={{ opacity: 0.6 }}
-                />
-              </div>
               <Form.Control
                 type="text"
-                placeholder="상세주소를 입력하세요"
-                value={detailedAddress}
-                onChange={(e) =>
-                  detailedAddressChangeHandler(e, setDetailedAddress)
-                }
-                onKeyDown={handleKeyDown}
-                style={{ opacity: 0.6 }}
+                placeholder="전화번호"
+                name="pwd"
+                maxLength={16}
+                value={member.phoneNumber.includes('X')
+                  ? "회원프로필에서 전화번호를 등록하세요"
+                  : member.phoneNumber}
+                required
+                readOnly
               />
-
-              <Button
-                variant="info"
-                type="button"
-                onClick={() =>
-                  redirectToPostcode(
-                    memberId,
-                    nickname,
-                    pwd,
-                    navigate,
-                    location
-                  )
-                }
-                className={`${styles2.typicalButtonColor}`}
-              >
-                주소 찾기
-              </Button>
-            </Form.Group> */}
+            </Form.Group>
           </Form>
         </Col>
       </Row>

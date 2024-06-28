@@ -1,0 +1,14 @@
+.backButton {
+  background-color: transparent;
+  border: none;
+  color: #91A7FF;
+  font-size: 24px;
+  cursor: pointer;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+}
+
+.backButton:hover {
+  color: #7289DA; /* Hover color for better user experience */
+}
