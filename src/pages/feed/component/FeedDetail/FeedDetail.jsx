@@ -171,6 +171,11 @@ const FeedDetail = ({ data, memberId }) => {
 
     return (
         <div className="container">
+            <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '10px' }}>
+                <Button variant="secondary" onClick={()=>goToBuildingProfile(buildingId)}>
+                    해당 건물 프로필로 이동
+                </Button>
+            </div>
             <Card>
                 <CardBody>
                     {/* Header */}
