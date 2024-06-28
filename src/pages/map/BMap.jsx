@@ -317,8 +317,8 @@ function fetchBuildingInfo(latitude, longitude, setWantBuildingProfileModal) {
           applicationData: {
             buildingName: data.place.placeName,
             roadAddr: data.place.roadAddress,
-            longitude: data.place.latitude,
-            latitude: data.place.longitude
+            longitude: data.place.longitude,
+            latitude: data.place.latitude
           }
         });
       }
