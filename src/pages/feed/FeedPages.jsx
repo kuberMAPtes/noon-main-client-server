@@ -16,10 +16,10 @@ const FeedPages = () => {
         <nav>
           <ul>
             <li>
-              <Link to="list?memberId=member_1&page=1">Feed List</Link>
+              <Link to="list?memberId=member_1&loginMemberId=member_1&page=1">Feed List</Link>
             </li>
             <li>
-              <Link to="list/building/10001?memberId=member_1&page=1">Feed Building List</Link>
+              <Link to="list/building/10001?memberId=member_2&page=1">Feed Building List</Link>
             </li>
             <li>
               <Link to="detail?feedId=10001&memberId=member_1">Feed Detail</Link>
