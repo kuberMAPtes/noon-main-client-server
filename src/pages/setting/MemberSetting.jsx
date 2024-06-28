@@ -9,7 +9,7 @@ import OpInfoModal from "./component/OpInfoModal";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { setFooterEnbaled } from "../../redux/slices/footerEnabledSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const PUBLIC_RANGES = [
   {
@@ -30,8 +30,6 @@ const PUBLIC_RANGES = [
   }
 ]
 
-const SAMPLE_MEMBER_ID = "member_2";
-
 export default function MemberSetting() {
   const [memberProfilePublicRange, setMemberProfilePublicRange] =
     useState("PUBLIC");
@@ -45,7 +43,7 @@ export default function MemberSetting() {
 
   const navigate = useNavigate();
 
-  const memberId = SAMPLE_MEMBER_ID;
+  const memberId = useSelector((state) => state.auth.member.memberId);
 
   const dispatch = useDispatch();
 
