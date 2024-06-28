@@ -42,7 +42,7 @@ export default function BMap() {
       useState(queryParams.has(PARAM_KEY_SEARCH_KEYWORD) ? queryParams.get(PARAM_KEY_SEARCH_KEYWORD) : "");
   const [currentPosition, setCurrentPosition] = useState(undefined);
   const [subscriptionChecked, setSubscriptionChecked] = useState(true);
-  const [popBuildingChecked, setPopBuildingChecked] = useState(ownerIdOfMapInfo === undefined);
+  const [popBuildingChecked, setPopBuildingChecked] = useState(true);
   const [firstEntry, setFirstEntry] = useState(true);
   const [wantBuildingProfileModal, setWantBuildingProfileModal] = useState({
     isOpen: false,
@@ -54,7 +54,7 @@ export default function BMap() {
       latitude: 0.0
     }
   });
-  const [currentMarkerDisplayMode, setCurrentMarkerDisplayMode] = useState(MARKER_MODES.DISPLAY_BUILDING_NAME);
+  const [currentMarkerDisplayMode, setCurrentMarkerDisplayMode] = useState(ownerIdOfMapInfo === undefined ? MARKER_MODES.DISPLAY_BUILDING_NAME : MARKER_MODES.DISPLAY_NONE);
 
   const currentMapState = useSelector((state) => state.currentMapState.value);
 
