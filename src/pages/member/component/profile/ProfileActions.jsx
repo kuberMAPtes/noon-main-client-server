@@ -52,7 +52,7 @@ const ProfileActions = ({ toId, fromId }) => {
     <>
       <Row className="text-center mt-3">
         <Row style={{ padding: "0px", margin: "0px" }}>
-          <Col xs={4}>
+          <Col xs={6}>
             <div
               className={`${profile.memberCircle} ${base.hoverStyle}`}
               onClick={() => navigate("/member/getMember")}
@@ -66,7 +66,7 @@ const ProfileActions = ({ toId, fromId }) => {
               개인정보
             </div>
           </Col>
-          <Col xs={4}>
+          {/* <Col xs={4}>
             <div
               className={`${profile.circle} ${base.hoverStyle}`}
               onClick={() => navigate("/map")}
@@ -79,8 +79,8 @@ const ProfileActions = ({ toId, fromId }) => {
               <FaMapMarkedAlt />
               지도
             </div>
-          </Col>
-          <Col xs={4}>
+          </Col> */}
+          <Col xs={6}>
             <div
               className={`${profile.circle} ${base.hoverStyle}`}
               onClick={handleToggle}

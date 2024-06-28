@@ -32,7 +32,7 @@ const useReadOnlyInput = (
   useEffect(() => {
     if (shouldUpdate) {
       const updateProfile = async () => {
-        alert("업데이트 axios 실행");
+        // alert("업데이트 axios 실행");
         await updateMember({ [profileDataType]: value, memberId: memberId });
         setProfile(prev => ({ ...prev, [profileDataType]: value }));
       };

@@ -29,7 +29,7 @@ const ProfileIntroInput = ({
   const handleProfileIntroKeyDown = (e) => {
     if (e.key === "Enter") {
       e.preventDefault(); // 폼 제출 방지
-      profileIntroInput.handleBlur(profile.profileIntro)();
+      profileIntroInput.handleBlur(profile.profileIntro)(e);
     }
   };
 

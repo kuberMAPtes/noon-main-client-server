@@ -39,12 +39,23 @@ import Cookies from "js-cookie";
 
 export const clearAllCookies = () => {
   const cookies = document.cookie.split("; ");
+
   cookies.forEach(cookie => {
     const name = cookie.split("=")[0];
+    
+    // 기본 경로에서 쿠키 삭제
     document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+
+    // 루트 경로에서 쿠키 삭제
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${window.location.hostname};`;
+
+    // 서브도메인에서도 쿠키 삭제
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.${window.location.hostname};`;
   });
-  console.log("모든 쿠키 삭제 완료");
+
+  console.log("모든 쿠키 삭제 시도 완료");
 };
+
 
 export const renderLoginError = (validationError, loginError) => {
 

@@ -56,7 +56,7 @@ const GetSignUpTermAgreement = () => {
         <Row className="justify-content-center">
           <Col md={8}>
             <Card style={{ position: "relative" }}>
-              <Card.Body>
+              <Card.Body style={{padding:"30px 0px 80px 0px"}}>
                 <h1 className="mb-4">회원가입 약관 동의</h1>
 
                 <Card>

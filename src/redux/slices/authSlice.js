@@ -56,7 +56,7 @@ export const login = createAsyncThunk(
         if(data.message === "로그인 업무"){
         returnMember = data.info;
         }else{
-          alert("authSlice에서 message :: "+data.message);
+          // alert("authSlice에서 message :: "+data.message);
           return thunkAPI.rejectWithValue({message : data.message});
         }
         //alert("returnMember 로그인합니다" + returnMember);

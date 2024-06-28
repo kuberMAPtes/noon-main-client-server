@@ -175,6 +175,7 @@ const ProfileBody = ({
             <Row>
               <Col xs={12}>프로필 소개</Col>
             </Row>
+            {toId===fromId ?
             <Row style={{ minHeight: "20%" }}>
               {/* <Col xs={12} style={{border: "2px solid #91A7FF", borderRadius:"7px"}}>&nbsp;{profile.profileIntro}</Col> */}
               <Form>
@@ -196,6 +197,7 @@ const ProfileBody = ({
                 />
               </Form>
             </Row>
+            :
             <Row style={{ minHeight: "20%" }}>
               <Col
                 xs={12}
@@ -204,6 +206,7 @@ const ProfileBody = ({
                 {profile.profileIntro}
               </Col>
             </Row>
+            }
           </Col>
           <Col xs={12}>
             <hr style={{ border: "1px solid #91A7FF" }} />
