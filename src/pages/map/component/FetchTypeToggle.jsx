@@ -5,7 +5,7 @@ import mapStyles from "../../../assets/css/module/map/BMap.module.css";
  * @returns JSX.Element
  */
 export default function FetchTypeToggle({
-  subscriptionChecked, setSubscriptionChecked, popBuildingChecked, setPopBuildingChecked
+  subscriptionChecked, setSubscriptionChecked
 }) {
   
   return (
@@ -15,12 +15,6 @@ export default function FetchTypeToggle({
           onClick={() => setSubscriptionChecked((prevState) => !prevState)}
       >
         <div>구독</div>
-      </div>
-      <div
-          className={`check-container${popBuildingChecked ? "" : " unchecked"}`}
-          onClick={() => setPopBuildingChecked((prevState) => !prevState)}
-      >
-        <div>인기</div>
       </div>
     </div>
   );
