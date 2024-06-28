@@ -21,7 +21,7 @@ export default function Search() {
   
   const [searchKeyword, setSearchKeyword] = useState(queryParams.has(PARAM_KEY_SEARCH_KEYWORD) ? queryParams.get(PARAM_KEY_SEARCH_KEYWORD) : "");
   const [currentSearchMode, setCurrentSearchMode] =
-      useState(queryParams.has(PARAM_KEY_SEARCH_MODE) ? parseInt(queryParams.get(PARAM_KEY_SEARCH_MODE)) : modes.INTEGRATION);
+      useState(queryParams.has(PARAM_KEY_SEARCH_MODE) ? parseInt(queryParams.get(PARAM_KEY_SEARCH_MODE)) : modes.FEED);
   const [searchResult, setSearchResult] = useState();
   const [page, setPage] = useState(1);
 
