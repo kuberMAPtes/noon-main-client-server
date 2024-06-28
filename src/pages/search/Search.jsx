@@ -11,7 +11,6 @@ import searchChatroom from "./axios/searchChatroom";
 import searchMember from "./axios/searchMember";
 import "../../assets/css/module/search/Search.css";
 import { useSearchParams } from "react-router-dom";
-import Footer from "../../components/common/Footer";
 import { useSelector } from "react-redux";
 
 
@@ -143,7 +142,6 @@ export default function Search() {
       <SearchBar typeCallback={(text) => setSearchKeyword(text)} searchCallback={onSearchBtnClick} />
       <SearchModeTab currentSearchMode={currentSearchMode} onModeChange={onModeChange} />
       {component}
-      <Footer />
     </div>
   );
 }

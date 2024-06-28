@@ -123,7 +123,7 @@ export const handleNicknameUpdateChange = async (
     setIsNicknameValid(false);
   }
   else {
-    setNicknameValidationMessage("2~20자");
+    setNicknameValidationMessage("2~20자, 특수문자는 띄어쓰기,(,),[,],만 가능합니다. 자음과 모음이 결합되어야 합니다.");
     setIsNicknameValid(false);
   }
 

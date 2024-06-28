@@ -11,6 +11,7 @@ import useEncryptId from "../../hook/useEncryptId";
 import { FaUserPlus } from "react-icons/fa";
 import { BsBuildings } from "react-icons/bs";
 import { MdDynamicFeed } from "react-icons/md";
+import base from "../../../../assets/css/module/member/base.module.css";
 const ProfileStats = ({
   toId,
   feeds,
@@ -56,7 +57,10 @@ const ProfileStats = ({
         </div>
       </Col>
       <Col>
-        <div className={profile.circle}>
+        <div
+          className={`${profile.circle} ${base.hoverStyle}`}
+          onClick={() => navigate(`/map/${toId}}`)}
+        >
           <div className={profile["circle-text"]}>
             {buildingSubscriptionCount}
           </div>
