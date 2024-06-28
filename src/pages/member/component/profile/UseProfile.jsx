@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useParams, useSearchParams } from "react-router-dom";
 import { getMemberProfile } from "../../function/memberAxios";
-import useGetInitialPage from "../common/useGetInitialPage";
-import useDecryptId from "../common/useDecryptId";
+import useGetInitialPage from "../../hook/useGetInitialPage";
+import useDecryptId from "../../hook/useDecryptId";
 
 const UseProfile = () => {
   const { initialPage } = useGetInitialPage();
@@ -21,6 +21,7 @@ const UseProfile = () => {
   });
 
   const [isDenied, setIsDenied] = useState(false);
+  const [denialMessage, setDenialMessage] = useState("");
 
   useEffect(() => {
     if (authorization && fromId && toId) {
@@ -40,19 +41,20 @@ const UseProfile = () => {
         if (response?.memberId) {
           //   alert("setIsDenied false");
           setIsDenied(false);
+          setProfile(response);
         } else {
           // alert("setIsDenied true");
+          setDenialMessage(response);
           setIsDenied(true);
         }
         console.log("Profile data:", response);
-        setProfile(response);
       };
 
       fetchMemberProfile();
     }
   }, [authorization, toId, fromId, isDenied]);
 
-  return { profile,setProfile, toId, fromId, initialPage, isDenied };
+  return { profile, setProfile, toId, fromId, initialPage, isDenied, denialMessage};
 };
 
 export default UseProfile;
