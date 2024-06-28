@@ -1,0 +1,25 @@
+.container {
+  position: fixed;
+  top: 15vh;
+  right: 0;
+  z-index: 99;
+  display: flex;
+  flex-direction: column;
+
+}
+
+.container button {
+  font-size: 10px;
+  margin-top: 0;
+  margin-bottom: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  color: #030722;
+  background-color: #FFFFFD88;
+  border: 1px solid #D9D9D9;
+  border-right: none;
+}
+
+.selected {
+  background-color: #9BAA;
+}

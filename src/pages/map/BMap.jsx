@@ -12,6 +12,7 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentMapState } from "../../redux/slices/currentMapStateSlice";
 import WantBuildingProfile from "../building/components/WantBuildingProfile";
+import MarkerModeButtonGroup, { MARKER_MODES } from "./component/MarkerModeButtonGroup";
 
 const naver = window.naver;
 
@@ -53,6 +54,7 @@ export default function BMap() {
       latitude: 0.0
     }
   });
+  const [currentMarkerDisplayMode, setCurrentMarkerDisplayMode] = useState(MARKER_MODES.DISPLAY_BUILDING_NAME);
 
   const currentMapState = useSelector((state) => state.currentMapState.value);
 
@@ -187,6 +189,10 @@ export default function BMap() {
   return (
     <div className={mapStyles.mapContainer}>
       <div id="map">
+        <MarkerModeButtonGroup
+            currentMarkerDisplayMode={currentMarkerDisplayMode}
+            setCurrentMarkerDisplayMode={setCurrentMarkerDisplayMode}
+        />
         <SearchBar
             typeCallback={(text) => setPlaceSearchKeyword(text)}
             searchCallback={() => searchPlaceList(placeSearchKeyword, onSearchPlace, queryParams, setQueryParams)}
