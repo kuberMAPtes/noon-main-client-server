@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { encryptWithLvWithUri } from '../../../../util/crypto';
+import { encryptWithLvWithUri } from '../../../util/crypto';
 
 const useEncryptId = (toId) => {
   const [encryptedData, setEncryptedData] = useState(null);

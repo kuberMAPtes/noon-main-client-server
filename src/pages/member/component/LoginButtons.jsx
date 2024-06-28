@@ -12,7 +12,6 @@ import NoonLogo from "../../../assets/css/NoonLogo";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { MdCelebration } from "react-icons/md";
-import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 const LoginButtons = ({ onLoginClick,onGoogleLoginClick }) => {
   const dispatch = useDispatch();
   const loginStatus = useSelector((state) => state.auth.loginStatus);

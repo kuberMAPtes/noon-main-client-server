@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { decryptWithLv, decryptWithLvWithUri, encryptWithLv, encryptWithLvWithUri } from "../../../../util/crypto";
+import { decryptWithLv, decryptWithLvWithUri, encryptWithLv, encryptWithLvWithUri } from "../../../util/crypto";
 
 const useDecryptId = () => {
   const { secretId, secretIv } = useParams();

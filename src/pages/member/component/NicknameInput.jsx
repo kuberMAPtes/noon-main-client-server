@@ -2,7 +2,7 @@ import React from "react";
 import { Form } from "react-bootstrap";
 import { FaCheck, FaUser } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import useReadOnlyInput from "./common/useReadOnlyInput";
+import useReadOnlyInput from "../hook/useReadOnlyInput";
 import NormalButton from "./NormalButton";
 
 const NicknameInput = ({
@@ -12,23 +12,25 @@ const NicknameInput = ({
   setNicknameValidationMessage,
   isNicknameValid,
   setIsNicknameValid,
-  handleKeyDown,
   handleNicknameUpdateChange,
   toId,
   profile,
   setProfile,
 }) => {
-  const nicknameInput = useReadOnlyInput(profile.nickname,isNicknameValid,toId,profile,setProfile);
+  const nicknameInput = useReadOnlyInput(
+    profile.nickname,
+    isNicknameValid,
+    toId,
+    profile,
+    setProfile,
+    "nickname"
+  );
   // 새로운 키 다운 핸들러 함수
 
   const handleNicknameKeyDown = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       e.preventDefault(); // 폼 제출 방지
-      nicknameInput.handleBlur(profile.nickname)();
-    }
-    // 기존의 handleKeyDown 함수가 있다면 여기서 호출
-    if (handleKeyDown) {
-      handleKeyDown(e);
+      nicknameInput.handleBlur(profile.nickname)(e);
     }
   };
 
@@ -39,9 +41,7 @@ const NicknameInput = ({
           border: isNicknameValid && "#91a7ff",
           color: isNicknameValid && "#91a7ff",
         }}
-      >
-
-      </Form.Label>
+      ></Form.Label>
       <Form.Control
         type="text"
         placeholder={profile.nickname}
@@ -61,7 +61,7 @@ const NicknameInput = ({
           fontSize: "13px",
           fontWeight: "bold",
           textAlign: "center",
-          opacity: "0.6"
+          opacity: "1",
         }}
         onKeyDown={handleNicknameKeyDown}
         required

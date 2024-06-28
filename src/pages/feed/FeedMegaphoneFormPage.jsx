@@ -5,10 +5,10 @@ import { Button } from "react-bootstrap";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import FeedMegaphoneForm from "./component/FeedForm/FeedMegaphoneForm";
 import SlideUpModal from "./component/FeedForm/SlideUpModal";
 import BasicNavbar from "../../components/common/BasicNavbar";
 import axios_api from "../../lib/axios_api";
+import FeedMegaphoneForm from "./component/FeedForm/FeedMegaphoneForm"
 
 /**
  * 확성기 피드를 새롭게 추가한다.

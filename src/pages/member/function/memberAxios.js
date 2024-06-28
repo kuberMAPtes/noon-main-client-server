@@ -61,9 +61,10 @@ export const checkMemberId = async (memberId) => {
 };
 
 // 회원 닉네임 확인
-export const checkNickname = async (nickname) => {
+export const checkNickname = async (inputNickname) => {
   try {
-    console.log("checkNickName 요청:", { nickname });
+    const nickname = encodeURIComponent(inputNickname);
+    console.log("checkNickName 요청:", { inputNickname });
     const response = await axiosInstance.get(`/member/checkNickname`, {
       params: { nickname },
     });
@@ -363,22 +364,32 @@ export const getMemberProfile = async (fromId, toId) => {
       toId,
     });
     console.log("getMemberProfile 응답:", response.data);
-    const profile = response.data.info;
-    // if (memberProfile.profilePhotoUrl && memberProfile.profilePhotoUrl.includes("https://noon-storage-bucket")) {
-    if(profile.profilePhotoUrl && profile.profilePhotoUrl.includes("https://noon-storage-bucket")){
-      
-      const getProfilePhotoUrl = async () => {
-        try {
-          const {url} = await profilePhotoGetter(toId);
-          profile.profilePhotoUrl = url;
-        } catch(error){
-          console.error("getProfilePhotoUrl error:", error);
-        }
-      }
-      getProfilePhotoUrl();
-    }
 
+
+    const profileAccessResultDto = response.data.info;
+    const profile = profileAccessResultDto.memberProfile;
+    //차단 당하지 않았으면
+    if(!profile){
+
+      return profileAccessResultDto.message;
+
+    }else{
+      if(profile.profilePhotoUrl && profile.profilePhotoUrl.includes("https://noon-storage-bucket")){
+        
+        const getProfilePhotoUrl = async () => {
+          try {
+            const {url} = await profilePhotoGetter(toId);
+            profile.profilePhotoUrl = url;
+          } catch(error){
+            console.error("getProfilePhotoUrl error:", error);
+          }
+        }
+        getProfilePhotoUrl();
+      }
+    }
     return profile;
+    
+
   } catch (error) {
     console.error("getMemberProfile error:", error);
     return null

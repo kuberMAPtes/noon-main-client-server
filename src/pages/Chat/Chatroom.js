@@ -213,7 +213,8 @@ const Chatroom = () => {
     // 내가 보낸 채팅 메세지 표시
     const myMessage = {
       type : 'mine', //css로 내가 보냈는지 남이 보냈는지 별도로 표기
-      text : `${messageInput} \n( ${new Date()} )`,
+      text : messageInput,
+      timestamp : new Date(),
       readMembers : [memberID]
     }
     setReceivedMessage((prevMessages) => [...prevMessages, myMessage]);
@@ -325,35 +326,35 @@ const Chatroom = () => {
       </div>
       )}
 
-        <div className={module.chat}>
-          <div className={module.messages}>
-            {receivedMessage.map((msg, index) => (
-              <div key={index} className={ msg.type === 'mine' ? module.mineMessage : msg.type === 'other' ? module.otherMessage : module.noticeMessage }>
-                <p>{msg.text}</p>
-                {msg.type !== 'notice' && (
-                    <p>안읽은 사람 수 : { participants.length - msg.readMembers.length }</p>
-                )}                
-              </div>
-            ))}
+      <div className={module.chatBody}>
+        {receivedMessage.map((msg, index) => (
+          <div key={index} className={`${module.chatMessage} ${msg.type === 'mine' ? module.question : msg.type === 'other' ? module.response : module.noticeMessage}`}>
+            <div className={module.messageText}>{msg.text}</div>
+            <div className={module.messageTimestamp}>{msg.timestamp ? msg.timestamp.toString() : ''}</div>
+            {msg.type !== 'notice' && (
+                  <p>안읽은 사람 수 : { participants.length - msg.readMembers.length }</p>
+              )}      
           </div>
-        <div>
-        <input
-          type="text"
-          value={messageInput}
-          onChange={(e) => setMessageInput(e.target.value)}
-          onKeyPress={(e) => {
-            if (e.key === 'Enter') {
-              sendMessage();
-            }
-          }}
-          placeholder="메시지를 입력하세요..."
-        />
-        <button onClick={sendMessage} style={{ backgroundColor: '#9BAAF8' }} >Send</button>
-        <button onClick={leaveRoom} style={{ backgroundColor: '#9BAAF8' }}>채팅방 나가기</button>
-        </div>
-      </div>
-
+        ))}
     </div>
+
+    <div className={module.chatFooter}>
+      <input
+        type="text"
+        value={messageInput}
+        onChange={(e) => setMessageInput(e.target.value)}
+        onKeyPress={(e) => {
+          if (e.key === 'Enter') {
+            sendMessage();
+          }
+        }}
+        placeholder="메시지를 입력하세요..."
+      />
+      <button onClick={sendMessage} style={{ backgroundColor: '#9BAAF8' }} >Send</button>
+      <button onClick={leaveRoom} style={{ backgroundColor: '#9BAAF8' }}>채팅방 나가기</button>
+      </div>
+    </div>
+
   );
 };
 

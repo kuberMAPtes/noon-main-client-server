@@ -8,6 +8,8 @@ import "./css/MemberSetting.css";
 import OpInfoModal from "./component/OpInfoModal";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
+import { setFooterEnbaled } from "../../redux/slices/footerEnabledSlice";
+import { useDispatch } from "react-redux";
 
 const PUBLIC_RANGES = [
   {
@@ -45,6 +47,8 @@ export default function MemberSetting() {
 
   const memberId = SAMPLE_MEMBER_ID;
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     fetchSettingInfo(memberId, (setting) => {
       setMemberProfilePublicRange(setting.memberProfilePublicRange);
@@ -54,6 +58,11 @@ export default function MemberSetting() {
       );
       setReceivingAllNotification(setting.receivingAllNotificationAllowed);
     });
+    dispatch(setFooterEnbaled(false));
+
+    return () => {
+      dispatch(setFooterEnbaled(true));
+    }
   }, [memberId]);
 
   const COMPONENT_INFOS = [

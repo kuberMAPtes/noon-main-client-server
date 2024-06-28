@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { generateNavigateUrl } from '../../../../util/crypto';
+import { generateNavigateUrl } from '../../../util/crypto';
 
 const useMainPage = (memberId) => {
   const [navigateUrl, setNavigateUrl] = useState(null);

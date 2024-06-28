@@ -28,6 +28,11 @@ const LoginForm = () => {
     };
 
     const validationMessage = validateLoginForm(memberId, pwd);
+    if(validationMessage === "로그인 시도 횟수 초과 30초간 잠금상태입니다.") {
+
+      //타임아웃 스타트 로직 구현해야함.
+
+    }
     if (validationMessage) {
       setValidationError(validationMessage);
       return;
@@ -107,17 +112,7 @@ const LoginForm = () => {
             >
               로그인
             </Button>
-            {(validationError && !loginError) && (
-              <Alert variant="danger" className="mt-3">
-                {validationError}
-              </Alert>
-            )}
-            {(!validationError && loginError) && (
-              <Alert variant="danger" className="mt-3">
-                {loginError.message}
-              </Alert>
-            )}
-            {(validationError && loginError) && (
+            {(validationError) && (
               <Alert variant="danger" className="mt-3">
                 {renderLoginError(validationError, loginError)}
               </Alert>

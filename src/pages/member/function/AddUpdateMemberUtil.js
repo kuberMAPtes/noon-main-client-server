@@ -70,7 +70,8 @@ export const handleProfileIntroUpdateChange = async (
   }else if (input.length >= 150){
     setProfileIntroValidationMessage("150자 이하로 입력하세요.");
     setIsProfileIntroValid(false);
-  }else if (input.lenth >=0 && input.length < 150){
+  }else if (input.length >=0 && input.length < 150){
+    // alert("참이다.")
     setProfileIntroValidationMessage("");
     setIsProfileIntroValid(true);
   }
@@ -122,7 +123,7 @@ export const handleNicknameUpdateChange = async (
     setIsNicknameValid(false);
   }
   else {
-    setNicknameValidationMessage("2~20자");
+    setNicknameValidationMessage("2~20자, 특수문자는 띄어쓰기,(,),[,],만 가능합니다. 자음과 모음이 결합되어야 합니다.");
     setIsNicknameValid(false);
   }
 
