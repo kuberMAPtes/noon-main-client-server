@@ -5,7 +5,12 @@ import { chatroomDeleteTime } from '../pages/Chat/function/axios_api';
 
 const Countdown = () => {
   const [timeLeft, setTimeLeft] = useState({});
-  const [remainingTime, setRemainingTime] = useState(null);
+  const [remainingTime, setRemainingTime] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0
+  });
 
   // api 서버에서 다음 스케쥴까지 남은 시간을 받아옴
   useEffect(() => {
@@ -23,27 +28,26 @@ const Countdown = () => {
       const difference = remainingTime;
 
       return {
-        // 남은 시간을 day, hours, minutes, seconds 로 반환
-        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+        // days: Math.floor(difference / (1000 * 60 * 60 * 24)),
         hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
         minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
         seconds: Math.floor((difference % (1000 * 60)) / 1000),
       };
     };
 
+    // 1초마다 남은시간에서 1초를 빼며 remaingTime 을 갱신 (시간이 지나면 timer 를 초기화)
     const timer = setInterval(() => {
-      console.log("1초마다모하노 remaingTime 계속변하노 ", remainingTime);
       setRemainingTime(prev => {
         const newTime = prev - 1000;
         if (newTime <= 0) {
-          clearInterval(timer);
+          clearInterval(timer); // 인터벌 중지
           alert('Time is up! Refreshing the page...');
           window.location.reload();
         }
         return newTime;
       });
       setTimeLeft(calculateTimeLeft());
-    }, 3000);
+    }, 1000);
 
     return () => clearInterval(timer);
   }, [remainingTime]);
@@ -51,10 +55,10 @@ const Countdown = () => {
   return (
     <div className={styles.countdownContainer}>
       <div className={styles.countdown}>
-        <div>
+        {/* <div>
           <span>{String(timeLeft.days).padStart(2, '0')}</span>
           <span>Days</span>
-        </div>
+        </div> */}
         <div>
           <span>{String(timeLeft.hours).padStart(2, '0')}</span>
           <span>Hours</span>
