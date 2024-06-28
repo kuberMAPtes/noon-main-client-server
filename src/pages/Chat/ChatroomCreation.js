@@ -6,6 +6,7 @@ import { addChatroomData } from '../../store/store';
 import { useDispatch , useSelector } from 'react-redux';
 
 const ChatRoomCreation = () => {
+    
     const [dajungMinTemp, setDajungMinTemp] = useState('');
     const [dajungMaxTemp, setDajungMaxTemp] = useState('');
     const [chatroomName, setChatRoomName] = useState('');
@@ -16,7 +17,7 @@ const ChatRoomCreation = () => {
     const memberID = member.memberId
 
     const { buildingId } = useParams(); // 받아온 경로매개변수
-
+    console.log("chatroomcreation 실행! 세울 채팅방 빌딩은", buildingId)
 
     const navigate = useNavigate();
 
