@@ -190,11 +190,11 @@ const GetImage = () => {
               <CardHeader>
                 <div>
                   {attachment.blurredFileUrl == null?
-                    <Badge color="primary" style={styles.badge}>
+                    <Badge color="" style={styles.badge}>
                       블러 처리전
                     </Badge>  
                     :
-                    <Badge color="danger" style={styles.badge}>
+                    <Badge color="secondary" style={styles.badge}>
                       블러 처리됨
                     </Badge>  
                   }
@@ -292,7 +292,12 @@ const styles = {
   },
   badge: {
     width: '100px',
-    height: '20px'
+    height: '20px',
+    top: '10px',
+    left: '10px',
+    zIndex: 10,
+    backgroundColor: '#D8B48B',
+    borderRadius: '100px'
   },
 };
 
