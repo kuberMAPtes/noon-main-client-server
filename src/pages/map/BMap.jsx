@@ -244,7 +244,11 @@ function searchPlaceList(searchKeyword, callback, queryParams, setQueryParams) {
  */
 function onSearchPlace(places) {
   console.log(places);
-  clearMarkers(placeSearchMarkers);
+  if (placeSearchMarkers) {
+    for (let marker of placeSearchMarkers) {
+      marker.setMap(null);
+    }
+  }
   const placeSearchMarkersCache = [];
   places.forEach((place) => {
     const contentHtml = getPlaceSearchMarkerHtml(place.roadAddress, place.placeName);

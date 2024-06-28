@@ -13,7 +13,7 @@ const TabNavigation = () => {
   // 피드 생성 or 채팅방 생성
   const handleCreationLink = () => {
     if(activeTab === 'feed'){
-      navigate('/feed/form');
+      navigate('/feed/form?buildingId='+buildingId);
     } else {
       navigate('/chat/chatroomCreation/'+buildingId);
     }

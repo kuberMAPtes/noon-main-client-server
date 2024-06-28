@@ -7,11 +7,13 @@ import Loading from './component/FeedList/FeedLoading';
 
 import Footer from '../../components/common/Footer';
 import BasicNavbar from '../../components/common/BasicNavbar';
+import FeedDisplayBoard from './component/FeedList/FeedDisplayBoard';
 
 import './css/FeedList.css';
 import axios_api from '../../lib/axios_api';
 import FeedPopularyRanking from './component/FeedList/FeedPopularyRanking';
 import { useSelector } from 'react-redux';
+import FeedCalendar from './component/FeedList/FeedCalendar';
 
 /**
  * 건물별 피드 목록을 보여준다. FeedListPage와 그 성질이 달라서 분리하였다.
@@ -117,7 +119,9 @@ const FeedBuildingListPage = () => {
 
     return (
         <div>
+            <FeedDisplayBoard buildingId={buildingId} />
             <FeedPopularyRanking feeds={ranking} />
+            <FeedCalendar />
             <div className='container'>
                 <div className="row">
                     {feeds.map((feed, index) => (

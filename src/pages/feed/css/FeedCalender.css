@@ -1,0 +1,47 @@
+.calendar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* 전체 화면 높이를 사용하여 중앙 배치 */
+    text-align: center;
+}
+  
+.react-datepicker {
+    font-size: 1.5rem; /* 폰트 크기 증가 */
+    margin: 5px 0; /* 달력 위아래의 간격 줄이기 */
+}
+  
+.react-datepicker__month-container {
+    width: 400px; /* 달력의 너비 증가 */
+}
+  
+.react-datepicker__day-name, 
+.react-datepicker__day, 
+.react-datepicker__time-name {
+    width: 50px; /* 날짜 셀의 너비 증가 */
+    line-height: 50px; /* 날짜 셀의 높이 증가 */
+}
+  
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+    background-color: #0056b3; /* 선택된 날짜의 배경색 */
+}
+  
+.has-event {
+    background-color: #3be23b; /* 이벤트가 있는 날짜의 배경색 */
+}
+
+h2 {
+    margin-top: 10px; /* h2 위쪽 간격 줄이기 */
+}
+  
+ul {
+    margin-top: 5px; /* 이벤트 목록 위쪽 간격 줄이기 */
+}
+  
+p {
+    margin-top: 5px; /* 이벤트 없는 경우 텍스트 위쪽 간격 줄이기 */
+}
+
+  

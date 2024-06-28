@@ -11,19 +11,30 @@ const axios_api = axios.create({
     withCredentials: true
 });
 
+let refreshingAvailabe = true;
+
 axios_api.interceptors.response.use((response) => {
     console.log(response);
     return response;
 }, async (error) => {
+    console.log(error);
     if (error.response && error.response.status === 403) {
-        try {
-            await axios.get(`${BASE_URL}/member/refresh`);
-            const originalRequestConfig = error.config;
-            return axios_api.request(originalRequestConfig);
-        } catch(err) {
-            // alert("로그인이 필요합니다.");
-            // window.location.href = "/member/getAuthMain";
-            return Promise.reject(error);
+        console.log("403 Forbidden");
+        if (refreshingAvailabe) {
+            refreshingAvailabe = false;
+            try {
+                await axios.get(`${BASE_URL}/member/refresh`, {
+                    withCredentials: true
+                });
+                const originalRequestConfig = error.config;
+                refreshingAvailabe = true;
+                return axios_api.request(originalRequestConfig);
+            } catch (err) {
+                alert("로그인이 필요합니다.");
+                window.location.href = "/member/getAuthMain";
+                refreshingAvailabe = true;
+                return Promise.reject(error);
+            }
         }
     }
     return Promise.reject(error);
