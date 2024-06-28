@@ -29,8 +29,8 @@ let buildingSubscriptionMarkers = new Map();
 let placeSearchMarkers;
 
 const buildingFetchChecked = {
-  popBuildingChecked: true,
-  subscriptionChecked: true
+  subscriptionChecked: true,
+  currentMarkerDisplayMode: MARKER_MODES.DISPLAY_BUILDING_NAME
 }
 
 export default function BMap() {
@@ -42,7 +42,6 @@ export default function BMap() {
       useState(queryParams.has(PARAM_KEY_SEARCH_KEYWORD) ? queryParams.get(PARAM_KEY_SEARCH_KEYWORD) : "");
   const [currentPosition, setCurrentPosition] = useState(undefined);
   const [subscriptionChecked, setSubscriptionChecked] = useState(true);
-  const [popBuildingChecked, setPopBuildingChecked] = useState(true);
   const [firstEntry, setFirstEntry] = useState(true);
   const [wantBuildingProfileModal, setWantBuildingProfileModal] = useState({
     isOpen: false,
@@ -60,8 +59,8 @@ export default function BMap() {
 
   const dispatch = useDispatch();
 
-  buildingFetchChecked.popBuildingChecked = popBuildingChecked;
   buildingFetchChecked.subscriptionChecked = subscriptionChecked;
+  buildingFetchChecked.currentMarkerDisplayMode = currentMarkerDisplayMode;
 
   const navigate = useNavigate();
 
@@ -93,7 +92,7 @@ export default function BMap() {
     });
 
     naver.maps.Event.addListener(map, "dragend", (e) => {
-      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, buildingFetchChecked.popBuildingChecked, member, navigate, currentMarkerDisplayMode);
+      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, member, navigate, buildingFetchChecked.currentMarkerDisplayMode);
       const center = map.getCenter();
       dispatch(setCurrentMapState({
         latitude: center.y,
@@ -102,7 +101,7 @@ export default function BMap() {
     });
 
     naver.maps.Event.addListener(map, "zoom_changed", (e) => {
-      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, buildingFetchChecked.popBuildingChecked, member, navigate, currentMarkerDisplayMode);
+      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, member, navigate, buildingFetchChecked.currentMarkerDisplayMode);
       console.log(e);
       dispatch(setCurrentMapState({
         zoomLevel: e
@@ -169,14 +168,14 @@ export default function BMap() {
 
   useEffect(() => {
     if (!firstEntry) {
-      fetchBuildingMarkers(subscriptionChecked, popBuildingChecked, member, navigate, currentMarkerDisplayMode);
+      fetchBuildingMarkers(subscriptionChecked, member, navigate, currentMarkerDisplayMode);
     }
   }, [subscriptionChecked, firstEntry]);
 
   useEffect(() => {
     if (!firstEntry) {
       clearMarkers(popBuildingMarkers);
-      fetchBuildingMarkers(subscriptionChecked, popBuildingChecked, member, navigate, currentMarkerDisplayMode);
+      fetchBuildingMarkers(subscriptionChecked, member, navigate, currentMarkerDisplayMode);
     }
   }, [currentMarkerDisplayMode]);
 
@@ -213,8 +212,6 @@ export default function BMap() {
         <FetchTypeToggle
             subscriptionChecked={subscriptionChecked}
             setSubscriptionChecked={setSubscriptionChecked}
-            popBuildingChecked={popBuildingChecked}
-            setPopBuildingChecked={setPopBuildingChecked}
         />
       </div>
       <WantBuildingProfile
@@ -331,12 +328,11 @@ function fetchBuildingInfo(latitude, longitude, setWantBuildingProfileModal) {
 
 /**
  * @param {boolean} subscriptionChecked 
- * @param {boolean} popBuildingChecked 
  * @param {string} memberId
  */
-async function fetchBuildingMarkers(subscriptionChecked, popBuildingChecked, memberId, navigate, curretMarkerDisplayMode) {
-  if (popBuildingChecked) {
-    await fetchBuildingsInPositionRange(navigate, curretMarkerDisplayMode);
+async function fetchBuildingMarkers(subscriptionChecked, memberId, navigate, currentMarkerDisplayMode) {
+  if (currentMarkerDisplayMode !== MARKER_MODES.DISPLAY_NONE) {
+    await fetchBuildingsInPositionRange(navigate, currentMarkerDisplayMode);
   } else {
     console.log("here");
     clearMarkers(popBuildingMarkers);
