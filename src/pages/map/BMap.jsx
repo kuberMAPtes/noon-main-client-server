@@ -65,7 +65,6 @@ export default function BMap() {
 
   const loginMember = useSelector((state) => state.auth.member);
 
-  // TODO: Replace sample with real
   const member = ownerIdOfMapInfo ? ownerIdOfMapInfo : loginMember.memberId;
 
   /**
@@ -87,7 +86,7 @@ export default function BMap() {
     naver.maps.Event.addListener(map, "click", (e) => {
       const latitude = e.latlng.y;
       const longitude = e.latlng.x;
-      fetchBuildingInfo(latitude, longitude, setWantBuildingProfileModal);
+      fetchBuildingInfo(latitude, longitude, setWantBuildingProfileModal, navigate);
     });
 
     naver.maps.Event.addListener(map, "dragend", (e) => {
@@ -278,15 +277,15 @@ function getCurrentPosition(callback, errorCallback) {
  * @param {number} latitude 
  * @param {number} longitude 
  */
-function fetchBuildingInfo(latitude, longitude, setWantBuildingProfileModal) {
+function fetchBuildingInfo(latitude, longitude, setWantBuildingProfileModal, navigate) {
   axios_api.get(`${MAIN_API_URL}/buildingProfile/getBuildingProfile`, {
     params: {
       latitude,
       longitude
     }
   }).then((response) => {
-    // TODO: Do somthing later
     console.log(response);
+    navigate(`/getBuildingProfile/${response.data.buildingId}`);
   }).catch((err) => {
     if (is4xxStatus(err.response.status)) {
       const data = err.response.data;
