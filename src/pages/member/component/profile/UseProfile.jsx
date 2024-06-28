@@ -21,6 +21,7 @@ const UseProfile = () => {
   });
 
   const [isDenied, setIsDenied] = useState(false);
+  const [denialMessage, setDenialMessage] = useState("");
 
   useEffect(() => {
     if (authorization && fromId && toId) {
@@ -40,19 +41,20 @@ const UseProfile = () => {
         if (response?.memberId) {
           //   alert("setIsDenied false");
           setIsDenied(false);
+          setProfile(response);
         } else {
           // alert("setIsDenied true");
+          setDenialMessage(response);
           setIsDenied(true);
         }
         console.log("Profile data:", response);
-        setProfile(response);
       };
 
       fetchMemberProfile();
     }
   }, [authorization, toId, fromId, isDenied]);
 
-  return { profile, setProfile, toId, fromId, initialPage, isDenied };
+  return { profile, setProfile, toId, fromId, initialPage, isDenied, denialMessage};
 };
 
 export default UseProfile;

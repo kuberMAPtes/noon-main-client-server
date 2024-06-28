@@ -44,12 +44,12 @@ const ProfileBody = ({
   const defaultPhotoUrl = `${process.env.PUBLIC_URL}/image/defaultMemberProfilePhoto.png`;
   // const member = useSelector((state) => state.auth.member);
   // const mainPageUrl = useMainPage(member.memberId);
-  const [nickname, setNickname] = useState(profile.nickname);
+  const [nickname, setNickname] = useState(profile?.nickname);
   const [nicknameValidationMessage, setNicknameValidationMessage] =
     useState("");
   const [isNicknameValid, setIsNicknameValid] = useState(false);
 
-  const [profileIntro, setProfileIntro] = useState(profile.profileIntro);
+  const [profileIntro, setProfileIntro] = useState(profile?.profileIntro);
   const [profileIntroValidationMessage, setProfileIntroValidationMessage] =
     useState("");
   const [isProfileIntroValid, setIsProfileIntroValid] = useState(false);
@@ -69,12 +69,12 @@ const ProfileBody = ({
   };
 
   useEffect(() => {
-    setNickname(profile.nickname);
-  }, [profile.nickname]);
+    setNickname(profile?.nickname);
+  }, [profile?.nickname]);
 
   useEffect(() => {
-    setProfileIntro(profile.profileIntro);
-  }, [profile.profileIntro]);
+    setProfileIntro(profile?.profileIntro);
+  }, [profile?.profileIntro]);
 
   // useEffect(() => {
   //   if (profile.dajungScore >= 80) {
@@ -90,7 +90,7 @@ const ProfileBody = ({
   //   }
   // }, [profile.dajungScore]);
 
-  if (!profile.nickname) {
+  if (!profile?.nickname) {
     return null;
   }
 
