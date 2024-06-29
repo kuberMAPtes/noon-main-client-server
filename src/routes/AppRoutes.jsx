@@ -168,6 +168,7 @@ const AppRoutes = () => {
             <Route path="form" element={<FeedForm />} /> {/* 일반 피드 추가 */}
             <Route path="voteForm" element={<FeedVoteForm />} /> {/* 투표 피드 추가 */}
             <Route path="form/:feedId" element={<FeedForm />} /> {/* 일반 피드 수정 */}
+            <Route path="megaphoneForm" element={<FeedMegaphoneForm />} /> {/* 확성기 피드 수정 */}
             <Route path="chart" element={<FeedChartPage />} />
             <Route path="main" element={<FeedListHomePage />}/>
             <Route path="" element={<FeedPages />} />

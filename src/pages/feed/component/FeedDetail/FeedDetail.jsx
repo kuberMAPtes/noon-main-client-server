@@ -74,8 +74,15 @@ const FeedDetail = ({ data, memberId }) => {
         const fetchAttachments = async () => {
             const urls = await Promise.all(
                 attachments.map(async (attachment) => {
-                    const url = await AttachmentGetter(attachment.attachmentId);
-                    return { attachmentId: attachment.attachmentId, url };
+                    if(attachment.blurredFileUrl != null) {
+                        const url = { type: "image", url: attachment.blurredFileUrl };
+                        return { attachmentId : attachment.attachmentId, url }; // 블러 사진 적용 : url 그대로 가져오기
+                    } else {
+                        const url = await AttachmentGetter(attachment.attachmentId);
+                        return { attachmentId: attachment.attachmentId, url };
+                    }
+                    // const url = await AttachmentGetter(attachment.attachmentId);
+                    // return { attachmentId: attachment.attachmentId, url };
                 })
             );
             setAttachmentUrls(urls.filter(urlObj => urlObj.url)); // 유효한 URL만 설정
@@ -171,6 +178,11 @@ const FeedDetail = ({ data, memberId }) => {
 
     return (
         <div className="container">
+            <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '10px' }}>
+                <Button variant="secondary" onClick={()=>goToBuildingProfile(buildingId)}>
+                    해당 건물 프로필로 이동
+                </Button>
+            </div>
             <Card>
                 <CardBody>
                     {/* Header */}
