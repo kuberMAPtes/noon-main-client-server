@@ -14,6 +14,7 @@ import { setCurrentMapState } from "../../redux/slices/currentMapStateSlice";
 import WantBuildingProfile from "../building/components/WantBuildingProfile";
 import MarkerModeButtonGroup, { MARKER_MODES } from "./component/MarkerModeButtonGroup";
 import { Spinner } from "reactstrap";
+import { MdCancel } from "react-icons/md";
 
 const naver = window.naver;
 
@@ -56,6 +57,7 @@ export default function BMap() {
   });
   const [currentMarkerDisplayMode, setCurrentMarkerDisplayMode] = useState(ownerIdOfMapInfo === undefined ? MARKER_MODES.DISPLAY_BUILDING_NAME : MARKER_MODES.DISPLAY_NONE);
   const [loading, setLoading] = useState(false);
+  const [placesSearchResultExists, setPlacesSearchResultExists] = useState(false);
 
   const currentMapState = useSelector((state) => state.currentMapState.value);
 
@@ -213,9 +215,23 @@ export default function BMap() {
             currentMarkerDisplayMode={currentMarkerDisplayMode}
             setCurrentMarkerDisplayMode={setCurrentMarkerDisplayMode}
         />
+        {placesSearchResultExists && (
+          <MdCancel className={mapStyles.removePlaceSearchResultsButton} onClick={() => {
+            if (placeSearchMarkers) {
+              for (let marker of placeSearchMarkers) {
+                marker.setMap(null);
+              }
+              placeSearchMarkers = undefined;
+              setPlacesSearchResultExists(false);
+              setPlaceSearchKeyword("");
+              queryParams.delete("search-keyword");
+              setQueryParams(queryParams);
+            }
+          }} />
+        )}
         <SearchBar
             typeCallback={(text) => setPlaceSearchKeyword(text)}
-            searchCallback={() => searchPlaceList(placeSearchKeyword, onSearchPlace, queryParams, setQueryParams, setLoading)}
+            searchCallback={() => searchPlaceList(placeSearchKeyword, onSearchPlace, queryParams, setQueryParams, setLoading, setPlacesSearchResultExists)}
           />
         <button
             type="button"
@@ -242,7 +258,7 @@ export default function BMap() {
  * @param {string} searchKeyword 
  * @param {(places: any) => void} callback 
  */
-function searchPlaceList(searchKeyword, callback, queryParams, setQueryParams, setLoading) {
+function searchPlaceList(searchKeyword, callback, queryParams, setQueryParams, setLoading, setPlacesSearchResultExists) {
   setLoading(true);
   queryParams.set(PARAM_KEY_SEARCH_KEYWORD, searchKeyword);
   setQueryParams(queryParams);
@@ -253,6 +269,7 @@ function searchPlaceList(searchKeyword, callback, queryParams, setQueryParams, s
   }).then((response) => {
     if (is2xxStatus(response.status)) {
       callback(response.data)
+      setPlacesSearchResultExists(true);
     }
     setLoading(false);
   })
