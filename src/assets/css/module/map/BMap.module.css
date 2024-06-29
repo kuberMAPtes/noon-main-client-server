@@ -36,3 +36,17 @@
   top: 8%;
   right: 3%
 }
+
+.loadingSpinnerContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 64px;
+  position: absolute;
+  top: 2%;
+  left: 12px;
+}
+
+.loadingSpinner {
+  z-index: 99;
+}

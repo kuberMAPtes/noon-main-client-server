@@ -6,6 +6,7 @@ import wikiStyles from "../../../assets/css/module/building/wiki/GetBuildingWiki
 import "../../../assets/css/module/building/wiki/GetBuildingWiki.css"
 import { FaPencil } from "react-icons/fa6";
 import { RiArrowGoBackFill } from "react-icons/ri";
+import { Spinner } from "reactstrap";
 
 export const BUILDING_WIKI_BASE_PATH = "/buildingWiki";
 
@@ -14,6 +15,7 @@ export default function GetBuildingWiki() {
 
   const [buildingName, setBuildingName] = useState("");
   const [content, setContent] = useState();
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
   
@@ -32,8 +34,8 @@ export default function GetBuildingWiki() {
         setContent(fetched);
       }).catch((err) => {
         console.log(err);
-        setBuildingName("Page Error");
-        setContent($(`<p className="mw-parser-output">404 Not Found</p>`));
+        setBuildingName("Wiki가 존재하지 않습니다.");
+        setContent($(`<p className="mw-parser-output">아마도 위키 페이지 생성 중일 것입니다.</p>`));
       })
     }
 
@@ -47,6 +49,7 @@ export default function GetBuildingWiki() {
       $(document).find(".mw-parser-output").remove();
       content.find(".mw-editsection").remove();
       $(document).find("#wiki-container").append(content);
+      setLoading(false);
     }
   }, [content]);
 
@@ -64,6 +67,17 @@ export default function GetBuildingWiki() {
       </div>
       <h1>{buildingName}</h1>
       <hr className={wikiStyles.contentSeparator} />
+      {
+        loading ? (
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
+            <Spinner style={{ width: '3rem', height: '3rem' }} color="primary" />
+          </div>
+        ) : (
+          <>
+            
+          </>
+        )
+      }
     </div>
   );
 }
