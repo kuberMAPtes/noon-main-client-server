@@ -9,6 +9,7 @@ import Footer from '../../components/common/Footer';
 import navigator from './util/Navigator'
 import { useSelector } from 'react-redux';
 import { Button } from 'react-bootstrap';
+import Header from '../../components/common/Header';
 
 
 /**
@@ -56,7 +57,6 @@ const FeedDetailPage = () => {
     if(!feed) {
         return (
             <div>
-                {/* <BasicNavbar /> */}
                 <FeedNotFound/>
             </div>
         );
@@ -65,6 +65,7 @@ const FeedDetailPage = () => {
     return (
         <div>
             {/* <BasicNavbar /> */}
+            <Header title="피드 상세 보기" />
             <FeedDetail data={feed} memberId = {memberId} />
             <div>
                 <Footer />
