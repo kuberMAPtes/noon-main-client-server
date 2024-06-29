@@ -4,10 +4,10 @@ import 'react-quill/dist/quill.snow.css';
 import '../CustomerSupport/css/text-editor.css';
 import axiosInstance from '../../lib/axiosInstance';
 import { useSelector } from 'react-redux';
-
-import CustomerSupportHeader from './components/CustomerSupportHeader';
 import Footer from '../../components/common/Footer';
 import { useNavigate } from 'react-router-dom';
+import Header from '../../components/common/Header';
+import { Button, Card, CardHeader, CardFooter, CardBody, CardTitle } from 'reactstrap';
 
 const AddNotice = () => {
   const member = useSelector((state) => state.auth.member);
@@ -126,30 +126,45 @@ const AddNotice = () => {
 
   return (
     <div>
-      <CustomerSupportHeader title="공지사항 작성" />
-      <div>
-        <input 
-          type="text" 
-          placeholder="제목을 입력하세요" 
-          value={title} 
-          onChange={handleTitleChange} 
-          style={{ width: '100%', padding: '10px', marginTop: '20px', marginBottom: '20px' }} 
-        />
-      </div>
-      <div>
-        <ReactQuill 
-          ref={quillRef}
-          value={content} 
-          onChange={handleTextChange} 
-          modules={modules} 
-          formats={formats} 
-          style={{ height: '550px', marginBottom: '50px' }}
-        />
-      </div>
-      <button onClick={handleAddNotice} style={{ padding: '10px 20px', fontSize: '16px', marginBottom: '100px', backgroundColor: '#030722', color: '#FFFFFF' }}>
-        등록
-      </button>
-      <Footer/>
+      <Header title="공지사항 작성" />
+
+      <Card>
+        <CardHeader>
+          <div>
+          <input 
+            type="text" 
+            placeholder="제목을 입력하세요" 
+            value={title} 
+            onChange={handleTitleChange} 
+            style={{ width: '100%', padding: '10px', marginTop: '20px', marginBottom: '20px' }} 
+          />
+        </div>
+        </CardHeader>
+
+        <CardBody>
+          <div>
+            <ReactQuill 
+              ref={quillRef}
+              value={content} 
+              onChange={handleTextChange} 
+              modules={modules} 
+              formats={formats} 
+              style={{ height: '500px', marginBottom: '15%' }}
+            />
+          </div>
+        </CardBody>
+
+        <CardFooter>
+          <Button 
+            color="" 
+            style={{ backgroundColor: '#D8B48B', marginBottom: '80px', width: "100%", borderRadius: '50px', color: 'white' }} 
+            onClick={handleAddNotice}>
+            등록
+          </Button>  
+        </CardFooter>
+
+      </Card>
+
     </div>
   );
 };
