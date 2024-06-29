@@ -12,6 +12,7 @@ import searchMember from "./axios/searchMember";
 import "../../assets/css/module/search/Search.css";
 import { useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { Spinner } from "reactstrap";
 
 
 const PARAM_KEY_SEARCH_MODE = "search-mode";
@@ -88,6 +89,7 @@ export default function Search() {
       searchFunction(searchKeyword, page, (data) => {
         if (!data || data.length === 0) {
           setHasMore(false);
+          setLoading(false);
           return;
         }
         setHasMore(true);
@@ -142,6 +144,11 @@ export default function Search() {
       <SearchBar typeCallback={(text) => setSearchKeyword(text)} searchCallback={onSearchBtnClick} />
       <SearchModeTab currentSearchMode={currentSearchMode} onModeChange={onModeChange} />
       {component}
+      {loading && (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
+          <Spinner style={{ width: '3rem', height: '3rem' }} color="primary" />
+        </div>
+      )}
     </div>
   );
 }
