@@ -4,7 +4,6 @@ import axios_api from '../../../../lib/axios_api';
 import CheckModal from '../Common/CheckModal';
 import navigator from '../../util/Navigator'
 import { Label } from 'reactstrap';
-import { buildCreateSlice } from '@reduxjs/toolkit';
 // import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
 
 const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, onSave }) => {
@@ -41,6 +40,7 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
 
     // 피드 추가
     const handleAddSubmit = async () => {
+
         try {
             const addFeedData = {
                 writerId: inputWriterId,

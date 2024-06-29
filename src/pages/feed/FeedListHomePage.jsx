@@ -85,7 +85,7 @@ const FeedListHomePage = () => {
 
     return (
         <div>
-            <BasicNavbar />
+            {/* <BasicNavbar /> */}
             <div className='container'>
                 <div className="row">
                     {feeds.map((feed, index) => (

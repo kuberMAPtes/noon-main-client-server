@@ -9,6 +9,7 @@ import SlideUpModal from "./component/FeedForm/SlideUpModal";
 import BasicNavbar from "../../components/common/BasicNavbar";
 import axios_api from "../../lib/axios_api";
 import FeedMegaphoneForm from "./component/FeedForm/FeedMegaphoneForm"
+import Header from "../../components/common/Header";
 
 /**
  * 확성기 피드를 새롭게 추가한다.
@@ -50,6 +51,7 @@ const FeedFormPage = () => {
     return (
         <div>
             {/* <BasicNavbar /> */}
+            <Header title="확성기 피드 만들기" />
             <div className="container">
                 <Button variant="primary" onClick={() => setShowModal(true)}>
                     피드 종류

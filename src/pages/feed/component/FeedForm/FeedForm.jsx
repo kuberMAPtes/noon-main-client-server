@@ -6,7 +6,6 @@ import CheckModal from '../Common/CheckModal';
 import navigator from '../../util/Navigator';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css'; // 달력 전용 css
-// import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
 
 const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, onSave }) => {
     const [feedData, setFeedData] = useState({

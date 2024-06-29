@@ -15,7 +15,7 @@ const FeedChartPage = () => {
 
     return (
         <div>
-            <BasicNavbar />
+            {/* <BasicNavbar /> */}
             <div className="container mt-4">
                 {feedCntByTag.labels.length > 0 ? (
                     <Line data={feedCntByTag} />

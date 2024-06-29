@@ -111,7 +111,6 @@ const FeedBuildingListPage = () => {
     if (!loading && feeds.length === 0) {
         return (
             <div>
-                <BasicNavbar />
                 <FeedNotFound />
             </div>
         );
