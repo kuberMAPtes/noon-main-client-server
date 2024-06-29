@@ -6,7 +6,9 @@ import FeedNotFound from './component/FeedNotFound'
 import axios_api from '../../lib/axios_api';
 import Loading from './component/FeedList/FeedLoading';
 import Footer from '../../components/common/Footer';
+import navigator from './util/Navigator'
 import { useSelector } from 'react-redux';
+import { Button } from 'react-bootstrap';
 
 
 /**
@@ -23,6 +25,7 @@ const FeedDetailPage = () => {
     const memberId = memberIdFromStore || memberIdFromURL;
 
     const [feed, setFeed] = useState(null);
+    const [buildingId, setBuildingId] = useState(0);
     const [loading, setLoading] = useState(false);
 
     useEffect(()=> {
@@ -53,7 +56,7 @@ const FeedDetailPage = () => {
     if(!feed) {
         return (
             <div>
-                <BasicNavbar />
+                {/* <BasicNavbar /> */}
                 <FeedNotFound/>
             </div>
         );
@@ -61,7 +64,7 @@ const FeedDetailPage = () => {
 
     return (
         <div>
-            <BasicNavbar />
+            {/* <BasicNavbar /> */}
             <FeedDetail data={feed} memberId = {memberId} />
             <div>
                 <Footer />

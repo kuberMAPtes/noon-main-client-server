@@ -38,7 +38,7 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
     const [feedUpdateShow, setFeedUpdateShow] = useState(false);
 
     // navigator
-    const { goToFeedDetail } = navigator();
+    const { goToFeedDetail, backHistory } = navigator();
 
     // 첨부파일을 삭제할 파일 목록
     const [deletedFiles, setDeletedFiles] = useState([]);
@@ -101,7 +101,7 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                 updateTagList: feedData.updateTagList,
                 feedCategory: feedData.category,
                 publicRange: feedData.publicRange,
-                eventDate: eventDate.toISOString()
+                eventDate: eventDate
             };
 
             console.log(addFeedData);
@@ -220,14 +220,16 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
     }
 
     const handleCancel = () => {
-        setFeedData({
-            title: '',
-            feedText: '',
-            tags: [],
-            category: 'GENERAL',
-            publicRange: 'PUBLIC',
-            attachments: []
-        });
+        // setFeedData({
+        //     title: '',
+        //     feedText: '',
+        //     tags: [],
+        //     category: 'GENERAL',
+        //     publicRange: 'PUBLIC',
+        //     attachments: []
+        // });
+
+        backHistory(); // 뒤로가기
     };
 
     const handleFileChange = (e) => {
@@ -391,7 +393,7 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                                 dateFormat="yyyy/MM/dd h:mm aa"
                                 showTimeSelect
                                 timeFormat="HH:mm"
-                                timeIntervals={15}
+                                timeIntervals={30}
                                 className="form-control"
                             />
                         </Form.Group>
@@ -406,7 +408,8 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                                 required
                             >
                                 <option value="PUBLIC">전체 공개</option>
-                                <option value="GROUP">그룹 공개</option>
+                                <option value="FOLLOWER_ONLY">팔로워 공개</option>
+                                <option value="MUTUAL_ONLY">맞팔 공개</option>
                                 <option value="PRIVATE">비공개</option>
                             </Form.Control>
                         </Form.Group>

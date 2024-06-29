@@ -33,7 +33,7 @@ const BlockMemberRelationshipButton = ({
 
   const memoHandleBlockClickSimple = useCallback(
     async (otherId) => {
-      handleBlockClickSimple(fromId, otherId);
+      await handleBlockClickSimple(fromId, otherId);
       fetchMemberRelationship(); // 상태를 업데이트하여 즉시 반영
     },
     [fromId,fetchMemberRelationship]

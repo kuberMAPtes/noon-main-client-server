@@ -1,143 +1,115 @@
 import axiosInstance from '../../lib/axiosInstance';
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-
-import CustomerSupportHeader from './components/CustomerSupportHeader';
+import { useParams } from 'react-router-dom';
 import Footer from '../../components/common/Footer';
-
 import MessageModal from './components/MessageModal';
 import messages from './metadata/messages';
-
-import {
-  Button,
-  Card,
-  CardHeader,
-  CardBody,
-  Input,
-  Row,
-  Col,
-  Table,
-  FormGroup,
-} from "reactstrap";
+import { useSelector } from 'react-redux';
+import { Button, Card, CardHeader, CardBody, CardFooter } from "reactstrap";
+import Header from '../../components/common/Header';
 
 const GetNotice = () => {
-
-
-  //회원 role(테스트용 임시데이터)
-  const [role, setRole] = useState("admin");
-
-  //회원 아이디(실제 데이터. 리덕스 상태값)
-  //const memberId = useSelector((state) => state.auth.memberId);
+  const member = useSelector((state) => state.auth.member);
+  const [role, setRole] = useState("MEMBER");
 
   const { noticeId } = useParams();
-  const[notice, setNotice] = useState();
-
-  const navigate = useNavigate();
+  const [notice, setNotice] = useState(null);
 
 
-    //공지 상세 정보 가져오기
-    const getNotice = async () => {
-      try {
-        const response = await axiosInstance.get(`/customersupport/getNoticeByNoticeId`, {
-          params: { noticeId }
-        });
-        setNotice(response.data);
-        console.log("공지 상세 정보: "+JSON.stringify(response.data));
-      } catch (error) {
-        console.error("Error fetching notice details:", error);
-      }
-    };
+  // 공지 상세 정보 가져오기
+  const getNotice = async () => {
+    try {
+      const response = await axiosInstance.get(`/customersupport/getNoticeByNoticeId`, {
+        params: { noticeId }
+      });
+      setNotice(response.data);
+      console.log("공지 상세 정보: " + JSON.stringify(response.data));
+    } catch (error) {
+      console.error("Error fetching notice details:", error);
+    }
+  };
 
-
-
-
-  //공지 삭제하기
+  // 공지 삭제하기
   const [deleteNoticeModalOpen, setDeleteNoticeModalOpen] = useState(false);
 
   const deleteNotice = async () => {
-
     try {
       const response = await axiosInstance.post(`/customersupport/deleteNotice`, {
-        feedId : noticeId,
+        feedId: noticeId,
       });
-      console.log("공지 삭제 정보: "+JSON.stringify(response.data));
+      console.log("공지 삭제 정보: " + JSON.stringify(response.data));
       toggleDeleteNoticeModal();
     } catch (error) {
       console.error("Error fetching deleteNotice details:", error);
     }
-
   };
 
   const toggleDeleteNoticeModal = () => {
     setDeleteNoticeModalOpen(!deleteNoticeModalOpen);
   };
 
+  useEffect(() => {
+    setRole(member.memberRole);
+    console.log("현재 회원의 역할은: " + member.memberRole);
+  }, [member.memberRole]);
 
-  
   useEffect(() => {
     getNotice();
+    console.log(role);
   }, []);
 
   if (!notice) {
     return <p>Loading...</p>;
   }
-  
 
+    // 날짜 형식을 YYYY-MM-DD로 변환
+    const formatDate = (dateString) => {
+      const date = new Date(dateString);
+      if (!isNaN(date.getTime())) {
+        return date.toISOString().split('T')[0];
+      }
+      return 'Invalid Date';
+    };
 
   return (
     <div style={styles.container}>
+      <Header title="공지 상세보기" />
 
-      <CustomerSupportHeader title="공지 상세보기" />
-
-        <div style={styles.content}>
-          <Row>
-            <Col md="12">
-              <Card>
-                <CardHeader>{notice.title}</CardHeader>
-                <CardBody>
-                  <Table responsive>
-                    <thead className="text-primary">
-                      <tr>
-                        <th className="text-right">등록 일자</th>
-                        <th className="text-right">조회수</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>{notice.writtenTime}</td>
-                        <td>{notice.viewCnt}</td>
-                      </tr>
-                    </tbody>
-                  </Table>
-                </CardBody>
-              </Card>
-
-              <Card>
-                <CardHeader>내용</CardHeader>
-                <CardBody>
-                  <div dangerouslySetInnerHTML={{ __html: notice.feedText }} />
-                </CardBody>
-              </Card>
-
-
-              <div style={styles.buttonContainer}>
-                <Button color="secondary" onClick={() => navigate(-1)}>뒤로</Button>
-                {role==='admin' && <Button color="primary" onClick={()=>deleteNotice()}>삭제</Button>}
-                <MessageModal isOpen={deleteNoticeModalOpen} toggle={toggleDeleteNoticeModal} message={messages.deleteNotice}/>
-              </div>
-
-            </Col>
-          </Row>
+      <div style={{ padding: '20px' }}>
+        <div style={{ color: 'gray', fontSize: '14px' }}>
+          👀{notice.viewCnt}
         </div>
-=
+
+        <h1 style={{ margin: '10px 0', fontSize: '24px', fontWeight: 'bold' }}>
+          {notice.title}
+        </h1>
+
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+          <span style={{ color: 'gray', marginRight: '10px' }}>{notice.writerId}</span>
+          <span style={{ color: 'gray' }}>{formatDate(notice.writtenTime)}</span>
+        </div>
+
+        <div style={{ marginTop: '20px', lineHeight: '1.6' }}>
+          <div dangerouslySetInnerHTML={{ __html: notice.feedText }} />
+        </div>
+      </div>
+
+      {role === 'ADMIN' && (
+        <div style={{ padding: '20px' }}>
+          <Button 
+            color="" 
+            style={{ backgroundColor: '#D8B48B', marginBottom: '80px', width: "100%", borderRadius: '50px', color: 'white' }} 
+            onClick={() => deleteNotice()}>
+            삭제
+          </Button>          
+          <MessageModal isOpen={deleteNoticeModalOpen} toggle={toggleDeleteNoticeModal} message={messages.deleteNotice} />
+        </div>
+      )}
 
       <Footer />
-
     </div>
   );
 };
-
-
 
 const styles = {
   container: {

@@ -9,7 +9,8 @@ import OpInfoModal from "./component/OpInfoModal";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
 import { setFooterEnbaled } from "../../redux/slices/footerEnabledSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Spinner } from "reactstrap";
 
 const PUBLIC_RANGES = [
   {
@@ -30,8 +31,6 @@ const PUBLIC_RANGES = [
   }
 ]
 
-const SAMPLE_MEMBER_ID = "member_2";
-
 export default function MemberSetting() {
   const [memberProfilePublicRange, setMemberProfilePublicRange] =
     useState("PUBLIC");
@@ -42,10 +41,11 @@ export default function MemberSetting() {
     useState("PUBLIC");
   const [opInfoMode, setOpInfoMode] = useState("termsAndPolicy");
   const [opInfoModalVisible, setOpInfoModalVisible] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
-  const memberId = SAMPLE_MEMBER_ID;
+  const memberId = useSelector((state) => state.auth.member.memberId);
 
   const dispatch = useDispatch();
 
@@ -57,6 +57,7 @@ export default function MemberSetting() {
         setting.buildingSubscriptionPublicRange
       );
       setReceivingAllNotification(setting.receivingAllNotificationAllowed);
+      setLoading(false);
     });
     dispatch(setFooterEnbaled(false));
 
@@ -108,82 +109,91 @@ export default function MemberSetting() {
   return (
     <div>
       <BasicNavbar />
-      
-      <main className="container member-setting-container">
-        <div class="title-container">
-          <h1>환경설정</h1>
-          <RiArrowGoBackFill
-              style={{
-                  width: "25px", height: "25px"
-              }}
-              onClick={() => {
-                navigate(-1);
-              }}
-          />
-        </div>
-        <div className="setting-content-wrapper">
-          {
-            COMPONENT_INFOS.map((data, idx) => (
-              <div className="setting-content" key={`button-group-${idx}`}>
-                <h3>{data.header}</h3>
-                <PublicRangeDropdown
-                  currentSelectedId={data.currentSelected}
-                  buttonInfos={data.buttonInfos}
-                  onButtonClick={data.callback}
-                />
-              </div>
-            ))
-          }
-        </div>
-        <button
-            className="btn--apply-setting"
-            type="button"
-            onClick={() => {
-              axios_api.post(`${MAIN_API_URL}/setting/updateSetting/${memberId}`, {
-                memberProfilePublicRange,
-                allFeedPublicRange,
-                buildingSubscriptionPublicRange,
-                receivingAllNotification
-              }).then((response) => {
-                if (is2xxStatus(response.status)) {
-                  alert("환경설정이 적용되었습니다");
-                }
-              }).catch((err) => {
-                console.error(err);
-              })
-            }}
-            style={{ backgroundColor: "#030722" }}
-        >변경사항 저장</button>
-        <button
-            className="btn--opinfo"
-            type="button"
-            onClick={() => {
-              setOpInfoMode("termsAndPolicy");
-              setOpInfoModalVisible(true);
-            }}
-            style={{
-              color: "#030722",
-              backgroundColor: "#FFFFFD"
-            }}
-        >약관 및 정책</button>
-        <button
-            className="btn--opinfo"
-            type="button"
-            onClick={() => {
-              setOpInfoMode("termsOfUse");
-              setOpInfoModalVisible(true);
-            }}
-            style={{
-              color: "#030722",
-              backgroundColor: "#FFFFFD"
-            }}
-        >이용규정</button>
-        <OpInfoModal
-            visible={opInfoModalVisible}
-            setVisible={setOpInfoModalVisible}
-            mode={opInfoMode}
-        />
-      </main>
+      {
+        loading ? (
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
+            <Spinner style={{ width: '3rem', height: '3rem' }} color="primary" />
+          </div>
+        ) : (
+          <main className="container member-setting-container">
+            <div class="title-container">
+              <h1>환경설정</h1>
+              <RiArrowGoBackFill
+                  style={{
+                      width: "25px", height: "25px"
+                  }}
+                  onClick={() => {
+                    navigate(-1);
+                  }}
+              />
+            </div>
+            <div className="setting-content-wrapper">
+              {
+                COMPONENT_INFOS.map((data, idx) => (
+                  <div className="setting-content" key={`button-group-${idx}`}>
+                    <h3>{data.header}</h3>
+                    <PublicRangeDropdown
+                      currentSelectedId={data.currentSelected}
+                      buttonInfos={data.buttonInfos}
+                      onButtonClick={data.callback}
+                    />
+                  </div>
+                ))
+              }
+            </div>
+            <button
+                className="btn--apply-setting"
+                type="button"
+                onClick={() => {
+                  setLoading(true);
+                  axios_api.post(`${MAIN_API_URL}/setting/updateSetting/${memberId}`, {
+                    memberProfilePublicRange,
+                    allFeedPublicRange,
+                    buildingSubscriptionPublicRange,
+                    receivingAllNotification
+                  }).then((response) => {
+                    if (is2xxStatus(response.status)) {
+                      alert("환경설정이 적용되었습니다");
+                    }
+                    setLoading(false);
+                  }).catch((err) => {
+                    console.error(err);
+                  })
+                }}
+                style={{ backgroundColor: "#030722" }}
+            >변경사항 저장</button>
+            <button
+                className="btn--opinfo"
+                type="button"
+                onClick={() => {
+                  setOpInfoMode("termsAndPolicy");
+                  setOpInfoModalVisible(true);
+                }}
+                style={{
+                  color: "#030722",
+                  backgroundColor: "#FFFFFD"
+                }}
+            >약관 및 정책</button>
+            <button
+                className="btn--opinfo"
+                type="button"
+                onClick={() => {
+                  setOpInfoMode("termsOfUse");
+                  setOpInfoModalVisible(true);
+                }}
+                style={{
+                  color: "#030722",
+                  backgroundColor: "#FFFFFD"
+                }}
+            >이용규정</button>
+            <OpInfoModal
+                visible={opInfoModalVisible}
+                setVisible={setOpInfoModalVisible}
+                mode={opInfoMode}
+            />
+          </main>
+        )
+      }
     </div>
   );
 }

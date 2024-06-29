@@ -27,19 +27,14 @@ const ImageGrid = ({ attachmentList }) => {
             <Card onClick={() => handleImageLink(attachment)}>
               <div style={{ position: 'relative' }}>
                 {attachment.blurredFileUrl == null ? (
-                  <Badge color="primary" style={styles.badge}>블러 전</Badge>
+                  <Badge color="" style={styles.badge}>블러 전</Badge>
                 ) : (
                   <Badge color="secondary" style={styles.badge}>블러 됨</Badge>
                 )}
                 <img src={attachment.blurredFileUrl !== null ? attachment.blurredFileUrl : attachment.fileUrl} alt={`Feed Attachment ${attachment.feedAttachmentId}`} className="image-grid-img" />
               </div>
               <CardBody>
-                <CardText>ID: {attachment.attachmentId}</CardText>
-                <CardFooter>
-                  <Row>
-                    <Col><span>{attachment.fileType}</span></Col>
-                  </Row>
-                </CardFooter>
+                <CardText><span>FEED {attachment.attachmentId}</span></CardText>
               </CardBody>
             </Card>
           </Col>
@@ -56,7 +51,9 @@ const styles = {
     left: '10px',
     zIndex: 10,
     width: '70px',
-    height: '20px'
+    height: '18x',
+    backgroundColor: '#D8B48B',
+    borderRadius: '100px'
   }
 }
 

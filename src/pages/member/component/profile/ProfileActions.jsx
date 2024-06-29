@@ -112,7 +112,7 @@ const ProfileActions = ({ toId, fromId }) => {
               <>
                 <AnimatedDiv
                   style={{ width: "100%" }}
-                  onClick={() => navigate(`report/addReport/${toId}`)}
+                  onClick={() => navigate(`/customerSupport/addReport/${toId}`)}
                 >
                   <AiFillAlert />
                   <span style={{ paddingRight: "20%" }}></span>신고하기

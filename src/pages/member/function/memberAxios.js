@@ -5,10 +5,10 @@ import profilePhotoGetter from "./profilePhotoGetter";
 export const sendAuthentificationNumber = async (phoneNumber) => {
   try {
     console.log("sendAuthentificationNumber 요청:", { phoneNumber });
-    // const response = await axiosInstance.get(`/member/sendAuthentificationNumber`, {
-    //     params: { phoneNumber },
-    // });
-    const response = { data: { info: 1234 } }; //이거 지우고 아래 주석 풀자
+    const response = await axiosInstance.get(`/member/sendAuthentificationNumber`, {
+        params: { phoneNumber },
+    });
+    // const response = { data: { info: 1234 } }; //이거랑 위에 주석 하고 위에 주석 풀자
     console.log("sendAuthentificationNumber 응답:", response.data);
     return response.data;
   } catch (error) {
@@ -28,14 +28,14 @@ export const confirmAuthentificationNumber = async (
       authentificationNumber,
     });
 
-    // const authNumber = authentificationNumber;
-    // const response = await axiosInstance.get(`/member/confirmAuthentificationNumber`, {
-    //     params: { phoneNumber, authNumber },
-    // });
-    if (authentificationNumber === "1234") {
-      return { info: true };
-    }
-    const response = { data: { info: false } }; //이거랑 위에 지우고 아래 주석 풀자
+    const authNumber = authentificationNumber;
+    const response = await axiosInstance.get(`/member/confirmAuthentificationNumber`, {
+        params: { phoneNumber, authNumber },
+    });
+    // if (authentificationNumber === "1234") {
+    //   return { info: true };
+    // }
+    // const response = { data: { info: false } }; //이거랑 위에 주석 하고 위에 주석 풀자
     console.log("confirmAuthentificationNumber 응답:", response.data);
 
     return response.data;

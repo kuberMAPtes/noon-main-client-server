@@ -58,7 +58,7 @@ const UpdatePwd = () => {
         isPwdValid={isPwdValid}
         setPwdValid={setIsPwdValid}
         isPwdConfirmValid={isPwdConfirmValid}
-        setPwdConfirmValid={setIsPwdConfirmValid}
+        setIsPwdConfirmValid={setIsPwdConfirmValid}
         pwdValidationMessage={pwdValidationMessage}
         setPwdValidationMessage={setPwdValidationMessage}
         pwdConfirmValidationMessage={pwdConfirmValidationMessage}

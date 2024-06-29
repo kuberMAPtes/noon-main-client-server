@@ -106,7 +106,7 @@ const ProfileBody = ({
             <LogoutForm />
           </Col>
 
-          {toId === fromId ? (
+          {toId !== fromId ? (
             <Col
               xs={12}
               className="d-flex flex-column align-items-center"
@@ -203,7 +203,7 @@ const ProfileBody = ({
                 xs={12}
                 style={{ border: "2px solid #91A7FF", borderRadius: "7px" }}
               >
-                {profile.profileIntro}
+                &nbsp;{profile.profileIntro}
               </Col>
             </Row>
             }

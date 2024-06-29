@@ -178,7 +178,7 @@ export const handlePwdChange = (
     setPwdValidationMessage,
     setIsPwdValid,
     "",
-    "비밀번호는 8자 이상 16자 이하로 입력하세요."
+    "비밀번호는 8~16자의 영문자와 숫자를 포함합니다. 3번 이상 연속된 문자열은 불가합니다."
   );
 };
 export const handlePwdConfirmChange = (
@@ -190,7 +190,6 @@ export const handlePwdConfirmChange = (
 ) => {
   const pwdConfirm = e.target.value;
   setPwdConfirm(pwdConfirm);
-
   if (pwd === pwdConfirm) {
     //pwd와 같은지만 보면 댐
     setPwdConfirmValidationMessage("");

@@ -3,12 +3,20 @@ import ReactDOM from 'react-dom';
 import axiosInstance from '../../../lib/axiosInstance';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { Card } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import useMainPage from '../../member/hook/useMainPage';
 
 const WantBuildingProfile = ({ isOpen, onClose, applicationData }) => {
+  const activationThreshold = 2;
   const navigate = useNavigate();
   const [applicantList, setApplicantList] = useState([]);
+  const [subscribe, setSubscribe] = useState(false);
+  const [selectedMemberId, setSelectedMemberId] = useState(null); 
   const member = useSelector((state) => state.auth.member);
   const { buildingName, roadAddr, longitude, latitude } = applicationData;
+
+  const mainPageUrl = useMainPage(selectedMemberId);
 
   useEffect(() => {
     // modal-root 요소를 동적으로 생성
@@ -23,6 +31,7 @@ const WantBuildingProfile = ({ isOpen, onClose, applicationData }) => {
   }, []);
 
   const addSubscription = async () => {
+    setSubscribe(true);
     try {
       const response = await axiosInstance.post(`/buildingProfile/addSubscription/applicant`, {
         memberId: member.memberId,
@@ -37,7 +46,7 @@ const WantBuildingProfile = ({ isOpen, onClose, applicationData }) => {
         if (prevList.some((item) => item.memberId === member.memberId)) {
           return prevList; // 중복 신청 체크
         }
-        return [...prevList, member]; 
+        return [...prevList, member];
       });
 
       if (response.data.profileActivated) {
@@ -48,20 +57,16 @@ const WantBuildingProfile = ({ isOpen, onClose, applicationData }) => {
     }
   };
 
-
   const deleteSubscription = async () => {
+    setSubscribe(false);
     try {
-
-      console.log(applicationData.roadAddr);
-
       const findBuildingResponse = await axiosInstance.get(`/buildingProfile/getBuildingProfileByRoadAddr`, {
         params: {
-          roadAddr : applicationData.roadAddr
+          roadAddr: applicationData.roadAddr
         },
       });
 
       const buildingId = findBuildingResponse.data.buildingId;
-      console.log(buildingId);
 
       const response = await axiosInstance.post(`/buildingProfile/deleteSubscription`, {
         memberId: member.memberId,
@@ -76,7 +81,6 @@ const WantBuildingProfile = ({ isOpen, onClose, applicationData }) => {
     }
   };
 
-
   const getSubscribers = async () => {
     try {
       const response = await axiosInstance.get(`/buildingProfile/getSubscribersByRoadAddr`, {
@@ -84,7 +88,11 @@ const WantBuildingProfile = ({ isOpen, onClose, applicationData }) => {
       });
       console.log("구독자 목록: " + JSON.stringify(response.data));
       if (Array.isArray(response.data)) {
+        // 구독자 목록 세팅
         setApplicantList(response.data);
+
+        // 회원 구독여부 세팅
+        setSubscribe(response.data.some(item => item.memberId && item.memberId.includes(member.memberId)));
       } else {
         console.error("Expected an array but got:", response.data);
         setApplicantList([]);
@@ -96,6 +104,8 @@ const WantBuildingProfile = ({ isOpen, onClose, applicationData }) => {
 
   useEffect(() => {
     if (isOpen) {
+      setSubscribe(false);
+      setSelectedMemberId(null);
       getSubscribers();
     }
   }, [isOpen]);
@@ -108,31 +118,45 @@ const WantBuildingProfile = ({ isOpen, onClose, applicationData }) => {
         <div style={styles.popupHeader}>
           <span role="img" aria-label="notification" style={styles.icon}>🔔</span>
           <h2>건물 프로필 등록 신청</h2>
-          <i onClick={onClose} class="fa-solid fa-circle-xmark"></i>
+          <i onClick={onClose} className="fa-solid fa-circle-xmark"></i>
         </div>
         <p>이 건물에서 일어나는 일을 알고 싶나요? 프로필 등록을 신청해보세요!</p>
-        <div style={styles.buildingInfo}>
+
+        <Card>
           <h3>{buildingName}</h3>
           <p>{roadAddr}</p>
-        </div>
+        </Card>
+
         <div style={styles.requestSection}>
-          <i onClick={addSubscription} class="fa-solid fa-circle-plus"></i>
-          <span style={styles.requestCount}>{applicantList.length}</span>
-         <i onClick={deleteSubscription} class="fa-solid fa-circle-minus"></i>
+          {!subscribe ?
+            <button onClick={addSubscription} style={styles.addButton}>신청 하기</button> :
+            <button onClick={deleteSubscription} style={styles.deleteButton}>신청 취소</button>
+          }
         </div>
+
         <div style={styles.applicantPhotos}>
           {applicantList.map((applicant) => (
-            <img
-              key={applicant.memberId}
-              src={applicant.profilePhotoUrl}
-              alt={applicant.nickname}
-              style={styles.profilePhoto}
-            />
+            <div key={applicant.memberId} onClick={() => setSelectedMemberId(applicant.memberId)}>
+              <img
+                src={applicant.profilePhotoUrl}
+                alt={applicant.memberId}
+                style={styles.profilePhoto}
+              />
+            </div>
           ))}
+          <div style={styles.requestCount}>{activationThreshold - applicantList.length} MORE!!</div>
         </div>
+
+        {selectedMemberId && (
+          <div style={styles.linkContainer}>
+            <Link to={mainPageUrl}>
+              <button style={styles.linkButton}>이 회원의 프로필 GO</button>
+            </Link>
+          </div>
+        )}
       </div>
     </div>,
-    document.getElementById('modal-root')
+    document.getElementById('modal-root') 
   );
 };
 
@@ -195,7 +219,9 @@ const styles = {
   },
   requestCount: {
     margin: '0 10px',
-    fontSize: '20px',
+    fontSize: '15px',
+    color: '#B8C6E3',
+    animation: 'blink 1s step-start infinite' // 깜빡이는 애니메이션
   },
   applicantPhotos: {
     display: 'flex',
@@ -203,11 +229,52 @@ const styles = {
     marginTop: '10px',
   },
   profilePhoto: {
+    objectFit: 'cover',
     width: '50px',
     height: '50px',
     borderRadius: '50%',
     margin: '0 5px',
+    border: '2px solid #9BAAF8',
+    cursor: 'pointer' 
+  },
+  addButton: {
+    backgroundColor: "#D8B48B",
+    width: '100px',
+    height: '40px',
+    borderRadius: '500px',
+    margin: '0 5px',
+  },
+  deleteButton: {
+    backgroundColor: "#596079",
+    width: '100px',
+    height: '40px',
+    borderRadius: '500px',
+    margin: '0 5px',
+  },
+  linkContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: '10px',
+  },
+  linkButton: {
+    backgroundColor: "#B8C6E3",
+    color: 'white',
+    border: 'none',
+    borderRadius: '5px',
+    padding: '10px 20px',
+    cursor: 'pointer',
   },
 };
+
+// 애니메이션 키프레임 정의
+const styleSheet = document.styleSheets[0];
+const keyframes =
+`@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}`;
+
+styleSheet.insertRule(keyframes, styleSheet.cssRules.length);
 
 export default WantBuildingProfile;

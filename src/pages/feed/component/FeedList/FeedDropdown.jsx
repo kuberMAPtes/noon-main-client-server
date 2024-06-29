@@ -1,9 +1,9 @@
 import React from 'react';
-import { Dropdown, DropdownButton } from 'react-bootstrap';
+import { ButtonGroup, Button } from 'react-bootstrap';
 
-const FeedDropdown = ({onSelect}) => {
+const FeedDropdown = ({ onSelect }) => {
 
-    // Dropdown을 클릭할 때마다 다른 목록으로 이동
+    // 각 버튼을 클릭할 때 관련 URL을 설정
     const handleSelect = (option) => {
         let temp = '';
         switch (option) {
@@ -28,18 +28,12 @@ const FeedDropdown = ({onSelect}) => {
 
     return (
         <div className="row justify-content-center">
-            <DropdownButton
-                id="dropdown-basic-button"
-                title="피드 목록"
-                onSelect={handleSelect}
-                size="sm" 
-                variant="primary" 
-            >
-                <Dropdown.Item eventKey="member">내 피드</Dropdown.Item>
-                <Dropdown.Item eventKey="subscriptionBuilding">건물 구독별 피드</Dropdown.Item>
-                <Dropdown.Item eventKey="like">좋아요를 누른 피드</Dropdown.Item>
-                <Dropdown.Item eventKey="bookmark">북마크한 피드</Dropdown.Item>
-            </DropdownButton>
+            <ButtonGroup>
+                <Button variant="primary" onClick={() => handleSelect('member')}>내 피드</Button>
+                <Button variant="primary" onClick={() => handleSelect('subscriptionBuilding')}>구독한 건물 피드</Button>
+                <Button variant="primary" onClick={() => handleSelect('like')}>좋아요를 한 피드</Button>
+                <Button variant="primary" onClick={() => handleSelect('bookmark')}>북마크한 피드</Button>
+            </ButtonGroup>
         </div>
     );
 };

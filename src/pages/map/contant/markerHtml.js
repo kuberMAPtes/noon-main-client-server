@@ -1,3 +1,5 @@
+import { MARKER_MODES } from "../component/MarkerModeButtonGroup";
+
 const liveliness = {
   1: "#e03131",
   2: "#f08c00",
@@ -17,17 +19,30 @@ const liveliness = {
  * @param {string} markerImage
  */
 export function getBuildingMarkerHtml(
-    subscriptionProviderList,
     liveliestChatroom,
     buildingName,
-    markerImage = "./image/marker.png"
+    currentMarkerDisplayMode
 ) {
+  let content;
+  switch (currentMarkerDisplayMode) {
+    case MARKER_MODES.DISPLAY_BUILDING_NAME:
+      content = `<div>${buildingName}</div>`;
+      break;
+    case MARKER_MODES.DISPLAY_LIVELIEST_CHATROOM:
+      content = `<div>${liveliestChatroom.chatroomName}</div>`
+      break;
+    default:
+      content = `<div></div>`;
+  }
+  return getCommonHtml(content, "/image/popular-bulilding.png");
+}
+
+export function getSubscriptionMarkerHtml(subscriptionProviderList, buildingName) {
   const content = `
     <div>${subscriptionProviderList[0]}</div>
-    <div>${liveliestChatroom.chatroomName}</div>
     <div>${buildingName}</div>
   `;
-  return getCommonHtml(content, markerImage);
+  return getCommonHtml(content, "/image/subscription-bulilding.png");
 }
 
 /**
@@ -41,8 +56,8 @@ export function getPlaceSearchMarkerHtml(
     markerImage = "./image/marker.png"
 ) {
   const content = `
-    <div>${placeName}</div>
-    <div>${roadAddress}</div>
+    <div style="width: fit-content">${placeName}</div>
+    <div style="width: fit-content">${roadAddress}</div>
   `;
 
   return getCommonHtml(content, markerImage)
@@ -55,7 +70,7 @@ export function getPlaceSearchMarkerHtml(
 function getCommonHtml(content, markerImage) {
   return `
     <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; height: fit-content; margin: 0px; padding: 0px">
-      <div style="text-align: center;">
+      <div style="text-align: center; overflow: hidden; white-space: nowrap; display: flex; flex-direction: column; justify-content: center; align-items: center">
         ${content}
       </div>
       <div style="display: flex; justify-content: center; align-items: center; ">
