@@ -75,13 +75,14 @@ const FeedDetail = ({ data, memberId }) => {
             const urls = await Promise.all(
                 attachments.map(async (attachment) => {
                     if(attachment.blurredFileUrl != null) {
-                        const url = attachment.blurredFileUrl;
+                        const url = { type: "image", url: attachment.blurredFileUrl };
                         return { attachmentId : attachment.attachmentId, url }; // 블러 사진 적용 : url 그대로 가져오기
                     } else {
                         const url = await AttachmentGetter(attachment.attachmentId);
                         return { attachmentId: attachment.attachmentId, url };
                     }
-
+                    // const url = await AttachmentGetter(attachment.attachmentId);
+                    // return { attachmentId: attachment.attachmentId, url };
                 })
             );
             setAttachmentUrls(urls.filter(urlObj => urlObj.url)); // 유효한 URL만 설정
