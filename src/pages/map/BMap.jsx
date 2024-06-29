@@ -293,7 +293,7 @@ function onSearchPlace(places) {
   const placeSearchMarkersCache = [];
   places.forEach((place) => {
     const contentHtml = getPlaceSearchMarkerHtml(place.roadAddress, place.placeName);
-    const placeSearchMarker = addMarker(contentHtml, place.latitude, place.longitude);
+    const placeSearchMarker = addMarker(contentHtml, place.latitude, place.longitude, false);
     placeSearchMarkersCache.push(placeSearchMarker);
   });
   placeSearchMarkers = placeSearchMarkersCache;
@@ -383,7 +383,7 @@ async function fetchBuildingMarkers(subscriptionChecked, memberId, navigate, cur
  * @param {number} latitude 
  * @param {number} longitude 
  */
-function addMarker(html, latitude, longitude) {
+function addMarker(html, latitude, longitude, clickable = true) {
   $(document).children().append($(html).addClass("temp"));
   const width = $(".temp").width();
   const height = $(".temp").height();
@@ -394,7 +394,7 @@ function addMarker(html, latitude, longitude) {
   return new naver.maps.Marker({
     position: new naver.maps.LatLng(latitude, longitude),
     map: map,
-    clickable: true,
+    clickable: clickable,
     icon: {
         content: contentHtml,
         size: new naver.maps.Size(width, height)
