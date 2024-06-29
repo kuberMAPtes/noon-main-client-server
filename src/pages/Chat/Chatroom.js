@@ -247,12 +247,24 @@ const Chatroom = () => {
     socket.emit('kick_room', memberID, roomInfo.chatroomName, targetMemberId);
     console.log(`🖐️kickRoom 실행 : ${memberID}가 ${targetMemberId}를 ${currentChatroomId} 에서 내보냄`)
   }
-  
+ 
+  // 채팅메세지 올라오면 스크롤다운
+  const chatBodyRef = useRef(null);
+
+  useEffect(() => {
+    // Scroll to the bottom of the chat body whenever receivedMessage changes
+    if (chatBodyRef.current) {
+      chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
+      //scrollTop =  number of pixels that the content of an element is scrolled vertically.
+    }
+  }, [receivedMessage]);
+
   // 이전 페이지에서 넘어와서 redux 데이터를 받는다면? 
   if (!roomInfo) {
     setTimeout(() => window.location.reload(), 1000);
     return <div>...</div>;
   }
+
 
   
   return (
@@ -328,7 +340,7 @@ const Chatroom = () => {
       </div>
       )}
 
-      <div className={module.chatBody}>
+      <div className={module.chatBody} ref={chatBodyRef}>
         {receivedMessage.map((msg, index) => (
           <div key={index} className={`${module.chatMessage} ${msg.type === 'mine' ? module.question : msg.type === 'other' ? module.response : module.noticeMessage}`}>
             <div className={module.messageText}>{msg.text}</div>
