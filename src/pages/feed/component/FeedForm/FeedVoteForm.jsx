@@ -78,6 +78,7 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
 
     // 피드 추가
     const handleAddSubmit = async () => {
+
         try {
             const addFeedData = {
                 writerId: inputWriterId,
