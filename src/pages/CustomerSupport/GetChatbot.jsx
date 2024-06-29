@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
-import CustomerSupportHeader from './components/CustomerSupportHeader';
 import Footer from '../../components/common/Footer';
 import '../CustomerSupport/css/customerSupport.css';
 import axiosInstance from '../../lib/axiosInstance';
+import Header from '../../components/common/Header';
 
 const GetChatbot = () => {
   const [messages, setMessages] = useState([
@@ -46,7 +46,7 @@ const GetChatbot = () => {
 
   return (
     <div className="chat-container">
-      <CustomerSupportHeader title="NOON 챗봇" />
+      <Header title="NOON 챗봇" />
       <div className="chat-body" ref={chatBodyRef}>
         {messages.map(message => (
           <div key={message.id} className={`chat-message ${message.type}`}>

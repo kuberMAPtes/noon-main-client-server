@@ -26,9 +26,11 @@ const Support = ({ isAdmin }) => {
   return (
     <Container
       className="support-container"
-      style={{ width: "100%", marginTop: "30px", height: "50vh" }}
+      style={{ width: "100%", marginBottom:"25%", marginTop: "5%"}}
     >
-      <Row>
+      <Row style={{ width: "100%", 
+              textAlign: "center",
+              margin: "0 auto",}}>
         <BuildingChart />
       </Row>
 
@@ -38,6 +40,8 @@ const Support = ({ isAdmin }) => {
             style={{
               width: "100%",
               justifyContent: "center",
+              marginTop:"10%",
+              marginBottom:"5%",
               textAlign: "center",
               margin: "0 auto",
             }}
@@ -68,6 +72,7 @@ const Support = ({ isAdmin }) => {
             style={{
               width: "100%",
               justifyContent: "center",
+              marginBottom:"5%",
               textAlign: "center",
               margin: "0 auto",
             }}
@@ -83,7 +88,7 @@ const Support = ({ isAdmin }) => {
               />
             </Col>
             <Col>
-              <Link to={mainPageUrl}>
+              <Link to={mainPageUrl} style={{textDecoration: 'none'}}>
                 <ClickableCard
                   path="./listImages"
                   iconClass="nc-icon nc-favourite-28 text-primary"
@@ -102,6 +107,8 @@ const Support = ({ isAdmin }) => {
             style={{
               width: "100%",
               justifyContent: "center",
+              marginTop:"10%",
+              marginBottom:"10%",
               textAlign: "center",
               margin: "0 auto",
             }}
