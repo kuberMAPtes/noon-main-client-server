@@ -32,8 +32,8 @@ export default function GetBuildingWiki() {
         setContent(fetched);
       }).catch((err) => {
         console.log(err);
-        setBuildingName("Page Error");
-        setContent($(`<p className="mw-parser-output">404 Not Found</p>`));
+        setBuildingName("Wiki가 존재하지 않습니다.");
+        setContent($(`<p className="mw-parser-output">아마도 위키 페이지 생성 중일 것입니다.</p>`));
       })
     }
 
