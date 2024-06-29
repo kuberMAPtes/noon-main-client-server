@@ -124,6 +124,12 @@ export default function Search() {
         setSearchResult(newSearchResult);
         setLoading(false);
       }, loginMemberId);
+    } else if (searchKeyword === "") {
+      queryParams.delete(PARAM_KEY_SEARCH_KEYWORD);
+      setPage(1);
+      setQueryParams(queryParams);
+      setSearchResult([]);
+      setLoading(false);
     }
   }
 
