@@ -25,7 +25,7 @@ export const CustomModal = ({kickRoom, showModal, setShowModal, setParticipants,
     // 유저 강퇴하기
     const handleBanUser = () => {
 
-        kickChatroom(currentChatroomID, targetMember.chatroomMemberId)
+        kickChatroom(currentChatroomID, targetMember.memberId)
         .then(chatroomData => {
             console.log("사용자를 강퇴했습니다. 업데이트된 채팅방 정보 => ", chatroomData);
             kickRoom(currentChatroomID,targetMember.chatroomMemberId)
