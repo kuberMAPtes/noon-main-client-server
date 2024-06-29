@@ -32,7 +32,7 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
     const [feedUpdateShow, setFeedUpdateShow] = useState(false);
 
     // navigator
-    const { goToFeedDetail } = navigator();
+    const { goToFeedDetail, backHistory } = navigator();
     
     // @(memberId)를 통해 리다이렉션하기
     // const renderFeedText = (feedText) => renderFeedTextWithLink(feedText);
@@ -201,12 +201,16 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
 
     // 취소
     const handleCancel = () => {
-        setFeedData({
-            title: '',
-            feedText: '',
-            tags: [],
-            publicRange: 'PUBLIC',
-        });
+        // setFeedData({
+        //     title: '',
+        //     feedText: '',
+        //     tags: [],
+        //     category: 'GENERAL',
+        //     publicRange: 'PUBLIC',
+        //     attachments: []
+        // });
+
+        backHistory(); // 뒤로가기
     };
 
     return (
@@ -273,7 +277,8 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
                                 required
                             >
                                 <option value="PUBLIC">전체 공개</option>
-                                <option value="GROUP">그룹 공개</option>
+                                <option value="FOLLOWER_ONLY">팔로워 공개</option>
+                                <option value="MUTUAL_ONLY">맞팔 공개</option>
                                 <option value="PRIVATE">비공개</option>
                             </Form.Control>
                         </Form.Group>

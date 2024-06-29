@@ -9,6 +9,7 @@ import FeedForm from "./component/FeedForm/FeedForm"
 import SlideUpModal from "./component/FeedForm/SlideUpModal";
 import BasicNavbar from "../../components/common/BasicNavbar";
 import axios_api from "../../lib/axios_api";
+import Header from "../../components/common/Header";
 
 /**
  * 피드를 새롭게 추가한다.
@@ -53,6 +54,7 @@ const FeedFormPage = () => {
         <div>
             {/* <BasicNavbar /> */}
             {/* 피드를 새로 추가할 때만 생성 */}
+            <Header title="일반 피드 만들기" />
             {feedId ? '' : (
                 <div className="container">
                     <Button variant="primary" onClick={() => setShowModal(true)}>

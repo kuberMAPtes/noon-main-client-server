@@ -11,6 +11,7 @@ import FeedCategoryGetter from '../../util/FeedCategoryGetter';
 import styles from "../../css/FeedItemAndDetail.module.css"; // css 적용
 import { FcApproval } from "react-icons/fc";
 import FeedVote from '../FeedForm/FeedVote';
+import axios_api from '../../../../lib/axios_api';
 
 const FeedItem = ({ data, memberId }) => {
 
@@ -54,10 +55,25 @@ const FeedItem = ({ data, memberId }) => {
 
     useEffect(() => {
         const loadAttachment = async () => {
-            const attachmentUrl = await AttachmentGetter(feedAttachmentId);
-            console.log(attachmentUrl);
-            if (attachmentUrl) {
-                setMainAttachment(attachmentUrl.url);
+            
+            // @Deprecated
+            // const attachmentUrl = await AttachmentGetter(feedAttachmentId);
+            // console.log(attachmentUrl);
+            // if (attachmentUrl) {
+            //     setMainAttachment(attachmentUrl.url);
+            // } else {
+            //     setMainAttachment(null);
+            // }
+
+            const response = await axios_api.get(`/feed/getFeedAttachmentDto?attachmentId=${feedAttachmentId}`);
+            if(response === null) return;
+
+            console.log(response.data);
+            const feedAttachmentDto = response.data;
+            if(feedAttachmentDto.blurredFileUrl != null) {
+                setMainAttachment(feedAttachmentDto.blurredFileUrl)
+            } else if(feedAttachmentDto.fileUrl != null) {
+                setMainAttachment(feedAttachmentDto.fileUrl);
             } else {
                 setMainAttachment(null);
             }

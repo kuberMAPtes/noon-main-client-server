@@ -9,6 +9,7 @@ import FeedVoteForm from "./component/FeedForm/FeedVoteForm";
 import SlideUpModal from "./component/FeedForm/SlideUpModal";
 import BasicNavbar from "../../components/common/BasicNavbar";
 import axios_api from "../../lib/axios_api";
+import Header from "../../components/common/Header";
 
 /**
  * 투표 피드를 새롭게 추가한다.
@@ -50,6 +51,7 @@ const FeedFormPage = () => {
     return (
         <div>
             {/* <BasicNavbar /> */}
+            <Header title="투표 피드 만들기" />
             <div className="container">
                 <Button variant="primary" onClick={() => setShowModal(true)}>
                     피드 종류
