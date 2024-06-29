@@ -37,6 +37,7 @@ const buildingFetchChecked = {
 
 export default function BMap() {
   const {ownerIdOfMapInfo} = useParams();
+  const isSubscriptionView = ownerIdOfMapInfo !== undefined;
 
   const [queryParams, setQueryParams] = useSearchParams();
 
@@ -177,7 +178,8 @@ export default function BMap() {
     if (!firstEntry) {
       setLoading(true);
       fetchBuildingMarkers(subscriptionChecked, member, navigate, currentMarkerDisplayMode)
-          .then((result) => setLoading(false));
+          .then((result) => setLoading(false))
+          .catch((err) => console.error(err));
     }
   }, [subscriptionChecked, firstEntry]);
 
@@ -186,7 +188,8 @@ export default function BMap() {
       setLoading(true);
       clearMarkers(popBuildingMarkers);
       fetchBuildingMarkers(subscriptionChecked, member, navigate, currentMarkerDisplayMode)
-          .then((result) => setLoading(false));
+          .then((result) => setLoading(false))
+          .catch((err) => console.error(err));
     }
   }, [currentMarkerDisplayMode]);
 
