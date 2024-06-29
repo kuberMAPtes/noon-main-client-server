@@ -145,6 +145,7 @@ export default function MemberSetting() {
                 className="btn--apply-setting"
                 type="button"
                 onClick={() => {
+                  setLoading(true);
                   axios_api.post(`${MAIN_API_URL}/setting/updateSetting/${memberId}`, {
                     memberProfilePublicRange,
                     allFeedPublicRange,
@@ -154,6 +155,7 @@ export default function MemberSetting() {
                     if (is2xxStatus(response.status)) {
                       alert("환경설정이 적용되었습니다");
                     }
+                    setLoading(false);
                   }).catch((err) => {
                     console.error(err);
                   })
