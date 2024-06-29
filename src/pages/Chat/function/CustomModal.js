@@ -7,7 +7,7 @@ import { useNavigate  } from 'react-router-dom';
 import useMainPage from '../../member/hook/useMainPage';
 // import { useMainPage }  from '../../member/component/common'
 
-export const CustomModal = ({kickRoom, showModal, setShowModal, setParticipants, roomInfoUpdate, currentChatroomID, loginMemberRole, targetMember}) => {
+export const CustomModal = ({kickRoom, showModal, setShowModal, setParticipants, roomInfoUpdate, currentChatroomID, loginMemberRole, targetMember, loginMemberID}) => {
     // console.log("유저정보를 확인합니다 => 요새끼 ", targetMember);
     // console.log("CustomModal 받은 데이터 => ", "채팅방", currentChatroomID, "내권한",loginMemberRole, "조회or내보낼놈",targetMember);
     
@@ -53,7 +53,7 @@ export const CustomModal = ({kickRoom, showModal, setShowModal, setParticipants,
                     <div className={styles.modalContent}>
                         <h2 className={styles.modalContentTitle}>작업 선택</h2>
                         <button className={styles.modalContentButton} onClick={handleUserInfo} >유저정보</button>
-                        {loginMemberRole === 'OWNER' && <button className={styles.modalContentButton} onClick={handleBanUser}>강퇴하기</button> }
+                        {loginMemberRole === 'OWNER' && loginMemberID !== targetMember.memberId && <button className={styles.modalContentButton} onClick={handleBanUser}>강퇴하기</button> }
                         <button className={styles.modalContentButton} onClick={() => setShowModal(false)}>취소</button>
                     </div>
                 </div>
