@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCurrentMapState } from "../../redux/slices/currentMapStateSlice";
 import WantBuildingProfile from "../building/components/WantBuildingProfile";
 import MarkerModeButtonGroup, { MARKER_MODES } from "./component/MarkerModeButtonGroup";
+import { Spinner } from "reactstrap";
 
 const naver = window.naver;
 
@@ -54,6 +55,7 @@ export default function BMap() {
     }
   });
   const [currentMarkerDisplayMode, setCurrentMarkerDisplayMode] = useState(ownerIdOfMapInfo === undefined ? MARKER_MODES.DISPLAY_BUILDING_NAME : MARKER_MODES.DISPLAY_NONE);
+  const [loading, setLoading] = useState(false);
 
   const currentMapState = useSelector((state) => state.currentMapState.value);
 
@@ -91,7 +93,9 @@ export default function BMap() {
     });
 
     naver.maps.Event.addListener(map, "dragend", (e) => {
-      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, member, navigate, buildingFetchChecked.currentMarkerDisplayMode);
+      setLoading(true);
+      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, member, navigate, buildingFetchChecked.currentMarkerDisplayMode)
+          .then((result) => setLoading(false));
       const center = map.getCenter();
       dispatch(setCurrentMapState({
         latitude: center.y,
@@ -100,7 +104,9 @@ export default function BMap() {
     });
 
     naver.maps.Event.addListener(map, "zoom_changed", (e) => {
-      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, member, navigate, buildingFetchChecked.currentMarkerDisplayMode);
+      setLoading(true);
+      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, member, navigate, buildingFetchChecked.currentMarkerDisplayMode)
+          .then((result) => setLoading(false));
       console.log(e);
       dispatch(setCurrentMapState({
         zoomLevel: e
@@ -167,14 +173,18 @@ export default function BMap() {
 
   useEffect(() => {
     if (!firstEntry) {
-      fetchBuildingMarkers(subscriptionChecked, member, navigate, currentMarkerDisplayMode);
+      setLoading(true);
+      fetchBuildingMarkers(subscriptionChecked, member, navigate, currentMarkerDisplayMode)
+          .then((result) => setLoading(false));
     }
   }, [subscriptionChecked, firstEntry]);
 
   useEffect(() => {
     if (!firstEntry) {
+      setLoading(true);
       clearMarkers(popBuildingMarkers);
-      fetchBuildingMarkers(subscriptionChecked, member, navigate, currentMarkerDisplayMode);
+      fetchBuildingMarkers(subscriptionChecked, member, navigate, currentMarkerDisplayMode)
+          .then((result) => setLoading(false));
     }
   }, [currentMarkerDisplayMode]);
 
@@ -194,13 +204,18 @@ export default function BMap() {
   return (
     <div className={mapStyles.mapContainer}>
       <div id="map">
+        {loading && (
+          <div className={mapStyles.loadingSpinnerContainer}>
+            <Spinner className={mapStyles.loadingSpinner} color="primary" />
+          </div>
+        )}
         <MarkerModeButtonGroup
             currentMarkerDisplayMode={currentMarkerDisplayMode}
             setCurrentMarkerDisplayMode={setCurrentMarkerDisplayMode}
         />
         <SearchBar
             typeCallback={(text) => setPlaceSearchKeyword(text)}
-            searchCallback={() => searchPlaceList(placeSearchKeyword, onSearchPlace, queryParams, setQueryParams)}
+            searchCallback={() => searchPlaceList(placeSearchKeyword, onSearchPlace, queryParams, setQueryParams, setLoading)}
           />
         <button
             type="button"
@@ -227,7 +242,8 @@ export default function BMap() {
  * @param {string} searchKeyword 
  * @param {(places: any) => void} callback 
  */
-function searchPlaceList(searchKeyword, callback, queryParams, setQueryParams) {
+function searchPlaceList(searchKeyword, callback, queryParams, setQueryParams, setLoading) {
+  setLoading(true);
   queryParams.set(PARAM_KEY_SEARCH_KEYWORD, searchKeyword);
   setQueryParams(queryParams);
   axios_api.get(`${MAIN_API_URL}/places/search`, {
@@ -238,6 +254,7 @@ function searchPlaceList(searchKeyword, callback, queryParams, setQueryParams) {
     if (is2xxStatus(response.status)) {
       callback(response.data)
     }
+    setLoading(false);
   })
 }
 
