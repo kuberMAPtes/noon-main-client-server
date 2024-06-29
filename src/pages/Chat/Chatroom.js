@@ -3,11 +3,11 @@ import { useLocation } from 'react-router-dom';
 import io from 'socket.io-client';
 import module from './Chatroom.module.css'; // 스타일 파일을 import 합니다
 import { getChatroom, addChatEntrance } from '../Chat/function/axios_api'
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import setFooterEnabled from '../../redux/slices/footerEnabledSlice'
 import { Link } from 'react-router-dom';
 import { useNavigate  } from 'react-router-dom';
 import { CustomModal } from './function/CustomModal'
-import { BootstrapModal } from './function/BootstrapModal'
 
 const Chatroom = () => {
   const [receivedMessage, setReceivedMessage] = useState([]); // 소켓에서 수신한 메세지
@@ -122,9 +122,11 @@ const Chatroom = () => {
       
       messageHistory.forEach( history => {
         const { nickname, chatMsg, time, type, readMembers } = history;
-        const text = `${nickname} : ${chatMsg} \n( ${time} )`;
 
-        previousMessages.push({ type: type ? type : 'other' , text : text , readMembers : readMembers });
+        const sender = nickname;
+        const text = chatMsg;
+
+        previousMessages.push({ type: type ? type : 'other' , sender : sender, text : text , timestamp : time, readMembers : readMembers });
       });
   
       // 불러오기 완료 메세지 추가
@@ -216,6 +218,7 @@ const Chatroom = () => {
     const myMessage = {
       type : 'mine', //css로 내가 보냈는지 남이 보냈는지 별도로 표기
       text : messageInput,
+      sender : member.nickname,
       timestamp : new Date(),
       readMembers : [memberID]
     }
@@ -247,12 +250,37 @@ const Chatroom = () => {
     socket.emit('kick_room', memberID, roomInfo.chatroomName, targetMemberId);
     console.log(`🖐️kickRoom 실행 : ${memberID}가 ${targetMemberId}를 ${currentChatroomId} 에서 내보냄`)
   }
-  
+ 
+  // 채팅메세지 올라오면 스크롤다운
+  const chatBodyRef = useRef(null);
+
+  useEffect(() => {
+    // Scroll to the bottom of the chat body whenever receivedMessage changes
+    if (chatBodyRef.current) {
+      chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
+      //scrollTop =  number of pixels that the content of an element is scrolled vertically.
+    }
+  }, [receivedMessage]);
+
+  const dispatch = useDispatch();
+
+  // // Footer 숨기기
+  // useEffect(() => {
+    
+  //   // dispatch(setFooterEnabled(false));
+
+  //   return () => {
+  //     // 컴포넌트가 언마운트될 때 Footer 다시 보이기
+  //     dispatch(setFooterEnabled(true));
+  //   };
+  // }, [dispatch]);
+
   // 이전 페이지에서 넘어와서 redux 데이터를 받는다면? 
   if (!roomInfo) {
     setTimeout(() => window.location.reload(), 1000);
     return <div>...</div>;
   }
+
 
   
   return (
@@ -272,7 +300,7 @@ const Chatroom = () => {
         <div>
           <h2>채팅방 이름: {roomInfo.chatroomName}</h2>
           <p><strong>채팅방 ID:</strong> {roomInfo.chatroomID}</p>
-          <p><stroing>건물 ID:</stroing> {roomInfo.buildingId}</p>
+          <p><strong>건물 ID:</strong> {roomInfo.buildingId}</p>
           <p><strong>다정온도 제한:</strong> {roomInfo.chatroomMinTemp}°C</p>
           <p><strong>방장:</strong> {roomInfo.chatroomCreatorId}</p>
           <p><strong>채팅방 종류:</strong> {roomInfo.chatroomType}</p>
@@ -282,7 +310,7 @@ const Chatroom = () => {
           <h2>채팅 참여자 목록 ({participants.length})</h2>
           {console.log("파티시팬트", participants)}
           {console.log("룸인포", roomInfo)}
-          {console.log("셀렉티드 파티시팬트", selectedParticipant)}
+          {console.log("라이브 파티시팬트", liveParticipants)}
           {participants.map((participant, index) => (
             <div key={index}>
               <p>
@@ -305,8 +333,9 @@ const Chatroom = () => {
                   currentChatroomID={roomInfo.chatroomID} // 채팅방ID
                   loginMemberRole={chatroomMemberRole}  // 채팅방에서 로그인유저의 권한
                   targetMember={selectedParticipant} // 클릭한 회원
+                  loginMemberID = {memberID}
                 />
-                {liveParticipants.includes(participant.chatroomMemberId) && (
+                {liveParticipants.includes(participant.chatroomMember.memberId) && (
                   <span className={module.liveIndicator}>🟢</span>
                 )}
               </p>
@@ -328,17 +357,34 @@ const Chatroom = () => {
       </div>
       )}
 
-      <div className={module.chatBody}>
+      <div className={module.chatBody} ref={chatBodyRef}>
+      {console.log(receivedMessage)}
         {receivedMessage.map((msg, index) => (
-          <div key={index} className={`${module.chatMessage} ${msg.type === 'mine' ? module.question : msg.type === 'other' ? module.response : module.noticeMessage}`}>
-            <div className={module.messageText}>{msg.text}</div>
-            <div className={module.messageTimestamp}>{msg.timestamp ? msg.timestamp.toString() : ''}</div>
-            {msg.type !== 'notice' && (
-                  <p>안읽은 사람 수 : { participants.length - msg.readMembers.length }</p>
-              )}      
+          <div key={index} className={`${module.chatMessage} ${msg.type === 'mine' ? module.question : msg.type === 'other' ? module.response : module.notice}`}>
+            {msg.type === 'other' && msg.sender && (
+                <div className={module.sender}>
+                  <span>{msg.sender}</span>
+                </div>
+              )}
+            <div className={module.messageContent} style={{ justifyContent: msg.type === 'mine' ? 'flex-end' : 'flex-start' }}>
+              {msg.type === 'mine' && (
+                <span className={module.unreadCount}>
+                  {participants.length - msg.readMembers.length} unread
+                </span>
+              )}
+              <div className={module.messageText}>{msg.text}</div>
+              {msg.type === 'other' && (
+                <span className={module.unreadCount}>
+                  {participants.length - msg.readMembers.length} unread
+                </span>
+              )}
+            </div>
+            <div className={module.messageTimestamp}>
+              {msg.timestamp ? msg.timestamp.toString() : ''}
+            </div>   
           </div>
         ))}
-    </div>
+      </div>
 
     <div className={module.chatFooter}>
       <input
