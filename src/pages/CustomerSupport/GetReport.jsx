@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import CustomerSupportHeader from './components/CustomerSupportHeader';
 import Footer from '../../components/common/Footer';
+import Header from '../../components/common/Header';
 import axiosInstance from '../../lib/axiosInstance';
-
 import MessageModal from './components/MessageModal';
 import messages from './metadata/messages';
-
-
 import {
   Button,
   Card,
@@ -19,6 +16,7 @@ import {
   Table,
   FormGroup,
 } from "reactstrap";
+import { CardFooter } from 'react-bootstrap';
 
 const GetReport = () => {
   const { reportId } = useParams();
@@ -106,7 +104,14 @@ const GetReport = () => {
   };
 
 
-
+  // 날짜 형식을 YYYY-MM-DD로 변환
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    if (!isNaN(date.getTime())) {
+      return date.toISOString().split('T')[0];
+    }
+    return 'Invalid Date';
+  };
 
 
   useEffect(() => {
@@ -119,63 +124,89 @@ const GetReport = () => {
 
 
 
+  
+
 
 
 
   return (
     <div style={styles.container}>
-      <CustomerSupportHeader title="신고 상세 보기" />
+      <Header title="신고 상세 보기" />
+
+
+
+      <Card style={{ marginTop: '40px', margin:'10px' ,  border: '3px solid #B8C6E3'}}>
+
+        <CardHeader style={{margin:'10px'}}>
+          <div style={{ padding: '10px', borderBottom: '1px solid #ddd', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div>
+
+              <div style={{ fontWeight: 'bold', whiteSpace: 'nowrap'}}>
+
+                    <span style={{
+                      color: 'white',
+                      backgroundColor: '#5c7cfa ',
+                      borderRadius: '5px',
+                      padding: '2px 6px',
+                      fontSize: '12px',
+                      fontWeight: 'bold',
+                      whiteSpace: 'nowrap'
+                    }}>신고자</span>
+
+                    &emsp;{report.reporterId}
+
+                </div>
+
+                <div style={{ fontWeight: 'bold', whiteSpace: 'nowrap'}}>
+                  
+                    <span style={{
+                      color: 'white',
+                      backgroundColor: '#fa5252',
+                      borderRadius: '5px',
+                      padding: '2px 6px',
+                      fontSize: '12px',
+                      fontWeight: 'bold',
+                      whiteSpace: 'nowrap'
+                    }}>피신고자</span>
+
+                    &nbsp;{report.reporteeId}
+                </div>
+            </div>
+
+            <div style={{ marginLeft: 'auto', color: '#adb5bd', fontSize: '20px', textAlign:'right'}}>
+              {formatDate(report.reportedTime)}&emsp;{report.reportStatus}&emsp;
+            </div>  
+
+          </div>
+        </CardHeader>
+
+        <CardBody>
+          <div>
+            {report.reportText}
+          </div>
+        </CardBody>
+      </Card>
+
+
       <div style={styles.content}>
         <Row>
           <Col md="12">
-            <Card>
-              <CardHeader>정보</CardHeader>
-              <CardBody>
-                <Table responsive>
-                  <thead className="text-primary">
-                    <tr>
-                      <th className="text-right">신고자</th>
-                      <th className="text-right">피신고자</th>
-                      <th className="text-right">신고일자</th>
-                      <th className="text-right">상태</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>{report.reporterId}</td>
-                      <td>{report.reporteeId}</td>
-                      <td>{report.reportedTime}</td>
-                      <td>{report.reportStatus}</td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </CardBody>
-            </Card>
 
-            <Card>
-              <CardHeader>내용</CardHeader>
-              <CardBody>
-                <div>
-                  {report.reportText}
-                </div>
-              </CardBody>
-            </Card>
-
-            <Card>
+            <Card style={{margin:'30px' }}>
               <CardHeader>처리 옵션</CardHeader>
               <CardBody>
-                <Table>
+                <Table style={{textAlign:'center'}}>
                   <thead>
                     <tr>
-                      <th>다정 수치 감소량</th>
+                      <th style={{width:'35%',whiteSpace: 'nowrap'}}>다정 수치 감소량</th>
                       <th>계정 잠금</th>
-                      <th>신고 상태</th>
+                      <th style={{width:'30%'}}>신고 상태</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
                       <td>
-                        <Input type="number" placeholder="감소량 숫자 입력" value={dajungScoreReduction} onChange={handleDajungScoreChange}/>
+                        <Input type="number" placeholder="감소량 입력" value={dajungScoreReduction} onChange={handleDajungScoreChange}/>
                         <MessageModal isOpen={dajungReductionModalOpen} toggle={toggleDajungReductionModal} message={messages.limitDajungScoreReduction}/>
                       </td>
                       <td>
@@ -200,22 +231,37 @@ const GetReport = () => {
                   </tbody>
                 </Table>
               </CardBody>
+
             </Card>
 
-            <Card>
-              <CardHeader>처리 안내문</CardHeader>
-              <CardBody>
-                <FormGroup>
-                  <Input type="textarea" name="text" id="exampleText" placeholder="승인/반려 사유 작성..."  onChange={(e) => setProcessingText(e.target.value)}/>
-                </FormGroup>
-              </CardBody>
-            </Card>
 
-            <div style={styles.buttonContainer}>
-              <Button color="secondary" onClick={() => navigate(-1)}>뒤로</Button>
-              <Button color="primary" onClick={()=>updateReport()}>처리</Button>
-              <MessageModal isOpen={reportProcessingModalOpen} toggle={toggleReportProcessingModal} message={messages.reportProcessing}/>
-            </div>
+
+<Card style={{margin:'30px' }}>
+  <CardHeader >
+    처리 안내문
+  </CardHeader>
+
+  <CardBody>
+    <FormGroup>
+      <Input style={{height:'200px'}} type="textarea" name="text" id="exampleText" placeholder="승인/반려 사유 작성..."  onChange={(e) => setProcessingText(e.target.value)}/>
+    </FormGroup>
+  </CardBody>
+
+  <CardFooter>
+    <Button 
+      color="" 
+      style={{ backgroundColor: '#030722', width: "100%", borderRadius: '50px', color: 'white' }} 
+      onClick={()=>updateReport()}>
+      처리
+    </Button>  
+
+
+{/**    알림으로 수정            <MessageModal isOpen={reportProcessingModalOpen} toggle={toggleReportProcessingModal} message={messages.reportProcessing}/> */}
+    
+  </CardFooter>
+</Card>
+
+
 
           </Col>
         </Row>

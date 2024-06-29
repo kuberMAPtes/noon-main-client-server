@@ -59,19 +59,19 @@ const ListImages = () => {
 
   return (
     <div>
-      <Header title={filterTab === "all" ? '모든 피드 사진 목록' : '유해 피드 사진 목록'} />
+      <Header title={filterTab === "all" ? '피드 사진 목록' : '유해 사진 AI 필터링 목록'} />
       <div style={styles.tabs}>
         <button
           style={{ ...styles.tabButton, ...(filterTab === "all" ? styles.activeTab : {}) }}
           onClick={() => handleTabChange("all")}
         >
-          <span role="img" aria-label="all"><i style={{ color: "#9BAAF8" }} className="fa-solid fa-images"></i>&nbsp;ALL</span>
+          <span role="img" aria-label="all">전체 목록</span>
         </button>
         <button
           style={{ ...styles.tabButton, ...(filterTab === "bad" ? styles.activeTab : {}) }}
           onClick={() => handleTabChange("bad")}
         >
-          <span role="img" aria-label="bad"><i style={{ color: "#9BAAF8" }} className="fa-solid fa-triangle-exclamation"></i>&nbsp;BAD</span>
+          <span role="img" aria-label="bad" style={{ whiteSpace: 'nowrap'}}>AI 필터링 목록</span>
         </button>
       </div>
       <div style={styles.grid}>
@@ -108,7 +108,7 @@ const styles = {
     fontSize: '20px',
   },
   activeTab: {
-    borderBottom: '3px solid #030722',
+    borderBottom: '3px solid #D9D9D9',
     width: '35%', 
   },
   grid: {

@@ -99,7 +99,7 @@ const GetNotice = () => {
         <div style={{ padding: '20px' }}>
           <Button 
             color="" 
-            style={{ backgroundColor: '#D8B48B', marginBottom: '80px', width: "100%", borderRadius: '50px', color: 'white' }} 
+            style={{ backgroundColor: '#030722', marginBottom: '80px', width: "100%", borderRadius: '50px', color: 'white' }} 
             onClick={() => deleteNotice()}>
             삭제
           </Button>          

@@ -157,7 +157,7 @@ const AddNotice = () => {
         <CardFooter>
           <Button 
             color="" 
-            style={{ backgroundColor: '#D8B48B', marginBottom: '80px', width: "100%", borderRadius: '50px', color: 'white' }} 
+            style={{ backgroundColor: '#030722', marginBottom: '80px', width: "100%", borderRadius: '50px', color: 'white' }} 
             onClick={handleAddNotice}>
             등록
           </Button>  
