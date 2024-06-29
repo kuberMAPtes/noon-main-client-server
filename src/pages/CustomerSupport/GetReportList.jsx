@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import CustomerSupportHeader from './components/CustomerSupportHeader';
+import Header from '../../components/common/Header'
 import Footer from '../../components/common/Footer';
 import axiosInstance from '../../lib/axiosInstance';
 import { Card, CardHeader, CardBody, Table, Row, Col } from 'reactstrap';
 import { useInView } from 'react-intersection-observer';
 import '../building/css/tab-navigation.css';
+import { CardFooter, CardTitle } from 'react-bootstrap';
 
 const GetListReport = () => {
   const [currentPage, setCurrentPage] = useState(0);
@@ -73,86 +74,95 @@ const GetListReport = () => {
 
   return (
     <div>
-      <CustomerSupportHeader title="신고 관리" />
+      <Header title="신고 관리" />
 
-      <div style={styles.tabs}>
-        <button
-          style={{ ...styles.tabButton, ...(filterTab === "ALL" ? styles.activeTab : {}) }}
-          onClick={() => handleTabChange("ALL")}
-        >
-          전체
-        </button>
-        <button
-          style={{ ...styles.tabButton, ...(filterTab === "PEND" ? styles.activeTab : {}) }}
-          onClick={() => handleTabChange("PEND")}
-        >
-          대기
-        </button>
-        <button
-          style={{ ...styles.tabButton, ...(filterTab === "ACCEPT" ? styles.activeTab : {}) }}
-          onClick={() => handleTabChange("ACCEPT")}
-        >
-          승인
-        </button>
-        <button
-          style={{ ...styles.tabButton, ...(filterTab === "REJECT" ? styles.activeTab : {}) }}
-          onClick={() => handleTabChange("REJECT")}
-        >
-          반려
-        </button>
-      </div>
+      <Card>
+        <CardTitle>
+          <div style={styles.tabs}>
+            <button
+              style={{ ...styles.tabButton, ...(filterTab === "ALL" ? styles.activeTab : {}) }}
+              onClick={() => handleTabChange("ALL")}
+            >
+              전체
+            </button>
+            <button
+              style={{ ...styles.tabButton, ...(filterTab === "PEND" ? styles.activeTab : {}) }}
+              onClick={() => handleTabChange("PEND")}
+            >
+              대기
+            </button>
+            <button
+              style={{ ...styles.tabButton, ...(filterTab === "ACCEPT" ? styles.activeTab : {}) }}
+              onClick={() => handleTabChange("ACCEPT")}
+            >
+              승인
+            </button>
+            <button
+              style={{ ...styles.tabButton, ...(filterTab === "REJECT" ? styles.activeTab : {}) }}
+              onClick={() => handleTabChange("REJECT")}
+            >
+              반려
+            </button>
+          </div>
+        </CardTitle>
 
-      <Row style={{ width: '103%', height: '90%' }} className="justify-content-center align-items-center">
-        <Col md="12">
-          <Card>
-            <CardHeader>각 신고를 클릭해 확인 후 처리하세요.</CardHeader>
-            <CardBody>
-              <Table responsive>
-                <thead className="text-primary">
-                  <tr>
-                    <th className="text-right">ID</th>
-                    <th className="text-right">신고자</th>
-                    <th className="text-right">신고일자</th>
-                    <th className="text-right">신고상태</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredReportList.map((report) => (
-                    <tr
-                      key={report.reportId}
-                      onClick={() => navigate(`../getReport/${report.reportId}`)}
-                      style={{
-                        backgroundColor: report.reportStatus === 'ACCEPT' || report.reportStatus === 'REJECT' ? '#D9D9D9' : 'transparent'
-                      }}
-                    >
-                      <td className="text-right">{report.reportId}</td>
-                      <td className="text-right">{report.reporterId}</td>
-                      <td className="text-right">{formatDate(report.reportedTime)}</td>
-                      <td
-                        className="text-right"
-                        style={{
-                          color: report.reportStatus === 'PEND' ? '#9BAAF8' : '#D9D9D9'
-                        }}
-                      >
-                        {report.reportStatus}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-              {loading && <p>Loading...</p>}
-              {!hasMore && <p>No more reports</p>}
-              <div ref={ref} style={{ height: 1 }} />
-            </CardBody>
-          </Card>
-        </Col>
-      </Row>
+        <CardHeader>
+          <div>
+            각 신고를 클릭해 확인 후 처리하세요.
+          </div>
+        </CardHeader>
+
+        <CardBody>
+         <Table responsive>
+            <thead className="text-primary">
+              <tr>
+                <th className="text-right">ID</th>
+                <th className="text-right">신고자</th>
+                <th className="text-right">신고일자</th>
+                <th className="text-right">신고상태</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredReportList.map((report) => (
+                <tr
+                  key={report.reportId}
+                  onClick={() => navigate(`../getReport/${report.reportId}`)}
+                  style={{
+                    backgroundColor: report.reportStatus === 'ACCEPT' || report.reportStatus === 'REJECT' ? '#D9D9D9' : 'transparent'
+                  }}
+                >
+                  <td className="text-right">{report.reportId}</td>
+                  <td className="text-right">{report.reporterId}</td>
+                  <td className="text-right">{formatDate(report.reportedTime)}</td>
+                  <td
+                    className="text-right"
+                    style={{
+                      color: report.reportStatus === 'PEND' ? '#9BAAF8' : '#D9D9D9'
+                    }}
+                  >
+                    {report.reportStatus}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+          {loading && <p>Loading...</p>}
+          {!hasMore && <p>No more reports</p>}
+          <div ref={ref} style={{ height: 1 }} />
+        </CardBody>
+
+        <CardFooter>
+
+        </CardFooter>
+      </Card>
+
 
       <Footer />
 
       <button className="create-button" onClick={handleGoUp}>
         <i className="fa fa-arrow-up"></i>
       </button>
+      
     </div>
   );
 };

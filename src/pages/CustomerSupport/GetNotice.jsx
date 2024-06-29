@@ -5,7 +5,7 @@ import Footer from '../../components/common/Footer';
 import MessageModal from './components/MessageModal';
 import messages from './metadata/messages';
 import { useSelector } from 'react-redux';
-import { Button, Card, CardHeader, CardBody, CardFooter } from "reactstrap";
+import { Button, Card, CardHeader, CardBody, CardFooter, Row } from "reactstrap";
 import Header from '../../components/common/Header';
 
 const GetNotice = () => {
@@ -88,17 +88,18 @@ const GetNotice = () => {
           <span style={{ color: 'gray', marginRight: '10px' }}>{notice.writerId}</span>
           <span style={{ color: 'gray' }}>{formatDate(notice.writtenTime)}</span>
         </div>
-
-        <div style={{ marginTop: '20px', lineHeight: '1.6' }}>
+        <Row className="row-margin-bottom feed-content">
+        <div style={{ marginTop: '20px', lineHeight: '1.6' }} className="feed-content">
           <div dangerouslySetInnerHTML={{ __html: notice.feedText }} />
         </div>
+      </Row>
       </div>
 
       {role === 'ADMIN' && (
         <div style={{ padding: '20px' }}>
           <Button 
             color="" 
-            style={{ backgroundColor: '#D8B48B', marginBottom: '80px', width: "100%", borderRadius: '50px', color: 'white' }} 
+            style={{ backgroundColor: '#030722', marginBottom: '80px', width: "100%", borderRadius: '50px', color: 'white' }} 
             onClick={() => deleteNotice()}>
             삭제
           </Button>          
@@ -125,6 +126,13 @@ const styles = {
     display: 'flex',
     justifyContent: 'space-between',
     marginTop: '20px',
+  }, feedContent: {
+    marginTop: '20px',
+    lineHeight: '1.6',
+    maxWidth: '100%',
+    minWidth: '100%',
+    height: 'auto',
+    objectFit: 'contain',
   },
 };
 
