@@ -152,3 +152,5 @@ const FeedItem = ({ data, memberId }) => {
 };
 
 export default FeedItem;
+
+

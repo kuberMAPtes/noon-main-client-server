@@ -1,17 +1,45 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../../css/FeedCalender.css'; // 추가 CSS 파일
+import axios_api from '../../../../lib/axios_api';
 
-const FeedCalendar = () => {
+const FeedCalendar = ({buildingId}) => {
   const [selectedDate, setSelectedDate] = useState(null);
+  const [events, setEvents] = useState({});
 
-  // 예시 이벤트 데이터
-  const events = {
-    '2024-06-01': ['Event 1', 'Event 2'],
-    '2024-06-15': ['Event 3'],
-    '2024-07-04': ['Event 4', 'Event 5', 'Event 6'],
-  };
+  const fetchEvents = async (buildingId) => {
+    let url = `/feed/getFeedEvent?buildingId=${buildingId}`
+
+    try {
+      const response = await axios_api.get(url);
+      if(response.data !== null || response.data.length > 0) {
+        const eventData = response.data;
+        console.log(eventData);
+        const eventMap = {};
+
+        // 데이터 필터링 및 맵핑
+        eventData.forEach(event => {
+            const dateKey = event.eventDate.split('T')[0];
+            if (!eventMap[dateKey]) {
+              eventMap[dateKey] = [];
+            }
+            eventMap[dateKey].push(event.title);
+        });
+
+        setEvents(eventMap);
+      } else {
+        console.log('지정된 이벤트가 없습니다.');
+      }
+
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  useEffect(() => {
+    fetchEvents(buildingId);
+  }, [buildingId])
 
   const handleDateChange = (date) => {
     setSelectedDate(date);

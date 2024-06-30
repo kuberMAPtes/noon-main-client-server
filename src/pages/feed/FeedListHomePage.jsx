@@ -10,6 +10,7 @@ import BasicNavbar from '../../components/common/BasicNavbar';
 
 import './css/FeedList.css';
 import axios_api from '../../lib/axios_api';
+import Header from '../../components/common/Header';
 
 /**
  * 피드 대표 Home을 설정하는 곳입니다. FeedListPage와 대동소이함
@@ -86,6 +87,7 @@ const FeedListHomePage = () => {
     return (
         <div>
             {/* <BasicNavbar /> */}
+            <Header title="투표 피드 만들기" />
             <div className='container'>
                 <div className="row">
                     {feeds.map((feed, index) => (
