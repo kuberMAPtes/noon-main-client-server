@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../../css/FeedCalender.css'; // 추가 CSS 파일
+import navigator from '../../util/Navigator';
 import axios_api from '../../../../lib/axios_api';
+import { ListGroup } from 'react-bootstrap';
 
-const FeedCalendar = ({buildingId}) => {
+const FeedCalendar = ({memberId, buildingId}) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [events, setEvents] = useState({});
 
@@ -24,7 +26,10 @@ const FeedCalendar = ({buildingId}) => {
             if (!eventMap[dateKey]) {
               eventMap[dateKey] = [];
             }
-            eventMap[dateKey].push(event.title);
+            eventMap[dateKey].push({
+              title: event.title,
+              feedId: event.feedId,
+            });
         });
 
         setEvents(eventMap);
@@ -61,6 +66,12 @@ const FeedCalendar = ({buildingId}) => {
   const formattedDate = formatDateKey(selectedDate);
   const eventList = events[formattedDate] || [];
 
+  const { goToFeedDetail } = navigator();
+
+  const handleEventClick = (feedId) => {
+    goToFeedDetail(memberId, feedId);
+  };
+
   return (
     <div className="calendar-container">
       <DatePicker
@@ -73,11 +84,13 @@ const FeedCalendar = ({buildingId}) => {
         <div>
           <h2>{selectedDate.toDateString()}의 이벤트</h2>
           {eventList.length > 0 ? (
-            <ul>
+            <ListGroup>
               {eventList.map((event, index) => (
-                <li key={index}>{event}</li>
+                <ListGroup.Item key={index} action onClick={() => handleEventClick(event.feedId)}>
+                  {event.title}
+                </ListGroup.Item>
               ))}
-            </ul>
+            </ListGroup>
           ) : (
             <p>이 날짜에는 이벤트가 없습니다.</p>
           )}
