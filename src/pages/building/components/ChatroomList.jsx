@@ -10,6 +10,7 @@ import {
   Row,
   Col,
 } from "reactstrap";
+import { FcAbout } from 'react-icons/fc';
 
 const ChatroomList = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -40,37 +41,38 @@ const ChatroomList = () => {
 
   return (
     <div className="chatroom-list">
-      <Row style={{ marginTop: '30px'}}>
-        <Col md="12">
-          <Card style={{ marginBottom: '80px', margin: "0 auto",width:'90%'}}>
-            <CardHeader>
-              <CardTitle>채팅방 목록</CardTitle>
-            </CardHeader>
 
-            {chatroomList.map((chatroom) => (
-            <Card>
+      <Card style={{marginBottom:'100px'}}>
+        <CardHeader>
+          채팅방 목록
+        </CardHeader>
+        <CardBody>
+
+
+        {chatroomList && chatroomList.length > 0 ? (
+          chatroomList.map((chatroom) => (
+            <Card key={chatroom.chatroomID}>
               <CardBody>
-              <Table responsive>
-                  <tbody >
-                      <tr key={chatroom.chatroomID} onClick={()=>handleChatroom(chatroom.chatroomID)}>
-                        <td><b style={{ fontSize: '20px'}}>{chatroom.chatroomName}</b></td>
-                        <td style={{  textAlign: 'right' }}> 최소 온도&nbsp;<b style={{ fontSize: '25px'}}>&nbsp;{chatroom.chatroomMinTemp}</b></td>
-                      </tr>
+                <Table responsive>
+                  <tbody>
+                    <tr onClick={() => handleChatroom(chatroom.chatroomID)}>
+                      <td><b style={{ fontSize: '20px' }}>{chatroom.chatroomName}</b></td>
+                      <td style={{ textAlign: 'right' }}> 최소 온도&nbsp;<b style={{ fontSize: '25px' }}>&nbsp;{chatroom.chatroomMinTemp}</b></td>
+                    </tr>
                   </tbody>
-                  </Table>
+                </Table>
               </CardBody>
             </Card>
-            ))}
+          ))
+        ) : (
+            <div colSpan="2" style={{ textAlign: 'center', fontSize: '20px', padding: '20px'}}>
+              <h3><FcAbout/> 아직 채팅방이 존재하지 않습니다!</h3> <br/>첫 번째 채팅방을 만들어보세요!
+            </div>
+        )}
 
-          </Card >
-          
+        </CardBody>
+      </Card>
 
-          
-
-
-
-        </Col>
-      </Row>
     </div>
   );
 };
