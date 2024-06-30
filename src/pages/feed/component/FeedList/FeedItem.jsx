@@ -42,6 +42,9 @@ const FeedItem = ({ data, memberId }) => {
     const feedCategoryName = FeedCategoryGetter(feedCategory); // 카테고리 변환
     const isNoticeCategory = feedCategory === 'NOTICE'; // 공지 카테고리에 대한 예외
     const isPollCategory = feedCategory === 'POLL'; // 투표 카테고리에 대한 예외
+    const isEventCategory = feedCategory === 'EVENT';
+    const isMegaphoneCategory = feedCategory === 'MEGAPHONE';
+
 
     const renderFeedText = (feedText) => renderFeedTextWithLink(feedText);
 
@@ -82,7 +85,9 @@ const FeedItem = ({ data, memberId }) => {
 
     return (
         <div className={styles.feedItemContainer}>
-            <Card className={isNoticeCategory ? styles.feedItemNotionColor : ''}>
+            <Card className={(isNoticeCategory ? styles.feedItemNotionColor : '') 
+                + (isEventCategory ? styles.feedItemEventColor : '')
+                + (isMegaphoneCategory ? styles.feedItemMegaphoneColor : '')}>
                 <CardBody>
                     {/* Header */}
                     <div className={styles.headerContainer}>
