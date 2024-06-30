@@ -50,3 +50,19 @@
 .loadingSpinner {
   z-index: 99;
 }
+
+.removePlaceSearchResultsButton {
+  position: absolute;
+  z-index: 99;
+  top: 8%;
+  width: 24px;
+  height: 24px;
+  right: 50%;
+}
+
+.mapMergeButton {
+  position: absolute;
+  z-index: 99;
+  top: 8%;
+  left: 12px;
+}
