@@ -72,7 +72,10 @@ export default function BMap() {
 
   const loginMember = useSelector((state) => state.auth.member);
 
+  console.log(loginMember);
+
   const member = ownerIdOfMapInfo ? ownerIdOfMapInfo : loginMember.memberId;
+  console.log(member);
 
   /**
    * 
@@ -115,44 +118,46 @@ export default function BMap() {
   }
 
   useEffect(() => {
-    const mapElement = document.getElementById("map");
-    map = new naver.maps.Map(mapElement);
-    getCurrentPosition((coords) => {
-      const initialMapState = {
-        latitude: currentMapState.initialized ? currentMapState.latitude : coords.latitude,
-        longitude: currentMapState.initialized ? currentMapState.longitude : coords.longitude,
-        zoomLevel: currentMapState.zoomLevel,
-        initialized: true
-      }
-      setCurrentPosition({
-        latitude: coords.latitude,
-        longitude: coords.longitude
+    if (loginMember) {
+      const mapElement = document.getElementById("map");
+      map = new naver.maps.Map(mapElement);
+      getCurrentPosition((coords) => {
+        const initialMapState = {
+          latitude: currentMapState.initialized ? currentMapState.latitude : coords.latitude,
+          longitude: currentMapState.initialized ? currentMapState.longitude : coords.longitude,
+          zoomLevel: currentMapState.zoomLevel,
+          initialized: true
+        }
+        setCurrentPosition({
+          latitude: coords.latitude,
+          longitude: coords.longitude
+        });
+        map.setCenter(new naver.maps.LatLng(initialMapState.latitude, initialMapState.longitude));
+        map.setZoom(initialMapState.zoomLevel);
+        dispatch(setCurrentMapState(initialMapState));
+        
+        initMap(map);
+        setFirstEntry(false);
+      }, () => {
+        console.error("Geolocation API not supported");
+        const initialMapState = {
+          latitude: currentMapState.latitude,
+          longitude: currentMapState.longitude,
+          zoomLevel: currentMapState.zoomLevel,
+          initialized: true
+        }
+        map.setCenter(new naver.maps.LatLng(initialMapState.latitude, initialMapState.longitude));
+        map.setZoom(initialMapState.zoomLevel);
+        dispatch(setCurrentMapState(initialMapState));
+        initMap(map);
+        setFirstEntry(false);
       });
-      map.setCenter(new naver.maps.LatLng(initialMapState.latitude, initialMapState.longitude));
-      map.setZoom(initialMapState.zoomLevel);
-      dispatch(setCurrentMapState(initialMapState));
       
-      initMap(map);
-      setFirstEntry(false);
-    }, () => {
-      console.error("Geolocation API not supported");
-      const initialMapState = {
-        latitude: currentMapState.latitude,
-        longitude: currentMapState.longitude,
-        zoomLevel: currentMapState.zoomLevel,
-        initialized: true
+      if (!intervalId) {
+        intervalId = window.setInterval(() => {
+          getCurrentPosition(onCurrentPositionAwared, onFailedFetchingPosition);
+        }, 1000);
       }
-      map.setCenter(new naver.maps.LatLng(initialMapState.latitude, initialMapState.longitude));
-      map.setZoom(initialMapState.zoomLevel);
-      dispatch(setCurrentMapState(initialMapState));
-      initMap(map);
-      setFirstEntry(false);
-    });
-    
-    if (!intervalId) {
-      intervalId = window.setInterval(() => {
-        getCurrentPosition(onCurrentPositionAwared, onFailedFetchingPosition);
-      }, 1000);
     }
 
     return () => {
@@ -166,7 +171,7 @@ export default function BMap() {
       clearMarkers(buildingSubscriptionMarkers);
       buildingSubscriptionMarkers = new Map();
     }
-  }, []);
+  }, [loginMember]);
 
   useEffect(() => {
     if (!firstEntry) {
