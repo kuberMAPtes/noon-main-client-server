@@ -1,14 +1,5 @@
 import { MARKER_MODES } from "../component/MarkerModeButtonGroup";
 
-const liveliness = {
-  1: "#e03131",
-  2: "#f08c00",
-  3: "#ffd43b",
-  4: "#37b24d",
-  5: "#adb5bd",
-  6: "#212529"
-}
-
 /**
  * @param {string} subscriptionProviderList 
  * @param {{
@@ -19,22 +10,9 @@ const liveliness = {
  * @param {string} markerImage
  */
 export function getBuildingMarkerHtml(
-    liveliestChatroom,
-    buildingName,
-    currentMarkerDisplayMode
+    buildingName
 ) {
-  let content;
-  switch (currentMarkerDisplayMode) {
-    case MARKER_MODES.DISPLAY_BUILDING_NAME:
-      content = `<div>${buildingName}</div>`;
-      break;
-    case MARKER_MODES.DISPLAY_LIVELIEST_CHATROOM:
-      content = `<div>${liveliestChatroom.chatroomName}</div>`
-      break;
-    default:
-      content = `<div></div>`;
-  }
-  return getCommonHtml(content, "/image/popular-bulilding.png");
+  return getCommonHtml(`<div>${buildingName}</div>`, "/image/popular-bulilding.png");
 }
 
 export function getSubscriptionMarkerHtml(subscriptionProviderList, buildingName) {
@@ -43,6 +21,19 @@ export function getSubscriptionMarkerHtml(subscriptionProviderList, buildingName
     <div>${buildingName}</div>
   `;
   return getCommonHtml(content, "/image/subscription-bulilding.png");
+}
+
+const LIVELINESS_COLOR = {
+  5: "#e03131",
+  4: "#f08c00",
+  3: "#ffd43b",
+  2: "#37b24d",
+  1: "#adb5bd"
+}
+
+export function getLiveliestChatroomMarkerHtml(chatroomName, liveliness) {
+  const content = `<div style="color: ${LIVELINESS_COLOR[liveliness]}">${chatroomName}</div>`;
+  return getCommonHtml(content, "/image/chat.png");
 }
 
 /**
