@@ -6,12 +6,13 @@ import FeedNotFound from './component/FeedNotFound';
 import Loading from './component/FeedList/FeedLoading';
 
 import Footer from '../../components/common/Footer';
-import BasicNavbar from '../../components/common/BasicNavbar';
 
 import './css/FeedList.css';
 import axios_api from '../../lib/axios_api';
 import Header from '../../components/common/Header';
 import { useSelector } from 'react-redux';
+import FeedCntByTag from './component/FeedChart/FeedCntByTag';
+import { Line } from 'react-chartjs-2';
 
 /**
  * 피드 대표 Home을 설정하는 곳입니다. FeedListPage와 대동소이함
@@ -32,6 +33,9 @@ const FeedListHomePage = () => {
     const [page, setPage] = useState(Number(initialPage));
     const [fetchUrl, setFetchUrl] = useState('/feed/getAllFeedOrderByPopolarity')
     const observer = useRef();
+
+    // Chart 정보
+    const feedCntByTag = FeedCntByTag();
 
     // 기본적으로 볼 수 있는 피드 목록 가져오기
     const fetchData = async (url, page) => {
@@ -94,12 +98,21 @@ const FeedListHomePage = () => {
     return (
         <div>
             <Header title="피드" />
+            <br/>
+            <div>
+                <h1 style={{ textAlign: 'center' }}>피드에 대한 통계</h1>
+                {feedCntByTag.labels.length > 0 ? (
+                    <Line data={feedCntByTag} />
+                ) : (
+                    <p>Loading...</p>
+                )}
+            </div>
             <div>
                 <div className="row">
                     {feeds.map((feed, index) => (
                         <div
                             key={feed.feedId}
-                            className="col-12 mb-4"
+                            className="col-lg-4 col-md-6 col-sm-12 mb-4"
                             ref={feeds.length === index + 1 ? lastFeedElementRef : null}
                         >
                             <FeedItem data={feed} memberId={memberId} />
