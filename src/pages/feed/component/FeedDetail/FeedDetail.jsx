@@ -177,7 +177,7 @@ const FeedDetail = ({ data, memberId }) => {
     const isPollCategory = feedCategory === 'POLL'; // 투표 카테고리에 대한 예외
 
     return (
-        <div className="container">
+        <div>
             <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '10px' }}>
                 <Button variant="secondary" onClick={()=>goToBuildingProfile(buildingId)}>
                     해당 건물 프로필로 이동
@@ -257,7 +257,7 @@ const FeedDetail = ({ data, memberId }) => {
                 <Card>
                     <CardBody>
                     {attachmentUrls.map((attachmentUrl, index) => (
-                        <div key={index}>
+                        <div key={index} className={styles.responsiveMaxImg}>
                         {attachmentUrl.url.type === "image" && (
                             <img
                                 src={attachmentUrl.url.url}
@@ -266,7 +266,7 @@ const FeedDetail = ({ data, memberId }) => {
                             />
                         )}
                         {attachmentUrl.url.type === "video" && (
-                            <video width="240" height="180" controls>
+                            <video controls className={styles.responsiveVideo}>
                                 <source src={attachmentUrl.url.url} type="video/mp4" />
                                 Your browser does not support the video tag.
                             </video>

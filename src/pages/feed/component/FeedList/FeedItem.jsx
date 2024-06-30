@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import '../../css/FeedItem.css';
 
-import { Card, CardBody, CardImg, CardText, CardTitle } from 'react-bootstrap';
+import { Card, CardBody, CardImg, CardText } from 'react-bootstrap';
 import { FaHeart, FaRegHeart, FaBookmark, FaRegBookmark } from 'react-icons/fa';
 import { toggleLike, toggleBookmark } from '../../axios/FeedAxios';
 import navigate from '../../util/Navigator'
 import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
-import AttachmentGetter from '../../util/AttachmentGetter';
+// import AttachmentGetter from '../../util/AttachmentGetter';
 import FeedCategoryGetter from '../../util/FeedCategoryGetter';
 import styles from "../../css/FeedItemAndDetail.module.css"; // css 적용
 import { FcApproval } from "react-icons/fc";
@@ -55,25 +54,22 @@ const FeedItem = ({ data, memberId }) => {
 
     useEffect(() => {
         const loadAttachment = async () => {
-            
-            // @Deprecated
-            // const attachmentUrl = await AttachmentGetter(feedAttachmentId);
-            // console.log(attachmentUrl);
-            // if (attachmentUrl) {
-            //     setMainAttachment(attachmentUrl.url);
-            // } else {
-            //     setMainAttachment(null);
-            // }
-
             const response = await axios_api.get(`/feed/getFeedAttachmentDto?attachmentId=${feedAttachmentId}`);
             if(response === null) return;
 
             console.log(response.data);
             const feedAttachmentDto = response.data;
+            const attachmentType = response.data.fileType
             if(feedAttachmentDto.blurredFileUrl != null) {
-                setMainAttachment(feedAttachmentDto.blurredFileUrl)
+                setMainAttachment({
+                    url : feedAttachmentDto.blurredFileUrl,
+                    type : attachmentType
+                });
             } else if(feedAttachmentDto.fileUrl != null) {
-                setMainAttachment(feedAttachmentDto.fileUrl);
+                setMainAttachment({
+                    url : feedAttachmentDto.fileUrl,
+                    type : attachmentType
+                });
             } else {
                 setMainAttachment(null);
             }
@@ -84,20 +80,20 @@ const FeedItem = ({ data, memberId }) => {
     }, [feedAttachmentId])
 
     return (
-        <div>
+        <div className={styles.feedItemContainer}>
             <Card className={isNoticeCategory ? styles.feedItemNotionColor : ''}>
                 <CardBody>
                     {/* Header */}
                     <div className={styles.headerContainer}>
                         {/* 제목 : 공지라면 공지로 바로 리다이렉션한다.*/}
                         {isNoticeCategory ? (
-                            <CardTitle tag="h1" onClick={() => goToDetailNotice(feedId)} style={{ cursor: 'pointer' }}>
+                            <h1 className={styles.noticeTitle} onClick={() => goToDetailNotice(feedId)} style={{ cursor: 'pointer' }}>
                                 <FcApproval /> {title}
-                            </CardTitle>
+                            </h1>
                         ) : (
-                            <CardTitle tag="h2" onClick={() => goToFeedDetail(memberId, feedId)} style={{ cursor: 'pointer' }}>
+                            <h2 className={styles.cardTitle} onClick={() => goToFeedDetail(memberId, feedId)} style={{ cursor: 'pointer' }}>
                                 {title}
-                            </CardTitle>
+                            </h2>
                         )}
 
                         <div className={styles.iconContainer}>
@@ -119,29 +115,33 @@ const FeedItem = ({ data, memberId }) => {
                     {/* Body */}
                     {/* 공지사항일 때는 내용을 출력하지 않는다. */}
                     {isNoticeCategory ? '' : (
-                        <p style={{ whiteSpace: "pre-wrap" }}><CardText>{renderFeedText(feedText)}</CardText></p>
+                        <p className={styles.feedText}>{renderFeedText(feedText)}</p>
                      )}
                     <CardText className={isNoticeCategory ? styles.noticeText : ''}>
-                        <small className={styles.textMuted}>
-                            {writtenTimeReplace}
-                        </small>
+                        <small className={styles.textMuted}>{writtenTimeReplace}</small>
                     </CardText>
                     <CardText className={isNoticeCategory ? styles.noticeText : ''}>
                         <small className={styles.textMuted}>
-                            <div onClick={() => goToMemberProfile(writerId)} style={{ cursor: 'pointer', display: 'inline'}}>{writerNickname}</div> 
-                            &nbsp;|&nbsp;<div onClick={() => goToBuildingProfile(buildingId)} style={{ cursor: 'pointer', display: 'inline' }}>{buildingName}</div>
+                            <div onClick={() => goToMemberProfile(writerId)} className={styles.linkText}>{writerNickname}</div> 
+                            &nbsp;|&nbsp;
+                            <div onClick={() => goToBuildingProfile(buildingId)} className={styles.linkText}>{buildingName}</div>
                         </small>
                     </CardText>
                 </CardBody>
-                {mainAttachment && (
+                {mainAttachment &&  mainAttachment.type === 'PHOTO' && (
                     <CardImg
                     alt={feedId}
-                    src={mainAttachment}
-                    style={{
-                        height: 300
-                    }}
-                    width="100%"
+                    src={mainAttachment.url}
+                    className={styles.responsiveMaxImg}
                     />
+                )}
+                {mainAttachment &&  mainAttachment.type === 'VIDEO' && (
+                    <div className={styles.videoWrapper}>
+                        <video controls className={styles.responsiveVideo}>
+                            <source src={mainAttachment.url} type="video/mp4" />
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
                 )}
                 {isPollCategory && (
                     <FeedVote feedId={feedId} memberId={memberId} />

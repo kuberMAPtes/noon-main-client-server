@@ -16,7 +16,7 @@ const FeedPopularyRanking = ({feeds}) => {
     console.log(feeds);
 
     return (
-        <Container>
+        <div>
             <Row className="justify-content-center my-4">
                 <h2>인기 피드 랭킹</h2>
             </Row>
@@ -34,7 +34,7 @@ const FeedPopularyRanking = ({feeds}) => {
                     </ListGroup.Item>
                 ))}
             </ListGroup>
-        </Container>
+        </div>
     );
 };
 

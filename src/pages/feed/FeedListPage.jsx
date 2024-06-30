@@ -89,7 +89,7 @@ const FeedListPage = ({toId}) => {
     
     return (
         <div>
-            <div className='container'>
+            <div>
             <Dropdown onSelect={handleSelect} />
             {!loading && inFileFeeds.length === 0 ? (
                 <FeedNotFound />
