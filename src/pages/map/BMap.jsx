@@ -73,7 +73,10 @@ export default function BMap() {
 
   const loginMember = useSelector((state) => state.auth.member);
 
+  console.log(loginMember);
+
   const member = ownerIdOfMapInfo ? ownerIdOfMapInfo : loginMember.memberId;
+  console.log(member);
 
   /**
    * 
