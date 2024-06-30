@@ -40,37 +40,31 @@ const ChatroomList = () => {
 
   return (
     <div className="chatroom-list">
-      <Row style={{ marginTop: '30px'}}>
-        <Col md="12">
-          <Card style={{ marginBottom: '80px', margin: "0 auto",width:'90%'}}>
-            <CardHeader>
-              <CardTitle>채팅방 목록</CardTitle>
-            </CardHeader>
 
-            {chatroomList.map((chatroom) => (
-            <Card>
-              <CardBody>
-              <Table responsive>
-                  <tbody >
-                      <tr key={chatroom.chatroomID} onClick={()=>handleChatroom(chatroom.chatroomID)}>
-                        <td><b style={{ fontSize: '20px'}}>{chatroom.chatroomName}</b></td>
-                        <td style={{  textAlign: 'right' }}> 최소 온도&nbsp;<b style={{ fontSize: '25px'}}>&nbsp;{chatroom.chatroomMinTemp}</b></td>
-                      </tr>
-                  </tbody>
-                  </Table>
-              </CardBody>
-            </Card>
-            ))}
+      <Card style={{marginBottom:'50px'}}>
+        <CardHeader>
+          채팅방 목록
+        </CardHeader>
+        <CardBody>
 
-          </Card >
-          
+              {chatroomList.map((chatroom) => (
+              <Card>
+                <CardBody>
+                <Table responsive>
+                    <tbody>
+                        <tr key={chatroom.chatroomID} onClick={()=>handleChatroom(chatroom.chatroomID)}>
+                          <td><b style={{ fontSize: '20px'}}>{chatroom.chatroomName}</b></td>
+                          <td style={{  textAlign: 'right' }}> 최소 온도&nbsp;<b style={{ fontSize: '25px'}}>&nbsp;{chatroom.chatroomMinTemp}</b></td>
+                        </tr>
+                    </tbody>
+                    </Table>
+                </CardBody>
+              </Card>
+              ))}
 
-          
+        </CardBody>
+      </Card>
 
-
-
-        </Col>
-      </Row>
     </div>
   );
 };
