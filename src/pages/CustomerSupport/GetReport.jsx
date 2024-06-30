@@ -7,6 +7,7 @@ import MessageModal from './components/MessageModal';
 import messages from './metadata/messages';
 import useMainPage from '../member/hook/useMainPage'
 import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import {
   Button,
   Card,
@@ -67,16 +68,25 @@ const GetReport = () => {
       });
       setReport(response.data);
       console.log("신고 상세 정보: "+JSON.stringify(response.data));
-      toggleReportProcessingModal();
+      
+      Swal.fire({
+        title: messages.reportProcessing.title,
+        text:  messages.reportProcessing.description,
+        icon: 'success',
+        confirmButtonText: '확인'
+      }).then((result)=>{
+        if(result.isConfirmed){
+          navigate('../GetReportList');
+        }
+      });
+
+
     } catch (error) {
       console.error("Error fetching getReport details:", error);
     }
 
   };
 
-  const toggleReportProcessingModal = () => {
-    setReportProcessingModalOpen(!reportProcessingModalOpen);
-  };
 
 
 
@@ -255,9 +265,6 @@ const GetReport = () => {
       onClick={()=>updateReport()}>
       처리
     </Button>  
-
-
-{/**    알림으로 수정            <MessageModal isOpen={reportProcessingModalOpen} toggle={toggleReportProcessingModal} message={messages.reportProcessing}/> */}
     
   </CardFooter>
 </Card>
