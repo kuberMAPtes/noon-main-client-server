@@ -30,10 +30,6 @@ let buildingSubscriptionMarkers = new Map();
 
 let placeSearchMarkers;
 
-const markerFetchMode = {
-  mode: () => {}
-};
-
 const buildingFetchChecked = {
   subscriptionChecked: true,
   currentMarkerDisplayMode: MARKER_MODES.DISPLAY_BUILDING_NAME
@@ -61,17 +57,6 @@ export default function BMap() {
     }
   });
   const [currentMarkerDisplayMode, setCurrentMarkerDisplayMode] = useState(ownerIdOfMapInfo === undefined ? MARKER_MODES.DISPLAY_BUILDING_NAME : MARKER_MODES.DISPLAY_NONE);
-
-  switch (currentMarkerDisplayMode) {
-    case MARKER_MODES.DISPLAY_BUILDING_NAME:
-      markerFetchMode.mode = fetchBuildingMarkers;
-      break;
-    case MARKER_MODES.DISPLAY_LIVELIEST_CHATROOM:
-      markerFetchMode.mode = fetchChatroomMarkers;
-      break;
-    default:
-      markerFetchMode.mode = () => {};
-  }
 
   const [loading, setLoading] = useState(false);
   const [placesSearchResultExists, setPlacesSearchResultExists] = useState(false);
@@ -113,7 +98,7 @@ export default function BMap() {
 
     naver.maps.Event.addListener(map, "dragend", (e) => {
       setLoading(true);
-      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, member, navigate, buildingFetchChecked.currentMarkerDisplayMode)
+      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, member, navigate, buildingFetchChecked.currentMarkerDisplayMode, setWantBuildingProfileModal)
           .then((result) => setLoading(false));
       const center = map.getCenter();
       dispatch(setCurrentMapState({
@@ -124,7 +109,7 @@ export default function BMap() {
 
     naver.maps.Event.addListener(map, "zoom_changed", (e) => {
       setLoading(true);
-      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, member, navigate, buildingFetchChecked.currentMarkerDisplayMode)
+      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, member, navigate, buildingFetchChecked.currentMarkerDisplayMode, setWantBuildingProfileModal)
           .then((result) => setLoading(false));
       console.log(e);
       dispatch(setCurrentMapState({
@@ -193,7 +178,7 @@ export default function BMap() {
   useEffect(() => {
     if (!firstEntry) {
       setLoading(true);
-      fetchBuildingMarkers(subscriptionChecked, member, navigate, currentMarkerDisplayMode)
+      fetchBuildingMarkers(subscriptionChecked, member, navigate, currentMarkerDisplayMode, setWantBuildingProfileModal)
           .then((result) => setLoading(false))
           .catch((err) => console.error(err));
     }
@@ -382,7 +367,7 @@ function fetchBuildingInfo(latitude, longitude, setWantBuildingProfileModal, nav
  * @param {boolean} subscriptionChecked 
  * @param {string} memberId
  */
-async function fetchBuildingMarkers(subscriptionChecked, memberId, navigate, currentMarkerDisplayMode) {
+async function fetchBuildingMarkers(subscriptionChecked, memberId, navigate, currentMarkerDisplayMode, setWantBuildingProfileModal) {
   switch (currentMarkerDisplayMode) {
     case MARKER_MODES.DISPLAY_BUILDING_NAME:
       await fetchBuildingsInPositionRange(navigate);
@@ -395,7 +380,7 @@ async function fetchBuildingMarkers(subscriptionChecked, memberId, navigate, cur
   }
 
   if (subscriptionChecked) {
-    await fetchSubscriptions(memberId, navigate);
+    await fetchSubscriptions(memberId, navigate, setWantBuildingProfileModal);
   } else {
     clearMarkers(buildingSubscriptionMarkers);
   }
@@ -453,7 +438,7 @@ async function fetchBuildingsInPositionRange(navigate, currentMarkerDisplayMode)
   clearMarkers(popBuildingMarkers, buildingMarkersCache);
 }
 
-async function fetchSubscriptions(memberId, navigate) {
+async function fetchSubscriptions(memberId, navigate, setWantBuildingProfileModal) {
   console.log(memberId);
   const response = await axios_api.get(`${MAIN_API_URL}/buildingProfile/getMemberSubscriptionList`, {
     params: {
@@ -466,9 +451,7 @@ async function fetchSubscriptions(memberId, navigate) {
   const buildingMarkersCache = new Set();
   data.forEach((d) => {
     const buildingId = d.building.buildingId;
-    console.log("here");
     if (!popBuildingMarkers.has(buildingId)) {
-      console.log("here2");
       buildingMarkersCache.add(buildingId);
       if (buildingSubscriptionMarkers.has(buildingId)) {
         return;
@@ -479,7 +462,25 @@ async function fetchSubscriptions(memberId, navigate) {
         if (d.building.profileActivated) {
           navigate(`/getBuildingProfile/${buildingId}`);
         } else {
-          // TODO
+          setWantBuildingProfileModal({
+            isOpen: true,
+            onClose: () => setWantBuildingProfileModal({
+              isOpen: false,
+              onClose: () => {},
+              applicationData: {
+                buildingName: "",
+                roadAddr: "",
+                longitude: 0,
+                latitude: 0
+              }
+            }),
+            applicationData: {
+              buildingName: d.building.buildingName,
+              roadAddr: d.building.roadAddr,
+              longitude: d.building.longitude,
+              latitude: d.building.latitude
+            }
+          });
         }
       });
       buildingSubscriptionMarkers.set(buildingId, buildingMarker);
