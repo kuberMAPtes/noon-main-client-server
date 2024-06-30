@@ -86,7 +86,7 @@ const BuildingInfo = ({ subscriptionData, setSubscriptionData }) => {
     });
     console.log(JSON.stringify(response));
     // alert(JSON.stringify(response));
-    const buildingIds = response.data.map(item => item.buildingId);
+    const buildingIds = response.data.map(item => item.buliding.buildingId);
     console.log("이건 구독건물목록", JSON.stringify(response.data));
     console.log("이건 구독건물ID", buildingIds);
 
