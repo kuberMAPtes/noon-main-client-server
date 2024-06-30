@@ -99,7 +99,7 @@ const FeedListPage = ({toId}) => {
                         {inFileFeeds.map((feed, index) => (
                             <div
                                 key={feed.feedId}
-                                className="col-12 mb-4"
+                                className="col-lg-4 col-md-6 col-sm-12 mb-4"
                                 ref={inFileFeeds.length === index + 1 ? lastFeedElementRef : null}
                             >
                                 <FeedItem data={feed} memberId={loginMember} />

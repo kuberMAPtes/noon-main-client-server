@@ -18,7 +18,7 @@
     border: 4px solid #9BAAF8; /* Primary color for border */
     border-radius: 8px; /* Rounded corners */
     padding: 10px;
-    background-color: #1e2235; /* Darker background for contrast */
+    background-color: #020822; /* Darker background for contrast */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     margin: 20px auto; /* Center the marquee container */
 }

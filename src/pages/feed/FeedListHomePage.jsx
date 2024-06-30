@@ -11,6 +11,7 @@ import BasicNavbar from '../../components/common/BasicNavbar';
 import './css/FeedList.css';
 import axios_api from '../../lib/axios_api';
 import Header from '../../components/common/Header';
+import { useSelector } from 'react-redux';
 
 /**
  * 피드 대표 Home을 설정하는 곳입니다. FeedListPage와 대동소이함
@@ -18,7 +19,11 @@ import Header from '../../components/common/Header';
  */
 const FeedListHomePage = () => {
     const [searchParams] = useSearchParams();
-    const memberId = searchParams.get('memberId');
+
+    const memberIdFromStore = useSelector((state) => state.auth.member.memberId);
+    const memberIdFromURL = searchParams.get('memberId');
+    const memberId = memberIdFromStore || memberIdFromURL;
+
     const initialPage = searchParams.get('page') || 1;
 
     const [feeds, setFeeds] = useState([]);
@@ -70,6 +75,7 @@ const FeedListHomePage = () => {
     if (loading && feeds.length === 0) {
         return (
             <div>
+                <Header title="피드" />
                 <Loading />
             </div>
         );
@@ -79,6 +85,7 @@ const FeedListHomePage = () => {
     if (!loading && feeds.length === 0) {
         return (
             <div>
+                <Header title="피드" />
                 <FeedNotFound />
             </div>
         );
@@ -86,9 +93,8 @@ const FeedListHomePage = () => {
 
     return (
         <div>
-            {/* <BasicNavbar /> */}
-            <Header title="투표 피드 만들기" />
-            <div className='container'>
+            <Header title="피드" />
+            <div>
                 <div className="row">
                     {feeds.map((feed, index) => (
                         <div
