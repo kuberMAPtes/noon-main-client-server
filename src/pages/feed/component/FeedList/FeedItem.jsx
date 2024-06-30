@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-import { Card, CardBody, CardImg, CardText } from 'react-bootstrap';
-import { FaHeart, FaRegHeart, FaBookmark, FaRegBookmark } from 'react-icons/fa';
+import { Image, Card, CardBody, CardImg, CardText } from 'react-bootstrap';
+import { FaHeart, FaRegHeart, FaBookmark, FaRegBookmark, FaBuilding } from 'react-icons/fa';
 import { toggleLike, toggleBookmark } from '../../axios/FeedAxios';
 import navigate from '../../util/Navigator'
 import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
@@ -22,6 +22,7 @@ const FeedItem = ({ data, memberId }) => {
         buildingName,
         writerId,
         writerNickname,
+        writerProfile,
         like,
         bookmark,
         feedCategory,
@@ -85,67 +86,80 @@ const FeedItem = ({ data, memberId }) => {
                 <CardBody>
                     {/* Header */}
                     <div className={styles.headerContainer}>
-                        {/* 제목 : 공지라면 공지로 바로 리다이렉션한다.*/}
-                        {isNoticeCategory ? (
-                            <h1 className={styles.noticeTitle} onClick={() => goToDetailNotice(feedId)} style={{ cursor: 'pointer' }}>
-                                <FcApproval /> {title}
-                            </h1>
-                        ) : (
-                            <h2 className={styles.cardTitle} onClick={() => goToFeedDetail(memberId, feedId)} style={{ cursor: 'pointer' }}>
-                                {title}
-                            </h2>
-                        )}
+                        <div className="d-flex align-items-center">
+                            <Image src={writerProfile || 'https://via.placeholder.com/50'} roundedCircle width="50" height="50" className="mr-3" />
+                            <div onClick={() => goToMemberProfile(writerId)}> &nbsp; {writerNickname}</div>
+                        </div>
+                        <div onClick={() => goToBuildingProfile(buildingId)} className={styles.linkText}><FaBuilding /> {buildingName}</div>
+                    </div>
+                    
 
-                        <div className={styles.iconContainer}>
-                            {/* 피드 카테고리 */}
-                            <div className={styles.feedCategory}>{feedCategoryName}</div>
+                    {/* Body- 1 */}
+                    {/* 첨부파일을 보여준다. 공지일 때는 보여주지 않는다. */}
+                    {isNoticeCategory ? '' : (
+                        <div>
+                            <br/>
+                            {mainAttachment &&  mainAttachment.type === 'PHOTO' && (
+                            <CardImg
+                                alt={feedId}
+                                src={mainAttachment.url}
+                                className={styles.responsiveMaxImg}
+                            />
+                            )}
+                            {mainAttachment &&  mainAttachment.type === 'VIDEO' && (
+                                <div className={styles.videoWrapper}>
+                                    <video controls className={styles.responsiveVideo}>
+                                        <source src={mainAttachment.url} type="video/mp4" />
+                                        Your browser does not support the video tag.
+                                    </video>
+                                </div>
+                            )}
+                            {isPollCategory && (
+                                <FeedVote feedId={feedId} memberId={memberId} />
+                            )}
+                        </div>
+                     )}
 
+                    {/* Body- 2 */}
+                    {/* 좋아요, 북마크, 피드 카테고리를 추가한다. */}
+                    <div className={styles.iconContainer}>
+                        <div className={styles.iconLeft}>
                             {/* 좋아요 */}
                             <span onClick={handleLikeClick}>
                                 {liked ? <FaHeart color="red" size='24'/> : <FaRegHeart size='24'/>}
                             </span>
-
                             {/* 북마크 */}
                             <span onClick={handleBookmarkClick}>
                                 {bookmarked ? <FaBookmark color="gold" size='24' /> : <FaRegBookmark size='24' />}
                             </span>
                         </div>
+
+                        <div className={styles.iconRight}>
+                            {/* 피드 카테고리 */}
+                            <div className={styles.feedCategory}>{feedCategoryName}</div>
+                        </div>
                     </div>
 
-                    {/* Body */}
+                    {/* footer */}
+                    {/* 제목 : 공지라면 공지로 바로 리다이렉션한다.*/}
+                    {isNoticeCategory ? (
+                        <h1 className={styles.noticeTitle} onClick={() => goToDetailNotice(feedId)} style={{ cursor: 'pointer' }}>
+                            <FcApproval /> {title}
+                        </h1>
+                    ) : (
+                        <h2 className={styles.cardTitle} onClick={() => goToFeedDetail(memberId, feedId)} style={{ cursor: 'pointer' }}>
+                            {title}
+                        </h2>
+                    )}
+
                     {/* 공지사항일 때는 내용을 출력하지 않는다. */}
                     {isNoticeCategory ? '' : (
                         <p className={styles.feedText}>{renderFeedText(feedText)}</p>
                      )}
-                    <CardText className={isNoticeCategory ? styles.noticeText : ''}>
+                    <CardText>
                         <small className={styles.textMuted}>{writtenTimeReplace}</small>
                     </CardText>
-                    <CardText className={isNoticeCategory ? styles.noticeText : ''}>
-                        <small className={styles.textMuted}>
-                            <div onClick={() => goToMemberProfile(writerId)} className={styles.linkText}>{writerNickname}</div> 
-                            &nbsp;|&nbsp;
-                            <div onClick={() => goToBuildingProfile(buildingId)} className={styles.linkText}>{buildingName}</div>
-                        </small>
-                    </CardText>
                 </CardBody>
-                {mainAttachment &&  mainAttachment.type === 'PHOTO' && (
-                    <CardImg
-                    alt={feedId}
-                    src={mainAttachment.url}
-                    className={styles.responsiveMaxImg}
-                    />
-                )}
-                {mainAttachment &&  mainAttachment.type === 'VIDEO' && (
-                    <div className={styles.videoWrapper}>
-                        <video controls className={styles.responsiveVideo}>
-                            <source src={mainAttachment.url} type="video/mp4" />
-                            Your browser does not support the video tag.
-                        </video>
-                    </div>
-                )}
-                {isPollCategory && (
-                    <FeedVote feedId={feedId} memberId={memberId} />
-                )}
             </Card>
         </div>
     );

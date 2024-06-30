@@ -1,69 +1,3 @@
-/*
-    FeedItem, FeedDetail에 적용
-*/
-/*
-.feedCategory {
-    border: 1px solid #ccc;
-    border-radius: 4px; 
-    padding: 5px 10px;
-    background-color: #f8f9fa;
-    font-weight: bold;
-    color:black !important;
-}
-
-.feedCategoryDetail {
-    border: 1px solid #ccc; 
-    border-radius: 4px;
-    padding: 5px 10px;
-    background-color: #f8f9fa;
-    font-weight: bold;
-    width: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-  
-.headerContainer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.iconContainer {
-    display: flex;
-    align-items: center;
-}
-
-.iconContainer span {
-    margin-left: 10px;
-    cursor: pointer;
-}
-
-.feedItemNotionColor {
-    background-color: #7966ca !important;
-    color: white !important;
-}
-
-.noticeText {
-    color: white !important;
-}
-
-.textMuted {
-    color: inherit;
-}
-
-.responsiveMaxImg {
-    max-width: 100%;
-    height: auto;
-}
-
-.responsiveVideo {
-    max-width: 100%;
-    height: auto;
-    display: block;
-}
-*/
-
 /* FeedItem, FeedDetail에 적용된 스타일 */
 
 .feedCategory {
@@ -94,8 +28,20 @@
 }
 
 .iconContainer {
-    display: flex; /* Flex 정렬 */
-    align-items: center; /* 가운데 정렬 */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.iconLeft {
+    display: flex;
+    align-items: center;
+}
+
+.iconRight {
+    display: flex;
+    align-items: center;
 }
 
 .iconContainer span {
@@ -104,12 +50,7 @@
 }
 
 .feedItemNotionColor {
-    background-color: #7966ca !important; /* 우선 순위 적용 배경색 */
-    color: white !important; /* 우선 순위 적용 텍스트 색상 */
-}
-
-.noticeText {
-    color: white !important; /* 우선 순위 적용 텍스트 색상 */
+    border-color: #7966CA !important; /* 우선 순위 적용 배경색 */
 }
 
 .textMuted {

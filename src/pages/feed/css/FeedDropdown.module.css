@@ -1,0 +1,23 @@
+.buttonGroup {
+    display: flex;
+    align-items: center;
+}
+
+.customButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 5px;
+    position: relative;
+}
+
+.separator {
+    width: 1px;
+    height: 24px;
+    background-color: #ccc;
+}
+
+.buttonColor {
+    background-color: #9BAAF8;
+    border-color: #9BAAF8;
+}
