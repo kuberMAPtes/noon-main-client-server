@@ -39,19 +39,6 @@ export function getLiveliestChatroomMarkerHtml(chatroomName, liveliness) {
   return getCommonHtml(content, "/image/chat.png");
 }
 
-const LIVELINESS_COLOR = {
-  5: "#e03131",
-  4: "#f08c00",
-  3: "#ffd43b",
-  2: "#37b24d",
-  1: "#adb5bd"
-}
-
-export function getLiveliestChatroomMarkerHtml(chatroomName, liveliness) {
-  const content = `<div style="color: ${LIVELINESS_COLOR[liveliness]}">${chatroomName}</div>`;
-  return getCommonHtml(content, "/image/chat.png");
-}
-
 /**
  * @param {string} roadAddress 
  * @param {string} placeName 
