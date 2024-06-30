@@ -15,6 +15,7 @@ import WantBuildingProfile from "../building/components/WantBuildingProfile";
 import MarkerModeButtonGroup, { MARKER_MODES } from "./component/MarkerModeButtonGroup";
 import { Spinner } from "reactstrap";
 import { MdCancel } from "react-icons/md";
+import { Button } from "react-bootstrap";
 
 const naver = window.naver;
 
@@ -206,6 +207,32 @@ export default function BMap() {
   return (
     <div className={mapStyles.mapContainer}>
       <div id="map">
+        {
+          isSubscriptionView && (
+            <Button
+                color="primary"
+                className={mapStyles.mapMergeButton}
+                onClick={() => {
+                  if (isSubscriptionView) {
+                    const fromId = loginMember.memberId;
+                    const toId = member;
+                    console.log("fromId=" + fromId);
+                    console.log("toId=", toId);
+                    axios_api.post("/buildingProfile/addSubscriptionFromSomeone", {
+                      fromMember: {
+                        memberId: fromId
+                      },
+                      toMember: {
+                        memberId: toId
+                      }
+                    });
+                  }
+                }}
+            >
+              건물 합치기
+            </Button>
+          )
+        }
         {loading && (
           <div className={mapStyles.loadingSpinnerContainer}>
             <Spinner className={mapStyles.loadingSpinner} color="primary" />
@@ -452,7 +479,7 @@ async function fetchSubscriptions(memberId, navigate, setWantBuildingProfileModa
       if (buildingSubscriptionMarkers.has(buildingId)) {
         return;
       }
-      const contentHtml = getSubscriptionMarkerHtml(d.subscriptionProvider.nickname, d.building.buildingName);
+      const contentHtml = getSubscriptionMarkerHtml(d.subscriptionProvider.nickname, d.building.buildingName, d.building.profileActivated);
       const buildingMarker = addMarker(contentHtml, d.building.latitude, d.building.longitude);
       naver.maps.Event.addListener(buildingMarker, "click", () => {
         if (d.building.profileActivated) {
