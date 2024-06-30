@@ -17,7 +17,7 @@ import {
   Col,
 } from "reactstrap";
 
-const BuildingInfo = () => {
+const BuildingInfo = ({ subscriptionData, setSubscriptionData }) => {
   const navigate = useNavigate();
   
   // 회원 정보
@@ -27,9 +27,8 @@ const BuildingInfo = () => {
   const [selectedMemberId, setSelectedMemberId] = useState(null); 
   const mainPageUrl = useMainPage(selectedMemberId);
 
-
   // 회원의 구독 여부
-  const [subscription, setSubscription] = useState(false);
+ // const [subscription, setSubscription] = useState(false);
 
   // 빌딩 아이디
   const { buildingId } = useParams();
@@ -91,23 +90,24 @@ const BuildingInfo = () => {
     console.log("이건 구독건물ID", buildingIds);
 
     if (buildingIds.includes(Number(buildingId))) {
-      setSubscription(true);
+      setSubscriptionData(true);
       console.log("구독 중인 건물입니다.");
     }
+    console.log("구독여부는: ", subscriptionData)
   };
 
   // 구독하기 or 구독취소
   const addOrDeleteSubscription = async () => {
-    if (subscription) {
+    if (subscriptionData===true) {
       try {
         const response = await axiosInstance.post('/buildingProfile/deleteSubscription', {
           memberId: member.memberId,
           buildingId: buildingId
         });
-        setSubscription(response.data.activated);
+        setSubscriptionData(response.data.activated);
         console.log("회원의 삭제된 구독 정보: " + response.data.activated, response.data.memberId, response.data.buildingId);
       } catch (error) {
-        console.error('Error fetching deleted subscription status:', error);
+        console.error('Error fetching deleted subscriptionData status:', error);
       }
     } else {
       try {
@@ -115,10 +115,10 @@ const BuildingInfo = () => {
           memberId: member.memberId,
           buildingId: buildingId
         });
-        setSubscription(response.data.activated);
+        setSubscriptionData(response.data.activated);
         console.log("회원의 추가된 구독 정보: " + response.data.activated, response.data.memberId, response.data.buildingId);
       } catch (error) {
-        console.error('Error fetching added subscription status:', error);
+        console.error('Error fetching added subscriptionData status:', error);
       }
     }
   };
@@ -153,7 +153,7 @@ const BuildingInfo = () => {
   useEffect(() => {
     getSubscriberCnt(); //Deprecated
     getSubscribers();
-  }, [subscription]);
+  }, [subscriptionData]);
 
   useEffect(() => {}, [profile]);
 
@@ -218,7 +218,7 @@ const BuildingInfo = () => {
                           addOrDeleteSubscription();
                         }}
                       >
-                        {subscription ? '구독취소' : '구독'}
+                        {subscriptionData===true ? '구독취소' : '구독'}
                       </Button>
                     </Col>
                   </Row>
