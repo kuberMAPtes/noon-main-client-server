@@ -28,7 +28,20 @@
     50% { opacity: 0.5; }
   }
 
-
+  /* 백 버튼 */
+  .backButton {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1000;
+    padding: 10px;
+    background-color: #2C3E50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    }
+  
   /* 사이드바 버튼 */
   .sidebarButton {
   position: fixed;
@@ -36,11 +49,21 @@
   right: 10px;
   z-index: 1000;
   padding: 10px;
-  background-color: #ff6af8;
+  background-color: #2C3E50;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  }
+
+  /* 채팅방 나가기 버튼 */
+  .leaveButton {
+    position: fixed;
+    bottom: 20px; /* 조정할 적절한 거리 */
+    right: 20px; /* 조정할 적절한 거리 */
+    background-color: #2C3E50;
+    padding: 10px 20px;
+    z-index: 999; /* 다른 요소 위에 나타나도록 z-index 설정 */
   }
 
   /* 채팅방 정보 */
