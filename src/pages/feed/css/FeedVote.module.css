@@ -1,0 +1,17 @@
+.voteButton {
+    border-color: #9BAAF8 !important;
+    color: #9BAAF8 !important;
+    background-color: white !important;
+}
+
+.voteButton:hover {
+    background-color: #9BAAF8 !important;
+    border-color: #9BAAF8 !important;
+    color: white !important;
+}
+
+.voteButtonSelected {
+    background-color: #9BAAF8 !important;
+    border-color: #9BAAF8 !important;
+    color: white !important;
+}

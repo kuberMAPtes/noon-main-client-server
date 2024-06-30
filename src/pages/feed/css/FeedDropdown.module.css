@@ -9,15 +9,12 @@
     justify-content: center;
     margin: 0 5px;
     position: relative;
+    background-color: #9BAAF8 !important;
+    border-color: #9BAAF8 !important;
 }
 
 .separator {
     width: 1px;
     height: 24px;
     background-color: #ccc;
-}
-
-.buttonColor {
-    background-color: #9BAAF8;
-    border-color: #9BAAF8;
 }

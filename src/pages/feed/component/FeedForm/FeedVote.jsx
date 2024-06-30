@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Badge, Button, Card } from 'react-bootstrap';
 import axios_api from '../../../../lib/axios_api';
+import styles from '../../css/FeedVote.module.css';
 
 /**
  * 실제 피드에서 사용하는 투표
@@ -73,7 +74,7 @@ const FeedVote = ({ feedId, memberId }) => {
                 {options && options.map((option, index) => (
                     <div key={index} className="d-flex align-items-center mb-2">
                         <Button
-                            variant={selectedOption === option ? 'primary' : 'outline-primary'}
+                            className={`${styles.voteButton} ${selectedOption === option ? styles.voteButtonSelected : ''}`}
                             onClick={() => handleOptionChange(option)}
                             style={{
                                 minWidth: '120px',
@@ -82,14 +83,13 @@ const FeedVote = ({ feedId, memberId }) => {
                                 padding: '5px 10px',
                                 fontSize: '14px', // 고정된 폰트 사이즈
                             }}
-                            className="me-2"
                         >
                             {option}
-                        </Button>
+                        </Button> &nbsp;&nbsp;
                         <Badge bg="secondary">{votes[index] !== undefined ? votes[index] : 0}</Badge>
                     </div>
                 ))}
-                <Button variant="primary" onClick={handleVoteSubmit} className="mt-3">
+                <Button variant="danger" onClick={handleVoteSubmit} className="mt-3">
                     투표
                 </Button>
             </Card.Body>

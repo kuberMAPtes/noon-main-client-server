@@ -53,6 +53,14 @@
     border-color: #7966CA !important; /* 우선 순위 적용 배경색 */
 }
 
+.feedItemEventColor {
+    border-color: #FF006E !important;
+}
+
+.feedItemMegaphoneColor {
+    border-color: #3A86FF !important;
+}
+
 .textMuted {
     color: inherit; /* 상속된 색상 사용 */
 }

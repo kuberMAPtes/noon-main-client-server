@@ -31,19 +31,19 @@ const FeedDropdown = ({ onSelect }) => {
     return (
         <div className="row justify-content-center">
             <ButtonGroup className={styles.buttonGroup}>
-                <Button className={`${styles.customButton} ${styles.buttonColor}`} onClick={() => handleSelect('member')} title="내 피드">
+                <Button className={styles.customButton} onClick={() => handleSelect('member')} title="내 피드">
                     <FaUser />
                 </Button>
                 <div className={styles.separator}></div>
-                <Button className={`${styles.customButton} ${styles.buttonColor}`} onClick={() => handleSelect('subscriptionBuilding')} title="구독한 건물 피드">
+                <Button className={styles.customButton} onClick={() => handleSelect('subscriptionBuilding')} title="구독한 건물 피드">
                     <FaBuilding />
                 </Button>
                 <div className={styles.separator}></div>
-                <Button className={`${styles.customButton} ${styles.buttonColor}`} onClick={() => handleSelect('like')} title="좋아요를 한 피드">
+                <Button className={styles.customButton} onClick={() => handleSelect('like')} title="좋아요를 한 피드">
                     <FaHeart />
                 </Button>
                 <div className={styles.separator}></div>
-                <Button className={`${styles.customButton} ${styles.buttonColor}`} onClick={() => handleSelect('bookmark')} title="북마크한 피드">
+                <Button className={styles.customButton} onClick={() => handleSelect('bookmark')} title="북마크한 피드">
                     <FaBookmark />
                 </Button>
             </ButtonGroup>
