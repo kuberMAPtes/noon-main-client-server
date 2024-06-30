@@ -156,26 +156,26 @@ const GetMemberRelationshipList = () => {
 
   const memoHandleFollowClick = useCallback(
     async (otherId) => {
+      alert("누가"+fromId+"누구를"+otherId+"팔로우");
       await handleFollowClick(fromId, otherId, refetchData);
-      fetchRelationships();
     },
-    [fromId,fetchRelationships, refetchData]
+    [fromId,refetchData]
   );
 
   const memoHandleFollowCancelClick = useCallback(
     async (otherId) => {
+      alert("누가"+fromId+"누구를"+otherId+"팔로우취소");
       await handleFollowCancelClick(fromId, otherId, refetchData);
-      fetchRelationships();
     },
-    [fromId,fetchRelationships, refetchData]
+    [fromId,refetchData]
   );
 
   const memoHandleBlockCancelClick = useCallback(
     async (otherId) => {
+      alert("누가"+fromId+"누구를"+otherId+"차단해제");
       await handleBlockCancelClick(fromId, otherId, refetchData);
-      fetchRelationships();
     },
-    [fromId,fetchRelationships, refetchData]
+    [fromId, refetchData]
   );
 
   // 서로 관계 확인 및 팔로우/언팔로우 버튼 생성 로직
@@ -189,7 +189,7 @@ const GetMemberRelationshipList = () => {
     activeTab
   }) => {
     let memberRelationshipButtton = null;
-
+    // alert("memberRelationship"+ JSON.stringify(memberRelationship) + "my" + JSON.stringify(myRelationshipLists));
     if (
       myRelationshipLists?.mutualFollowingList?.includes(memberRelationship)
     ) {
