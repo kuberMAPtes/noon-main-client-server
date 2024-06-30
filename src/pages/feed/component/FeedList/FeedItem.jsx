@@ -101,9 +101,12 @@ const FeedItem = ({ data, memberId }) => {
 
                     {/* Body- 1 */}
                     {/* 첨부파일을 보여준다. 공지일 때는 보여주지 않는다. */}
+                    {(mainAttachment && isNoticeCategory === false ) && (
+                        <br/>
+                    )}
+
                     {isNoticeCategory ? '' : (
                         <div>
-                            <br/>
                             {mainAttachment &&  mainAttachment.type === 'PHOTO' && (
                             <CardImg
                                 alt={feedId}
