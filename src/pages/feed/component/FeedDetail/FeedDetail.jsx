@@ -12,7 +12,7 @@ import navigator from '../../util/Navigator';
 import CheckModal from '../Common/CheckModal';
 import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
 import AttachmentGetter from '../../util/AttachmentGetter';
-import styles from "../../css/FeedItemAndDetail.module.css"; // css 적용
+import styles from  "../../css/common/FeedItemAndDetail.module.css"; // css 적용
 import FeedCategoryGetter from '../../util/FeedCategoryGetter';
 import FeedVote from '../FeedForm/FeedVote';
 

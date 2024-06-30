@@ -7,7 +7,7 @@ import navigate from '../../util/Navigator'
 import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
 // import AttachmentGetter from '../../util/AttachmentGetter';
 import FeedCategoryGetter from '../../util/FeedCategoryGetter';
-import styles from "../../css/FeedItemAndDetail.module.css"; // css 적용
+import styles from "../../css/common/FeedItemAndDetail.module.css"; // css 적용
 import { FcApproval } from "react-icons/fc";
 import FeedVote from '../FeedForm/FeedVote';
 import axios_api from '../../../../lib/axios_api';

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Badge, Button, Card } from 'react-bootstrap';
-import styles from '../../css/FeedVote.module.css';
+import styles from '../../css/FeedForm/FeedVote.module.css';
 
 /**
  * 피드 미리보기 시 사용하는 컴포넌트
@@ -22,7 +22,6 @@ const VotePreview = ({ question, options, onSelectVote }) => {
 
     return (
         <Card className="mb-4">
-            <br/>
             <Card.Header>{question}</Card.Header>
             <Card.Body>
             {options.map((option, index) => (

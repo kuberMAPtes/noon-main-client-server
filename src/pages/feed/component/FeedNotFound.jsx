@@ -1,5 +1,5 @@
 import React from 'react';
-import '../css/FeedNotFound.css';
+import '../css/common/FeedNotFound.css';
 import navigate from "../util/Navigator";
 import { FcAbout } from "react-icons/fc";
 

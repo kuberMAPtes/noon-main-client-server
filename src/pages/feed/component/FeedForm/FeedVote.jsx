@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Badge, Button, Card } from 'react-bootstrap';
 import axios_api from '../../../../lib/axios_api';
-import styles from '../../css/FeedVote.module.css';
+import styles from '../../css/FeedForm/FeedVote.module.css';
 
 /**
  * 실제 피드에서 사용하는 투표

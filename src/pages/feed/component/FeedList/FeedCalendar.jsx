@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import '../../css/FeedCalender.css'; // 추가 CSS 파일
+import '../../css/FeedList/FeedCalender.css';
 import navigator from '../../util/Navigator';
 import axios_api from '../../../../lib/axios_api';
 import { ListGroup } from 'react-bootstrap';

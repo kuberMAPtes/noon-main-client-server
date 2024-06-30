@@ -1,7 +1,7 @@
 import React from 'react';
 import { ButtonGroup, Button } from 'react-bootstrap';
 import { FaBookmark, FaBuilding, FaHeart, FaUser } from 'react-icons/fa';
-import styles from "../../css/FeedDropdown.module.css"
+import styles from "../../css/FeedList/FeedDropdown.module.css"
 
 const FeedDropdown = ({ onSelect }) => {
 
