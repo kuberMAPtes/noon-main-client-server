@@ -68,13 +68,6 @@ const DajungScore = ({ profile, setProfile, toId , fromId }) => {
             <Col xs={12}>
               다정 온도
             </Col>
-            {toId !== fromId && 
-            <Col xs={12} style={{ fontSize: "10px", position: "relative" }}>
-              <span style={{ position: "absolute", whiteSpace: "nowrap" }}>
-                다정 수치를 올릴 수 있어요!
-              </span>
-            </Col>
-            }
           </Row>
         </Col>
         <Col xs={9}>

@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
 import axiosInstance from "../../lib/axiosInstance";
 import { clearAllCookies } from "../../pages/member/function/memberFunc";
-import { navigateMainPage } from "../../util/mainPageUri";
+import { navigateMainPage, navigateRealMainPage } from "../../util/mainPageUri";
 import {
   getMember,
   googleLogin,
@@ -76,7 +76,7 @@ export const login = createAsyncThunk(
 
         if (!(loginData?.loginWay === "signUp")) {
           //alert("네비게이트메인페이지");
-          navigateMainPage(returnMember?.memberId, navigate);
+          navigateRealMainPage(returnMember?.memberId, navigate);
         }
         return { member: returnMember, authorization: true };
       }

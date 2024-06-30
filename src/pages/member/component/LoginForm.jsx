@@ -8,6 +8,7 @@ import { Form, Button, Container, Row, Col, Alert } from "react-bootstrap";
 import SignUpButton from "./SignUpButton";
 import styles from "../../../assets/css/module/member/LoginForm.module.css";
 import styles2 from "../../../assets/css/module/member/base.module.css";
+import { setFooterEnbaled } from "../../../redux/slices/footerEnabledSlice";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -18,6 +19,13 @@ const LoginForm = () => {
   const [memberId, setMemberId] = useState("");
   const [pwd, setPassword] = useState("");
   const [validationError, setValidationError] = useState("");
+
+  useEffect(() => {
+    dispatch(setFooterEnbaled(false));
+    return () => {
+      dispatch(setFooterEnbaled(true));
+    }
+  }, [dispatch]);
 
   const handleLoginClick = async (event) => {
     event.preventDefault();

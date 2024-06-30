@@ -227,7 +227,7 @@ const GetMember = () => {
                 {isPwdValid && <FaCheck />}
                 <NormalButton
                   onClick={handlePwdUpdateClick}
-                  style={{ width: "60px", height: "30px" }}
+                  style={{ width: "90px", height: "30px" }}
                 >
                   재설정
                 </NormalButton>
@@ -247,7 +247,7 @@ const GetMember = () => {
                 </Form.Text>
               )}
               <Form.Text>
-                비밀번호는 회원님의 개인정보 보호를 위하여<br/> 찾을 수 없고 재설정만 가능합니다.
+                비밀번호는 회원님의 개인정보 보호를 위하여<br/> 확인하실 수 없고, 재설정만 가능합니다.
               </Form.Text>
             </Form.Group>
             <Form.Group>

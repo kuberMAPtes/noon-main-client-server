@@ -58,7 +58,7 @@ const LoginButtons = ({ onLoginClick,onGoogleLoginClick }) => {
             className={`d-flex align-items-center justify-content-center ${styles.loginButton} ${styles.customButton}`}
             onClick={onLoginClick}
           >
-            계정 ID로 시작하기
+            일반 계정으로 시작하기
           </Button>
           <hr />
           <SignUpButton />
