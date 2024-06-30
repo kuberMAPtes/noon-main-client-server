@@ -3,9 +3,9 @@ import '../../css/FeedDetail.css';
 
 import { Image, Badge, Button, Card, CardBody, CardSubtitle, CardText, CardTitle, Form, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { toggleBookmark, toggleLike } from '../../axios/FeedAxios';
-import { FaBookmark, FaHeart, FaRegBookmark, FaRegHeart, FaCommentAlt, FaRegEye, FaFireAlt } from 'react-icons/fa';
+import { FaBookmark, FaHeart, FaRegBookmark, FaRegHeart, FaCommentAlt, FaRegEye, FaFireAlt, FaBuilding } from 'react-icons/fa';
 import { GrUpdate } from "react-icons/gr";
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdFeed } from "react-icons/md";
 import LikedUsersList from './LikedUsersList';
 import axios_api from '../../../../lib/axios_api';
 import navigator from '../../util/Navigator';
@@ -177,11 +177,23 @@ const FeedDetail = ({ data, memberId }) => {
     const isPollCategory = feedCategory === 'POLL'; // 투표 카테고리에 대한 예외
 
     return (
-        <div>
-            <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '10px' }}>
-                <Button variant="secondary" onClick={()=>goToBuildingProfile(buildingId)}>
-                    해당 건물 프로필로 이동
-                </Button>
+            <div>
+            <div className={styles.iconContainer}>
+                { memberId && memberId === writerId && (
+                    <div className={styles.iconLeft}>
+                        <span onClick={() => setFeedDeleteShow(true)}>
+                            <MdDelete size='32'/> {/* 피드 삭제 : Modal 열기*/}
+                        </span>
+                        <span onClick={() => goToFeedForm(writerId, feedId)}>
+                            <MdFeed size='32'/> {/* 피드 수정 */}
+                        </span>
+                    </div>
+                )}
+                <div className={styles.iconRight}>
+                    <Button variant="secondary" onClick={()=>goToBuildingProfile(buildingId)}>
+                        해당 건물 프로필로 이동
+                    </Button>
+                </div>
             </div>
             <Card>
                 <CardBody>
@@ -191,45 +203,33 @@ const FeedDetail = ({ data, memberId }) => {
                             <Image src={writerProfile || 'https://via.placeholder.com/50'} roundedCircle width="50" height="50" className="mr-3" />
                             <div onClick={() => goToMemberProfile(writerId)} className={styles.headerContainer}>&nbsp; {writerNickname}</div>
                         </div>
-                        <div className={styles.iconContainer}>
-                            { memberId && memberId === writerId && (
-                                <div className={styles.iconContainer}>
-                                    <span onClick={() => setFeedDeleteShow(true)} style={{ cursor: 'pointer', marginRight: '10px' }}>
-                                            <MdDelete size='32'/> {/* 피드 삭제 : Modal 열기*/}
-                                    </span>
-                                    <span onClick={() => goToFeedForm(writerId, feedId)} style={{ cursor: 'pointer', marginRight: '10px' }}>
-                                        <GrUpdate size='32'/> {/* 피드 수정 */}
-                                    </span>
-                                </div>
-                            )}
+                        <div onClick={() => goToBuildingProfile(buildingId)} className={styles.linkText}><FaBuilding /> {buildingName}</div>
+                    </div>
 
+                    {/* 좋아요, 북마크, 카테고리 */}
+                    <div className={styles.iconContainer}>
+                        <div className={styles.iconLeft}>
                             {/* 피드 좋아요 */}
-                            <span onClick={handleLikeClick} style={{ cursor: 'pointer', marginRight: '10px' }}>
-                                {liked ? <FaHeart color="red" size='24'/> : <FaRegHeart size='24'/>} 
+                            <span onClick={handleLikeClick}>
+                                {liked ? <FaHeart color="red" size='32'/> : <FaRegHeart size='32'/>} 
                             </span> 
 
                             {/* 피드 북마크 */}
-                            <span onClick={handleBookmarkClick} style={{ cursor: 'pointer' }}>
-                                {bookmarked ? <FaBookmark color="gold" size='24' /> : <FaRegBookmark size='24' />} 
+                            <span onClick={handleBookmarkClick}>
+                                {bookmarked ? <FaBookmark color="gold" size='32' /> : <FaRegBookmark size='32' />} 
                             </span>
                         </div>
+                        {/* 피드 카테고리 */}
+                        <div className={styles.feedCategoryDetail}>{feedCategoryName}</div>
                     </div>
-                    <br/>
-                    <CardSubtitle>
-                        {writtenTimeReplace} | <div onClick={() => goToBuildingProfile(buildingId)} style={{ cursor: 'pointer', display: 'inline' }}>{buildingName}</div>  
-                    </CardSubtitle>
-
-                    {/* 피드 카테고리 */}
-                    <div className={styles.feedCategoryDetail}>{feedCategoryName}</div>
-                    <br/>
-
+                    
                     {/* 제목 */}
-                    <CardTitle tag="h2">
-                            {title}
-                        </CardTitle>
+                    <CardTitle tag="h2">{title}</CardTitle>
 
                     {/* 내용 */}
                     <p style={{ whiteSpace: "pre-wrap" }}><CardText>{renderFeedText(feedText)}</CardText></p>
+
+                    {/* 태그 목록 */}
                     { tags && tags.length > 0 && (
                         <div className="tags">
                             {tags.map((tag) => (
@@ -239,6 +239,9 @@ const FeedDetail = ({ data, memberId }) => {
                                 ))}
                         </div>
                     )}
+                    {/* 작성 시간 */}
+                    <br/>
+                    <CardSubtitle>{writtenTimeReplace}</CardSubtitle>
 
                     {/* Body */}
                     <div className="feed-stats">
@@ -257,12 +260,12 @@ const FeedDetail = ({ data, memberId }) => {
                 <Card>
                     <CardBody>
                     {attachmentUrls.map((attachmentUrl, index) => (
-                        <div key={index} className={styles.responsiveMaxImg}>
+                        <div key={index}>
                         {attachmentUrl.url.type === "image" && (
                             <img
                                 src={attachmentUrl.url.url}
                                 alt={`Attachment ${attachmentUrl.attachmentId}`}
-                                className="attachment-img"
+                                className={styles.responsiveMaxImg}
                             />
                         )}
                         {attachmentUrl.url.type === "video" && (
