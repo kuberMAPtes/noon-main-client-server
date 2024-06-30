@@ -37,11 +37,11 @@ const AddPhoneNumberAuthentification = () => {
   const [verifiedState, setIsVerified] = useState("pending"); // 인증 상태 pending,success,fail
 
   const { toUrl } = useParams(); //addMember 또는 getMemberId 또는 updatePwd 또는 updatePhoneNumber
-  const { memberId } = useDecrypteIdUrl(); //URL파라미터에서 가져옴
-  const { encryptedData, ivData } = useEncryptId(memberId);
+  const { toId } = useDecrypteIdUrl(); //URL파라미터에서 가져옴
+  const { encryptedData, ivData } = useEncryptId(toId);
   const member = useSelector((state) => state.auth.member);
 
-  //toUrl이 getMemberId면 getMemberId/memberId로 바꿔져야함. 인증하면
+  //toUrl이 getMemberId면 getMemberId/toId로 바꿔져야함. 인증하면
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -75,25 +75,29 @@ const AddPhoneNumberAuthentification = () => {
 
   const handleUpdatePhoneNumber = async (
     phoneNumber,
-    memberId,
+    toId,
     verifiedState,
     navigate,
     toUrl
   ) => {
-    // alert("phoneNumber"+phoneNumber+"memberId"+memberId+"verifiedState"+verifiedState+"toUrl"+toUrl)
-
+    // alert("phoneNumber"+phoneNumber+"toId"+toId+"verifiedState"+verifiedState+"toUrl"+toUrl)
+    console.log("verifiedState :: "+verifiedState + "toUrl :: "+toUrl + "toId :: "+toId);
+    alert("verifiedState :: "+verifiedState + "toUrl :: "+toUrl + "toId :: "+toId);
     if (
       verifiedState === "success" &&
       toUrl === "updatePhoneNumber" &&
-      memberId
+      toId
     ) {
+      const memberId = toId;
       const response = await updatePhoneNumber({ phoneNumber, memberId });
-
+      console.log(JSON.stringify(response));
+      alert("response" + JSON.stringify(response));
       if (response === true) {
         const secretId = encryptedData;
         const secretIv = ivData;
         // alert("휴대폰 번호 등록에 성공했습니다.");
-        navigate(`/member/getMemberProfile/${secretId}/${secretIv}`);
+        //리로드 해야 전화번호 바뀐게 프로필에 제대로 반영이 된다.
+        window.location.href = `/member/getMemberProfile/${secretId}/${secretIv}`;
       } else {
         // alert("휴대폰 번호 등록에 실패했습니다.");
       }
@@ -116,12 +120,16 @@ const AddPhoneNumberAuthentification = () => {
         } else if (response.info !== true) {
           console.log("response", response);
           // alert(response?.message);
-          const messageObject = JSON.parse(response.message);
-          if (messageObject?.result?.error === "허용되지 않은 IP주소 입니다.") {
-            setPhoneNumberValidationMessage("허용되지 않은 IP주소 입니다.");
-          } else {
-            console.log("response.message", response.message);
-            setPhoneNumberValidationMessage("유효하지 않은 전화번호 입니다.");
+          if(response.message === "이미 존재하는 전화번호입니다."){
+            setPhoneNumberValidationMessage("이미 존재하는 전화번호입니다.");
+          }else{
+            const messageObject = JSON.parse(response.message);
+            if (messageObject?.result?.error === "허용되지 않은 IP주소 입니다.") {
+              setPhoneNumberValidationMessage("허용되지 않은 IP주소 입니다.");
+            } else {
+              console.log("response.message", response.message);
+              setPhoneNumberValidationMessage("유효하지 않은 전화번호 입니다.");
+            }
           }
 
           setIsPhoneNumberValid(false);
@@ -312,7 +320,7 @@ const AddPhoneNumberAuthentification = () => {
                   onClick={() =>
                     handleUpdatePhoneNumber(
                       phoneNumber,
-                      memberId,
+                      toId,
                       verifiedState,
                       navigate,
                       toUrl

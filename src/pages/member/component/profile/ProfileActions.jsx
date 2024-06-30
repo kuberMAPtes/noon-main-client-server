@@ -166,8 +166,7 @@ const ProfileActions = ({ toId, fromId }) => {
                   휴대폰 번호 등록
                 </NormalButton>
                 <span style={{ fontSize: "13px" }}>
-                  💥휴대폰 번호를 등록하지 않으시면 아이디 및 비밀번호 찾기
-                  서비스를 이용하실 수 없습니다.
+                  💥하나의 휴대폰 번호는 하나의 계정만을 가집니다.
                 </span>
               </Col>
             </Row>

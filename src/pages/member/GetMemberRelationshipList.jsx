@@ -156,7 +156,7 @@ const GetMemberRelationshipList = () => {
 
   const memoHandleFollowClick = useCallback(
     async (otherId) => {
-      alert("누가"+fromId+"누구를"+otherId+"팔로우");
+      // alert("누가"+fromId+"누구를"+otherId+"팔로우");
       await handleFollowClick(fromId, otherId, refetchData);
     },
     [fromId,refetchData]
@@ -164,7 +164,7 @@ const GetMemberRelationshipList = () => {
 
   const memoHandleFollowCancelClick = useCallback(
     async (otherId) => {
-      alert("누가"+fromId+"누구를"+otherId+"팔로우취소");
+      // alert("누가"+fromId+"누구를"+otherId+"팔로우취소");
       await handleFollowCancelClick(fromId, otherId, refetchData);
     },
     [fromId,refetchData]
@@ -172,7 +172,7 @@ const GetMemberRelationshipList = () => {
 
   const memoHandleBlockCancelClick = useCallback(
     async (otherId) => {
-      alert("누가"+fromId+"누구를"+otherId+"차단해제");
+      // alert("누가"+fromId+"누구를"+otherId+"차단해제");
       await handleBlockCancelClick(fromId, otherId, refetchData);
     },
     [fromId, refetchData]
