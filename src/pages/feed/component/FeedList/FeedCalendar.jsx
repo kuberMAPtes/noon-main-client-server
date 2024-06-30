@@ -72,8 +72,19 @@ const FeedCalendar = ({memberId, buildingId}) => {
     goToFeedDetail(memberId, feedId);
   };
 
+  const formatSelectedDate = (date) => {
+    if (!date) return '';
+    return new Intl.DateTimeFormat('ko-KR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      weekday: 'long'
+    }).format(date);
+  };
+
   return (
-    <div className="calendar-container">
+    <div className='calendar-container'>
+      <h2 className='calender-title'>이벤트</h2>
       <DatePicker
         selected={selectedDate}
         onChange={handleDateChange}
@@ -81,8 +92,8 @@ const FeedCalendar = ({memberId, buildingId}) => {
         dayClassName={dayClassName}
       />
       {selectedDate && (
-        <div>
-          <h2>{selectedDate.toDateString()}의 이벤트</h2>
+        <div className="event-list-container">
+          <h2>{formatSelectedDate(selectedDate)}</h2>
           {eventList.length > 0 ? (
             <ListGroup>
               {eventList.map((event, index) => (

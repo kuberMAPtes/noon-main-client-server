@@ -1,39 +1,39 @@
 .calendar-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh; /* 전체 화면 높이를 사용하여 중앙 배치 */
-    text-align: center;
+    text-align: center; /* 달력을 화면 중앙에 정렬 */
+    max-width: 80%; /* 모바일에서 최대 80%까지 너비 제한 */
+    margin: 0 auto; /* 가운데 정렬 */
 }
-  
+
+.event-list-container {
+    margin-top: 20px; /* 이벤트 목록과의 간격 설정 */
+}
+
 .react-datepicker {
-    font-size: 1.5rem; /* 폰트 크기 증가 */
-    margin: 5px 0; /* 달력 위아래의 간격 줄이기 */
+    font-size: 1rem;
+    margin: 10px 0; /* 달력 위아래의 간격 조정 */
+    width: 100%; /* 너비 100%로 설정 */
 }
   
 .react-datepicker__month-container {
-    width: 400px; /* 달력의 너비 증가 */
+    width: 100%;
 }
   
 .react-datepicker__day-name, 
 .react-datepicker__day, 
 .react-datepicker__time-name {
-    width: 50px; /* 날짜 셀의 너비 증가 */
-    line-height: 50px; /* 날짜 셀의 높이 증가 */
+    width: 30px; /* 날짜 셀의 너비 증가 */
+    line-height: 30px; /* 날짜 셀의 높이 증가 */
 }
   
 .react-datepicker__day--selected,
 .react-datepicker__day--keyboard-selected {
-    background-color: #0056b3; /* 선택된 날짜의 배경색 */
+    background-color: #9BAAF8; /* 선택된 날짜의 배경색 */
 }
   
 .has-event {
-    background-color: #3be23b; /* 이벤트가 있는 날짜의 배경색 */
-}
-
-h2 {
-    margin-top: 10px; /* h2 위쪽 간격 줄이기 */
+    background-color: #FF006E; /* 이벤트가 있는 날짜 배경색 설정 */
+    color: #f0f0f0; /* 텍스트 색상 */
+    border-radius: 50%; /* 원형으로 스타일링 */
 }
   
 ul {
@@ -44,4 +44,9 @@ p {
     margin-top: 5px; /* 이벤트 없는 경우 텍스트 위쪽 간격 줄이기 */
 }
 
-  
+.calender-title {
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 24px;
+    font-weight: bold;
+}

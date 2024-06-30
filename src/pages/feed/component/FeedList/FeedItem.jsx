@@ -151,9 +151,9 @@ const FeedItem = ({ data, memberId }) => {
                     {/* footer */}
                     {/* 제목 : 공지라면 공지로 바로 리다이렉션한다.*/}
                     {isNoticeCategory ? (
-                        <h1 className={styles.noticeTitle} onClick={() => goToDetailNotice(feedId)} style={{ cursor: 'pointer' }}>
+                        <h2 className={styles.noticeTitle} onClick={() => goToDetailNotice(feedId)} style={{ cursor: 'pointer' }}>
                             <FcApproval /> {title}
-                        </h1>
+                        </h2>
                     ) : (
                         <h2 className={styles.cardTitle} onClick={() => goToFeedDetail(memberId, feedId)} style={{ cursor: 'pointer' }}>
                             {title}

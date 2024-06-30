@@ -5,6 +5,7 @@ import useNavigator from '../../util/Navigator';
 import { useSearchParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios_api from '../../../../lib/axios_api';
+import styles from '../../css/FeedList/FeedPopularyRanking.module.css';
 
 const FeedPopularyRanking = ({buildingId}) => {
     const {goToMemberProfile, goToFeedDetail} = useNavigator();
@@ -21,12 +22,15 @@ const FeedPopularyRanking = ({buildingId}) => {
 
         // axios 실행
         try {
+            if(ranking.length !== 0) {
+                setRanking([]);
+            }
             const response = await axios_api.get(url);
+
             if (response.data.length === 0) {
                 setRanking([]);
             } else {
                 setRanking((prevFeeds) => [...prevFeeds, ...response.data]); // 기존의 끝에 추가
-
                 console.log(response.data);
             }
         } catch (e) {
@@ -40,20 +44,19 @@ const FeedPopularyRanking = ({buildingId}) => {
     }, []);
     
     return (
-        <div>
+        <div className={styles.rankingContainer}>
             <Row className="justify-content-center my-4">
-                <h2>인기 피드 랭킹</h2>
+                <h2 className={styles.rankingTitle}>인기 피드 랭킹</h2>
             </Row>
             <ListGroup as="ol">
                 {ranking.map((feed, index) => (
-                    <ListGroup.Item key={feed.feedId} as="li" className="d-flex justify-content-between align-items-center">
-                        <div onClick={() => goToFeedDetail(memberId, feed.feedId)}>
+                    <ListGroup.Item key={feed.feedId} as="li" className={`${styles.feedListItem} d-flex justify-content-between align-items-center`}>
+                        <div onClick={() => goToFeedDetail(memberId, feed.feedId)} className={styles.feedInfo}>
                             <span className="me-3">{index + 1}위</span>
-                            <span>{feed.title}</span>
+                            <span className={styles.feedTitle}>{feed.title}</span>
                         </div>
                         <div>
-                            <span className="me-3" onClick={() => goToMemberProfile(feed.writerId)}>작성자: {feed.nickname}</span>
-                            <Badge bg="primary">인기도: {feed.popularity}</Badge>
+                            <Badge className={styles.feedPopularityBadge}>인기도: {feed.popularity}</Badge>
                         </div>
                     </ListGroup.Item>
                 ))}
@@ -63,3 +66,5 @@ const FeedPopularyRanking = ({buildingId}) => {
 };
 
 export default FeedPopularyRanking;
+
+//<span className="me-3" onClick={() => goToMemberProfile(feed.writerId)}>작성자: {feed.nickname}</span>

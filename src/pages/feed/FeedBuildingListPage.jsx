@@ -57,25 +57,6 @@ const FeedBuildingListPage = () => {
         setLoading(false);
     };
 
-    // // 건물 내 인기 피드 목록 가져오기
-    // const rankingData = async () => {
-    //     let url = `/feed/FeedPopularity?buildingId=${buildingId}`;
-
-    //     // axios 실행
-    //     try {
-    //         const response = await axios_api.get(url);
-    //         if (response.data.length === 0) {
-    //             setRanking([]);
-    //         } else {
-    //             setRanking((prevFeeds) => [...prevFeeds, ...response.data]); // 기존의 끝에 추가
-
-    //             console.log(response.data);
-    //         }
-    //     } catch (e) {
-    //         console.log(e);
-    //     }    
-    // }
-
     // 랜더링 될 때마다 실행
     useEffect(() => {
         fetchData(fetchUrl, page);
@@ -118,8 +99,11 @@ const FeedBuildingListPage = () => {
     return (
         <div>
             <FeedDisplayBoard buildingId={buildingId} />
+            <br/>
             <FeedPopularyRanking buildingId={buildingId} />
+            <br/>
             <FeedCalendar memberId={memberId} buildingId={buildingId}/>
+            <br/>
             <div>
                 <div className="row">
                     {feeds.map((feed, index) => (

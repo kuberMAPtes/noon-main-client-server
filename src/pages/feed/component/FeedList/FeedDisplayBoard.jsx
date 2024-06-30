@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import '../../css/FeedDisplayBoard.css';
+import '../../css/FeedList/FeedDisplayBoard.css';
 import axios_api from '../../../../lib/axios_api';
 
 /**
