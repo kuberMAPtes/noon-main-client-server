@@ -84,8 +84,9 @@ const BuildingInfo = ({ subscriptionData, setSubscriptionData }) => {
     const response = await axiosInstance.get(`/buildingProfile/getMemberSubscriptionList`, {
       params: { memberId: member.memberId }
     });
-
-    const buildingIds = response.data.map(item => item.building.buildingId);
+    console.log(JSON.stringify(response));
+    // alert(JSON.stringify(response));
+    const buildingIds = response.data.map(item => item.buildingId);
     console.log("이건 구독건물목록", JSON.stringify(response.data));
     console.log("이건 구독건물ID", buildingIds);
 
