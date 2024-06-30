@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Row, Col } from "react-bootstrap";
 import {
   FaUserEdit,
@@ -20,10 +20,26 @@ import { BsFillChatDotsFill } from "react-icons/bs";
 import { IoSettingsOutline } from "react-icons/io5";
 import { RiCustomerServiceLine } from "react-icons/ri";
 import { AiFillAlert } from "react-icons/ai";
+import {chatRequest} from "../../../Chat/function/axios_api";
+import ChatRequestModal from "./ChatRequestModal";
 const ProfileActions = ({ toId, fromId }) => {
   const [showMenu, setShowMenu] = React.useState(false);
   const member = useSelector((state) => state.auth.member);
   const { encryptedData, ivData } = useEncryptId(member?.memberId);
+
+  const [showChatModal, setShowChatModal] = useState(false);
+  const handleChatModalShow = () => setShowChatModal(true);
+  const handleChatModalClose = () => setShowChatModal(false);
+  const handleChatModalSubmit = async (fromId, toId, applyMessage) => {
+    const response = await chatRequest({
+      fromId: fromId,
+      toId: toId,
+      applyMessage: applyMessage
+    });
+    console.log("response :: " + response);
+    alert("response :: " + response);
+    handleChatModalClose();
+  };
 
   const navigate = useNavigate();
 
@@ -36,6 +52,7 @@ const ProfileActions = ({ toId, fromId }) => {
     e.preventDefault();
     // alert("유저를 차단합니다.");
   };
+
 
   const handleReport = (e) => {
     e.preventDefault();
@@ -125,14 +142,6 @@ const ProfileActions = ({ toId, fromId }) => {
         {toId !== fromId && (
           <Row style={{ margin: "0px", padding: "0px" }}>
             <Col xs={12} style={{ margin: "0px", padding: "0px" }}>
-              <Link
-                to={`/chat/chatApply/${toId}`}
-                style={{
-                  width: "100%",
-                  margin: "0px 0px 0px 0px",
-                  padding: "0px",
-                }}
-              >
                 <NormalButton
                   size="sm"
                   style={{
@@ -141,12 +150,19 @@ const ProfileActions = ({ toId, fromId }) => {
                     padding: "0px",
                     textAlign: "left",
                   }}
+                  onClick={handleChatModalShow}
                 >
                   <span style={{ paddingRight: "20%" }}></span>
                   <BsFillChatDotsFill />
                   <span style={{ paddingLeft: "11%" }}>1대1채팅방 신청</span>
                 </NormalButton>
-              </Link>
+                <ChatRequestModal 
+                  show={showChatModal} 
+                  handleClose={handleChatModalClose} 
+                  handleSubmit={handleChatModalSubmit}
+                  fromId={fromId}
+                  toId={toId}
+                />
             </Col>
           </Row>
         )}
