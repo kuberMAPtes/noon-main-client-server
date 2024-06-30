@@ -59,3 +59,10 @@
   height: 24px;
   right: 50%;
 }
+
+.mapMergeButton {
+  position: absolute;
+  z-index: 99;
+  top: 8%;
+  left: 12px;
+}

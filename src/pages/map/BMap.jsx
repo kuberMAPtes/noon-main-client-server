@@ -15,6 +15,7 @@ import WantBuildingProfile from "../building/components/WantBuildingProfile";
 import MarkerModeButtonGroup, { MARKER_MODES } from "./component/MarkerModeButtonGroup";
 import { Spinner } from "reactstrap";
 import { MdCancel } from "react-icons/md";
+import { Button } from "react-bootstrap";
 
 const naver = window.naver;
 
@@ -72,10 +73,7 @@ export default function BMap() {
 
   const loginMember = useSelector((state) => state.auth.member);
 
-  console.log(loginMember);
-
   const member = ownerIdOfMapInfo ? ownerIdOfMapInfo : loginMember.memberId;
-  console.log(member);
 
   /**
    * 
@@ -206,6 +204,32 @@ export default function BMap() {
   return (
     <div className={mapStyles.mapContainer}>
       <div id="map">
+        {
+          isSubscriptionView && (
+            <Button
+                color="primary"
+                className={mapStyles.mapMergeButton}
+                onClick={() => {
+                  if (isSubscriptionView) {
+                    const fromId = loginMember.memberId;
+                    const toId = member;
+                    console.log("fromId=" + fromId);
+                    console.log("toId=", toId);
+                    axios_api.post("/buildingProfile/addSubscriptionFromSomeone", {
+                      fromMember: {
+                        memberId: fromId
+                      },
+                      toMember: {
+                        memberId: toId
+                      }
+                    });
+                  }
+                }}
+            >
+              건물 합치기
+            </Button>
+          )
+        }
         {loading && (
           <div className={mapStyles.loadingSpinnerContainer}>
             <Spinner className={mapStyles.loadingSpinner} color="primary" />
