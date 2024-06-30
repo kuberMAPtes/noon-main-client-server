@@ -82,7 +82,7 @@ const AddPhoneNumberAuthentification = () => {
   ) => {
     // alert("phoneNumber"+phoneNumber+"toId"+toId+"verifiedState"+verifiedState+"toUrl"+toUrl)
     console.log("verifiedState :: "+verifiedState + "toUrl :: "+toUrl + "toId :: "+toId);
-    alert("verifiedState :: "+verifiedState + "toUrl :: "+toUrl + "toId :: "+toId);
+    // alert("verifiedState :: "+verifiedState + "toUrl :: "+toUrl + "toId :: "+toId);
     if (
       verifiedState === "success" &&
       toUrl === "updatePhoneNumber" &&
@@ -91,7 +91,7 @@ const AddPhoneNumberAuthentification = () => {
       const memberId = toId;
       const response = await updatePhoneNumber({ phoneNumber, memberId });
       console.log(JSON.stringify(response));
-      alert("response" + JSON.stringify(response));
+      // alert("response" + JSON.stringify(response));
       if (response === true) {
         const secretId = encryptedData;
         const secretIv = ivData;
