@@ -5,7 +5,7 @@ import FetchTypeToggle from "./component/FetchTypeToggle";
 import axios_api from "../../lib/axios_api";
 import { MAIN_API_URL } from "../../util/constants";
 import { is2xxStatus, is4xxStatus } from "../../util/statusCodeUtil";
-import { getBuildingMarkerHtml, getPlaceSearchMarkerHtml, getSubscriptionMarkerHtml } from "./contant/markerHtml";
+import { getBuildingMarkerHtml, getLiveliestChatroomMarkerHtml, getPlaceSearchMarkerHtml, getSubscriptionMarkerHtml } from "./contant/markerHtml";
 import mapStyles from "../../assets/css/module/map/BMap.module.css";
 import "../../assets/css/module/map/BMap.css";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
@@ -29,6 +29,10 @@ let popBuildingMarkers = new Map();
 let buildingSubscriptionMarkers = new Map();
 
 let placeSearchMarkers;
+
+const markerFetchMode = {
+  mode: () => {}
+};
 
 const buildingFetchChecked = {
   subscriptionChecked: true,
@@ -57,6 +61,18 @@ export default function BMap() {
     }
   });
   const [currentMarkerDisplayMode, setCurrentMarkerDisplayMode] = useState(ownerIdOfMapInfo === undefined ? MARKER_MODES.DISPLAY_BUILDING_NAME : MARKER_MODES.DISPLAY_NONE);
+
+  switch (currentMarkerDisplayMode) {
+    case MARKER_MODES.DISPLAY_BUILDING_NAME:
+      markerFetchMode.mode = fetchBuildingMarkers;
+      break;
+    case MARKER_MODES.DISPLAY_LIVELIEST_CHATROOM:
+      markerFetchMode.mode = fetchChatroomMarkers;
+      break;
+    default:
+      markerFetchMode.mode = () => {};
+  }
+
   const [loading, setLoading] = useState(false);
   const [placesSearchResultExists, setPlacesSearchResultExists] = useState(false);
 
@@ -367,11 +383,15 @@ function fetchBuildingInfo(latitude, longitude, setWantBuildingProfileModal, nav
  * @param {string} memberId
  */
 async function fetchBuildingMarkers(subscriptionChecked, memberId, navigate, currentMarkerDisplayMode) {
-  if (currentMarkerDisplayMode !== MARKER_MODES.DISPLAY_NONE) {
-    await fetchBuildingsInPositionRange(navigate, currentMarkerDisplayMode);
-  } else {
-    console.log("here");
-    clearMarkers(popBuildingMarkers);
+  switch (currentMarkerDisplayMode) {
+    case MARKER_MODES.DISPLAY_BUILDING_NAME:
+      await fetchBuildingsInPositionRange(navigate);
+      break;
+    case MARKER_MODES.DISPLAY_LIVELIEST_CHATROOM:
+      await fetchChatroomMarkers(navigate);
+      break;
+    default:
+      clearMarkers(popBuildingMarkers);
   }
 
   if (subscriptionChecked) {
@@ -406,10 +426,6 @@ function addMarker(html, latitude, longitude, clickable = true) {
 }
 
 async function fetchBuildingsInPositionRange(navigate, currentMarkerDisplayMode) {
-  if (currentMarkerDisplayMode === MARKER_MODES.DISPLAY_NONE) {
-    clearMarkers(popBuildingMarkers);
-    return;
-  }
   const positionRange = getPositionRange();
   console.log(positionRange);
   const response = await axios_api.get(`${MAIN_API_URL}/buildingProfile/getBuildingsWithinRange`, {
@@ -433,7 +449,7 @@ async function fetchBuildingsInPositionRange(navigate, currentMarkerDisplayMode)
       return;
     }
 
-    const contenthtml = getBuildingMarkerHtml(sampleLiveliestChatroom, d.buildingName, currentMarkerDisplayMode);
+    const contenthtml = getBuildingMarkerHtml(d.buildingName);
     const buildingMarker = addMarker(contenthtml, d.latitude, d.longitude)
     naver.maps.Event.addListener(buildingMarker, "click", () => {
       navigate(`/getBuildingProfile/${d.buildingId}`);
@@ -477,6 +493,29 @@ async function fetchSubscriptions(memberId, navigate) {
     }
   });
   clearMarkers(buildingSubscriptionMarkers, buildingMarkersCache);
+}
+
+function fetchChatroomMarkers(navigate) {
+  axios_api.get("/buildingProfile/liveliestChatrooms")
+      .then((response) => {
+        const data = response.data;
+        const chatroomMarkerCache = new Set();
+        console.log(data);
+        data.forEach((d) => {
+          const chatroomId = d.chatroomId;
+          chatroomMarkerCache.add(chatroomId);
+          const contentHtml = getLiveliestChatroomMarkerHtml(d.chatroomName, d.liveliness);
+          const chatroomMarker = addMarker(contentHtml, d.building.latitude, d.building.longitude);
+          naver.maps.Event.addListener(chatroomMarker, "click", () => {
+            navigate(`/chat/chatroom?chatroomID=${chatroomId}`);
+          });
+          popBuildingMarkers.set(chatroomId, chatroomMarker);
+        });
+        clearMarkers(popBuildingMarkers, chatroomMarkerCache);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
 }
 
 function getPositionRange() {
