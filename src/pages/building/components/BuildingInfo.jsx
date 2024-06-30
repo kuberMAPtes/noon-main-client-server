@@ -75,17 +75,21 @@ const BuildingInfo = () => {
       params: { buildingId: buildingId }
     });
     setSubscribers(response.data);
-    console.log("구독자 목록: " + response.data);
+    console.log("구독자 목록: " + JSON.stringify(response.data));
   };
 
   // 회원의 구독여부 체크
   const getSubscriptionStatus = async () => {
+    console.log("회원의 구독 여부 확인");
+
     const response = await axiosInstance.get(`/buildingProfile/getMemberSubscriptionList`, {
       params: { memberId: member.memberId }
     });
-    console.log("회원의 구독 여부 확인");
 
-    const buildingIds = response.data.map(building => building.buildingId);
+    const buildingIds = response.data.map(item => item.building.buildingId);
+    console.log("이건 구독건물목록", JSON.stringify(response.data));
+    console.log("이건 구독건물ID", buildingIds);
+
     if (buildingIds.includes(Number(buildingId))) {
       setSubscription(true);
       console.log("구독 중인 건물입니다.");
