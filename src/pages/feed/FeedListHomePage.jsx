@@ -13,7 +13,8 @@ import Header from '../../components/common/Header';
 import { useSelector } from 'react-redux';
 import FeedCntByTag from './component/FeedChart/FeedCntByTag';
 import { Line } from 'react-chartjs-2';
-
+import { Chart, registerables } from 'chart.js';
+Chart.register(...registerables);
 /**
  * 피드 대표 Home을 설정하는 곳입니다. FeedListPage와 대동소이함
  * @returns 인기도가 높은 피드 리스트를 가져온다.
