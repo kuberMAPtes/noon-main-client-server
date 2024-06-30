@@ -434,12 +434,6 @@ async function fetchBuildingsInPositionRange(navigate, currentMarkerDisplayMode)
   const data = response.data;
   console.log(data);
 
-  // TODO: 샘플 데이터 변경
-  const sampleLiveliestChatroom = {
-    "liveliness": 1,
-    "chatroomName": "sample-chatroom"
-  }
-
   const buildingMarkersCache = new Set();
   
   data.forEach((d) => {
@@ -469,25 +463,24 @@ async function fetchSubscriptions(memberId, navigate) {
   const data = response.data;
   console.log(data);
 
-  // TODO: 샘플 데이터 변경
-  const sampleSubscriptionProviders = [ "sample" ];
-  const sampleLiveliestChatroom = {
-    "liveliness": 1,
-    "chatroomName": "sample-chatroom"
-  }
-
   const buildingMarkersCache = new Set();
   data.forEach((d) => {
-    const buildingId = d.buildingId;
+    const buildingId = d.building.buildingId;
+    console.log("here");
     if (!popBuildingMarkers.has(buildingId)) {
+      console.log("here2");
       buildingMarkersCache.add(buildingId);
       if (buildingSubscriptionMarkers.has(buildingId)) {
         return;
       }
-      const contenthtml = getSubscriptionMarkerHtml(sampleSubscriptionProviders, d.buildingName);
-      const buildingMarker = addMarker(contenthtml, d.latitude, d.longitude);
+      const contentHtml = getSubscriptionMarkerHtml(d.subscriptionProvider.nickname, d.building.buildingName);
+      const buildingMarker = addMarker(contentHtml, d.building.latitude, d.building.longitude);
       naver.maps.Event.addListener(buildingMarker, "click", () => {
-        navigate(`/getBuildingProfile/${d.buildingId}`);
+        if (d.building.profileActivated) {
+          navigate(`/getBuildingProfile/${buildingId}`);
+        } else {
+          // TODO
+        }
       });
       buildingSubscriptionMarkers.set(buildingId, buildingMarker);
     }
@@ -538,8 +531,6 @@ function getPositionRange() {
  * @param {Set<number>} toRemain 
  */
 function clearMarkers(markers, toRemain) {
-  console.log(markers);
-  console.log(toRemain);
   for (let marker of markers) {
     const [buildingId, markerInstance] =  marker;
     if (!toRemain || !toRemain.has(buildingId)) {
