@@ -109,7 +109,7 @@ const Chatroom = () => {
 
       return ;
     }
-    
+
     // 채팅을 위해 노드서버와 웹소켓연결
     socket.on('connect', async () => {
       console.log('Connected to server with sessionID: ', sessionID);
@@ -156,8 +156,19 @@ const Chatroom = () => {
     });
 
     // 실시간 소켓룸 및 실시간 접속자 정보 받아오기
-    socket.emit('live_socketRoomInfo', roomInfo, initLiveSetting);
+    socket.emit('live_socketRoomInfo', roomInfo, (socketRoom) =>{
 
+      const socket = socketRef.current;
+      console.log("🌹생성된방?", socketRoom);
+
+      // 채팅방 입장하며 해당 채팅방에 있는 실시간 member Id들을 조회 
+      socket.emit("enter_room", socketRoom, (liveusers) => {
+
+        console.log("🌹채팅방 실시간 접속자 정보", liveusers);
+        setLiveParticipants(liveusers);
+      });
+    });
+ 
     // 입장과 동시에 채팅읽음처리
     socket.emit('message_read', memberID, roomInfo, (data) =>{
       console.log("🟥⚪메세지 읽었습니다 결과는 ", data)
@@ -201,6 +212,17 @@ const Chatroom = () => {
       setReceivedMessage((prevMessages) => [...prevMessages, noticeMsg]);
     });
 
+    // 채팅방 강퇴당하기
+    socket.on('kicked_room', (data) => {
+      const { roomId } = data;
+      console.log(`방 ${roomId}에서 강퇴됨`);
+      
+      // 사용자 인터페이스 업데이트
+      alert(`방 ${roomId}에서 강퇴되었습니다.`);
+
+      // 강퇴된 방에서 나가는 로직 추가
+      navigate(`/chat/myChatroomList`);
+    })
     // 컴포넌트 언마운트 시 소켓 이벤트 리스너 정리
     return () => {
       console.log("unmount! socket off!");
@@ -209,19 +231,6 @@ const Chatroom = () => {
     };
   }, [roomInfo])
   
-  // 소켓에서 열린 실시간 채팅방 과 실시간 채팅유저정보를 받음
-  const initLiveSetting = (socketRoom) => {
-    const socket = socketRef.current;
-    console.log("🌹생성된방?", socketRoom);
-
-    // 채팅방 입장하며 해당 채팅방에 있는 실시간 member Id들을 조회 
-    socket.emit("enter_room", socketRoom, (liveusers) => {
-
-      console.log("🌹채팅방 실시간 접속자 정보", liveusers);
-      setLiveParticipants(liveusers);
-    });
-  };
-
   // 화면 리랜더링하고 싶을때 씁니다
   useEffect( ()=>{
     console.log("-------- 조용하게 화면 리랜더링 ------")
