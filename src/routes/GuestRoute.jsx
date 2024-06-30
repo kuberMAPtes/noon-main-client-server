@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { encryptWithLv } from '../util/crypto';
 import { setIsRedirect } from '../redux/slices/authSlice';
 import { navigateMainPage, navigateRealMainPage } from '../util/mainPageUri';
-import { setFooterEnbaled } from '../redux/slices/footerEnabledSlice';
+import useFooterToggle from '../components/hook/useFooterToggle';
 
 //게스트만 사용할 수 있는 라우터
 const GuestRoute = ({ children }) => {
@@ -21,12 +21,7 @@ const GuestRoute = ({ children }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    useEffect(() => {
-      dispatch(setFooterEnbaled(false));
-      return () => {
-        dispatch(setFooterEnbaled(true));
-      }
-    }, [dispatch]);
+    useFooterToggle(false);
     
     console.log("#### GuestRoute 렌더링 authorization, memberId, uri, IsFirst구독", authorization, member,IsFirst);
     //부작용 로직이다. 렌더링은 UI에 집중하고 부작용은 useEffect에 집중
@@ -46,12 +41,11 @@ const GuestRoute = ({ children }) => {
         setIsFirst(false);
     }, [authorization, member, isRedirect, navigate, dispatch]);
 
-    if (IsFirst===true || loading === true){
-        return null;
+    if (IsFirst === true || loading === true) {
+      return null;
+    } else {
+        return <>{children}</>;
     }
-
-    //조건부 렌더링 : 인증이 있으면 메인페이지로 이동 
-    return <>{children}</>
 };
 
 export default GuestRoute;

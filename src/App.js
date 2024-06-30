@@ -11,6 +11,7 @@ import BackButton from "./components/common/BackButton";
 
 function App() {
   const footerEnabled = useSelector((state) => state.footerEnabled.value);
+
   const backButtonEnabled = useSelector((state) => state.backButtonEnabled.value);
   function setScreenSize() {
     let vh = window.innerHeight * 0.01;

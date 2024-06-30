@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense, lazy } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../../../redux/slices/authSlice";
@@ -9,6 +9,10 @@ import SignUpButton from "./SignUpButton";
 import styles from "../../../assets/css/module/member/LoginForm.module.css";
 import styles2 from "../../../assets/css/module/member/base.module.css";
 import { setFooterEnbaled } from "../../../redux/slices/footerEnabledSlice";
+import NoonLogoRmBg from "../../../assets/css/NoonLogoRmBg";
+import {motion,useAnimation} from "framer-motion";
+
+const GetAuthMain = lazy(() => import("../GetAuthMain"));
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -19,13 +23,8 @@ const LoginForm = () => {
   const [memberId, setMemberId] = useState("");
   const [pwd, setPassword] = useState("");
   const [validationError, setValidationError] = useState("");
-
-  useEffect(() => {
-    dispatch(setFooterEnbaled(false));
-    return () => {
-      dispatch(setFooterEnbaled(true));
-    }
-  }, [dispatch]);
+  const controls = useAnimation();
+  const [isNavigating, setIsNavigating] = useState(false);
 
   const handleLoginClick = async (event) => {
     event.preventDefault();
@@ -48,7 +47,7 @@ const LoginForm = () => {
 
     try {
       console.log("로그인 하기 전 store.auth.member :: ", storeMemberId);
-      const resultAction = await dispatch(login({ loginData, navigate }));
+      const resultAction = await dispatch(login({ loginData, navigate, setIsNavigating }));
       // alert("resultAction"+JSON.stringify(resultAction));
       const message = resultAction.payload?.message;
       // alert("로그인 처리중입니다."+message);
@@ -80,63 +79,100 @@ const LoginForm = () => {
     }
   }, [storeMemberId, navigate]);
 
+  useEffect(() => {
+    controls.start({
+      background: [
+        "linear-gradient(to right, #ffffff, #ffffff)",
+        "linear-gradient(to right, #966ec1, #91a7ff)"
+      ],
+      transition: { duration: 0.7 }
+    });
+  }, [controls]);
+
+  const handleLinkClick = async () => {
+    setIsNavigating(true);
+    navigate("/member/getAuthMain");
+  };
+
+  useEffect(() => {
+    const preloadComponent = async () => {
+      const component = await import("../GetAuthMain");
+      return component;
+    };
+    preloadComponent();
+  }, []);
+
+  if (isNavigating) {
+    return null; // 페이지 전환 시 현재 컴포넌트를 숨깁니다.
+  }
+
   return (
-    <Container className={`mt-5 ${styles.container}`}>
-      <Row className="justify-content-center">
-        <Col xs={12} sm={10} md={8} lg={6}>
-          <h2 className="text-center">로그인</h2>
-          <Form>
-            <Form.Group controlId="memberId">
-              <Form.Label>Member ID</Form.Label>
-              <Form.Control
-                minLength={6}
-                maxLength={40}
-                type="text"
-                value={memberId}
-                onChange={(e) => setMemberId(e.target.value)}
-                onKeyDown={handleKeyDown}
-                required
-                className={styles.formControl}
-              />
-            </Form.Group>
-            <Form.Group controlId="password">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                minLength={8}
-                maxLength={16}
-                type="password"
-                value={pwd}
-                onChange={(e) => setPassword(e.target.value)}
-                onKeyDown={handleKeyDown}
-                required
-                className={styles.formControl}
-              />
-            </Form.Group>
-            <Button
-              variant="primary"
-              type="button"
-              onClick={handleLoginClick}
-              className={`mt-3 w-100 ${styles.btn} ${styles2.typicalButtonColor}`}
-            >
-              로그인
-            </Button>
-            {(validationError) && (
-              <Alert variant="danger" className="mt-3">
-                {renderLoginError(validationError, loginError)}
-              </Alert>
-            )}
-          </Form>
-          <Link to="/member/getAuthMain">
-            <Button
-              variant="primary"
-              className={`${styles2.typicalButtonColor} me-2`}
-            >
-              메인으로..
-            </Button>
-          </Link>
-        </Col>
-      </Row>
-    </Container>
+    <Suspense fallback={<div>Loading...</div>}>
+    <motion.div
+    initial={{ background: "linear-gradient(to right, #ffffff, #ffffff)" }}
+    animate={controls}
+    className={styles.background}
+  >
+      <Container className={`${styles.container} ${styles.setting}`}>
+        <Row className="justify-content-center">
+          <Col xs={12} sm={10} md={8} lg={6}>
+            <div className={`${styles.centeredContainer}`}><NoonLogoRmBg /></div>
+            <h2 className="text-center">&nbsp;</h2>
+            <Form>
+              <Form.Group controlId="memberId">
+                <Form.Label className={styles.formLabel}>아이디</Form.Label>
+                <Form.Control
+                  placeholder="아이디"
+                  minLength={6}
+                  maxLength={40}
+                  type="text"
+                  value={memberId}
+                  onChange={(e) => setMemberId(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  required
+                  className={styles.formControl}
+                />
+              </Form.Group>
+              <Form.Group controlId="password">
+                <Form.Label className={styles.formLabel}>비밀번호</Form.Label>
+                <Form.Control
+                  placeholder="비밀번호"
+                  minLength={8}
+                  maxLength={16}
+                  type="password"
+                  value={pwd}
+                  onChange={(e) => setPassword(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  required
+                  className={styles.formControl}
+                />
+              </Form.Group>
+              <Button
+                variant="primary"
+                type="button"
+                onClick={handleLoginClick}
+                className={`mt-3 w-100 ${styles.btn} ${styles2.typicalButtonColor}`}
+              >
+                로그인
+              </Button>
+              {(validationError) && (
+                <Alert variant="danger" className="mt-3">
+                  {renderLoginError(validationError, loginError)}
+                </Alert>
+              )}
+            </Form>
+              <Button
+                variant="secondary"
+                className={`${styles.linkButton} me-2`}
+                onClick={handleLinkClick}
+              >
+                메인으로..
+              </Button>
+          </Col>
+        </Row>
+      </Container>
+      </motion.div>
+    </Suspense>
   );
 };
 

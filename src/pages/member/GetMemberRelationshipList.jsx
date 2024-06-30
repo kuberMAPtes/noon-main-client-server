@@ -146,11 +146,30 @@ const GetMemberRelationshipList = () => {
       case "follower":
         return yourRelationshipLists.followerList;
       case "blocking":
+        if(fromId===toId){
         return yourRelationshipLists.blockingList;
+        }else{
+          const blockingList = Array.from({ length: 0 }, () => ({
+            memberRelationshipId: null,
+            relationshipType: "",
+            activated: null,
+            fromMember: {
+              memberId: null,
+              nickname: null,
+              profilePhotoUrl: null
+            },
+            toMember: {
+              memberId: null,
+              nickname: null,
+              profilePhotoUrl: null
+            }
+          }));
+          return blockingList;
+        }
       default:
         return [];
     }
-  }, [activeTab, yourRelationshipLists]);
+  }, [activeTab, yourRelationshipLists, fromId, toId]);
 
   const defaultPhotoUrl = `${process.env.PUBLIC_URL}/image/defaultMemberProfilePhoto.png`;
 
@@ -354,7 +373,7 @@ const GetMemberRelationshipList = () => {
             activeTab === "blocking" ? module.active : ""
           }`}
         >
-          차단 회원 {blockingCount}
+          차단 회원 {fromId===toId ? blockingCount : ""}
         </Col>
       </Row>
 
@@ -505,6 +524,46 @@ const GetMemberRelationshipList = () => {
                   </Col>
                 </Row>
               </ListGroup.Item>
+            )}
+            {activeTab === "blocking" && fromId !== toId && (
+            <ListGroup.Item
+            key={index}
+            className="d-flex align-items-center justify-content-between"
+            style={{
+              marginTop: "10px",
+              paddingBottom:
+                index === getActiveList().length - 1 ? "70px" : "0", // 마지막 요소에만 패딩 추가
+            }}
+            >
+            <Row className="align-items-center" style={{ width: "100%" }}>
+              <Col xs={2} style={{ margin: "0px", padding: "0px" }}>
+                <Image
+                  src={
+                    defaultPhotoUrl
+                  }
+                  className={module.profilePhotoUrl}
+                  roundedCircle
+                />
+              </Col>
+              <Col xs={6}>
+                <div>차단된 회원</div>
+              </Col>
+              <Col xs={2}>
+                <button
+                  size="sm"
+                  className={module.buttonColor}
+                  style={{
+                    paddingLeft: "10px",
+                    paddingRight: "10px",
+                    width: "100px",
+                    height: "40px",
+                  }}
+                >
+                  비공개
+                </button>
+              </Col>
+            </Row>
+          </ListGroup.Item>
             )}
           </div>
         )
