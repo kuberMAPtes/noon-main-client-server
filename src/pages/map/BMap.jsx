@@ -116,6 +116,7 @@ export default function BMap() {
 
   useEffect(() => {
     const mapElement = document.getElementById("map");
+    map = new naver.maps.Map(mapElement);
     getCurrentPosition((coords) => {
       const initialMapState = {
         latitude: currentMapState.initialized ? currentMapState.latitude : coords.latitude,
@@ -127,10 +128,8 @@ export default function BMap() {
         latitude: coords.latitude,
         longitude: coords.longitude
       });
-      map = new naver.maps.Map(mapElement, {
-        center: new naver.maps.LatLng(initialMapState.latitude, initialMapState.longitude),
-        zoom: initialMapState.zoomLevel
-      });
+      map.setCenter(new naver.maps.LatLng(initialMapState.latitude, initialMapState.longitude));
+      map.setZoom(initialMapState.zoomLevel);
       dispatch(setCurrentMapState(initialMapState));
       
       initMap(map);
@@ -143,10 +142,8 @@ export default function BMap() {
         zoomLevel: currentMapState.zoomLevel,
         initialized: true
       }
-      map = new naver.maps.Map(mapElement, {
-        center: new naver.maps.LatLng(initialMapState.latitude, initialMapState.longitude),
-        zoom: initialMapState.zoomLevel
-      });
+      map.setCenter(new naver.maps.LatLng(initialMapState.latitude, initialMapState.longitude));
+      map.setZoom(initialMapState.zoomLevel);
       dispatch(setCurrentMapState(initialMapState));
       initMap(map);
       setFirstEntry(false);
