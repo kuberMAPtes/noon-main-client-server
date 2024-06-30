@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import io from 'socket.io-client';
 import module from './Chatroom.module.css'; // 스타일 파일을 import 합니다
-import { getChatroom, addChatEntrance } from '../Chat/function/axios_api'
+import { getChatroom, addChatEntrance, kickChatroom } from '../Chat/function/axios_api'
 import { useSelector, useDispatch } from 'react-redux';
-import setFooterEnabled from '../../redux/slices/footerEnabledSlice'
+import { setFooterEnbaled } from '../../redux/slices/footerEnabledSlice'
 import { Link } from 'react-router-dom';
 import { useNavigate  } from 'react-router-dom';
 import { CustomModal } from './function/CustomModal'
@@ -18,7 +18,7 @@ const Chatroom = () => {
   const [showModal, setShowModal] = useState(false); // 유저 프로필보기 / 추방하기 모달 on/off
   const [selectedParticipant, setSelectedParticipant] = useState(null); // 모달에 유저 정보 전달하기 위함
   const [showSidebar, setShowSidebar] = useState(false); // 채팅방 정보는 사이드바에 몰아넣기
-
+  const [reRendering, setReRedering] = useState(false); // 조용히 리랜더링을 강제하고 싶을때 사용
   
   const member = useSelector((state) => state.auth.member);
   const authorization = useSelector((state) => state.auth.authorization);
@@ -38,6 +38,7 @@ const Chatroom = () => {
   const queryParams = new URLSearchParams(location.search);
   const chatroomID = queryParams.get('chatroomID');
   const chatroomData = useSelector(state => state.chatroom.chatroomData);
+  const footerEnabled = useSelector((state) => state.footerEnabled.value);
 
   // 채팅방 입장후에 getChatroom 을 하면 새로고침해야 방정보 업데이트됨
   // 이전화면에서 axios 후 redux 에 채팅방 정보를 넣고 가져오게끔 변경
@@ -52,6 +53,15 @@ const Chatroom = () => {
 
   const socketRef = useRef();
 
+  // 새로고침시 socketID가 다시만들어져서 계속 재입장하는 버그를 픽스한다
+  let sessionID = localStorage.getItem('sessionID');
+  if (!sessionID) {
+      sessionID = generateRandomID(); // 임의의 고유 ID 생성
+      localStorage.setItem('sessionID', sessionID);
+  }
+  function generateRandomID() {
+    return '_' + Math.random().toString(36).substr(2, 9);
+  }
 
   // 접속 유저가 바뀌거나 채팅방 정보가 바뀌면 소켓에 연결하고 기본 세팅을 함
   // socket 들을 등록해서 메세지를 수신할 수 있게도 함
@@ -59,7 +69,12 @@ const Chatroom = () => {
     console.log("🦄roomInfo 업데이트로 첫번째 useEffect 실행 => ", roomInfo);
 
     // 소켓 연결 설정
-    socketRef.current = io(process.env.REACT_APP_NODE_SERVER_URL, { path: '/socket.io' });
+    socketRef.current = io(process.env.REACT_APP_NODE_SERVER_URL, { 
+      path: '/socket.io',
+      query: {
+        sessionID: sessionID
+      }
+    });
 
     const socket = socketRef.current;
 
@@ -94,9 +109,11 @@ const Chatroom = () => {
 
       return ;
     }
+
     // 채팅을 위해 노드서버와 웹소켓연결
     socket.on('connect', async () => {
-      console.log('Connected to server', roomInfo.chatroomName);
+      console.log('Connected to server with sessionID: ', sessionID);
+      console.log('Connected to server on roomID: ', roomInfo.chatroomName);
     });
 
     // 멤버ID를 소켓ID에 매핑
@@ -121,12 +138,9 @@ const Chatroom = () => {
       console.log("메세지 히스토리 받은거 => ", messageHistory);
       
       messageHistory.forEach( history => {
-        const { nickname, chatMsg, time, type, readMembers } = history;
+        const { sender, chatMsg, time, type, readMembers } = history;
 
-        const sender = nickname;
-        const text = chatMsg;
-
-        previousMessages.push({ type: type ? type : 'other' , sender : sender, text : text , timestamp : time, readMembers : readMembers });
+        previousMessages.push({ type: sender == memberID ? 'mine' : 'other' , sender : sender, text : chatMsg , timestamp : time, readMembers : readMembers });
       });
   
       // 불러오기 완료 메세지 추가
@@ -142,11 +156,24 @@ const Chatroom = () => {
     });
 
     // 실시간 소켓룸 및 실시간 접속자 정보 받아오기
-    socket.emit('live_socketRoomInfo', roomInfo, initLiveSetting);
+    socket.emit('live_socketRoomInfo', roomInfo, (socketRoom) =>{
 
+      const socket = socketRef.current;
+      console.log("🌹생성된방?", socketRoom);
+
+      // 채팅방 입장하며 해당 채팅방에 있는 실시간 member Id들을 조회 
+      socket.emit("enter_room", socketRoom, (liveusers) => {
+
+        console.log("🌹채팅방 실시간 접속자 정보", liveusers);
+        setLiveParticipants(liveusers);
+      });
+    });
+ 
     // 입장과 동시에 채팅읽음처리
     socket.emit('message_read', memberID, roomInfo, (data) =>{
       console.log("🟥⚪메세지 읽었습니다 결과는 ", data)
+
+      setReRedering(prev => !prev)
     })
 
     // (개발중) 다른유저 채팅 메세지 읽음시 메세지 업데이트 
@@ -170,6 +197,13 @@ const Chatroom = () => {
     socket.on('specific_chat', (message) => {
       console.log("표시할 메세지 =>", message);
       setReceivedMessage((prevMessages) => [...prevMessages, message]);
+
+      // 수신했으면 읽은거로 처리
+      socket.emit('message_read', memberID, roomInfo, (data) =>{
+        console.log("🟥⚪메세지 읽었습니다 결과는 ", data)
+      })
+
+      setReRedering(prev => !prev)
     });
 
     // 공지 메세지 수신
@@ -178,38 +212,30 @@ const Chatroom = () => {
       setReceivedMessage((prevMessages) => [...prevMessages, noticeMsg]);
     });
 
+    // 채팅방 강퇴당하기
+    socket.on('kicked_room', (data) => {
+      const { roomId } = data;
+      console.log(`방 ${roomId}에서 강퇴됨`);
+      
+      // 사용자 인터페이스 업데이트
+      alert(`방 ${roomId}에서 강퇴되었습니다.`);
+
+      // 강퇴된 방에서 나가는 로직 추가
+      navigate(`/chat/myChatroomList`);
+    })
     // 컴포넌트 언마운트 시 소켓 이벤트 리스너 정리
     return () => {
       console.log("unmount! socket off!");
       socket.off('message');
       socket.off('connect');
     };
-  }, [roomInfo]);
+  }, [roomInfo])
   
-  // 소켓에서 열린 실시간 채팅방 과 실시간 채팅유저정보를 받음
-  const initLiveSetting = (socketRoom) => {
-    const socket = socketRef.current;
-    console.log("🌹생성된방?", socketRoom);
-
-    // 채팅방 입장하며 해당 채팅방에 있는 실시간 member Id들을 조회 
-    socket.emit("enter_room", socketRoom, (liveusers) => {
-
-      console.log("🌹채팅방 실시간 접속자 정보", liveusers);
-      setLiveParticipants(liveusers);
-    });
-  };
-
-  // 채팅 메시지가 업데이트될 때마다 스크롤을 아래로 내립니다(개발중)
+  // 화면 리랜더링하고 싶을때 씁니다
   useEffect( ()=>{
-    
-    const messagesContainer = document.querySelector('.messages');
-    console.log("⚓ 스크롤 조정", messagesContainer)
-
-    if (messagesContainer) {
-      messagesContainer.scrollBottom = messagesContainer.scrollHeight;
-    }
-
-  },[receivedMessage])
+    console.log("-------- 조용하게 화면 리랜더링 ------")
+    console.log(reRendering)
+  },[reRendering])
 
   // 채팅 메세지 보내기
   const sendMessage = () => {
@@ -231,7 +257,7 @@ const Chatroom = () => {
     setMessageInput('');
   };
 
-  // 채팅방 나가기
+  // 채팅방 잠깐 나가기
   const leaveRoom = () => {
     const socket = socketRef.current;
 
@@ -241,6 +267,29 @@ const Chatroom = () => {
       navigate(`/chat/myChatroomList`);           
     });
   };
+
+  // 채팅방 아예 나가기
+  const leaveRoomForever = () => {
+
+    alert(`채팅방 ${roomInfo.chatroomID} 에서 퇴장합니다`)
+
+    //DB에서도 나가기
+    kickChatroom(roomInfo.chatroomID, memberID)
+    .then(chatroomData => {
+      console.log("회원이 나갔습니다. 업데이트된 채팅방 정보 => ", chatroomData);
+      setRoomInfo([...chatroomData.chatroom])
+      setParticipants(chatroomData.activeChatEntrances)
+    })
+    .catch(error => console.log(error));
+
+    const socket = socketRef.current;
+    //현재 소켓에서 나가면서 메세지보내기
+    socket.emit("leave_room_forever", roomInfo, (data) => {
+      console.log("나갈예정인 방", data);
+      
+      navigate(`/chat/myChatroomList`);           
+    });
+  }
 
   // 채팅방 내보내기
   function kickRoom(currentChatroomId, targetMemberId) {
@@ -264,16 +313,16 @@ const Chatroom = () => {
 
   const dispatch = useDispatch();
 
-  // // Footer 숨기기
-  // useEffect(() => {
+  // Footer 숨기기
+  useEffect(() => {
     
-  //   // dispatch(setFooterEnabled(false));
+    dispatch(setFooterEnbaled(false));
 
-  //   return () => {
-  //     // 컴포넌트가 언마운트될 때 Footer 다시 보이기
-  //     dispatch(setFooterEnabled(true));
-  //   };
-  // }, [dispatch]);
+    return () => {
+      // 컴포넌트가 언마운트될 때 Footer 다시 보이기
+      dispatch(setFooterEnbaled(true));
+    };
+  }, []);
 
   // 이전 페이지에서 넘어와서 redux 데이터를 받는다면? 
   if (!roomInfo) {
@@ -284,19 +333,24 @@ const Chatroom = () => {
 
   
   return (
+    // <div className={module.chatContainer} style={{ height: footerEnbled ? 'calc(100% - 50px)' : '100%', transition: 'height 0.3s ease' }}></div>
     <div className={module.chatContainer}>
+      <button onClick={leaveRoom} className={module.backButton}>
+        ⏪ Back
+      </button>
+
       <button onClick={() => setShowSidebar(!showSidebar)} className={module.sidebarButton}>
-        {showSidebar ? 'Hide Sidebar' : 'Show Sidebar'}
+        {showSidebar ? 'Hide Sidebar' : 'Show Sidebar ⏩'}
       </button>
 
       {showSidebar && (
       <div className={module.sidebarChat}>
 
-        <br/><br/>
-        --------------------
-        <p> 로그인 한놈 : {memberID} ({chatroomMemberRole}) </p>
-        --------------------
+        <br/><br/><br/>
+       
+        <p> 로그인 유저 : {memberID} ({chatroomMemberRole}) </p>
 
+        <br/>
         <div>
           <h2>채팅방 이름: {roomInfo.chatroomName}</h2>
           <p><strong>채팅방 ID:</strong> {roomInfo.chatroomID}</p>
@@ -306,6 +360,7 @@ const Chatroom = () => {
           <p><strong>채팅방 종류:</strong> {roomInfo.chatroomType}</p>
         </div> 
 
+        <br/>
         <div>
           <h2>채팅 참여자 목록 ({participants.length})</h2>
           {console.log("파티시팬트", participants)}
@@ -344,16 +399,17 @@ const Chatroom = () => {
           ))}
         </div>
 
-        <div>
+        <br/>
+        {/* <div>
           <h2>실시간 채팅 참여자 목록 ({liveParticipants.length})</h2>
           {liveParticipants.map((liveParticipant, index) => (
             <div key={index}>
               <p><strong> socketID:</strong> {liveParticipant}</p>
             </div>
           ))}
-        </div>
-        
-        <Link to='/chat/myChatroomList'>내 채팅방 목록</Link>
+        </div>         */}
+        <button onClick={leaveRoomForever} className={module.leaveButton}>채팅방 나가기</button>
+
       </div>
       )}
 
@@ -399,7 +455,6 @@ const Chatroom = () => {
         placeholder="메시지를 입력하세요..."
       />
       <button onClick={sendMessage} style={{ backgroundColor: '#9BAAF8' }} >Send</button>
-      <button onClick={leaveRoom} style={{ backgroundColor: '#9BAAF8' }}>채팅방 나가기</button>
       </div>
     </div>
 

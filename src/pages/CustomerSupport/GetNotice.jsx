@@ -1,6 +1,6 @@
 import axiosInstance from '../../lib/axiosInstance';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Footer from '../../components/common/Footer';
 import MessageModal from './components/MessageModal';
 import messages from './metadata/messages';
@@ -10,6 +10,7 @@ import Header from '../../components/common/Header';
 
 const GetNotice = () => {
   const member = useSelector((state) => state.auth.member);
+  const navigate = useNavigate();
   const [role, setRole] = useState("MEMBER");
 
   const { noticeId } = useParams();
@@ -47,6 +48,11 @@ const GetNotice = () => {
   const toggleDeleteNoticeModal = () => {
     setDeleteNoticeModalOpen(!deleteNoticeModalOpen);
   };
+
+
+  const goToNoticeList=()=>{
+    navigate('../GetNoticeList');
+  }
 
   useEffect(() => {
     setRole(member.memberRole);
@@ -99,10 +105,16 @@ const GetNotice = () => {
         <div style={{ padding: '20px' }}>
           <Button 
             color="" 
-            style={{ backgroundColor: '#030722', marginBottom: '80px', width: "100%", borderRadius: '50px', color: 'white' }} 
+            style={{ backgroundColor: '#030722', width: "100%", borderRadius: '50px', color: 'white' }} 
             onClick={() => deleteNotice()}>
             삭제
-          </Button>          
+          </Button>    
+          <Button 
+            color="" 
+            style={{ backgroundColor: '#030722', marginBottom: '80px', width: "100%", borderRadius: '50px', color: 'white' }} 
+            onClick={() => goToNoticeList()}>
+            목록으로
+          </Button>        
           <MessageModal isOpen={deleteNoticeModalOpen} toggle={toggleDeleteNoticeModal} message={messages.deleteNotice} />
         </div>
       )}

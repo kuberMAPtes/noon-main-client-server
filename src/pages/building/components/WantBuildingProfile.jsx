@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import useMainPage from '../../member/hook/useMainPage';
+import Swal from 'sweetalert2';
 
 const WantBuildingProfile = ({ isOpen, onClose, applicationData }) => {
   const activationThreshold = 2;
@@ -51,6 +52,12 @@ const WantBuildingProfile = ({ isOpen, onClose, applicationData }) => {
 
       if (response.data.profileActivated) {
         navigate('../getBuildingProfile/' + response.data.buildingId);
+        Swal.fire({
+          title: buildingName+'건물 프로필이 생성되었습니다!',
+          text: '첫번째 피드를 작성하고 채팅방을 생성해보세요.',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
       }
     } catch (error) {
       console.error("Error fetching addSubscription details:", error);

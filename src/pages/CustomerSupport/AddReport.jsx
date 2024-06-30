@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../../lib/axiosInstance';
-import CustomerSupportHeader from './components/CustomerSupportHeader';
+import Header from '../../components/common/Header'
 import Footer from '../../components/common/Footer';
 import MessageModal from './components/MessageModal';
 import messages from './metadata/messages';
 import { useSelector } from 'react-redux';
 import AlertModal from './components/AlertModal';
+import { CardHeader, CardTitle, Card, CardBody,Button } from 'reactstrap';
+import { CardFooter } from 'react-bootstrap';
 
 const AddReport = () => {
 
@@ -61,28 +63,46 @@ const AddReport = () => {
 
 
   return (
+
+
+
     <div>
-      <CustomerSupportHeader title="신고하기" />
-      <div>
+
+      <Header title="신고하기" />
+
+
+      <Card style={{margin:'10px'}}>
+        <CardHeader>
+          <label htmlFor="reportedId">{reporteeId}를 신고합니다.</label>
+        </CardHeader>
+        <CardBody>
           <div>
-            <label htmlFor="reportedId">{reporteeId}를 신고합니다.</label>
+              <textarea
+                id="reportText"
+                value={reportText}
+                onChange={handleReportTextChange}
+                placeholder="신고 사유를 상세히 작성..."
+                rows="10"
+                cols="50"
+              />
           </div>
-          <div>
-            <textarea
-              id="reportText"
-              value={reportText}
-              onChange={handleReportTextChange}
-              placeholder="신고 사유를 상세히 작성..."
-              rows="4"
-              cols="50"
-            />
-          </div>
-          <div style={styles.buttonContainer}>
-            <button type="button" onClick={() => navigate(-1)}>취소</button>
-            <button onClick={addReport}>신고등록</button>
+        </CardBody>
+        <CardFooter>      
+          <Button 
+            color="" 
+            style={{ backgroundColor: '#030722', marginBottom: '0px', width: "100%", borderRadius: '50px', color: 'white' }} 
+            onClick={addReport}>
+            신고하기
+          </Button>  
             <MessageModal isOpen={reportModalOpen} toggle={toggleReportModal} message={messages.addReport}/>
             <AlertModal isOpen={nothingToAddModalOpen} toggle={toggleNothingToAddModal} message={messages.nothingToAddRoport}/>
+        </CardFooter>
+      </Card>
+
+      <div>
+          <div>
           </div>
+
       </div>
       <Footer />
     </div>

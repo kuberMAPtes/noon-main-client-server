@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
     import module from './MyChatroomList.module.css'; // Import CSS module
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { getChatroom , getMyChatrooms } from '../Chat/function/axios_api'
 import { setChatroomData } from '../../store/store';
@@ -15,7 +15,7 @@ const MyChatroomList = () => {
 
     const [chatrooms, setChatrooms] = useState([]);
     const dispatch = useDispatch();
-
+    const location = useLocation();
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -43,7 +43,7 @@ const MyChatroomList = () => {
                     })
             })
             .catch(error => console.log(error));
-    }, [memberID]);
+    }, [memberID, location.pathname]); // 채팅방에서 나갈경우 path의 변경을 감지해 리로드
 
     // 안읽은 메세지 가져오기
     async function fetchUnreadMessageCountAndActiveRooms(chatrooms, memberID) {
