@@ -15,9 +15,9 @@ export function getBuildingMarkerHtml(
   return getCommonHtml(`<div>${buildingName}</div>`, "/image/popular-bulilding.png");
 }
 
-export function getSubscriptionMarkerHtml(subscriptionProviderList, buildingName) {
+export function getSubscriptionMarkerHtml(subscriptionProvider, buildingName) {
   const content = `
-    <div>${subscriptionProviderList[0]}</div>
+    <div>${subscriptionProvider}</div>
     <div>${buildingName}</div>
   `;
   return getCommonHtml(content, "/image/subscription-bulilding.png");
