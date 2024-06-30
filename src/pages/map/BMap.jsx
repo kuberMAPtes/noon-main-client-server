@@ -476,7 +476,7 @@ async function fetchSubscriptions(memberId, navigate, setWantBuildingProfileModa
       if (buildingSubscriptionMarkers.has(buildingId)) {
         return;
       }
-      const contentHtml = getSubscriptionMarkerHtml(d.subscriptionProvider.nickname, d.building.buildingName);
+      const contentHtml = getSubscriptionMarkerHtml(d.subscriptionProvider.nickname, d.building.buildingName, d.building.profileActivated);
       const buildingMarker = addMarker(contentHtml, d.building.latitude, d.building.longitude);
       naver.maps.Event.addListener(buildingMarker, "click", () => {
         if (d.building.profileActivated) {

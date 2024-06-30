@@ -15,12 +15,15 @@ export function getBuildingMarkerHtml(
   return getCommonHtml(`<div>${buildingName}</div>`, "/image/popular-bulilding.png");
 }
 
-export function getSubscriptionMarkerHtml(subscriptionProvider, buildingName) {
+export function getSubscriptionMarkerHtml(subscriptionProvider, buildingName, activated) {
   const content = `
     <div>${subscriptionProvider}</div>
     <div>${buildingName}</div>
   `;
-  return getCommonHtml(content, "/image/subscription-bulilding.png");
+  return getCommonHtml(content,
+      activated
+          ? "/image/subscription-bulilding.png"
+          : "/image/not-activated-building.png");
 }
 
 const LIVELINESS_COLOR = {
