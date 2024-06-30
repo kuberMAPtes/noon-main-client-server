@@ -5,6 +5,8 @@ import Header from '../../components/common/Header';
 import axiosInstance from '../../lib/axiosInstance';
 import MessageModal from './components/MessageModal';
 import messages from './metadata/messages';
+import useMainPage from '../member/hook/useMainPage'
+import { Link } from 'react-router-dom';
 import {
   Button,
   Card,
@@ -21,7 +23,7 @@ import { CardFooter } from 'react-bootstrap';
 const GetReport = () => {
   const { reportId } = useParams();
   const [report, setReport] = useState(null);
-
+  const mainPageUrl = useMainPage(report && report.reporteeId);
   const [dajungScoreReduction, setDajungScoreReduction] = useState(null);
   const [lockDuration, setLockDuration] = useState('ONE_DAY');
   const [reportStatus, setReportStatus] = useState('PEND');
@@ -78,10 +80,6 @@ const GetReport = () => {
 
 
 
-
-
-
-
   //다정수치 감소 제한 및 값 저장
   const [dajungReductionModalOpen, setDajungReductionModalOpen] = useState(false);
 
@@ -104,6 +102,7 @@ const GetReport = () => {
   };
 
 
+
   // 날짜 형식을 YYYY-MM-DD로 변환
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -124,11 +123,6 @@ const GetReport = () => {
 
 
 
-  
-
-
-
-
   return (
     <div style={styles.container}>
       <Header title="신고 상세 보기" />
@@ -136,6 +130,13 @@ const GetReport = () => {
 
 
       <Card style={{ marginTop: '40px', margin:'10px' ,  border: '3px solid #B8C6E3'}}>
+
+
+       <Link to={mainPageUrl}  style={{textDecoration: 'none'}}>
+          <CardHeader  style={{ textAlign: 'right', paddingTop: '20px', paddingBottom: '20px' }} >
+            피신고자 활동 확인하러가기&nbsp; <i className="fa-solid fa-right-from-bracket">&nbsp; </i>
+          </CardHeader>  
+       </Link>
 
         <CardHeader style={{margin:'10px'}}>
           <div style={{ padding: '10px', borderBottom: '1px solid #ddd', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
