@@ -97,9 +97,7 @@ export default function BMap() {
     });
 
     naver.maps.Event.addListener(map, "dragend", (e) => {
-      setLoading(true);
-      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, member, navigate, buildingFetchChecked.currentMarkerDisplayMode, setWantBuildingProfileModal)
-          .then((result) => setLoading(false));
+      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, member, navigate, buildingFetchChecked.currentMarkerDisplayMode, setWantBuildingProfileModal);
       const center = map.getCenter();
       dispatch(setCurrentMapState({
         latitude: center.y,
@@ -108,9 +106,7 @@ export default function BMap() {
     });
 
     naver.maps.Event.addListener(map, "zoom_changed", (e) => {
-      setLoading(true);
-      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, member, navigate, buildingFetchChecked.currentMarkerDisplayMode, setWantBuildingProfileModal)
-          .then((result) => setLoading(false));
+      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, member, navigate, buildingFetchChecked.currentMarkerDisplayMode, setWantBuildingProfileModal);
       console.log(e);
       dispatch(setCurrentMapState({
         zoomLevel: e
@@ -177,19 +173,17 @@ export default function BMap() {
 
   useEffect(() => {
     if (!firstEntry) {
-      setLoading(true);
       fetchBuildingMarkers(subscriptionChecked, member, navigate, currentMarkerDisplayMode, setWantBuildingProfileModal)
-          .then((result) => setLoading(false))
+          .then((result) => {})
           .catch((err) => console.error(err));
     }
   }, [subscriptionChecked, firstEntry]);
 
   useEffect(() => {
     if (!firstEntry) {
-      setLoading(true);
       clearMarkers(popBuildingMarkers);
       fetchBuildingMarkers(subscriptionChecked, member, navigate, currentMarkerDisplayMode)
-          .then((result) => setLoading(false))
+          .then((result) => {})
           .catch((err) => console.error(err));
     }
   }, [currentMarkerDisplayMode]);
