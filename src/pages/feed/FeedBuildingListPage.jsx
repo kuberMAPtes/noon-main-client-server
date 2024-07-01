@@ -99,11 +99,8 @@ const FeedBuildingListPage = () => {
     return (
         <div>
             <FeedDisplayBoard buildingId={buildingId} />
-            <br/>
             <FeedPopularyRanking buildingId={buildingId} />
-            <br/>
             <FeedCalendar memberId={memberId} buildingId={buildingId}/>
-            <br/>
             <div>
                 <div className="row">
                     {feeds.map((feed, index) => (

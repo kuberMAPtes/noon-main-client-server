@@ -46,7 +46,7 @@ const FeedPopularyRanking = ({buildingId}) => {
     return (
         <div className={styles.rankingContainer}>
             <Row className="justify-content-center my-4">
-                <h2 className={styles.rankingTitle}>인기 피드 랭킹</h2>
+                <div className={styles.rankingTitle}>인기 피드</div>
             </Row>
             <ListGroup as="ol">
                 {ranking.map((feed, index) => (
