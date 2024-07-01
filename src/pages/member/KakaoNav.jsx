@@ -2,15 +2,25 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { login } from "../../redux/slices/authSlice";
+import useFooterToggle from "../../components/hook/useFooterToggle";
+import { setFooterEnbaled } from "../../redux/slices/footerEnabledSlice";
 
 const KakaoNav = () => {
+  
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(setFooterEnbaled(false));
+    return () => {
+      dispatch(setFooterEnbaled(true));
+    };
+  });
+
   console.log("#### KakaoNav 컴포넌트 시작");
   const StoreMemberId = useSelector((state) => state.auth.member.memberId);
   const [loginWay, setLoginWay] = useState(null);
   const {memberId} = useParams();
   const loginWayValue = "kakao";
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 

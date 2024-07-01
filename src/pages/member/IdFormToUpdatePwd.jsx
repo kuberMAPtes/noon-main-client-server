@@ -6,9 +6,11 @@ import { TbUserSearch } from "react-icons/tb";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import styles from "../../assets/css/module/member/base.module.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setFooterEnbaled } from "../../redux/slices/footerEnabledSlice";
+import useFooterToggle from "../../components/hook/useFooterToggle";
 const IdFormToUpdatePwd = () => {
+  
   const [memberId, setMemberId] = useState("");
   const [isMemberIdValid, setIsMemberIdValid] = useState(false);
   //얘는 뷰에 보여주지 않아 확인을 눌렀을때 얘의 값이 true이면 휴대폰번호로 네비게이션
@@ -22,8 +24,8 @@ const IdFormToUpdatePwd = () => {
     dispatch(setFooterEnbaled(false));
     return () => {
       dispatch(setFooterEnbaled(true));
-    }
-  }, [dispatch]);
+    };
+  });
 
   const handleClick = () => {
     // alert("handleClick실행 :: "+isMemberIdValid);
