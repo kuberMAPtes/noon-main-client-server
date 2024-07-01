@@ -132,6 +132,9 @@ const GetMember = () => {
       navigateMainPage(memberId, navigate);
     }
   };
+  const handlePwdNoUpdateClick = (e) => {
+    e.preventDefault();
+  }
 
   return (
     <Container
@@ -225,12 +228,16 @@ const GetMember = () => {
                 <FaLock />
                 &nbsp;비밀번호&nbsp;&nbsp;
                 {isPwdValid && <FaCheck />}
+                {!member.phoneNumber.includes('X') ?
+                
                 <NormalButton
                   onClick={handlePwdUpdateClick}
                   style={{ width: "90px", height: "30px" }}
                 >
                   재설정
-                </NormalButton>
+                </NormalButton> : <NormalButton onClick={handlePwdNoUpdateClick}>전화번호 미등록</NormalButton>}
+
+
               </Form.Label>
               <Form.Control
                 type="password"

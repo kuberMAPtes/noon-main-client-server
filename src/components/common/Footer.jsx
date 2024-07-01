@@ -22,7 +22,7 @@ const Footer = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <footer style={footerStyles.footer}>
+    <footer style={footerStyles.footer} id="footer">
       <Container fluid>
         <Row className={`text-center ${styles["row-no-link-style"]}`}>
 

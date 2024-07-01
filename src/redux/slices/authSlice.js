@@ -15,7 +15,7 @@ export const login = createAsyncThunk(
   //일반로그인시 loginData :: {member : {memberId :  fullForm.memberId, pwd: fullForm.pwd}}
   //구글로그인시 loginData :: {loginWay:"google", member : {memberId :  fullForm.memberId} , nickname: "test" 등등..}
   //카카오로그인시 loginData :: {loginWay:"kakao", member : {memberId :  fullForm.memberId} }
-  async ({ loginData, navigate }, thunkAPI) => {
+  async ({ loginData, navigate, setIsNavigating }, thunkAPI) => {
     try {
       console.log("$$$login 함수 실행");
       const { dispatch } = thunkAPI;
@@ -45,6 +45,7 @@ export const login = createAsyncThunk(
         returnMember = info;
 
       } else {
+
 
         // 일반 로그인 처리
         // 일반 로그인은 회원가입은 같이 하지 않는다.
@@ -76,7 +77,15 @@ export const login = createAsyncThunk(
 
         if (!(loginData?.loginWay === "signUp")) {
           //alert("네비게이트메인페이지");
-          navigateRealMainPage(returnMember?.memberId, navigate);
+
+          if(loginData?.loginWay === "normal"){
+            setIsNavigating(true);
+            navigateRealMainPage(returnMember?.memberId, navigate);
+          }else{
+            navigateRealMainPage(returnMember?.memberId, navigate);
+          }
+
+
         }
         return { member: returnMember, authorization: true };
       }
