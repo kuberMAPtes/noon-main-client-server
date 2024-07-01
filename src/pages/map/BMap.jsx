@@ -528,6 +528,9 @@ function fetchChatroomMarkers(navigate) {
         data.forEach((d) => {
           const chatroomId = d.chatroomId;
           chatroomMarkerCache.add(chatroomId);
+          if (popBuildingMarkers.has(chatroomId)) {
+            return;
+          }
           const contentHtml = getLiveliestChatroomMarkerHtml(d.chatroomName, d.liveliness);
           const chatroomMarker = addMarker(contentHtml, d.building.latitude, d.building.longitude);
           naver.maps.Event.addListener(chatroomMarker, "click", () => {
