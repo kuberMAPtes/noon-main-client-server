@@ -172,6 +172,7 @@ const LoginForm = () => {
                 variant="secondary"
                 className={`${styles.linkButton} me-2`}
                 onClick={handleLinkClick}
+                style={{marginTop: "16px"}}
               >
                 메인으로..
               </Button>
