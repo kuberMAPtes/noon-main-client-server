@@ -37,7 +37,7 @@ const ProfileActions = ({ toId, fromId }) => {
       applyMessage: applyMessage
     });
     console.log("response :: " + response);
-    alert("response :: " + response);
+    // alert("response :: " + response);
     handleChatModalClose();
   };
 
