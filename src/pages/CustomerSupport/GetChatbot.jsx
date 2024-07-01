@@ -55,7 +55,8 @@ const GetChatbot = () => {
           </div>
         ))}
       </div>
-      <div className="chat-footer">
+      
+      <div className="chat-footer" style={{position:'fixed',bottom:'60px', width:'100%'}}>
         <input 
           type="text" 
           value={userQuestion} 
@@ -64,7 +65,6 @@ const GetChatbot = () => {
         />
         <button onClick={getChatbotConversation}>전송</button>
       </div>
-      <Footer/>
     </div>
   );
 };
