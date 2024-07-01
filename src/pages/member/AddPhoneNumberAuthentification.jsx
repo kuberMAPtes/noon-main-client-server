@@ -23,8 +23,16 @@ import {
   updatePhoneNumber,
 } from "./function/memberAxios";
 import { validatePhoneNumber } from "./function/memberValidator";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setFooterEnbaled } from "../../redux/slices/footerEnabledSlice";
 const AddPhoneNumberAuthentification = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(setFooterEnbaled(false));
+    return () => {
+      dispatch(setFooterEnbaled(true));
+    };
+  });
   const [phoneNumber, setPhoneNumber] = useState(""); //휴대폰번호
   const [phoneNumberValidationMessage, setPhoneNumberValidationMessage] =
     useState(""); //번호 형식 검사 : 통과하면 "" 통과하지 못하면 메세지

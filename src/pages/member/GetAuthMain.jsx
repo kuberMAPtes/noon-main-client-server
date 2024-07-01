@@ -11,14 +11,23 @@ import ForegroundTemplate from '../../components/common/ForegroundTemplate';
 import NoonLogo from '../../assets/css/NoonLogo';
 import { auth } from '../../firebase';
 import { clearAllCookies } from './function/memberFunc';
+import useFooterToggle from '../../components/hook/useFooterToggle';
+import { setFooterEnbaled } from '../../redux/slices/footerEnabledSlice';
 const GetAuthMain = () => {
+  
   console.log("#### GetAuthMain 컴포넌트 초기화 시작");
-
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   // const loginError = useSelector((state) => state.auth.loginError);
   // const [isAuthInitialized, setIsAuthInitialized] = useState(false);
   
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(setFooterEnbaled(false));
+    return () => {
+      dispatch(setFooterEnbaled(true));
+    };
+  });
+
   const handleLoginClick = () => {
     console.log("$$$$ 일반 로그인 버튼 클릭");
     navigate('/member/loginForm');

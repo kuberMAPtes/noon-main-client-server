@@ -11,11 +11,11 @@ import styles2 from "../../../assets/css/module/member/base.module.css";
 import { setFooterEnbaled } from "../../../redux/slices/footerEnabledSlice";
 import NoonLogoRmBg from "../../../assets/css/NoonLogoRmBg";
 import {motion,useAnimation} from "framer-motion";
+import useFooterToggle from "../../../components/hook/useFooterToggle";
 
 const GetAuthMain = lazy(() => import("../GetAuthMain"));
 
 const LoginForm = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const storeMemberId = useSelector((state) => state?.auth?.member?.memberId);
   const loginError = useSelector((state) => state?.auth?.loginError);
@@ -25,6 +25,13 @@ const LoginForm = () => {
   const [validationError, setValidationError] = useState("");
   const controls = useAnimation();
   const [isNavigating, setIsNavigating] = useState(false);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(setFooterEnbaled(false));
+    return () => {
+      dispatch(setFooterEnbaled(true));
+    };
+  });
 
   const handleLoginClick = async (event) => {
     event.preventDefault();

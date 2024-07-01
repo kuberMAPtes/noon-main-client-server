@@ -1,9 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
 import styles from "../../assets/css/module/member/base.module.css";
 import { motion } from "framer-motion";
+import useFooterToggle from "../../components/hook/useFooterToggle";
+import { useDispatch } from "react-redux";
+import { setFooterEnbaled } from "../../redux/slices/footerEnabledSlice";
 const GetMemberId = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(setFooterEnbaled(false));
+    return () => {
+      dispatch(setFooterEnbaled(true));
+    };
+  });
   const { memberId } = useParams();
 
   return (

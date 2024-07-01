@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Container, Row, Col, Form, Button, Card } from "react-bootstrap";
 import { useSwipeable } from "react-swipeable";
@@ -11,11 +11,22 @@ import {
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import styles from "../../assets/css/module/member/GetSignUpTermAgreement.module.css";
 import ForegroundTemplate from "../../components/common/ForegroundTemplate";
+import useFooterToggle from "../../components/hook/useFooterToggle";
+import { useDispatch } from "react-redux";
+import { setFooterEnbaled } from "../../redux/slices/footerEnabledSlice";
 const GetSignUpTermAgreement = () => {
+  useFooterToggle();
   const [agreed, setAgreed] = useState(false);
   const [currentCard, setCurrentCard] = useState(0); //현재 페이지
   const navigate = useNavigate();
   const navigateUrl = `/member/AddPhoneNumberAuthentification/addMember`;
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(setFooterEnbaled(false));
+    return () => {
+      dispatch(setFooterEnbaled(true));
+    };
+  });
 
   const terms = [
     { title: "이용 약관", content: termsOfService },

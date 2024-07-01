@@ -26,8 +26,10 @@ import {
   FaUser,
   FaUserPlus,
 } from "react-icons/fa";
+import useFooterToggle from "../../components/hook/useFooterToggle";
 
 const AddMember = () => {
+  useFooterToggle();
   // 각 필드의 상태와 유효성 메시지, 유효성 플래그 관리
   const [nickname, setNickname] = useState("");
   const [memberId, setMemberId] = useState("");

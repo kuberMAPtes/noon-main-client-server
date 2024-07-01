@@ -1,10 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "../../assets/css/module/member/base.module.css";
 import {motion} from "framer-motion";
 import styles from "../../assets/css/module/member/base.module.css";
+import useFooterToggle from "../../components/hook/useFooterToggle";
+import { useDispatch } from "react-redux";
+import { setFooterEnbaled } from "../../redux/slices/footerEnabledSlice";
 const UpdatePwdResult = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(setFooterEnbaled(false));
+    return () => {
+      dispatch(setFooterEnbaled(true));
+    };
+  });
   const { result } = useParams();
   const navigate = useNavigate();
 

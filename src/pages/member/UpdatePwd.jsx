@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Container } from "react-bootstrap";
 import PwdInput from "./component/PwdInput";
 import {
@@ -7,6 +7,9 @@ import {
 } from "./function/AddUpdateMemberUtil";
 import { updatePwd } from "./function/memberAxios";
 import { useNavigate } from "react-router-dom";
+import useFooterToggle from "../../components/hook/useFooterToggle";
+import { useDispatch } from "react-redux";
+import { setFooterEnbaled } from "../../redux/slices/footerEnabledSlice";
 
 const UpdatePwd = () => {
   const [pwd, setPwd] = useState("");
@@ -18,7 +21,13 @@ const UpdatePwd = () => {
     useState("");
 
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(setFooterEnbaled(false));
+    return () => {
+      dispatch(setFooterEnbaled(true));
+    };
+  });
   const handleClick = async () => {
     if (isPwdValid && isPwdConfirmValid) {
       let result = "fail";
