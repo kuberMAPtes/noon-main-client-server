@@ -49,4 +49,5 @@ p {
     margin-bottom: 10px;
     font-size: 24px;
     font-weight: bold;
+    color: inherit; /* Default color, inherits from parent */
 }

@@ -42,8 +42,8 @@ const FeedItem = ({ data, memberId }) => {
     const feedCategoryName = FeedCategoryGetter(feedCategory); // 카테고리 변환
     const isNoticeCategory = feedCategory === 'NOTICE'; // 공지 카테고리에 대한 예외
     const isPollCategory = feedCategory === 'POLL'; // 투표 카테고리에 대한 예외
-    const isEventCategory = feedCategory === 'EVENT';
-    const isMegaphoneCategory = feedCategory === 'MEGAPHONE';
+    const isEventCategory = feedCategory === 'EVENT'; // 이벤트 카테고리에 대한 예외
+    const isMegaphoneCategory = feedCategory === 'MEGAPHONE'; // 확성기 카테고리에 대한 예외
 
     const renderFeedText = (feedText) => renderFeedTextWithLink(feedText);
 
@@ -149,23 +149,26 @@ const FeedItem = ({ data, memberId }) => {
 
                     {/* footer */}
                     {/* 제목 : 공지라면 공지로 바로 리다이렉션한다.*/}
-                    {isNoticeCategory ? (
-                        <div className={styles.h2Like} onClick={() => goToDetailNotice(feedId)} style={{ cursor: 'pointer' }}>
-                            <FcApproval /> {title}
-                        </div>
-                    ) : (
-                        <div className={styles.h2Like} onClick={() => goToFeedDetail(memberId, feedId)} style={{ cursor: 'pointer' }}>
-                            {title}
-                        </div>
-                    )}
+                    <div onClick={() => goToDetailNotice(feedId)}>
+                        {isNoticeCategory ? (
+                            <div className={styles.h2Like} onClick={() => goToDetailNotice(feedId)} style={{ cursor: 'pointer' }}>
+                                <FcApproval /> {title}
+                            </div>
+                        ) : (
+                            <div className={styles.h2Like} onClick={() => goToFeedDetail(memberId, feedId)} style={{ cursor: 'pointer' }}>
+                                {title}
+                            </div>
+                        )}
 
-                    {/* 공지사항일 때는 내용을 출력하지 않는다. */}
-                    {isNoticeCategory ? '' : (
-                        <p className={styles.feedText}>{renderFeedText(feedText)}</p>
-                     )}
-                    <CardText>
-                        <small className={styles.textMuted}>{writtenTimeReplace}</small>
-                    </CardText>
+                        {/* 공지사항일 때는 내용을 출력하지 않는다. */}
+                        {isNoticeCategory ? '' : (
+                            <p className={styles.feedText} onClick={() => goToFeedDetail(memberId, feedId)}>{renderFeedText(feedText)}</p>
+                        )}
+
+                        <CardText>
+                            <small className={styles.textMuted}>{writtenTimeReplace}</small>
+                        </CardText>
+                    </div>
                 </CardBody>
             </Card>
         </div>

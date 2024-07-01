@@ -84,7 +84,7 @@ const FeedCalendar = ({memberId, buildingId}) => {
 
   return (
     <div className='calendar-container'>
-      <h2 className='calender-title'>이벤트</h2>
+      <div className='calender-title'>이벤트</div>
       <DatePicker
         selected={selectedDate}
         onChange={handleDateChange}

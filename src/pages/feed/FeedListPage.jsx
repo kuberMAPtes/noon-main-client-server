@@ -64,8 +64,11 @@ const FeedListPage = ({toId}) => {
 
     // 랜더링 될 때마다 실행
     useEffect(() => {
+        console.log("page : " + page);
+        console.log("fetchUrl : " + fetchUrl);
         fetchData(fetchUrl, page);
-    }, [fetchUrl, page, fetchData]);
+
+    }, [page, fetchUrl, fetchData]);
 
     // 무한스크롤 구현 (IntersectionObserver)
     const lastFeedElementRef = useCallback((node) => {

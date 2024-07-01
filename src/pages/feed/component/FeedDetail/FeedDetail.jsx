@@ -175,6 +175,8 @@ const FeedDetail = ({ data, memberId }) => {
     }
 
     const isPollCategory = feedCategory === 'POLL'; // 투표 카테고리에 대한 예외
+    const isEventCategory = feedCategory === 'EVENT'; // 이벤트 카테고리에 대한 예외
+    const isMegaphoneCategory = feedCategory === 'MEGAPHONE'; // 확성기 카테고리에 대한 예외
 
     return (
             <div>
@@ -184,9 +186,14 @@ const FeedDetail = ({ data, memberId }) => {
                         <span onClick={() => setFeedDeleteShow(true)}>
                             <MdDelete size='32'/> {/* 피드 삭제 : Modal 열기*/}
                         </span>
-                        <span onClick={() => goToFeedForm(writerId, feedId)}>
-                            <MdFeed size='32'/> {/* 피드 수정 */}
-                        </span>
+                        {/* 투표, 이벤트, 확성기는 수정 불가능 */}
+                        {( isPollCategory && isEventCategory && isMegaphoneCategory) ? (
+                            <span onClick={() => goToFeedForm(writerId, feedId)}>
+                                <MdFeed size='32'/> {/* 피드 수정 */}
+                            </span>
+                         ) : (
+                            <span></span>
+                         )}
                     </div>
                 )}
                 <div className={styles.iconRight}>
