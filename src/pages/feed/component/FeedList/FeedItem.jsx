@@ -45,7 +45,6 @@ const FeedItem = ({ data, memberId }) => {
     const isEventCategory = feedCategory === 'EVENT';
     const isMegaphoneCategory = feedCategory === 'MEGAPHONE';
 
-
     const renderFeedText = (feedText) => renderFeedTextWithLink(feedText);
 
     const handleLikeClick = () => {
@@ -151,13 +150,13 @@ const FeedItem = ({ data, memberId }) => {
                     {/* footer */}
                     {/* 제목 : 공지라면 공지로 바로 리다이렉션한다.*/}
                     {isNoticeCategory ? (
-                        <h2 className={styles.noticeTitle} onClick={() => goToDetailNotice(feedId)} style={{ cursor: 'pointer' }}>
+                        <div className={styles.h2Like} onClick={() => goToDetailNotice(feedId)} style={{ cursor: 'pointer' }}>
                             <FcApproval /> {title}
-                        </h2>
+                        </div>
                     ) : (
-                        <h2 className={styles.cardTitle} onClick={() => goToFeedDetail(memberId, feedId)} style={{ cursor: 'pointer' }}>
+                        <div className={styles.h2Like} onClick={() => goToFeedDetail(memberId, feedId)} style={{ cursor: 'pointer' }}>
                             {title}
-                        </h2>
+                        </div>
                     )}
 
                     {/* 공지사항일 때는 내용을 출력하지 않는다. */}
