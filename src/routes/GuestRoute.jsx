@@ -21,7 +21,7 @@ const GuestRoute = ({ children }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    useFooterToggle(false);
+    // useFooterToggle(false);
     
     console.log("#### GuestRoute 렌더링 authorization, memberId, uri, IsFirst구독", authorization, member,IsFirst);
     //부작용 로직이다. 렌더링은 UI에 집중하고 부작용은 useEffect에 집중
