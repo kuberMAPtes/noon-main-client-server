@@ -33,7 +33,8 @@ let placeSearchMarkers;
 
 const buildingFetchChecked = {
   subscriptionChecked: true,
-  currentMarkerDisplayMode: MARKER_MODES.DISPLAY_BUILDING_NAME
+  currentMarkerDisplayMode: MARKER_MODES.DISPLAY_BUILDING_NAME,
+  zoomLevel: 15 
 }
 
 export default function BMap() {
@@ -68,6 +69,7 @@ export default function BMap() {
 
   buildingFetchChecked.subscriptionChecked = subscriptionChecked;
   buildingFetchChecked.currentMarkerDisplayMode = currentMarkerDisplayMode;
+  buildingFetchChecked.zoomLevel = currentMapState.zoomLevel;
 
   const navigate = useNavigate();
 
@@ -101,7 +103,7 @@ export default function BMap() {
     });
 
     naver.maps.Event.addListener(map, "dragend", (e) => {
-      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, member, navigate, buildingFetchChecked.currentMarkerDisplayMode, setWantBuildingProfileModal);
+      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, member, navigate, buildingFetchChecked.currentMarkerDisplayMode, setWantBuildingProfileModal, buildingFetchChecked.zoomLevel);
       const center = map.getCenter();
       dispatch(setCurrentMapState({
         latitude: center.y,
@@ -110,7 +112,8 @@ export default function BMap() {
     });
 
     naver.maps.Event.addListener(map, "zoom_changed", (e) => {
-      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, member, navigate, buildingFetchChecked.currentMarkerDisplayMode, setWantBuildingProfileModal);
+      buildingFetchChecked.zoomLevel = e;
+      fetchBuildingMarkers(buildingFetchChecked.subscriptionChecked, member, navigate, buildingFetchChecked.currentMarkerDisplayMode, setWantBuildingProfileModal, buildingFetchChecked.zoomLevel);
       console.log(e);
       dispatch(setCurrentMapState({
         zoomLevel: e
@@ -176,7 +179,7 @@ export default function BMap() {
 
   useEffect(() => {
     if (!firstEntry) {
-      fetchBuildingMarkers(subscriptionChecked, member, navigate, currentMarkerDisplayMode, setWantBuildingProfileModal)
+      fetchBuildingMarkers(subscriptionChecked, member, navigate, currentMarkerDisplayMode, setWantBuildingProfileModal, buildingFetchChecked.zoomLevel)
           .then((result) => {})
           .catch((err) => console.error(err));
     }
@@ -185,7 +188,7 @@ export default function BMap() {
   useEffect(() => {
     if (!firstEntry) {
       clearMarkers(popBuildingMarkers);
-      fetchBuildingMarkers(subscriptionChecked, member, navigate, currentMarkerDisplayMode)
+      fetchBuildingMarkers(subscriptionChecked, member, navigate, currentMarkerDisplayMode, setWantBuildingProfileModal, buildingFetchChecked.zoomLevel)
           .then((result) => {})
           .catch((err) => console.error(err));
     }
@@ -390,7 +393,7 @@ function fetchBuildingInfo(latitude, longitude, setWantBuildingProfileModal, nav
  * @param {boolean} subscriptionChecked 
  * @param {string} memberId
  */
-async function fetchBuildingMarkers(subscriptionChecked, memberId, navigate, currentMarkerDisplayMode, setWantBuildingProfileModal) {
+async function fetchBuildingMarkers(subscriptionChecked, memberId, navigate, currentMarkerDisplayMode, setWantBuildingProfileModal, zoomLevel) {
   switch (currentMarkerDisplayMode) {
     case MARKER_MODES.DISPLAY_BUILDING_NAME:
       await fetchBuildingsInPositionRange(navigate);
@@ -403,7 +406,7 @@ async function fetchBuildingMarkers(subscriptionChecked, memberId, navigate, cur
   }
 
   if (subscriptionChecked) {
-    await fetchSubscriptions(memberId, navigate, setWantBuildingProfileModal);
+    await fetchSubscriptions(memberId, navigate, setWantBuildingProfileModal, zoomLevel);
   } else {
     clearMarkers(buildingSubscriptionMarkers);
   }
@@ -461,7 +464,7 @@ async function fetchBuildingsInPositionRange(navigate, currentMarkerDisplayMode)
   clearMarkers(popBuildingMarkers, buildingMarkersCache);
 }
 
-async function fetchSubscriptions(memberId, navigate, setWantBuildingProfileModal) {
+async function fetchSubscriptions(memberId, navigate, setWantBuildingProfileModal, zoomLevel) {
   console.log(memberId);
   const response = await axios_api.get(`${MAIN_API_URL}/buildingProfile/getMemberSubscriptionList`, {
     params: {
@@ -471,10 +474,14 @@ async function fetchSubscriptions(memberId, navigate, setWantBuildingProfileModa
   const data = response.data;
   console.log(data);
 
+  let i = 0;
   const buildingMarkersCache = new Set();
   data.forEach((d) => {
     const buildingId = d.building.buildingId;
     if (!popBuildingMarkers.has(buildingId)) {
+      if (++i > 10 && zoomLevel < 14) {
+        return;
+      }
       buildingMarkersCache.add(buildingId);
       if (buildingSubscriptionMarkers.has(buildingId)) {
         return;
