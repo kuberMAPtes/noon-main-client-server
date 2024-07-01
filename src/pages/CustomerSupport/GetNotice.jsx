@@ -64,6 +64,28 @@ const GetNotice = () => {
     console.log(role);
   }, []);
 
+  useEffect(() => {
+    if (notice) {
+      const imgs = document.querySelectorAll('.feed-content img');
+      const videos = document.querySelectorAll('.feed-content video');
+
+      imgs.forEach(img => {
+        img.style.maxWidth = '100%';
+        img.style.height = 'auto';
+        img.style.display = 'block';
+        img.style.margin = '0 auto';
+      });
+
+      videos.forEach(video => {
+        video.style.maxWidth = '100%';
+        video.style.height = 'auto';
+        video.style.display = 'block';
+        video.style.margin = '0 auto';
+      });
+    }
+  }, [notice]);
+
+
   if (!notice) {
     return <p>Loading...</p>;
   }
@@ -101,23 +123,27 @@ const GetNotice = () => {
       </Row>
       </div>
 
-      {role === 'ADMIN' && (
-        <div style={{ padding: '20px' }}>
-          <Button 
-            color="" 
-            style={{ backgroundColor: '#030722', width: "100%", borderRadius: '50px', color: 'white' }} 
-            onClick={() => deleteNotice()}>
-            삭제
-          </Button>    
-          <Button 
-            color="" 
-            style={{ backgroundColor: '#030722', marginBottom: '80px', width: "100%", borderRadius: '50px', color: 'white' }} 
-            onClick={() => goToNoticeList()}>
-            목록으로
-          </Button>        
-          <MessageModal isOpen={deleteNoticeModalOpen} toggle={toggleDeleteNoticeModal} message={messages.deleteNotice} />
-        </div>
-      )}
+      <Card>
+        <CardFooter>
+          {role === 'ADMIN' && (
+            <div style={{ padding: '20px' }}>
+              <Button 
+                color="" 
+                style={{marginBottom:'20px', backgroundColor: '#fa5252', width: "100%", borderRadius: '50px', color: 'white' }} 
+                onClick={() => deleteNotice()}>
+                삭제
+              </Button>    
+              <Button 
+                color="" 
+                style={{ backgroundColor: '#030722', marginBottom: '80px', width: "100%", borderRadius: '50px', color: 'white' }} 
+                onClick={() => goToNoticeList()}>
+                목록으로
+              </Button>        
+              <MessageModal isOpen={deleteNoticeModalOpen} toggle={toggleDeleteNoticeModal} message={messages.deleteNotice} />
+            </div>
+          )}
+        </CardFooter>
+      </Card>
 
       <Footer />
     </div>
