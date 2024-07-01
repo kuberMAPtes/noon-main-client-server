@@ -12,14 +12,11 @@ import { MARKER_MODES } from "../component/MarkerModeButtonGroup";
 export function getBuildingMarkerHtml(
     buildingName
 ) {
-  return getCommonHtml(`<div>${buildingName}</div>`, "/image/popular-bulilding.png");
+  return getCommonHtml(``, "/image/popular-bulilding.png");
 }
 
 export function getSubscriptionMarkerHtml(subscriptionProvider, buildingName, activated) {
-  const content = `
-    <div>${subscriptionProvider}</div>
-    <div>${buildingName}</div>
-  `;
+  const content = ``;
   return getCommonHtml(content,
       activated
           ? "/image/subscription-bulilding.png"
@@ -68,7 +65,7 @@ function getCommonHtml(content, markerImage) {
         ${content}
       </div>
       <div style="display: flex; justify-content: center; align-items: center; ">
-        <img src="${markerImage}" style="width: 20px; height: 25px; margin: 0px; padding: 0px" />
+        <img src="${markerImage}" style="width: 25px; height: 30px; margin: 0px; padding: 0px" />
       </div>
     </div>
   `
