@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios_api from '../../../../lib/axios_api';
 
 const FeedCntByTag = () => {

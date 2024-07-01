@@ -4,6 +4,7 @@ import axios_api from '../../../../lib/axios_api';
 import CheckModal from '../Common/CheckModal';
 import navigator from '../../util/Navigator'
 import VotePreview from './VotePreview';
+import styles from '../../css/FeedForm/FeedForm.module.css';
 // import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
 
 const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, onSave }) => {
@@ -215,8 +216,8 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
     };
 
     return (
-        <Container className="feed=form">
-            <Card>
+        <div className={styles.feedFormContainer}>
+            <Card className="mb-4">
                 <Card.Body>
                     <Form onSubmit={handleSubmit}>
                         {/* 제목 */}
@@ -249,19 +250,19 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
                         {/* 태그 추가 */}
                         <Form.Group controlId="feedTags" className="mb-3">
                             <Form.Label>태그</Form.Label>
-                            <div className="d-flex">
+                            <div className={`d-flex align-items-center ${styles.tagInputContainer}`}>
                                 <Form.Control
                                     type="text"
                                     value={tagInput}
                                     onChange={(e) => setTagInput(e.target.value)}
                                     placeholder="태그를 입력하세요"
                                 />
-                                <Button className="ml-2" onClick={handleTagAdd}>추가</Button>
+                                <Button className={styles.addButton} onClick={handleTagAdd}>추가</Button>
                             </div>
                             <div className="mt-2">
                                 {Array.isArray(feedData.updateTagList) && feedData.updateTagList.map((tag, index) => (
-                                    <Badge key={index} pill variant="primary" className="mr-2">
-                                        {tag} <span className="badge-close" onClick={() => handleTagRemove(tag)}>×</span>
+                                    <Badge key={index} pill variant="primary" className={`mr-2 ${styles.tagBadge}`}>
+                                        {tag} <span className={styles.badgeClose} onClick={() => handleTagRemove(tag)}>×</span>
                                     </Badge>
                                 ))}
                             </div>
@@ -353,9 +354,7 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
                     }}
                 />
             )}
-        </Container>
-
-
+        </div>
     );
 };
 

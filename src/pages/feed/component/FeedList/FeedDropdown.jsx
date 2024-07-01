@@ -1,5 +1,7 @@
 import React from 'react';
 import { ButtonGroup, Button } from 'react-bootstrap';
+import { FaBookmark, FaBuilding, FaHeart, FaUser } from 'react-icons/fa';
+import styles from "../../css/FeedList/FeedDropdown.module.css"
 
 const FeedDropdown = ({ onSelect }) => {
 
@@ -28,11 +30,22 @@ const FeedDropdown = ({ onSelect }) => {
 
     return (
         <div className="row justify-content-center">
-            <ButtonGroup>
-                <Button variant="primary" onClick={() => handleSelect('member')}>내 피드</Button>
-                <Button variant="primary" onClick={() => handleSelect('subscriptionBuilding')}>구독한 건물 피드</Button>
-                <Button variant="primary" onClick={() => handleSelect('like')}>좋아요를 한 피드</Button>
-                <Button variant="primary" onClick={() => handleSelect('bookmark')}>북마크한 피드</Button>
+            <ButtonGroup className={styles.buttonGroup}>
+                <Button className={styles.customButton} onClick={() => handleSelect('member')} title="내 피드">
+                    <FaUser />
+                </Button>
+                <div className={styles.separator}></div>
+                <Button className={styles.customButton} onClick={() => handleSelect('subscriptionBuilding')} title="구독한 건물 피드">
+                    <FaBuilding />
+                </Button>
+                <div className={styles.separator}></div>
+                <Button className={styles.customButton} onClick={() => handleSelect('like')} title="좋아요를 한 피드">
+                    <FaHeart />
+                </Button>
+                <div className={styles.separator}></div>
+                <Button className={styles.customButton} onClick={() => handleSelect('bookmark')} title="북마크한 피드">
+                    <FaBookmark />
+                </Button>
             </ButtonGroup>
         </div>
     );

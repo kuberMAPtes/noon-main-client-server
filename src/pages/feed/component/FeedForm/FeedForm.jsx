@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Card, ListGroup, Container, Badge } from 'react-bootstrap';
-import "../../css/FeedForm.css";
+import { Form, Button, Card, ListGroup, Badge } from 'react-bootstrap';
 import axios_api from '../../../../lib/axios_api';
 import CheckModal from '../Common/CheckModal';
 import navigator from '../../util/Navigator';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css'; // 달력 전용 css
+import styles from '../../css/FeedForm/FeedForm.module.css';
 
 const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, onSave }) => {
     const [feedData, setFeedData] = useState({
@@ -281,8 +281,8 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
     };
 
     return (
-        <Container className="feed-form">
-            <Card>
+        <div className={styles.feedFormContainer}>
+            <Card className="mb-4">
                 <Card.Body>
                     <Form onSubmit={handleSubmit}>
                         <Form.Group controlId="feedTitle" className="mb-3">
@@ -318,11 +318,11 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                                 multiple
                                 onChange={handleFileChange}
                             />
-                            <ListGroup className="file-list mt-3">
+                            <ListGroup className={styles.fileList}>
                                 {feedData.attachments.map((file, index) => (
                                     <ListGroup.Item key={index} className="d-flex justify-content-between align-items-center">
                                         {isUploadedFile(file) ? (
-                                            <div className="d-flex align-items-center">
+                                            <div className={styles.filePreview}>
                                                 {isImageOrVideo(file) ? (
                                                     <img src={file.fileUrl} alt={file.fileUrl} style={{ maxWidth: '50px', maxHeight: '50px', marginRight: '10px' }} />
                                                 ) : (
@@ -331,7 +331,7 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                                                 <span>{file.fileUrl}</span>
                                             </div>
                                         ) : (
-                                            <div className="d-flex align-items-center">
+                                            <div className={styles.filePreview}>
                                                 {isImageOrVideo(file) ? (
                                                     <img src={URL.createObjectURL(file)} alt={file.name} style={{ maxWidth: '50px', maxHeight: '50px', marginRight: '10px' }} />
                                                 ) : (
@@ -348,22 +348,23 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
 
                         <Form.Group controlId="feedTags" className="mb-3">
                             <Form.Label>태그</Form.Label>
-                            <div className="d-flex">
+                            <div className={`d-flex align-items-center ${styles.tagInputContainer}`}>
                                 <Form.Control
                                     type="text"
                                     value={tagInput}
                                     onChange={(e) => setTagInput(e.target.value)}
                                     placeholder="태그를 입력하세요"
                                 />
-                                <Button className="ml-2" onClick={handleTagAdd}>추가</Button>
+                                <Button onClick={handleTagAdd} className={styles.addButton}>추가</Button>
                             </div>
-                            <div className="mt-2">
+                            <div className={styles.tagList}>
                                 {Array.isArray(feedData.updateTagList) && feedData.updateTagList.map((tag, index) => (
-                                    <Badge key={index} pill variant="primary" className="mr-2">
-                                        {tag} <span className="badge-close" onClick={() => handleTagRemove(tag)}>×</span>
+                                    <Badge key={index} pill variant="primary" className={`mr-2 ${styles.tagBadge}`}>
+                                        {tag} <span className={styles.badgeClose} onClick={() => handleTagRemove(tag)}>×</span>
                                     </Badge>
                                 ))}
                             </div>
+                            <br/>
                         </Form.Group>
 
                         <Form.Group controlId="feedCategory" className="mb-3">
@@ -385,7 +386,7 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                         </Form.Group>
                         {feedData.category === 'EVENT' && (
                         <Form.Group controlId="eventDate" className="mb-3">
-                            <Form.Label>이벤트 날짜</Form.Label>
+                            <Form.Label>이벤트 날짜 : </Form.Label>
                             <DatePicker
                                 selected={eventDate}
                                 onChange={handleDateChange}
@@ -441,7 +442,7 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                 title="피드 수정"
                 content="변화된 일상을 공유할까요?"
             />
-        </Container>
+        </div>
     );
 };
 

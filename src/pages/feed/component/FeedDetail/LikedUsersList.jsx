@@ -31,7 +31,7 @@ const LikedUsersList = (props) => {
                         className="d-flex align-items-center"
                         onClick={() => goToMemberProfile(user.memberId)}>
                         <Image
-                            src={user.memberProfile || 'https://via.placeholder.com/40'}
+                            src={user.writerProfile || 'https://via.placeholder.com/40'}
                             roundedCircle
                             width="40"
                             height="40"

@@ -29,7 +29,6 @@ const FeedBuildingListPage = () => {
     const initialPage = searchParams.get('page') || 1;
 
     const [feeds, setFeeds] = useState([]);
-    const [ranking, setRanking] = useState([]);
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [page, setPage] = useState(Number(initialPage));
@@ -58,34 +57,15 @@ const FeedBuildingListPage = () => {
         setLoading(false);
     };
 
-    // 건물 내 인기 피드 목록 가져오기
-    const rankingData = async () => {
-        let url = `/feed/FeedPopularity?buildingId=${buildingId}`;
-
-        // axios 실행
-        try {
-            const response = await axios_api.get(url);
-            if (response.data.length === 0) {
-                setRanking([]);
-            } else {
-                setRanking((prevFeeds) => [...prevFeeds, ...response.data]); // 기존의 끝에 추가
-
-                console.log(response.data);
-            }
-        } catch (e) {
-            console.log(e);
-        }    
-    }
-
     // 랜더링 될 때마다 실행
     useEffect(() => {
         fetchData(fetchUrl, page);
     }, [page, fetchUrl]);
 
-    // 처음에만 실행
-    useEffect(() => {
-        rankingData();
-    }, []);
+    // // 처음에만 실행
+    // useEffect(() => {
+    //     rankingData();
+    // }, []);
     
     // 무한스크롤 구현 (IntersectionObserver)
     const lastFeedElementRef = useCallback((node) => {
@@ -119,14 +99,17 @@ const FeedBuildingListPage = () => {
     return (
         <div>
             <FeedDisplayBoard buildingId={buildingId} />
-            <FeedPopularyRanking feeds={ranking} />
-            <FeedCalendar />
-            <div className='container'>
+            <br/>
+            <FeedPopularyRanking buildingId={buildingId} />
+            <br/>
+            <FeedCalendar memberId={memberId} buildingId={buildingId}/>
+            <br/>
+            <div>
                 <div className="row">
                     {feeds.map((feed, index) => (
                         <div
                             key={feed.feedId}
-                            className="col-12 mb-4"
+                            className="col-lg-4 col-md-6 col-sm-12 mb-4"
                             ref={feeds.length === index + 1 ? lastFeedElementRef : null}
                         >
                             <FeedItem data={feed} memberId={memberId} />

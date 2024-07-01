@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Badge, Button, Card } from 'react-bootstrap';
 import axios_api from '../../../../lib/axios_api';
+import styles from '../../css/FeedForm/FeedVote.module.css';
 
 /**
  * 실제 피드에서 사용하는 투표
@@ -67,33 +68,28 @@ const FeedVote = ({ feedId, memberId }) => {
     };
 
     return (
-        <Card className="mb-4">
-            <Card.Header>{question}</Card.Header>
+        <div>
+        <br/>
+        <Card className={`mb-4 ${styles.voteCard}`}>
+            <Card.Header className={styles.voteHeader}>{question}</Card.Header>
             <Card.Body>
                 {options && options.map((option, index) => (
-                    <div key={index} className="d-flex align-items-center mb-2">
+                    <div key={index} className={styles.voteOption}>
                         <Button
-                            variant={selectedOption === option ? 'primary' : 'outline-primary'}
+                            className={`${styles.voteButton} ${selectedOption === option ? styles.voteButtonSelected : ''}`}
                             onClick={() => handleOptionChange(option)}
-                            style={{
-                                minWidth: '120px',
-                                width: '100%', // 버튼이 전체 너비를 차지하도록 설정
-                                height: '40px',
-                                padding: '5px 10px',
-                                fontSize: '14px', // 고정된 폰트 사이즈
-                            }}
-                            className="me-2"
                         >
                             {option}
-                        </Button>
+                        </Button> &nbsp;&nbsp;
                         <Badge bg="secondary">{votes[index] !== undefined ? votes[index] : 0}</Badge>
                     </div>
                 ))}
-                <Button variant="primary" onClick={handleVoteSubmit} className="mt-3">
+                <Button variant="danger" className={styles.voteSubmitButton} onClick={handleVoteSubmit}>
                     투표
                 </Button>
             </Card.Body>
         </Card>
+        </div>
     );
 };
 

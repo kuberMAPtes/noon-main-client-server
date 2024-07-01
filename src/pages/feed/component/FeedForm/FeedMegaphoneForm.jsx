@@ -4,6 +4,7 @@ import axios_api from '../../../../lib/axios_api';
 import CheckModal from '../Common/CheckModal';
 import navigator from '../../util/Navigator'
 import { Label } from 'reactstrap';
+import styles from '../../css/FeedForm/FeedForm.module.css';
 // import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
 
 const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, onSave }) => {
@@ -148,7 +149,7 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
     };
 
     return (
-        <Container className="feed=form">
+        <div className={styles.feedFormContainer}>
             <Card>
                 <Card.Body>
                     <Form onSubmit={handleSubmit}>
@@ -194,9 +195,7 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
                 title="피드 수정"
                 content="변화된 일상을 공유할까요?"
             />
-        </Container>
-
-
+       </div>
     );
 };
 

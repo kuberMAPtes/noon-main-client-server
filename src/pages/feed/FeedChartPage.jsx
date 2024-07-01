@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import BasicNavbar from '../../components/common/BasicNavbar';
 import Footer from '../../components/common/Footer';
-import axios_api from '../../lib/axios_api';
-import Chart from 'chart.js/auto';
 import { Line } from 'react-chartjs-2';
 import FeedCntByTag from './component/FeedChart/FeedCntByTag';
 
