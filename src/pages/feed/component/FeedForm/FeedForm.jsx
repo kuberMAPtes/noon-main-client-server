@@ -346,6 +346,7 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                             </ListGroup>
                         </Form.Group>
 
+                        {/* 태그 추가 */}
                         <Form.Group controlId="feedTags" className="mb-3">
                             <Form.Label>태그</Form.Label>
                             <div className={`d-flex align-items-center ${styles.tagInputContainer}`}>

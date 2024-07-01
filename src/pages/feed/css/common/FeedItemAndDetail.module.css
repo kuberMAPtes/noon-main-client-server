@@ -101,3 +101,10 @@
         margin-right: 0 !important;
     }
 }
+
+.h2Like {
+    font-size: 1.5em; /* Default size for <h2> */
+    font-weight: bold; /* Default weight for <h2> */
+    line-height: 1.2; /* Default line-height for <h2> */
+    color: inherit; /* Default color, inherits from parent */
+}
