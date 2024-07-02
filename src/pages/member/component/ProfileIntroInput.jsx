@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Form } from "react-bootstrap";
 import { FaCheck, FaUser } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -33,6 +33,17 @@ const ProfileIntroInput = ({
     }
   };
 
+  const adjustTextareaHeight = () => {
+    if (profileIntroInput.inputRef.current) {
+      profileIntroInput.inputRef.current.style.height = "auto";
+      profileIntroInput.inputRef.current.style.height = `${profileIntroInput.inputRef.current.scrollHeight}px`;
+    }
+  };
+
+  useEffect(() => {
+    adjustTextareaHeight();
+  }, [profileIntro]);
+
   return (
     <Form.Group controlId="formProfileIntro" className="mb-3">
       <Form.Label
@@ -42,6 +53,8 @@ const ProfileIntroInput = ({
         }}
       ></Form.Label>
       <Form.Control
+        as="textarea" // input 대신 textarea로 변환
+        rows={1} // 초기 행 수 설정
         type="text"
         placeholder={profile.profileIntro}
         name="profileIntro"
@@ -61,6 +74,9 @@ const ProfileIntroInput = ({
           fontWeight: "bold",
           textAlign: "center",
           opacity: "1",
+          resize: "none", // 사용자에 의한 크기 조절 비활성화
+          overflow: "hidden", // 스크롤 바 숨기기
+          border: "none",
         }}
         onKeyDown={handleProfileIntroKeyDown}
         required
@@ -70,7 +86,7 @@ const ProfileIntroInput = ({
         onBlur={profileIntroInput.handleBlur(profile.profileIntro)}
         ref={profileIntroInput.inputRef}
       />
-      <Form.Text className="text-danger">
+      <Form.Text className="text-danger" style={{fontSize:"8px", fontWeight:"900"}}>
         {profileIntroValidationMessage && profileIntroValidationMessage}
       </Form.Text>
     </Form.Group>

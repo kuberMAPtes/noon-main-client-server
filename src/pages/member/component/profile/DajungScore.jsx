@@ -5,6 +5,9 @@ import withReactContent from "sweetalert2-react-content";
 import DajungModal from "./DajungModal";
 import SmallAlertStyle from "../common/SmallAlertStyle";
 import { updateDajungScore } from "../../function/memberAxios";
+import { FaTemperatureFull,FaFire,FaTemperatureEmpty,FaTemperatureQuarter,FaTemperatureHalf,FaTemperatureThreeQuarters, FaSnowflake   } from "react-icons/fa6";
+import { IoSunny } from "react-icons/io5";
+import { MdWaterDrop } from "react-icons/md";
 
 const MySwal = withReactContent(Swal);
 
@@ -14,15 +17,35 @@ const DajungScore = ({ profile, setProfile, toId , fromId }) => {
 
   useEffect(() => {
     if (profile.dajungScore >= 80) {
-      setDajungTemperature("매우 따뜻함");
+      setDajungTemperature(
+        <div>
+          <FaFire style={{ fontSize: "1.2rem", color: "#FF4500" }} /> 매우 따뜻함
+        </div>
+      );
     } else if (profile.dajungScore >= 60) {
-      setDajungTemperature("따뜻함");
+      setDajungTemperature(
+        <div>
+          <IoSunny style={{ fontSize: "1.2rem", color: "#FFA500" }} /> 따뜻함
+        </div>
+      );
     } else if (profile.dajungScore >= 40) {
-      setDajungTemperature("보통");
+      setDajungTemperature(
+        <div>
+          <FaTemperatureHalf  style={{ fontSize: "1.2rem", color: "#FFD700" }} /> 보통
+        </div>
+      );
     } else if (profile.dajungScore >= 20) {
-      setDajungTemperature("차가움");
+      setDajungTemperature(
+        <div>
+          <MdWaterDrop style={{ fontSize: "1.2rem", color: "#1E90FF" }} /> 차가움
+        </div>
+      );
     } else {
-      setDajungTemperature("매우 차가움");
+      setDajungTemperature(
+        <div>
+          <FaSnowflake  style={{ fontSize: "1.2rem", color: "#1E90FF" }} /> 매우 차가움
+        </div>
+      );
     }
   }, [profile.dajungScore]);
 
@@ -42,7 +65,7 @@ const DajungScore = ({ profile, setProfile, toId , fromId }) => {
 
     MySwal.fire({
       title: `${profile.nickname}회원님의\n다정온도가 상승하였습니다`,
-      timer: 3000,
+      timer: 700,
       showConfirmButton: false,
       customClass: {
         popup: 'small-alert'
@@ -55,38 +78,59 @@ const DajungScore = ({ profile, setProfile, toId , fromId }) => {
   return (
     <>
       <SmallAlertStyle />
-      <Row>
-        <Col
+      <Row style={{width:"100%",height:"100%"}}>
+        {/* <Col
           xs={3}
           style={{
-            fontSize: "14px",
-            padding: "0px 12px",
+            fontSize: "12px",
+            padding: "0px 0px 0px 0px",
             textAlign: "left",
           }}
         >
-          <Row>
-            <Col xs={12}>
-              다정 온도
-            </Col>
-          </Row>
+        </Col> */}
+        <Col
+          xs={6}
+          className="d-flex flex-column align-items-start"
+          style={{
+            padding: "0px",
+            fontWeight: 900,
+            fontSize: "12px",
+            textAlign:"center"
+          }}
+        >
+          <div style={{ alignSelf: "left", width: "100%", textAlign: "left",padding:"0px 12px 0px 12px" }}>
+            <FaTemperatureFull />&nbsp;&nbsp;다정 온도
+          </div>
         </Col>
-        <Col xs={9}>
-          <div className="d-flex flex-column align-items-center">
-            <ProgressBar
-              now={profile.dajungScore}
-              style={{ width: "100%", height: "1rem", cursor: "pointer" }}
-              onClick={toId !== fromId ? handleShow : null}
-            >
-              <div
+        <Col
+        xs={6}
+        className="d-flex flex-column align-items-start"
+        style={{
+          padding: "0px"
+        }}
+        >
+          <ProgressBar
+                now={profile.dajungScore}
+                style={{ width: "100%", height: "1rem", cursor: "pointer"}}
+                onClick={toId !== fromId ? handleShow : null}
+                
+              >
+            <div
                 style={{
                   background: "#ff8787",
                   width: `${profile.dajungScore}%`,
                   height: `100%`
                 }}
-              ></div>
-            </ProgressBar>
-            <div>{dajungTemperature}</div>
+            ></div>
+          </ProgressBar>
+          <div style={{ alignSelf: "center", width: "100%", textAlign: "center",fontSize:"10px",fontWeight:"900",paddingTop:"5%" }}>
+            {dajungTemperature}
           </div>
+        </Col>
+        <Col xs={6}>
+        </Col>
+        <Col xs={6}>
+
         </Col>
       </Row>
 

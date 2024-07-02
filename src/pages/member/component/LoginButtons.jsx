@@ -30,9 +30,9 @@ const LoginButtons = ({ onLoginClick,onGoogleLoginClick }) => {
   };
 
   return (
-    <Container className={styles.loginButtons} style={{width:"100%",height:"100%",margin:"0px", padding:"0px"}}>
+    <Container className={styles.loginButtons} fluid>
       <Row className="justify-content-center" style={{width:"100%",height:"100%",margin:"0px", padding:"0px"}}>
-        <Col xs={12} md={8} lg={6} className="text-center">
+        <Col xs={12} md={8} lg={8} className="text-center">
           <div className={styles.logo}>
             <NoonLogo />
           </div>
@@ -63,20 +63,18 @@ const LoginButtons = ({ onLoginClick,onGoogleLoginClick }) => {
           <hr />
           <SignUpButton />
           <hr />
-          <Link
-            to="/member/addPhoneNumberAuthentification/getMemberId"
-            style={{ fontSize: "0.6rem" }}
-          >
-            아이디 찾기
-          </Link>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <Link to="/member/IdFormToUpdatePwd" style={{ fontSize: "0.6rem" }}>
-            비밀번호 재설정
-          </Link>
-        </Col>
-      </Row>
-      <Row className="justify-content-center">
-        <Col xs={12} md={8} lg={6} className="text-center">
+          <div className="d-flex justify-content-between">
+            <div>
+            <Link to="/member/addPhoneNumberAuthentification/getMemberId" style={{ fontSize: "0.9rem" }}>
+              아이디 찾기
+            </Link>
+            </div>
+            <div>
+            <Link to="/member/IdFormToUpdatePwd" style={{ fontSize: "0.9rem" }}>
+              비밀번호 재설정
+            </Link>
+            </div>
+          </div>
           <div className={styles.welcomeBanner}>
             <motion.div
               initial={{ opacity: 0 }}

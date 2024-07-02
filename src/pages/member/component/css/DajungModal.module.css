@@ -1,0 +1,13 @@
+/* DajungModal.module.css */
+.swal2Actions {
+  display: flex;
+  justify-content: center;
+  margin-left: 10% !important;
+}
+.swal2ConfirmButton {
+  margin-right: 10% !important; /* Optional: Adjust the spacing between buttons */
+  margin-left: 10% !important; /* Optional: Adjust the spacing between buttons */
+}
+.swal2CancelButton {
+  margin-right: 10% !important; /* Optional: Adjust the spacing between buttons */
+}
