@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Image, Card, CardBody, CardImg, CardText } from 'react-bootstrap';
-import { FaHeart, FaRegHeart, FaBookmark, FaRegBookmark, FaBuilding } from 'react-icons/fa';
+import { FaHeart, FaRegHeart, FaBookmark, FaRegBookmark, FaBuilding, FaRegEye, FaCommentAlt } from 'react-icons/fa';
 import { toggleLike, toggleBookmark } from '../../axios/FeedAxios';
 import navigate from '../../util/Navigator'
 import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
@@ -23,8 +23,11 @@ const FeedItem = ({ data, memberId }) => {
         writerId,
         writerNickname,
         writerProfile,
+        viewCnt,
         like,
+        likeCount,
         bookmark,
+        commentCount,
         feedCategory,
         mainActivated,
         writtenTime,        // 포멧팅 처리
@@ -34,6 +37,7 @@ const FeedItem = ({ data, memberId }) => {
     const [liked, setLiked] = useState(like);
     const [bookmarked, setBookmarked] = useState(bookmark);
     const [mainAttachment, setMainAttachment] = useState(null);
+    const [likedCount, setLikeCount] = useState(likeCount); // 좋아요 개수
 
     const {goToMemberProfile, goToBuildingProfile, goToFeedDetail, goToDetailNotice} = navigate();
 
@@ -49,6 +53,7 @@ const FeedItem = ({ data, memberId }) => {
 
     const handleLikeClick = () => {
         toggleLike(liked, setLiked, feedId, memberId);
+        setLikeCount(preCount => liked ? preCount - 1 : preCount + 1); // 좋아요 수는 변동이 바로 보이도록 변경
     }
     
     const handleBookmarkClick = () => {
@@ -94,15 +99,15 @@ const FeedItem = ({ data, memberId }) => {
                             <Image src={writerProfile || 'https://via.placeholder.com/50'} roundedCircle width="50" height="50" className="mr-3" />
                             <div onClick={() => goToMemberProfile(writerId)}> &nbsp; {writerNickname}</div>
                         </div>
-                        <div onClick={() => goToBuildingProfile(buildingId)} className={styles.linkText}><FaBuilding /> {buildingName}</div>
+                        <div className="d-flex align-items-center">
+                            {/* 빌딩 이름 */}
+                            <div onClick={() => goToBuildingProfile(buildingId)} className={styles.feedItemLinkText}><FaBuilding /> {buildingName}</div>
+                        </div>
                     </div>
                     
 
                     {/* Body- 1 */}
                     {/* 첨부파일을 보여준다. 공지일 때는 보여주지 않는다. */}
-                    {/* {(mainAttachment && isNoticeCategory === false ) && (
-                        <br/>
-                    )} */}
                     {isNoticeCategory ? '' : (
                         <div>
                             <br/>
@@ -124,9 +129,11 @@ const FeedItem = ({ data, memberId }) => {
                             {isPollCategory && (
                                 <FeedVote feedId={feedId} memberId={memberId} />
                             )}
-                            <br/>
                         </div>
                      )}
+                    {(mainAttachment && isNoticeCategory === false ) && (
+                        <br/>
+                    )}
 
                     {/* body - 2 */}
                     {/* 제목 : 공지라면 공지로 바로 리다이렉션한다.*/}
@@ -153,21 +160,30 @@ const FeedItem = ({ data, memberId }) => {
 
                     {/* footer */}
                     {/* 좋아요, 북마크, 피드 카테고리를 추가한다. */}
+                    <hr className={styles.feedItemHr}/>
                     <div className={styles.iconContainer}>
                         <div className={styles.iconLeft}>
                             {/* 좋아요 */}
                             <span onClick={handleLikeClick}>
-                                {liked ? <FaHeart color="red" size='24'/> : <FaRegHeart size='24'/>}
+                                {liked ? <FaHeart color="red" size='24'/> : <FaRegHeart size='24'/>} {likedCount}
                             </span>
-                            {/* 북마크 */}
-                            <span onClick={handleBookmarkClick}>
-                                {bookmarked ? <FaBookmark color="gold" size='24' /> : <FaRegBookmark size='24' />}
+                            {/* 댓글 개수 */}
+                            <span onClick={() => goToFeedDetail(memberId, feedId, true)}>
+                                <FaCommentAlt size='24'/> {commentCount}
+                            </span>
+                            {/* 조회수 */}
+                            <span>
+                                <FaRegEye size='24'/> {viewCnt}
                             </span>
                         </div>
 
                         <div className={styles.iconRight}>
                             {/* 피드 카테고리 */}
                             <div className={styles.feedCategory}>{feedCategoryName}</div>
+                            {/* 북마크 */}
+                            <span onClick={handleBookmarkClick} className={styles.feedItemBookmarkIcon}>
+                                {bookmarked ? <FaBookmark color="gold" size='24' /> : <FaRegBookmark size='24' />}
+                            </span>
                         </div>
                     </div>
                 </CardBody>

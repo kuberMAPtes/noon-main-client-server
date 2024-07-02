@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import '../../css/FeedDetail.css';
 
 import { Image, Badge, Button, Card, CardBody, CardSubtitle, CardText, CardTitle, Form, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { toggleBookmark, toggleLike } from '../../axios/FeedAxios';
 import { FaBookmark, FaHeart, FaRegBookmark, FaRegHeart, FaCommentAlt, FaRegEye, FaFireAlt, FaBuilding } from 'react-icons/fa';
-import { GrUpdate } from "react-icons/gr";
 import { MdDelete, MdFeed } from "react-icons/md";
 import LikedUsersList from './LikedUsersList';
 import axios_api from '../../../../lib/axios_api';
@@ -39,6 +38,23 @@ const FeedDetail = ({ data, memberId }) => {
         tags = [],
         comments = [],
     } = data;
+
+    // 댓글 이동 시 스크롤 이동
+    const commentsRef = useRef(null);
+
+    useEffect(() => {
+        const handleHashChange = () => {
+            const hash = window.location.hash;
+            if (hash === '#comments' && commentsRef.current) {
+                commentsRef.current.scrollIntoView({ behavior: 'smooth' });
+            }
+        };
+
+        handleHashChange(); // 페이지가 로드될 때 해시 처리
+
+        window.addEventListener('hashchange', handleHashChange); // 해시 변경 감지
+        return () => window.removeEventListener('hashchange', handleHashChange); // 클린업
+    }, []);
 
     const [liked, setLiked] = useState(like); // 좋아요 여부
     const [bookmarked, setBookmarked] = useState(bookmark); // 북마크 여부
@@ -316,7 +332,7 @@ const FeedDetail = ({ data, memberId }) => {
                             </ListGroupItem>
                         ))}
                     </ListGroup>
-                    <Form onSubmit={handleCommentSubmit} className='mt-3'>
+                    <Form onSubmit={handleCommentSubmit} className='mt-3' ref={commentsRef}>
                         <Form.Group controlId="formNewComment">
                             <Form.Control
                                 type="text"
