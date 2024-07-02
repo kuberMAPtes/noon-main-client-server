@@ -211,7 +211,7 @@ export default function BMap() {
     <div className={mapStyles.mapContainer}>
       <div id="map">
         {
-          isSubscriptionView && (
+          isSubscriptionView && loginMember.memberId !== ownerIdOfMapInfo && (
             <Button
                 color="primary"
                 className={mapStyles.mapMergeButton}
