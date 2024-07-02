@@ -16,12 +16,16 @@
   overflow: auto;
 }
 
+.list-container-item:last-child .search-item-divider {
+  display: none;
+}
+
 .icon-title {
   display: flex;
   gap: 4px;
   align-items: center;
 }
 
-.scroll {
-
+.search-item-divider {
+  margin: 0px;
 }
