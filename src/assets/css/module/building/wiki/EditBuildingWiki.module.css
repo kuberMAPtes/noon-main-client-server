@@ -1,6 +1,6 @@
 .container {
-  margin-top: 48px;
-  height: 80vh;
+  margin-top: 12px;
+  height: 76vh;
   width: 100vw;
   padding: 0px 8vw;
   margin-left: auto;
@@ -9,12 +9,11 @@
 }
 
 .btnContainer {
-  position: absolute;
   display: flex;
   flex-direction: row;
-  right: 10vw;
-  top: 12px;
-  gap: 12px;
+  gap: 8px;
+  margin-left: 5%;
+  margin-bottom: 12px;
 }
 
 .btn {
@@ -42,6 +41,7 @@
   font-size: 44px;
   margin-left: 32px;
   margin-bottom: 24px;
+  color: #000;
 }
 
 .wikiTextArea {

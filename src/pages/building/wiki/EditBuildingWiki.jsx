@@ -7,6 +7,9 @@ import styles from "../../../assets/css/module/building/wiki/EditBuildingWiki.mo
 import { Button } from "react-bootstrap";
 import { IoNewspaperOutline } from "react-icons/io5";
 import { IoPaperPlane } from "react-icons/io5";
+import Header from "../../../components/common/Header";
+import Swal from "sweetalert2";
+import { Spinner } from "reactstrap";
 
 export default function EditBuildingWiki() {
   const { buildingId } = useParams();
@@ -20,6 +23,8 @@ export default function EditBuildingWiki() {
 
   const navigate = useNavigate();
 
+  const [isLoading, setIsLoading] = useState(false);
+
   console.log(content);
 
   useEffect(() => {
@@ -27,7 +32,7 @@ export default function EditBuildingWiki() {
         .then((response) => {
           setErrorExists(false);
           const data = response.data;
-          setBuildingName(data.buildingName);
+          setBuildingName(!data.buildingName || data.buildingName === "" ? "이름 없음" : data.buildingName);
           const fetched = $(data.htmlContent).find("#editform");
           console.log(fetched);
           setContent({
@@ -63,50 +68,73 @@ export default function EditBuildingWiki() {
   }, [content, textareaRef.current]);
 
   return (
-    <div className={styles.container}>
-      {
-        errorExists ? (
-          <div className={styles.wikiEditContainer}>
-            <h2 className={styles.headTitle}>404 Not Found</h2>
-          </div>
-        ) : (
-          <>
-            <div className={styles.btnContainer}>
-              <IoNewspaperOutline
-                  className={styles.btn}
-                  onClick={() => {
-                    navigate(`/getBuildingWiki/${buildingId}`);
-                  }}  
-              />
-              <IoPaperPlane
-                  className={styles.btn}
-                  onClick={() => {
-                    axios_api.post(`${BUILDING_WIKI_BASE_PATH}/editPage/${buildingId}`, content)
-                        .then((response) => {
-                          alert("변경사항이 저장되었습니다.");
-                          navigate(`/getBuildingWiki/${buildingId}`);
-                        })
-                        .catch((err) => {
-                          console.error(err);
-                        });
-                  }}
-              />
+    <>
+      <Header title="위키 편집" />
+      <div className={styles.container}>
+        {
+          errorExists ? (
+            <div className={styles.wikiEditContainer}>
+              <h2 className={styles.headTitle}>404 Not Found</h2>
             </div>
-            <div id="wiki-edit-container" className={styles.wikiEditContainer}>
-              <h2 className={styles.headTitle}>{buildingName}</h2>
-              <textarea
-                  className={styles.wikiTextArea}
-                  name="wpTextbox1"
-                  ref={textareaRef}
-                  onChange={(e) => {
-                    console.log(e.target.value);
-                    setContent({...content, wpTextbox1: e.target.value});
-                  }} 
-              />
-            </div>
-          </>
-        )
-      }
-    </div>
+          ) : (
+            <>
+              {
+                isLoading ? (
+                  <Spinner />
+                ) : (
+                  <>
+                    <div className={styles.btnContainer}>
+                      <IoNewspaperOutline
+                          className={styles.btn}
+                          onClick={() => {
+                            navigate(`/getBuildingWiki/${buildingId}`);
+                          }}  
+                      />
+                      <IoPaperPlane
+                          className={styles.btn}
+                          onClick={() => {
+                            setIsLoading(true);
+                            axios_api.post(`${BUILDING_WIKI_BASE_PATH}/editPage/${buildingId}`, content)
+                                .then((response) => {
+                                  Swal.fire({
+                                    title: `${buildingName} 건물 위키 수정이 완료되었습니다.`,
+                                    icon: "success",
+                                    confirmButtonText: "OK"
+                                  })
+                                  setIsLoading(false);
+                                  navigate(`/getBuildingWiki/${buildingId}`);
+                                })
+                                .catch((err) => {
+                                  setIsLoading(false);
+                                  Swal.fire({
+                                    title: "에러 발생",
+                                    icon: "error",
+                                    confirmButtonText: "OK"
+                                  });
+                                  console.error(err);
+                                });
+                          }}
+                      />
+                    </div>
+                    <div id="wiki-edit-container" className={styles.wikiEditContainer}>
+                      <h2 className={styles.headTitle}>{buildingName}</h2>
+                      <textarea
+                          className={styles.wikiTextArea}
+                          name="wpTextbox1"
+                          ref={textareaRef}
+                          onChange={(e) => {
+                            console.log(e.target.value);
+                            setContent({...content, wpTextbox1: e.target.value});
+                          }} 
+                      />
+                    </div>
+                  </>
+                )
+              }
+            </>
+          )
+        }
+      </div>
+    </>
   );
 }
