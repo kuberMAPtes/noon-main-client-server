@@ -79,7 +79,6 @@ const NicknameInput = ({
           padding: "0px",
           resize: "none", // 사용자에 의한 크기 조절 비활성화
           overflow: "hidden", // 스크롤 바 숨기기
-          border: "none",
         }}
         onKeyDown={handleNicknameKeyDown}
         required

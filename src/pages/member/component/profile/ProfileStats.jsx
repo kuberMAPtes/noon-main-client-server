@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Row, Col, Card } from "react-bootstrap";
 import profile from "../../../../assets/css/module/member/GetMemberProfile.module.css";
 import { useNavigate } from "react-router-dom";
@@ -12,16 +12,18 @@ import { FaUserPlus } from "react-icons/fa";
 import { BsBuildings } from "react-icons/bs";
 import { MdDynamicFeed } from "react-icons/md";
 import base from "../../../../assets/css/module/member/base.module.css";
+import { Link as ScrollLink } from "react-scroll";
 const ProfileStats = ({
+  fromId,
   toId,
   feeds,
   buildingSubscriptionCount,
   followerCount,
   followingCount,
+  feedSectionRef
 }) => {
   const { encryptedData, ivData } = useEncryptId(toId); // 커스텀 훅 사용
   const feedCount = feeds.length;
-
   const navigate = useNavigate();
 
   const handleFollowerClick = () => {
@@ -44,22 +46,27 @@ const ProfileStats = ({
       `/member/getMemberRelationshipList/${secretId}/${secretIv}?relationshipType=following`
     );
   };
+  const handleFeedCountClick = () => {
+    feedSectionRef.current.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
-    <Row className="text-center">
-      <Col>
-        <div className={profile.circle}>
+    <Row className="text-center d-flex align-items-center justify-content-center" style={{width:"100%", height:"100%", padding:"0px 5px 0px 5px"}}>
+
+      <Col Col xs={3} sm={3} md={3} lg={3} style={{padding:"0%"}}>
+      <ScrollLink to="feedSection" smooth={true} duration={500} className={profile.circle}>
           <div className={profile["circle-text"]}>{feedCount}</div>
-        </div>
+      </ScrollLink>
         <div>
           <MdDynamicFeed />
           피드 수
         </div>
       </Col>
-      <Col>
+
+      <Col Col xs={3} sm={3} md={3} lg={3} style={{padding:"0%"}}>
         <div
           className={`${profile.circle} ${base.hoverStyle}`}
-          onClick={() => navigate(`/map/${toId}`)}
+          onClick={fromId!==toId ? () => navigate(`/map/${toId}`) : ()=> navigate(`/map`)}
         >
           <div className={profile["circle-text"]}>
             {buildingSubscriptionCount}
@@ -67,10 +74,11 @@ const ProfileStats = ({
         </div>
         <div>
           <BsBuildings />
-          구독한 건물
+          구독건물
         </div>
       </Col>
-      <Col>
+
+      <Col Col xs={3} sm={3} md={3} lg={3} style={{padding:"0%"}}>
         <div className={profile.circle} onClick={handleFollowerClick}>
           <div className={profile["circle-text"]}>{followerCount}</div>
         </div>
@@ -79,7 +87,8 @@ const ProfileStats = ({
           팔로워
         </div>
       </Col>
-      <Col>
+
+      <Col Col xs={3} sm={3} md={3} lg={3} style={{padding:"0%"}}>
         <div className={profile.circle} onClick={handleFollowingClick}>
           <div className={profile["circle-text"]}>{followingCount}</div>
         </div>

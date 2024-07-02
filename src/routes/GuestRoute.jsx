@@ -28,7 +28,7 @@ const GuestRoute = ({ children }) => {
         if (authorization && member&& member?.memberId && isRedirect) {
             // alert("로그인한 사용자는 입장이 안됩니다.(리다이렉트를 false로..)"+authorization+"::"+memberId+"::"+isRedirect);
             // navigateMainPage(member?.memberId,navigate);
-            navigateRealMainPage(member?.memberId,navigate);
+            navigateRealMainPage(navigate);
             // const { encryptedData, ivData } = encryptWithLv(memberId);
             // const encryptedToId = encodeURIComponent(encryptedData);
             // const IV = encodeURIComponent(ivData);

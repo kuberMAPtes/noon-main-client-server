@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Container, Row, Col, Button, Card } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import UseProfileFetchFeeds from "./component/profile/UseProfileFetchFeeds";
@@ -12,6 +12,8 @@ import module from "../member/component/css/profile.module.css";
 import FeedListPage from "../feed/FeedListPage";
 import { useDispatch, useSelector } from "react-redux";
 import { setFooterEnbaled } from "../../redux/slices/footerEnabledSlice";
+import Header from "../../components/common/Header";
+import { Element } from "react-scroll";
 
 const GetMemberProfile = () => {
   const { profile, setProfile, toId, fromId, initialPage, isDenied,denialMessage } =
@@ -31,8 +33,12 @@ const GetMemberProfile = () => {
     toId
   );
   // const lastFeedElementRef = UseProfileInfiniteScroll(hasMore, setPage);
+  const feedSectionRef = useRef(null);
 
   return (
+    <>
+    <Header
+    title={fromId===toId ? "내 프로필" : `${profile.nickname}님의 프로필`}/>
     <Container
       fluid
       className={`${module.container} d-flex flex-column justify-content-start align-items-center pt-6`}
@@ -42,7 +48,6 @@ const GetMemberProfile = () => {
         margin: "0px",
         maxWidth: "100%",
         height: "85vh",
-        overflow: "auto",
       }}
     >
       <Row
@@ -62,6 +67,7 @@ const GetMemberProfile = () => {
                 buildingSubscriptionCount={buildingSubscriptionCount}
                 followerCount={followerCount}
                 followingCount={followingCount}
+                feedSectionRef={feedSectionRef}
               />
             </Col>
             {/* <Col xs={12} sm={12} md={12} lg={12}>
@@ -84,6 +90,7 @@ const GetMemberProfile = () => {
                 buildingSubscriptionCount={buildingSubscriptionCount}
                 followerCount={followerCount}
                 followingCount={followingCount}
+                feedSectionRef={feedSectionRef}
               />
             </Col>
             <Col xs={12} sm={12} md={12} lg={12}>
@@ -91,12 +98,15 @@ const GetMemberProfile = () => {
             toId={toId}
             feeds={feeds}
             lastFeedElementRef={lastFeedElementRef} /> */}
-              <FeedListPage toId={toId} feeds={feeds} setFeeds={setFeeds} />
+              <Element name="feedSection">
+                <FeedListPage toId={toId} feeds={feeds} setFeeds={setFeeds} />
+              </Element>
             </Col>
           </>
         )}
       </Row>
     </Container>
+    </>
   );
 };
 

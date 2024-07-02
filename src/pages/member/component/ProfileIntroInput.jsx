@@ -45,7 +45,17 @@ const ProfileIntroInput = ({
   }, [profileIntro]);
 
   return (
-    <Form.Group controlId="formProfileIntro" className="mb-3">
+    <Form.Group
+    controlId="formProfileIntro"
+    style={{
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "flex-start",
+      justifyContent: "flex-start", // 수평 방향에서도 맨 위로 정렬
+      height: "100%", // 필요에 따라 높이를 조정
+      width: "100%",  // 필요에 따라 너비를 조정
+    }}
+    >
       <Form.Label
         style={{
           border: isProfileIntroValid && "#91a7ff",
@@ -76,7 +86,6 @@ const ProfileIntroInput = ({
           opacity: "1",
           resize: "none", // 사용자에 의한 크기 조절 비활성화
           overflow: "hidden", // 스크롤 바 숨기기
-          border: "none",
         }}
         onKeyDown={handleProfileIntroKeyDown}
         required

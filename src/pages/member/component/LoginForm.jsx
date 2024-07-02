@@ -12,11 +12,13 @@ import { setFooterEnbaled } from "../../../redux/slices/footerEnabledSlice";
 import NoonLogoRmBg from "../../../assets/css/NoonLogoRmBg";
 import {motion,useAnimation} from "framer-motion";
 import useFooterToggle from "../../../components/hook/useFooterToggle";
+import useSafeNavigate from "../hook/useSafeNavigate";
 
 const GetAuthMain = lazy(() => import("../GetAuthMain"));
 
 const LoginForm = () => {
   const navigate = useNavigate();
+  const [isNavigating,setIsNavigating, handleSafeNavigation] = useSafeNavigate(navigate);
   const storeMemberId = useSelector((state) => state?.auth?.member?.memberId);
   const loginError = useSelector((state) => state?.auth?.loginError);
   console.log("로그인 에러값 확인:", JSON.stringify(loginError));
@@ -24,7 +26,7 @@ const LoginForm = () => {
   const [pwd, setPassword] = useState("");
   const [validationError, setValidationError] = useState("");
   const controls = useAnimation();
-  const [isNavigating, setIsNavigating] = useState(false);
+  
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(setFooterEnbaled(false));
@@ -96,11 +98,6 @@ const LoginForm = () => {
     });
   }, [controls]);
 
-  const handleLinkClick = async () => {
-    setIsNavigating(true);
-    navigate("/member/getAuthMain");
-  };
-
   useEffect(() => {
     const preloadComponent = async () => {
       const component = await import("../GetAuthMain");
@@ -108,7 +105,7 @@ const LoginForm = () => {
     };
     preloadComponent();
   }, []);
-
+  
   if (isNavigating) {
     return null; // 페이지 전환 시 현재 컴포넌트를 숨깁니다.
   }
@@ -159,7 +156,7 @@ const LoginForm = () => {
                 <Button
                   variant="secondary"
                   className={`${styles.linkButton} ${styles.main}`}
-                  onClick={handleLinkClick}
+                  onClick={()=>handleSafeNavigation("/member/getAuthMain")}
                 >
                   메인으로..
                 </Button>
