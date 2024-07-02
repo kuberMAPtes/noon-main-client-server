@@ -17,7 +17,7 @@ const Header = ({ title }) => {
        { title }
       </div>
       <div>
-        <img src={`${process.env.PUBLIC_URL}/image/noon-mini-logo-removebg.png`} alt="Member Icon" style={styles.icon} />
+        <img src={`${process.env.PUBLIC_URL}/image/noon-mini-logo-removebg.png`} alt="NOON" style={styles.icon} />
       </div>
     </div>
   );
