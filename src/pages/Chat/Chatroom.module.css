@@ -142,8 +142,8 @@
   /* My label */
   .myLabel {
     position: absolute;
-    top: -5px;
-    right: -5px;
+    top: +10px;
+    right: +10px;
     background-color: #9BAAF8; /* Red background */
     color: white; /* White text */
     padding: 2px 5px; /* Padding for better appearance */

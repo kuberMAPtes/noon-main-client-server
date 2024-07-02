@@ -85,11 +85,13 @@ const Chatroom = () => {
       // 채팅방 정보(roomInfo) 없으면 요청 후 useEffect 종료
       getChatroom(chatroomID)
       .then(data => {
-        //chatEntranceInfo 에 memberID 가 없으면 ParticiPants 에 등록하기
+
+        //유저가 채팅방에 입장할 때 chatEntranceInfo 에 memberID 가 없으면 ParticiPants 에 등록하기
         const chatEntrancesInfo = data.ChatEntrancesInfo;
         const chatEntranceChecked = chatEntrancesInfo.find(entrance => entrance.chatroomMember.memberId === memberID);
         
-       if(!chatEntranceChecked){
+        //단 1:1채팅방에는 채팅수락시 이미 chatEntrance가 서버상에 등록되므로 생략
+       if(!chatEntranceChecked && data.ChatroomInfo.chatroomType==="GROUP_CHATTING"){
         console.log(chatEntrancesInfo , " <= 여기에 멤버아이디 ", memberID, " 가 없으므로 chackEntranceChecked 를 추가하려고합니다 => ",chatEntranceChecked )
  
           addChatEntrance(chatroomID, memberID)
@@ -395,12 +397,12 @@ const Chatroom = () => {
               <h2>채팅방 이름: {roomInfo.chatroomName}</h2>
               {/* <p><strong>채팅방 ID:</strong> {roomInfo.chatroomID}</p> */}
               <p><strong>건물 ID:</strong> {roomInfo.buildingId}</p>
-              <p><strong>다정온도 제한:</strong> {roomInfo.chatroomMinTemp}°C</p>
+              {(roomInfo.chatroomMinTemp && <p><strong>다정온도 제한:</strong> {roomInfo.chatroomMinTemp}°  C</p>)}
               {/* <p><strong>방장:</strong> {roomInfo.chatroomCreator}</p> */}
               <p><strong>채팅방 종류:</strong> {roomInfo.chatroomType}</p>
-              {roomInfo.chatroomType === 'PRIVATE_CHATTING' && (
-                <img src={roomInfo.chatroomCreator.profilePhotoUrl} alt="Profile" />
-              )}
+              {/* {roomInfo.chatroomType === 'PRIVATE_CHATTING' && (
+                <img className={module.profileImage} src={roomInfo.chatroomCreator.profilePhotoUrl} alt="Profile" />
+              )} */}
             </div> 
           </div>
 
