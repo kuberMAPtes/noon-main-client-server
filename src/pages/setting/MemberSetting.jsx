@@ -12,6 +12,7 @@ import { setFooterEnbaled } from "../../redux/slices/footerEnabledSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Spinner } from "reactstrap";
 import Header from "../../components/common/Header";
+import Swal from "sweetalert2";
 
 const PUBLIC_RANGES = [
   {
@@ -143,7 +144,11 @@ export default function MemberSetting() {
                     receivingAllNotification
                   }).then((response) => {
                     if (is2xxStatus(response.status)) {
-                      alert("환경설정이 적용되었습니다");
+                      Swal.fire({
+                        title: "환경설정이 적용되었습니다",
+                        icon: "success",
+                        confirmButtonText: "OK"
+                      });
                     }
                     setLoading(false);
                   }).catch((err) => {
