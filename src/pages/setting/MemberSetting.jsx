@@ -11,6 +11,8 @@ import { useNavigate } from "react-router-dom";
 import { setFooterEnbaled } from "../../redux/slices/footerEnabledSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Spinner } from "reactstrap";
+import Header from "../../components/common/Header";
+import Swal from "sweetalert2";
 
 const PUBLIC_RANGES = [
   {
@@ -108,7 +110,7 @@ export default function MemberSetting() {
 
   return (
     <div>
-      <BasicNavbar />
+      <Header title="환경설정" />
       {
         loading ? (
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
@@ -116,17 +118,6 @@ export default function MemberSetting() {
           </div>
         ) : (
           <main className="container member-setting-container">
-            <div class="title-container">
-              <h1>환경설정</h1>
-              <RiArrowGoBackFill
-                  style={{
-                      width: "25px", height: "25px"
-                  }}
-                  onClick={() => {
-                    navigate(-1);
-                  }}
-              />
-            </div>
             <div className="setting-content-wrapper">
               {
                 COMPONENT_INFOS.map((data, idx) => (
@@ -153,7 +144,11 @@ export default function MemberSetting() {
                     receivingAllNotification
                   }).then((response) => {
                     if (is2xxStatus(response.status)) {
-                      alert("환경설정이 적용되었습니다");
+                      Swal.fire({
+                        title: "환경설정이 적용되었습니다",
+                        icon: "success",
+                        confirmButtonText: "OK"
+                      });
                     }
                     setLoading(false);
                   }).catch((err) => {
@@ -162,30 +157,32 @@ export default function MemberSetting() {
                 }}
                 style={{ backgroundColor: "#030722" }}
             >변경사항 저장</button>
-            <button
-                className="btn--opinfo"
-                type="button"
-                onClick={() => {
-                  setOpInfoMode("termsAndPolicy");
-                  setOpInfoModalVisible(true);
-                }}
-                style={{
-                  color: "#030722",
-                  backgroundColor: "#FFFFFD"
-                }}
-            >약관 및 정책</button>
-            <button
-                className="btn--opinfo"
-                type="button"
-                onClick={() => {
-                  setOpInfoMode("termsOfUse");
-                  setOpInfoModalVisible(true);
-                }}
-                style={{
-                  color: "#030722",
-                  backgroundColor: "#FFFFFD"
-                }}
-            >이용규정</button>
+            <div className="opinfo--container--asdf">
+              <button
+                  className="btn--opinfo"
+                  type="button"
+                  onClick={() => {
+                    setOpInfoMode("termsAndPolicy");
+                    setOpInfoModalVisible(true);
+                  }}
+                  style={{
+                    color: "#030722",
+                    backgroundColor: "#FFFFFD"
+                  }}
+              >약관 및 정책</button>
+              <button
+                  className="btn--opinfo"
+                  type="button"
+                  onClick={() => {
+                    setOpInfoMode("termsOfUse");
+                    setOpInfoModalVisible(true);
+                  }}
+                  style={{
+                    color: "#030722",
+                    backgroundColor: "#FFFFFD"
+                  }}
+              >이용규정</button>
+            </div>
             <OpInfoModal
                 visible={opInfoModalVisible}
                 setVisible={setOpInfoModalVisible}

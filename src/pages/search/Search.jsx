@@ -162,15 +162,16 @@ export default function Search() {
           <Spinner style={{ width: '3rem', height: '3rem' }} color="primary" />
         </div>
       )}
-      <GoMoveToTop
-          className="search-go-to-top-button"
+      <button
+          className="create-button"
           onClick={() => {
             searchResultContainerRef.current.scroll({
               top: 0,
               behavior: "smooth"
             });
-          }}
-      />
+          }}>
+        <i className="fa fa-arrow-up"></i>
+      </button>
     </div>
   );
 }
