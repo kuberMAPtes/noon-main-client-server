@@ -174,8 +174,9 @@ export const handleNavigate = (phoneNumber, verifiedState, navigate, url) => {
           url = url + "/fail";
         }
       } else if (url === "updatePwd") {
+        
       }
-      //alert("네비게이션 합니다 " + url);
+      alert("네비게이션 합니다 " + url);
       navigate("/member/" + url);
     };
 
