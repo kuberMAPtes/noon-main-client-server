@@ -40,7 +40,7 @@ function OpInfoContent({mode}) {
 
   console.log(contentSlice);
   return (
-    <>
+    <div className="opinfo-modal-container">
       {
         contentSlice.map((c, idx) => <p key={`op-${idx}`}>{c}</p>)
       }
@@ -57,6 +57,6 @@ function OpInfoContent({mode}) {
           }
         }}>이후</button>
       </div>
-    </>
+    </div>
   )
 }

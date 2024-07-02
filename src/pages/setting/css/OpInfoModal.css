@@ -1,3 +1,8 @@
+.opinfo-modal-container {
+  height: 80vh;
+  overflow: auto;
+}
+
 .btn-opinfo-pagination {
   display: flex;
   align-items: center;
