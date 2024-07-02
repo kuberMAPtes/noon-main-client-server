@@ -11,7 +11,7 @@ export const PARAM_KEY_SEARCH_KEYWORD = "search-keyword";
  * }} prop
  * @returns JSX.Element
  */
-export default function SearchBar({typeCallback, searchCallback}) {
+export default function SearchBar({typeCallback, searchCallback, isSearchButtonEnabled = true}) {
   const [queryParams, setQueryParams] = useSearchParams();
 
   const searchKeywordInputRef = useRef(null);
@@ -29,7 +29,7 @@ export default function SearchBar({typeCallback, searchCallback}) {
           onChange={(e) => typeCallback(e.target.value)}
           ref={searchKeywordInputRef}
       />
-      <Button type="button" onClick={() => searchCallback()}>검색</Button>
+      {isSearchButtonEnabled && <Button type="button" onClick={() => searchCallback()}>검색</Button>}
     </InputGroup>
   );
 }
