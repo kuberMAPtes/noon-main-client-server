@@ -30,16 +30,34 @@
   padding: 20px;
 }
 
+.chatBody p {
+  font-size : 1.2em
+}
+
 .chatRobot {
   margin: 20px 0;
 }
 
 .robotImage {
-  width: 100px;
-  height: 100px;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  margin-right: 5px;
+  margin-bottom: 10px;
+  border: 2px solid #9BAAF8;
 }
 
-.chatBody p {
+.chatMessage {
+  padding: 30px ;
+  border: 2px solid #9BAAF8;
+  border-radius: 8px;
+  background-color: #ffffff;
+  margin: 40px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.chatMessage p {
   font-size: 1.2em;
   color: #333333;
 }
@@ -74,4 +92,13 @@
 
 .rejectButton:hover {
   background-color: #e55a5a;
+}
+
+.inputField {
+  padding: 20px ;
+  border: 2px solid #9BAAF8;
+  border-radius: 8px;
+  background-color: #ffffff;
+  margin: 40px 0 50px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }

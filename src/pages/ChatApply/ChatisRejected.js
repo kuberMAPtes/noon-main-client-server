@@ -6,7 +6,7 @@ const ChatisRejected = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
-    const fromID = queryParams.get('fromID');
+    const { fromID, member } = location.state || {};
 
     const handleSubmit = () => {
       navigate('/chat/chatApplyList');
@@ -20,7 +20,7 @@ const ChatisRejected = () => {
         </div>
         <div className={styles.chatBody}>
           <div className={styles.chatRobot}>
-            <img src='../../image/09e904cb8f26f.png' alt="Robot" className={styles.robotImage} />
+            <img src={member.profilePhotoUrl ? member.profilePhotoUrl : `${process.env.PUBLIC_URL}/image/defaultMemberProfilePhoto.png`} alt="Robot" className={styles.robotImage} />
           </div>
           <p>1대1 채팅이 거절되었습니다</p>
           <button className={styles.backButton} onClick={handleSubmit}>나가기</button>
