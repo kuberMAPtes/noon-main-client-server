@@ -70,8 +70,12 @@ const GetNotice = () => {
     if (notice) {
       const imgs = document.querySelectorAll('.feed-content img');
       const videos = document.querySelectorAll('.feed-content video');
+      const screenWidth = window.innerWidth;
 
       imgs.forEach(img => {
+        if (img.clientWidth < screenWidth) {
+        img.style.width = '100%';
+        } 
         img.style.maxWidth = '100%';
         img.style.height = 'auto';
         img.style.display = 'block';
@@ -79,6 +83,9 @@ const GetNotice = () => {
       });
 
       videos.forEach(video => {
+        if (video.clientWidth < screenWidth) {
+          video.style.width = '100%';
+        }
         video.style.maxWidth = '100%';
         video.style.height = 'auto';
         video.style.display = 'block';
