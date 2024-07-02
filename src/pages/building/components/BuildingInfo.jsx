@@ -28,8 +28,7 @@ const BuildingInfo = ({ subscriptionData, setSubscriptionData }) => {
   const [selectedMemberId, setSelectedMemberId] = useState(null); 
   const mainPageUrl = useMainPage(selectedMemberId);
 
-  // 회원의 구독 여부
- // const [subscription, setSubscription] = useState(false);
+  const [hiddenSubscriptions, setHiddenSubscriptions] = useState(0);
 
   // 빌딩 아이디
   const { buildingId } = useParams();
@@ -69,12 +68,20 @@ const BuildingInfo = ({ subscriptionData, setSubscriptionData }) => {
     console.log("구독자 수: " + response.data);
   };
 
-  //구독자 목록 가져오기 
+  //구독자 목록 가져오기 (공개범위에 따라 조회 가능한 구독자만 보여줌)
   const getSubscribers = async () => {
     const response = await axiosInstance.get(`/buildingProfile/getSubscribers`, {
-      params: { buildingId: buildingId }
+      params: { buildingId: buildingId, viewerId: member.memberId}
     });
-    setSubscribers(response.data);
+    if(response){
+      const visibleSubscribers = response.data.filter(member => member.visible);
+      const hiddenSubscribersCnt = response.data.length - visibleSubscribers.length;
+
+      setSubscribers(visibleSubscribers);
+      setHiddenSubscriptions(hiddenSubscribersCnt);
+      console.log("visibleSubscribers: "+visibleSubscribers);
+      console.log("hiddenSubscribersCnt: "+hiddenSubscribersCnt);
+    }
     console.log("구독자 목록: " + JSON.stringify(response.data));
   };
 
@@ -228,11 +235,11 @@ const BuildingInfo = ({ subscriptionData, setSubscriptionData }) => {
                       </Button>
                     </Col>
                   </Row>
-                  <div style={{ overflowX: 'auto', whiteSpace: 'nowrap', marginTop: '10px', display: 'flex', justifyContent: 'center',}}>
+                  <div style={{ alignItems: 'flex-end',overflowX: 'auto', whiteSpace: 'nowrap', marginTop: '10px',  justifyContent: 'center',}}>
                     {subscribers.map((subscriber, index) => (
                       <div 
-                        key={subscriber.memberId} 
-                        onClick={() => setSelectedMemberId(subscriber.memberId)}
+                        key={subscriber.member.memberId} 
+                        onClick={() => setSelectedMemberId(subscriber.member.memberId)}
                         style={{ 
                           display: 'inline-block', 
                           textAlign: 'center', 
@@ -252,9 +259,15 @@ const BuildingInfo = ({ subscriptionData, setSubscriptionData }) => {
                             margin: '0 auto',
                           }}
                         />
-                        <p style={{ margin: '5px 0 0 0' }}>{subscriber.nickname}</p>
+                        <p style={{ margin: '5px 0 0 0' }}>{subscriber.member.nickname}</p>
                       </div>
                     ))}
+                    
+                    {hiddenSubscriptions>0?
+                      <div style={{color:'#596079'}}>+ 숨은 구독자 {hiddenSubscriptions}명😜</div>
+                      :
+                      ""
+                    }
                   </div>
 
                   {selectedMemberId && (
