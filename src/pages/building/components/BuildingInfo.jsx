@@ -4,6 +4,7 @@ import axiosInstance from '../../../lib/axiosInstance';
 import { useSelector } from 'react-redux';
 import useMainPage from '../../member/hook/useMainPage';
 import { Link } from 'react-router-dom';
+import FeedDisplayBoard from '../../feed/component/FeedList/FeedDisplayBoard';
 
 import {
   Button,
@@ -166,14 +167,17 @@ const BuildingInfo = ({ subscriptionData, setSubscriptionData }) => {
 
   return (
     <>  
+
+      <FeedDisplayBoard buildingId={buildingId} />
+
       <div className="content">
         <Row style={ {margin: "0 auto",marginTop:"20px", width: '95%', height: '90%' }} className="justify-content-center align-items-center">
           <Col md="4">
-            <Card className="card-user">
+            <Card className="card-user" style={{border:'3px solid #FFFFFD', marginBottom:'30px'}}>
               <div className="image"></div>
-
-              <CardTitle>{profile.buildingName}</CardTitle>
-              <CardText>{profile.roadAddr}</CardText>
+              <br/>
+              <CardTitle tag={"h3"}><b>&emsp;{profile.buildingName}</b></CardTitle>
+              <CardText>&emsp;{profile.roadAddr}</CardText>
 
               <Card style={{ width: "80%", margin: "0 auto", marginBottom: '20px'}}>
                 <CardBody>
@@ -184,7 +188,8 @@ const BuildingInfo = ({ subscriptionData, setSubscriptionData }) => {
                     block
                     style={{
                       backgroundColor: clickedButton === 'summary' ? '#f3f0ff' : '#9BAAF8',
-                      borderColor: '#9BAAF8'
+                      borderColor: '#9BAAF8',
+                      borderRadius:'8px'
                     }}
                     onClick={() => {
                       handleButtonClick('summary');
@@ -201,7 +206,7 @@ const BuildingInfo = ({ subscriptionData, setSubscriptionData }) => {
                 <div className="button-container">
                   <Row>
                     <Col className="ml-auto" lg="3" md="6" xs="6">
-                      <h5>
+                      <h5 style={{textAlign:'center'}}>
                         {subscriber} <br />
                         <small>구독자 수</small>
                       </h5>
@@ -211,18 +216,19 @@ const BuildingInfo = ({ subscriptionData, setSubscriptionData }) => {
                         block
                         style={{
                           backgroundColor: clickedButton === 'subscribe' ? '#f3f0ff' : '#9BAAF8',
-                          borderColor: '#9BAAF8'
+                          borderColor: '#9BAAF8',
+                          borderRadius: '50px'
                         }}
                         onClick={() => {
                           handleButtonClick('subscribe');
                           addOrDeleteSubscription();
                         }}
                       >
-                        {subscriptionData===true ? '구독취소' : '구독'}
+                        {subscriptionData===true ? '구독 취소' : '구독'}
                       </Button>
                     </Col>
                   </Row>
-                  <div style={{ overflowX: 'auto', whiteSpace: 'nowrap', marginTop: '10px' }}>
+                  <div style={{ overflowX: 'auto', whiteSpace: 'nowrap', marginTop: '10px', display: 'flex', justifyContent: 'center',}}>
                     {subscribers.map((subscriber, index) => (
                       <div 
                         key={subscriber.memberId} 
@@ -233,11 +239,10 @@ const BuildingInfo = ({ subscriptionData, setSubscriptionData }) => {
                           marginRight: '10px', 
                           border: '1px solid #ccc', 
                           padding: '10px', 
-                          borderRadius: '5px'
                         }}
                       >
                         <img
-                          src={subscriber.profilePhotoUrl}
+                          src={subscriber.profilePhotoUrl || '/image/defaultMemberProfilePhoto.png'}
                           alt={subscriber.nickname}
                           style={{
                             borderRadius: '50%',
@@ -253,26 +258,26 @@ const BuildingInfo = ({ subscriptionData, setSubscriptionData }) => {
                   </div>
 
                   {selectedMemberId && (
-                    <div style={styles.linkContainer}>
+                    <div style={{ display: 'flex', justifyContent: 'right', alignItems: 'center', marginTop: '10px' }}>
                       <Link to={mainPageUrl}>
-                        <button style={{backgroundColor: "#B8C6E3"}}>이 회원의 프로필 GO</button>
+                        <button style={{ backgroundColor: "#9BAAF8", width:'150px', height:'39px' ,borderRadius:'50px' }}>프로필로 이동</button>
                       </Link>
                     </div>
                   )}
-
                 </div>
               </CardFooter>
             </Card>
 
-            <Card style={{ width: "95%", margin: "0 auto", marginBottom: '20px'}}>
-              <CardTitle tag="h5">WIKI</CardTitle>
-              <CardText>건물 정보를 더 자세히 알아보세요!</CardText>
-              <CardFooter>
+            <Card style={{ width: "100%", margin: "0 auto", marginTop:'20px', marginBottom: '20px'}}>
+              <br/>
+              <CardTitle tag="h3"><b>&emsp;WIKI</b></CardTitle>
+              <CardText>&emsp;건물 정보를 더 자세히 알아보세요!</CardText>
+              
                 <Button
                   block
                   style={{
-                    backgroundColor: clickedButton === 'wiki' ? '#f3f0ff' : '#9BAAF8',
-                    borderColor: '#9BAAF8'
+                    backgroundColor: clickedButton === 'wiki' ? '#f3f0ff' : '#030722',
+                    borderColor: '#E8DEC9'
                   }}
                   onClick={() => {
                     handleButtonClick('wiki');
@@ -281,7 +286,6 @@ const BuildingInfo = ({ subscriptionData, setSubscriptionData }) => {
                 >
                   위키 보러가기
                 </Button>
-              </CardFooter>
             </Card>
           </Col>
         </Row>

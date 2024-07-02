@@ -123,13 +123,15 @@ const WantBuildingProfile = ({ isOpen, onClose, applicationData }) => {
     <div style={styles.overlay}>
       <div style={styles.modal}>
         <div style={styles.popupHeader}>
-          <span role="img" aria-label="notification" style={styles.icon}>🔔</span>
-          <h2>건물 프로필 등록 신청</h2>
-          <i onClick={onClose} className="fa-solid fa-circle-xmark"></i>
+          <span role="img" aria-label="notification" style={styles.icon}>
+            <h3>🔔 건물 프로필 등록</h3>
+          </span>
+          <h4><i onClick={onClose} class="fa-solid fa-circle-xmark"></i></h4>
         </div>
-        <p>이 건물에서 일어나는 일을 알고 싶나요? 프로필 등록을 신청해보세요!</p>
+        <p>&emsp;이 건물에서 일어나는 일을 알고 싶나요? <br/> &emsp;프로필 등록을 신청해보세요!</p>
 
-        <Card>
+        <Card style={{paddingLeft:'20px', paddingRight:'20px'}}>
+          <br/>
           <h3>{buildingName}</h3>
           <p>{roadAddr}</p>
         </Card>
@@ -145,7 +147,7 @@ const WantBuildingProfile = ({ isOpen, onClose, applicationData }) => {
           {applicantList.map((applicant) => (
             <div key={applicant.memberId} onClick={() => setSelectedMemberId(applicant.memberId)}>
               <img
-                src={applicant.profilePhotoUrl}
+                src={applicant.profilePhotoUrl || '/image/defaultMemberProfilePhoto.png'}
                 alt={applicant.memberId}
                 style={styles.profilePhoto}
               />
@@ -185,8 +187,9 @@ const styles = {
     borderRadius: '10px',
     padding: '20px',
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-    width: '300px',
+    width: '320px',
     position: 'relative',
+    border: '3px solid #D8B48B'
   },
   closeButton: {
     position: 'absolute',
@@ -213,7 +216,8 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: '10px',
+    marginTop:'25px',
+    marginBottom: '25px',
   },
   requestButton: {
     background: '#f0f0f0',

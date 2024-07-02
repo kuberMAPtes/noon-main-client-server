@@ -1,0 +1,80 @@
+.report-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+  }
+  
+  .report-guide {
+    width: 100%;
+    max-width: 900px;
+    height: 800px;
+    margin-bottom: 70px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+  }
+  
+  .tabs {
+    display: flex;
+    margin-bottom: 20px;
+  }
+  
+  .tab {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    background-color: #e9ecef;
+  }
+  
+  .tab.active {
+    background-color: #9BAAF8;
+    color: white;
+  }
+  
+  .guide-content {
+    padding: 20px;
+  }
+  
+  .guide-section {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+  }
+  
+  .guide-item {
+    flex: 1;
+    margin: 0 10px;
+  }
+  
+  .guide-item h4 {
+    margin-bottom: 10px;
+    color: #9BAAF8 ;
+  }
+  
+  .guide-item ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .guide-item ul li {
+    margin-bottom: 5px;
+  }
+  
+  .caution {
+    background-color: #e9ecef;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  
+  .caution h4 {
+    margin-bottom: 8px;
+    color: #fa5252;
+  }
+  
+  .caution p {
+    margin: 0;
+    ;
+  }
+  
