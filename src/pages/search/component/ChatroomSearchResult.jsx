@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import "../../../assets/css/module/search/component/ChatroomSearchResult.css";
+import styles from "../../../assets/css/module/search/component/ChatroomSearchResult.module.css";
+import { abbreviateLongString } from "../../../util/stringUtil";
+import { FaBuilding } from "react-icons/fa";
 
 /**
  * @param {{
@@ -19,29 +21,37 @@ import "../../../assets/css/module/search/component/ChatroomSearchResult.css";
  *     }[]
  *   };
  *   infScrollTargetRef;
+ *   searchResultContainerRef;
  * }} props
  */
 export default function ChatroomSearchResult({
   searchResult,
-  infScrollTargetRef
+  infScrollTargetRef,
+  searchResultContainerRef
 }) {
   console.log(searchResult);
   return (
-    <div className="scroll list-container">
+    <div className="scroll list-container" ref={searchResultContainerRef}>
       {
         searchResult && searchResult.map((data, idx) => (
-          <CharoomSearchResultItem
-            key={`chatroom-item-${idx}`}
-            chatroomId={data.chatroomId}
-            chatroomName={data.chatroomName}
-            participantCount={data.participantCount}
-            buildingName={data.buildingName}
-            roadAddr={data.roadAddr}
-            chatroomCreatorId={data.chatroomCreatorId}
-            chatroomType={data.chatroomType}
-            chatroomMinTemp={data.chatroomMinTemp}
-            infScrollTargetRef={idx + 1 === searchResult.length ? infScrollTargetRef : null}
-          />
+          <div
+              key={`search-item-${idx}`}
+              className="list-container-item"
+          >
+            <CharoomSearchResultItem
+              key={`chatroom-item-${idx}`}
+              chatroomId={data.chatroomId}
+              chatroomName={data.chatroomName}
+              participantCount={data.participantCount}
+              buildingName={data.buildingName}
+              roadAddr={data.roadAddr}
+              chatroomCreatorId={data.chatroomCreatorId}
+              chatroomType={data.chatroomType}
+              chatroomMinTemp={data.chatroomMinTemp}
+              infScrollTargetRef={idx + 1 === searchResult.length ? infScrollTargetRef : null}
+            />
+            <hr className="search-item-divider" />
+          </div>
         ))
       }
     </div>
@@ -74,20 +84,26 @@ function CharoomSearchResultItem({
   const navigate = useNavigate();
   return (
     <div
-        className="item-container chatroom-item-container"
+        className={styles.chatroomItemContainer}
         onClick={() => navigate(`/chat/chatroom?chatroomID=${chatroomId}`)}
         ref={infScrollTargetRef}
     >
-      <div className="info">
-        <h3>{chatroomName}</h3>
+      <div className={styles.info}>
+        <h3>{abbreviateLongString(chatroomName)}</h3>
         <div className="icon-title">
           <img src="./image/chat-participants.png" alt="chat participants" />
           <div>{participantCount}</div>
         </div>
       </div>
-      <div className="info">
-        <div>{buildingName}</div>
-        <div>{roadAddr}</div>
+      <div className={`${styles.info} ${styles.metadata}`}>
+        <div className="icon-title">
+          <FaBuilding />
+          <div>{buildingName}</div>
+        </div>
+        <div className="icon-title">
+          <img src="/image/address.png" alt="address" />
+          <div>{abbreviateLongString(roadAddr, 13)}</div>
+        </div>
         <div>{chatroomCreatorId}</div>
       </div>
     </div>
