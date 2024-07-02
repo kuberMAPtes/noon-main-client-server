@@ -107,9 +107,12 @@ const MyChatroomList = () => {
                     <div key={chatroom.chatroomID} className={module.chatroom}>
                         <div className={module.chatroomInfo}>
                             <p className={module.chatroomName}>{chatroom.chatroomName} ({chatroom.chatroomEntrancesSize}) {chatroom.famous === 1 ? <span className={`${module.sparkle}`}>🔥</span> : ''}</p>
-                            <p className={module.chatroomStatus}>방장 : {chatroom.chatroomCreator.memberId} ({chatroom.chatroomMinTemp} 도 이상만)</p>
+                            <p className={module.chatroomStatus}>방장 : {chatroom.chatroomCreator.nickname} ({chatroom.chatroomMinTemp} 도 이상만)</p>
                             <p>안읽은메세지수 : {chatroom.unreadMessage} </p>
                         </div>
+                        {chatroom.chatroomType === 'PRIVATE_CHATTING' && (
+                            <img src={chatroom.chatroomCreator.profilePhotoUrl} alt="Profile" />
+                        )}
                         <button
                             onClick={() => enterChatroom(chatroom.chatroomID)}
                             className={chatroom.unreadMessage !== 0 ? module.activeButton : module.normalButton}
