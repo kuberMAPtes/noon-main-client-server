@@ -112,6 +112,7 @@ const FeedItem = ({ data, memberId }) => {
                     {/* Body- 1 */}
                     {/* 첨부파일을 보여준다. 공지일 때는 보여주지 않는다. */}
                     {isNoticeCategory ? '' : (
+                        <>
                         <div onClick={() => goToFeedDetail(memberId, feedId)}>
                             <br/>
                             {mainAttachment &&  mainAttachment.type === 'PHOTO' && (
@@ -129,10 +130,13 @@ const FeedItem = ({ data, memberId }) => {
                                     </video>
                                 </div>
                             )}
+                        </div>
+                        <div>
                             {isPollCategory && (
                                 <FeedVote feedId={feedId} memberId={memberId} />
                             )}
                         </div>
+                        </>
                      )}
                     {(mainAttachment && isNoticeCategory === false ) && (
                         <br/>
