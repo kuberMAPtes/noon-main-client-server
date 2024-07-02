@@ -23,7 +23,7 @@ export default function GetBuildingWiki() {
     function fetchPageHtml() {
       axios_api.get(`${BUILDING_WIKI_BASE_PATH}/getPage/${buildingId}`).then((response) => {
         const data = response.data;
-        setBuildingName(data.buildingName);
+        setBuildingName(!data.buildingName || data.buildingName === "" ? "이름 없음" : data.buildingName);
         console.log(wikiStyles.contentContainer);
         console.log(typeof(wikiStyles.contentContainer));
         const fetched =
