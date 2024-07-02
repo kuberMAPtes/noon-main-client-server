@@ -28,114 +28,100 @@ const Support = ({ isAdmin }) => {
       className="support-container"
       style={{ width: "100%", marginBottom:"25%", marginTop: "5%"}}
     >
-      <Row style={{ width: "100%", 
-              textAlign: "center",
-              margin: "0 auto",}}>
-        <BuildingChart />
-      </Row>
 
+      <div style={{width:'83%',margin: "0 auto", marginTop:'20px'}}>
       {role === "ADMIN" ? (
         <>
-          <Row
-            style={{
-              width: "100%",
-              justifyContent: "center",
-              marginTop:"10%",
-              marginBottom:"5%",
-              textAlign: "center",
-              margin: "0 auto",
-            }}
-          >
-            <Col>
-              <ClickableCard
-                path="./getNoticeList"
-                iconClass="nc-icon nc-vector text-danger"
-                category="공지 관리"
-                title={<i className="fas fa-bell"></i>}
-                onClick={handleCardClick}
-                active={activeCard === "./getNoticeList"}
-              />
-            </Col>
-            <Col>
-              <ClickableCard
-                path="./getReportList"
-                iconClass="nc-icon nc-favourite-28 text-primary"
-                category="신고 관리"
-                title={<i className="fa-solid fa-ban"></i>}
-                onClick={handleCardClick}
-                active={activeCard === "./getReportList"}
-              />
-            </Col>
-          </Row>
 
-          <Row
-            style={{
-              width: "100%",
-              justifyContent: "center",
-              marginBottom:"5%",
-              textAlign: "center",
-              margin: "0 auto",
-            }}
-          >
-            <Col>
+        <div style={{marginBottom:'15px'}}>
+          <ClickableCard
+              path="./getNoticeList"
+              iconClass="nc-icon nc-vector text-danger"
+              category="공지 관리"
+              title={<i className="fas fa-bell"></i>}
+              onClick={handleCardClick}
+              active={activeCard === "./getNoticeList"}
+            />
+        </div>
+
+        <div style={{marginBottom:'15px'}}>
+          <ClickableCard
+            path="./getReportList"
+            iconClass="nc-icon nc-favourite-28 text-primary"
+            category="신고 관리"
+            title={<i className="fa-solid fa-ban"></i>}
+            onClick={handleCardClick}
+            active={activeCard === "./getReportList"}
+          />
+        </div>
+
+        <div style={{marginBottom:'15px'}}>
+          <ClickableCard
+            path="./listImages"
+            iconClass="nc-icon nc-favourite-28 text-primary"
+            category="이미지 관리"
+            title={<i className="fas fa-exclamation-triangle"></i>}
+            onClick={handleCardClick}
+            active={activeCard === "./listImages"}
+          />
+          </div>
+
+          <div style={{marginBottom:'15px'}}>
+            <ClickableCard
+              path="./getChatbot"
+              iconClass="nc-icon nc-money-coins text-success"
+              category="NOON 챗봇"
+              title={<i className="fa-solid fa-headset"></i>}
+              onClick={handleCardClick}
+              active={activeCard === "./getChatbot"}
+            />
+          </div>
+
+          <div style={{marginBottom:'15px'}}>
+            <Link to={mainPageUrl} style={{textDecoration: 'none'}}>
               <ClickableCard
                 path="./listImages"
                 iconClass="nc-icon nc-favourite-28 text-primary"
-                category="이미지 관리"
-                title={<i className="fas fa-exclamation-triangle"></i>}
+                category="관리자 프로필"
+                title={<i class="fa-solid fa-user"></i>}
                 onClick={handleCardClick}
                 active={activeCard === "./listImages"}
               />
-            </Col>
-            <Col>
-              <Link to={mainPageUrl} style={{textDecoration: 'none'}}>
-                <ClickableCard
-                  path="./listImages"
-                  iconClass="nc-icon nc-favourite-28 text-primary"
-                  category="프로필"
-                  title={<i class="fa-solid fa-user"></i>}
-                  onClick={handleCardClick}
-                  active={activeCard === "./listImages"}
-                />
-              </Link>
-            </Col>
-          </Row>
+            </Link>
+          </div>
+
         </>
+
       ) : (
+
         <>
-          <Row
-            style={{
-              width: "100%",
-              justifyContent: "center",
-              marginTop:"10%",
-              marginBottom:"10%",
-              textAlign: "center",
-              margin: "0 auto",
-            }}
-          >
-            <Col>
-              <ClickableCard
-                path="./getNoticeList"
-                iconClass="nc-icon nc-globe text-warning"
-                category="공지사항 목록"
-                title={<i className="fas fa-bell"></i>}
-                onClick={handleCardClick}
-                active={activeCard === "./getNoticeList"}
-              />
-            </Col>
-            <Col>
-              <ClickableCard
-                path="./getChatbot"
-                iconClass="nc-icon nc-money-coins text-success"
-                category="NOON 챗봇"
-                title={<i className="fa-solid fa-headset"></i>}
-                onClick={handleCardClick}
-                active={activeCard === "./getChatbot"}
-              />
-            </Col>
-          </Row>
+
+        <div style={{marginBottom:'15px'}}>
+         <ClickableCard
+            path="./getNoticeList"
+            iconClass="nc-icon nc-globe text-warning"
+            category="공지사항 목록"
+            title={<i className="fas fa-bell"></i>}
+            onClick={handleCardClick}
+            active={activeCard === "./getNoticeList"}
+          />
+          </div>
+
+          <div style={{marginBottom:'15px'}}>
+            <ClickableCard
+              path="./getChatbot"
+              iconClass="nc-icon nc-money-coins text-success"
+              category="NOON 챗봇"
+              title={<i className="fa-solid fa-headset"></i>}
+              onClick={handleCardClick}
+              active={activeCard === "./getChatbot"}
+            />
+          </div>
+
         </>
       )}
+      </div>
+
     </Container>
   );
 };
