@@ -331,13 +331,20 @@ const Chatroom = () => {
   // 채팅메세지 작성자를 participant 과 매핑해서 닉네임 받아오기
   function particiPantToMsgSenderNickName(sender){
     const matchedParticipant = participants.find(p => p.chatroomMember.memberId === sender);
-    const { nickname } = matchedParticipant.chatroomMember;
 
-    return (
-      <div className={module.sender}>
-        <span> {nickname} </span>
-      </div>
-    )
+    // 공지메세지에는 msg.sender 가 없어서 예외처리
+    if (matchedParticipant && matchedParticipant.chatroomMember) {
+      const { nickname } = matchedParticipant.chatroomMember;
+      
+      return (
+        <div className={module.sender}>
+          <span> {nickname} </span>
+        </div>      
+      );
+    } else {
+      // Handle case where participant or chatroomMember is not found
+      return null; // or return a placeholder image or handle the case as needed
+    }
   }
 
   // 채팅메세지 작성자를 participant 과 매핑해서 닉네임 받아오기
@@ -386,11 +393,11 @@ const Chatroom = () => {
           <div className={module.chatroomInfo}>
             <div>
               <h2>채팅방 이름: {roomInfo.chatroomName}</h2>
-              <p><strong>채팅방 ID:</strong> {roomInfo.chatroomID}</p>
+              {/* <p><strong>채팅방 ID:</strong> {roomInfo.chatroomID}</p> */}
               <p><strong>건물 ID:</strong> {roomInfo.buildingId}</p>
               <p><strong>다정온도 제한:</strong> {roomInfo.chatroomMinTemp}°C</p>
               {/* <p><strong>방장:</strong> {roomInfo.chatroomCreator}</p> */}
-              {/* <p><strong>채팅방 종류:</strong> {roomInfo.chatroomType}</p> */}
+              <p><strong>채팅방 종류:</strong> {roomInfo.chatroomType}</p>
               {roomInfo.chatroomType === 'PRIVATE_CHATTING' && (
                 <img src={roomInfo.chatroomCreator.profilePhotoUrl} alt="Profile" />
               )}
@@ -430,6 +437,9 @@ const Chatroom = () => {
                   />
                   {liveParticipants.includes(participant.chatroomMember.memberId) && (
                     <span className={module.liveIndicator}>🟢</span>
+                  )}
+                  {participant.chatroomMember.memberId === memberID && (
+                    <span className={module.myLabel}>Me</span>
                   )}
                 </p>
               

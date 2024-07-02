@@ -16,19 +16,6 @@
     transform: scale(1.05);
   }
 
-  .liveIndicator {
-    width: 5px;
-    background-color: rgb(95, 235, 95);
-    border-radius: 50%;
-    margin-left: 5px;
-    animation: blink 1s infinite;
-  }
-
-  @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
-  }
-
   /* 백 버튼 */
   .backButton {
     position: fixed;
@@ -151,9 +138,23 @@
     border-bottom: 2px solid #9BAAF8;
     padding-bottom: 5px;
   }
+ 
+  /* My label */
+  .myLabel {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: #9BAAF8; /* Red background */
+    color: white; /* White text */
+    padding: 2px 5px; /* Padding for better appearance */
+    border-radius: 3px; /* Rounded corners */
+    font-size: 10px; /* Smaller font size */
+    font-weight: bold; /* Bold text */
+  }
   
     /* Participant item */
   .participant {
+    position: relative;
     display: flex;
     align-items: center;
     padding: 10px;
@@ -196,7 +197,6 @@
     background-color: #FFFFFD;
     overflow-y: auto;
   }
-
 
   /* 채팅메세지 꾸미는부분 (공통) */
   .chatMessage {
@@ -328,3 +328,17 @@
   .chatFooter button:hover {
     background-color: #9BAAF8;
   }
+  
+  .liveIndicator {
+    width: 5px;
+    background-color: rgb(95, 235, 95);
+    border-radius: 50%;
+    margin-left: 5px;
+    animation: blink 1s infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+  

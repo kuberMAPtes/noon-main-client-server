@@ -69,6 +69,33 @@
   100% { background-color: #9BAAF8; }
 }
 
+/* Unread message badge */
+.unreadBadge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* Modify the button styles to ensure the badge is positioned correctly */
+.normalButton, .activeButton {
+  position: relative; /* Ensure the button is positioned relatively to contain the badge */
+}
+
+.profileImage {
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  margin-right: 5px;
+  border: 2px solid #9BAAF8;
+}
+
 /* 채팅방 리스트 */
 .chatroomList {
   display: flex;
@@ -78,6 +105,13 @@
   background-color: #fff;
   border-radius: 10px;
   overflow-y: auto;
+}
+
+/* Hot chatroom */
+.hotChatroom {
+  background-color: #ffe5e5; /* Light red background to make it stand out */
+  border: 2px solid #ff4d4d; /* Red border */
+  position: relative; /* Ensure relative positioning for containing the hot label */
 }
 
 .chatroom {
@@ -98,6 +132,19 @@
 .chatroomName {
   font-weight: bold;
   margin: 0;
+}
+
+/* Hot label */
+.hotLabel {
+  /* position: absolute; */
+  top: 10px;
+  left: 10px;
+  background-color: #ff4d4d;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: bold;
 }
 
 .chatroomStatus {
