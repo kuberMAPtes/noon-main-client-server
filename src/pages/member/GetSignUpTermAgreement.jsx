@@ -141,7 +141,7 @@ const GetSignUpTermAgreement = () => {
                         className="mt-3"
                         onClick={handleAgree}
                         disabled={!agreed}
-                        style={{display:"inline-block",margin:"0px 15px 0px 15px",padding:"",opacity:"0.6"}}
+                        style={{display:"inline-block",margin:"0px 15px 0px 15px",padding:"",opacity: agreed ? "1" : "0.6"}}
                       >
                         동의하고 계속하기
                       </NormalButton>
