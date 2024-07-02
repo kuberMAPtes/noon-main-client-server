@@ -111,8 +111,41 @@ const ProfileActions = ({ toId, fromId }) => {
             </div>
           </Col>
 
-          {showMenu && (
+          {(toId!==fromId && showMenu) && (
               <Row className={`${profile.absoluteRow}`} style={{width:"28%"}}>
+                <AnimatedDiv 
+                style={{ width: "100%" }}
+                onClick={() => navigate("/setting")}>
+                  <IoSettingsOutline />
+                  <span style={{ padding: "0px 5px 0px 2px" }}></span>환경설정
+                  <span style={{ padding: "0px 5px 0px 2px" }}></span>
+                </AnimatedDiv>
+                <AnimatedDiv
+                style={{ width: "100%" }}
+                onClick={() => navigate("/customerSupport")}>
+                  <RiCustomerServiceLine />
+                  <span style={{ padding: "0px 5px 0px 2px" }}></span>고객지원
+                  <span style={{ padding: "0px 5px 0px 2px" }}></span>
+                </AnimatedDiv>
+
+                {fromId !== toId && (
+                  <>
+                    <AnimatedDiv
+                      style={{ width: "100%" }}
+                      onClick={() =>
+                        navigate(`/customerSupport/addReport/${toId}`)
+                      }
+                    >
+                      <AiFillAlert />
+                      <span style={{ padding: "0px 5px 0px 2px" }}></span>신고하기
+                      <span style={{ padding: "0px 5px 0px 2px" }}></span>
+                    </AnimatedDiv>
+                  </>
+                )}
+              </Row>
+          )}
+          {(toId===fromId && showMenu) && (
+              <Row className={`${profile.myAbsoluteRow}`} style={{width:"28%"}}>
                 <AnimatedDiv 
                 style={{ width: "100%" }}
                 onClick={() => navigate("/setting")}>
