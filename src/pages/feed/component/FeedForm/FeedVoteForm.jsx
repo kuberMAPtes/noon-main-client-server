@@ -5,11 +5,11 @@ import CheckModal from '../Common/CheckModal';
 import navigator from '../../util/Navigator'
 import VotePreview from './VotePreview';
 import styles from '../../css/FeedForm/FeedForm.module.css';
+import buttonStyles from '../../css/common/FeedButton.module.css';
 
 // import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
 
 const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, onSave }) => {
-    const [previewVoteShow, setPreviewVoteShow] = useState(false);
     const [feedData, setFeedData] = useState({
         title: '',
         feedText: '',
@@ -19,11 +19,6 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
         viewCnt: 0,
         writtenTime: '',
         modified: false,
-    });
-
-    const [newVote, setNewVote] = useState({ 
-        question: '', 
-        options: [''] 
     });
 
     // 태그 추가 
@@ -40,6 +35,13 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
     // const renderFeedText = (feedText) => renderFeedTextWithLink(feedText);
 
     /* 투표 관련 */
+    const [newVote, setNewVote] = useState({ 
+        question: '', 
+        options: [''] 
+    });
+
+    const [previewVoteShow, setPreviewVoteShow] = useState(false);
+
     useEffect(() => {
         fetchVotes();
     }, []);
@@ -204,123 +206,107 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
 
     // 취소
     const handleCancel = () => {
-        // setFeedData({
-        //     title: '',
-        //     feedText: '',
-        //     tags: [],
-        //     category: 'GENERAL',
-        //     publicRange: 'PUBLIC',
-        //     attachments: []
-        // });
-
         backHistory(); // 뒤로가기
     };
 
     return (
         <div className={styles.feedFormContainer}>
-            <Card className="mb-4">
-                <Card.Body>
-                    <Form onSubmit={handleSubmit}>
-                        {/* 제목 */}
-                        <Form.Group controlId="feedTitle" className="mb-3">
-                            <Form.Label>제목</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="title"
-                                placeholder="제목을 입력하세요"
-                                value={feedData.title}
-                                onChange={handleChange}
-                                required
-                            />
-                        </Form.Group>
+            <Form onSubmit={handleSubmit}>
+                {/* 제목 */}
+                <Form.Group controlId="feedTitle" className="mb-3">
+                    <Form.Control
+                        type="text"
+                        name="title"
+                        placeholder="제목을 입력하세요"
+                        value={feedData.title}
+                        onChange={handleChange}
+                        required
+                    />
+                </Form.Group>
 
-                        {/* 내용 */}
-                        <Form.Group controlId="feedText" className="mb-3">
-                            <Form.Label>내용</Form.Label>
-                            <Form.Control
-                                as="textarea"
-                                name="feedText"
-                                rows={3}
-                                placeholder="내용을 입력하세요"
-                                value={feedData.feedText}
-                                onChange={handleChange}
-                                required
-                            />
-                        </Form.Group>
+                {/* 내용 */}
+                <Form.Group controlId="feedText" className="mb-3">
+                    <Form.Control
+                        as="textarea"
+                        name="feedText"
+                        rows={10}
+                        placeholder="내용을 입력하세요"
+                        value={feedData.feedText}
+                        onChange={handleChange}
+                        required
+                    />
+                </Form.Group>
 
-                        {/* 태그 추가 */}
-                        <Form.Group controlId="feedTags" className="mb-3">
-                            <Form.Label>태그</Form.Label>
-                            <div className={`d-flex align-items-center ${styles.tagInputContainer}`}>
-                                <Form.Control
-                                    type="text"
-                                    value={tagInput}
-                                    onChange={(e) => setTagInput(e.target.value)}
-                                    placeholder="태그를 입력하세요"
-                                />
-                                <Button className={styles.addButton} onClick={handleTagAdd}>추가</Button>
-                            </div>
-                            <div className="mt-2">
-                                {Array.isArray(feedData.updateTagList) && feedData.updateTagList.map((tag, index) => (
-                                    <Badge key={index} pill variant="primary" className={`mr-2 ${styles.tagBadge}`}>
-                                        {tag} <span className={styles.badgeClose} onClick={() => handleTagRemove(tag)}>×</span>
-                                    </Badge>
-                                ))}
-                            </div>
-                        </Form.Group>
-
-                        {/* 공개 범위 추가 */}
-                        <Form.Group controlId="feedPublicRange" className="mb-3">
-                            <Form.Label>공개 범위</Form.Label>
-                            <Form.Control
-                                as="select"
-                                name="publicRange"
-                                value={feedData.publicRange}
-                                onChange={handleChange}
-                                required
-                            >
-                                <option value="PUBLIC">전체 공개</option>
-                                <option value="FOLLOWER_ONLY">팔로워 공개</option>
-                                <option value="MUTUAL_ONLY">맞팔 공개</option>
-                                <option value="PRIVATE">비공개</option>
-                            </Form.Control>
-                        </Form.Group>
-                        <hr/>
-                        {/* 투표 생성*/}
-                        <Form.Group className="mb-3">
-                            <Form.Label>질문</Form.Label>
-                            <Form.Control
-                                type="text"
-                                placeholder="질문을 입력하세요"
-                                value={newVote.question}
-                                onChange={(e) => setNewVote({ ...newVote, question: e.target.value })}
-                            />
-                        </Form.Group>
-                        
-                        {newVote.options.map((option, index) => (
-                            <Form.Group key={index} className="mb-3">
-                                <Form.Label>옵션 {index + 1}</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder={`옵션 ${index + 1}`}
-                                    value={option}
-                                    onChange={(e) => handleOptionChange(index, e.target.value)}
-                                />
-                            </Form.Group>
+                {/* 태그 */}
+                <Form.Group controlId="feedTags" className="mb-3">
+                    <Form.Control
+                        type="text"
+                        value={tagInput}
+                        onChange={(e) => setTagInput(e.target.value)}
+                        placeholder="태그를 입력하세요"
+                        className={styles.tagInput}
+                    />
+                    <Button onClick={handleTagAdd} className={buttonStyles.fullWidthButton}>태그 추가</Button>
+                    <div className={styles.tagList}>
+                        {Array.isArray(feedData.updateTagList) && feedData.updateTagList.map((tag, index) => (
+                            <Badge key={index} className={`mr-2 ${styles.tagBadge}`}>
+                                {tag} <span className={styles.badgeClose} onClick={() => handleTagRemove(tag)}>×</span>
+                            </Badge>
                         ))}
-                        <Button variant="danger" onClick={addOption} className="me-2">
-                            옵션 추가
-                        </Button>
-                        <Button variant="primary" type="submit" className="mr-2">
-                            저장
-                        </Button>
-                        &nbsp;&nbsp;
-                        <Button variant="secondary" onClick={handleCancel}>
-                            취소
-                        </Button>
-                    </Form>
-                </Card.Body>
-            </Card>
+                    </div>
+                </Form.Group>
+
+                {/* 공개 범위 추가 */}
+                <Form.Group controlId="feedPublicRange" className="mb-3">
+                    <Form.Label>공개 범위</Form.Label>
+                    <Form.Control
+                        as="select"
+                        name="publicRange"
+                        value={feedData.publicRange}
+                        onChange={handleChange}
+                        required
+                    >
+                        <option value="PUBLIC">전체 공개</option>
+                        <option value="FOLLOWER_ONLY">팔로워 공개</option>
+                        <option value="MUTUAL_ONLY">맞팔 공개</option>
+                        <option value="PRIVATE">비공개</option>
+                    </Form.Control>
+                </Form.Group>
+                <hr/>
+                {/* 투표 생성*/}
+                <Form.Group className="mb-3">
+                    <Form.Label>투표 질문</Form.Label>
+                    <Form.Control
+                        type="text"
+                        placeholder="투표 질문을 입력하세요"
+                        value={newVote.question}
+                        onChange={(e) => setNewVote({ ...newVote, question: e.target.value })}
+                    />
+                </Form.Group>
+                
+                {newVote.options.map((option, index) => (
+                    <Form.Group key={index} className="mb-3">
+                        <Form.Label>투표 옵션 {index + 1}</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder={`옵션 ${index + 1}`}
+                            value={option}
+                            onChange={(e) => handleOptionChange(index, e.target.value)}
+                        />
+                    </Form.Group>
+                ))}
+                <Button className={buttonStyles.fullWidthButton} onClick={addOption}>
+                    옵션 추가
+                </Button>
+                <hr/>
+                <Button className={buttonStyles.fullWidthButtonBlack} variant="primary" type="submit" >
+                    저장
+                </Button>
+                &nbsp;&nbsp;
+                <Button className={buttonStyles.fullWidthButtonRed} onClick={handleCancel}>
+                    취소
+                </Button>
+            </Form>
 
             {/* Modal : addFeed*/}
             <CheckModal 
@@ -341,9 +327,9 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
             />
 
             {/* 투표 미리 보기 */}
-            <Button variant="info" onClick={handlePreviewVote} className="me-2">
+            {/* <Button variant="info" onClick={handlePreviewVote} className="me-2">
                 투표 미리 보기
-            </Button>
+            </Button> */}
 
             {/* Modal : 투표 미리 보기 */}
             {previewVoteShow && (

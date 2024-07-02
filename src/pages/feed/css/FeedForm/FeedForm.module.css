@@ -52,11 +52,6 @@
     margin-bottom: 10px;
 }
 
-.addButton {
-    align-self: flex-start;
-    margin-bottom: 10px;
-}
-
 .tagBadge {
     display: inline-flex;
     align-items: center;

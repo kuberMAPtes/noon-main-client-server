@@ -1,12 +1,10 @@
 import Footer from "../../components/common/Footer";
 
 import { useEffect, useState } from 'react';
-import { Button } from "react-bootstrap";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import SlideUpModal from "./component/FeedForm/SlideUpModal";
-import BasicNavbar from "../../components/common/BasicNavbar";
+import FloatingButtons from "./component/FeedForm/FloatingButtons";
 import axios_api from "../../lib/axios_api";
 import FeedMegaphoneForm from "./component/FeedForm/FeedMegaphoneForm"
 import Header from "../../components/common/Header";
@@ -52,12 +50,6 @@ const FeedFormPage = () => {
         <div>
             {/* <BasicNavbar /> */}
             <Header title="확성기 피드 만들기" />
-            <div className="container">
-                <Button variant="primary" onClick={() => setShowModal(true)}>
-                    피드 종류
-                </Button>
-                <SlideUpModal show={showModal} onHide={() => setShowModal(false)} />
-            </div>
 
             <FeedMegaphoneForm
                 existingFeed={selectedFeed}
@@ -66,7 +58,8 @@ const FeedFormPage = () => {
                 inputFeedId={feedId}
             />
             <div>
-            <Footer />
+            {!feedId && <FloatingButtons />}
+            {/* <Footer /> */}
             </div>
             <br/><br/><br/><br/>
         </div>

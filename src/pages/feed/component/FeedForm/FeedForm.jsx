@@ -4,7 +4,7 @@ import axios_api from '../../../../lib/axios_api';
 import CheckModal from '../Common/CheckModal';
 import navigator from '../../util/Navigator';
 import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css'; // 달력 전용 css
+import 'react-datepicker/dist/react-datepicker.css'; // 달력 전용 css;
 import styles from '../../css/FeedForm/FeedForm.module.css';
 import buttonStyles from '../../css/common/FeedButton.module.css';
 
@@ -275,6 +275,24 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
     return (
         <div className={styles.feedFormContainer}>
             <Form onSubmit={handleSubmit}>
+                <Form.Group controlId="feedCategory" className="mb-3">
+                    <Form.Label>카테고리</Form.Label>
+                    <Form.Control
+                        as="select"
+                        name="category"
+                        value={feedData.category}
+                        onChange={handleChange}
+                        required
+                    >
+                        <option value="GENERAL">일반</option>
+                        <option value="COMPLIMENT">칭찬하기</option>
+                        <option value="QUESTION">Q&A</option>
+                        <option value="EVENT">이벤트</option>
+                        <option value="SHARE">나눔</option>
+                        <option value="HELP_REQUEST">도움 요청</option>
+                    </Form.Control>
+                </Form.Group>
+
                 <Form.Group controlId="feedTitle" className="mb-3">
                     <Form.Control
                         type="text"
@@ -299,7 +317,6 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
 
                 {/* 태그 */}
                 <Form.Group controlId="feedTags" className="mb-3">
-                    <Form.Label>태그</Form.Label>
                     <Form.Control
                         type="text"
                         value={tagInput}
@@ -307,7 +324,7 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                         placeholder="태그를 입력하세요"
                         className={styles.tagInput}
                     />
-                    <Button onClick={handleTagAdd} className={buttonStyles.fullWidthButton}>추가</Button>
+                    <Button onClick={handleTagAdd} className={buttonStyles.fullWidthButton}>태그 추가</Button>
                     <div className={styles.tagList}>
                         {Array.isArray(feedData.updateTagList) && feedData.updateTagList.map((tag, index) => (
                             <Badge key={index} className={`mr-2 ${styles.tagBadge}`}>
@@ -339,7 +356,7 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                                 ) : (
                                     <div className={styles.filePreview}>
                                         {isImageOrVideo(file) ? (
-                                           <img src={URL.createObjectURL(file)} alt={file.name} style={{ maxWidth: '50px', maxHeight: '50px', marginRight: '10px' }} />
+                                        <img src={URL.createObjectURL(file)} alt={file.name} style={{ maxWidth: '50px', maxHeight: '50px', marginRight: '10px' }} />
                                         ) : (
                                             <span>{file.name}</span>
                                         )}
@@ -352,25 +369,6 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                     </ListGroup>
                 </Form.Group>
 
-
-
-                <Form.Group controlId="feedCategory" className="mb-3">
-                    <Form.Label>카테고리</Form.Label>
-                    <Form.Control
-                        as="select"
-                        name="category"
-                        value={feedData.category}
-                        onChange={handleChange}
-                        required
-                    >
-                        <option value="GENERAL">일반</option>
-                        <option value="COMPLIMENT">칭찬하기</option>
-                        <option value="QUESTION">Q&A</option>
-                        <option value="EVENT">이벤트</option>
-                        <option value="SHARE">나눔</option>
-                        <option value="HELP_REQUEST">도움 요청</option>
-                    </Form.Control>
-                </Form.Group>
                 {feedData.category === 'EVENT' && (
                 <Form.Group controlId="eventDate" className="mb-3">
                     <Form.Label>이벤트 날짜 : </Form.Label>
@@ -384,7 +382,10 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                         className="form-control"
                     />
                 </Form.Group>
-                )}
+                ) }
+
+                
+
                 <Form.Group controlId="feedPublicRange" className="mb-3">
                     <Form.Label>공개 범위</Form.Label>
                     <Form.Control
@@ -401,11 +402,11 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                     </Form.Control>
                 </Form.Group>
 
-                <Button variant="primary" type="submit" className="mr-2">
+                <Button className={buttonStyles.fullWidthButtonBlack} type="submit">
                     저장
                 </Button>
                 &nbsp;&nbsp;
-                <Button variant="secondary" onClick={handleCancel}>
+                <Button className={buttonStyles.fullWidthButtonRed} onClick={handleCancel}>
                     취소
                 </Button>
             </Form>

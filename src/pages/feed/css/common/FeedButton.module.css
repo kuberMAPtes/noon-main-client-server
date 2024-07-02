@@ -4,12 +4,12 @@
     padding: 10px 20px;
     box-sizing: border-box; 
     background-color : #9BAAF8 !important;
-    border : #9BAAF8;
+    border : #9BAAF8 !important;
 }
 
 .fullWidthButton:hover {
-    background-color : #4a5ec2;
-    border : #4a5ec2;
+    background-color : #4a5ec2 !important;
+    border : #4a5ec2 !important;
 }
 
 .fullWidthButtonRed {
@@ -17,11 +17,20 @@
     border-radius: 8px; /* 원하는 radius 값으로 조정 */
     padding: 10px 20px; /* 버튼 내부의 padding 값은 필요에 따라 조정 가능 */
     box-sizing: border-box; /* padding을 포함한 전체 크기를 유지하도록 함 */
-    background-color: #FA5252;
-    border : #FA5252;
+    background-color: #FA5252 !important;
+    border : #FA5252 !important;
 }
 
-.fullWidthButtonRed:hover {
-    background-color: #fd3131;
-    border : #fd3131;
+.fullWidthButtonBlack:hover {
+    background-color: #030722 !important;
+    border : #030722 !important;
+}
+
+.fullWidthButtonBlack {
+    width: 100%;
+    border-radius: 8px; /* 원하는 radius 값으로 조정 */
+    padding: 10px 20px; /* 버튼 내부의 padding 값은 필요에 따라 조정 가능 */
+    box-sizing: border-box; /* padding을 포함한 전체 크기를 유지하도록 함 */
+    background-color: #030722 !important;
+    border : #030722 !important;
 }
