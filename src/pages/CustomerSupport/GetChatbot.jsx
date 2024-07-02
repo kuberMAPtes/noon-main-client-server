@@ -47,10 +47,10 @@ const GetChatbot = () => {
   return (
     <div className="chat-container">
       <Header title="NOON 챗봇" />
-      <div className="chat-body" ref={chatBodyRef}>
+      <div className="chat-body" ref={chatBodyRef} style={{marginBottom:'100px', width:'100%'}}>
         {messages.map(message => (
           <div key={message.id} className={`chat-message ${message.type}`}>
-            <div className="message-text">{message.text}</div>
+            <div className="message-text" dangerouslySetInnerHTML={{ __html: message.text }}></div>
             <div className="message-timestamp">{message.timestamp}</div>
           </div>
         ))}
