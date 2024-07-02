@@ -1,0 +1,20 @@
+.button-group {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .toggle-button {
+    background-color: transparent;
+    border: 1px solid #9BAAF8;
+    color: #030722;
+    padding: 0.375rem 0.75rem;
+    width: 100%;
+  }
+  
+  .toggle-button.active {
+    background-color: #9BAAF8;
+    color: white;
+  }
+  
+
+  
