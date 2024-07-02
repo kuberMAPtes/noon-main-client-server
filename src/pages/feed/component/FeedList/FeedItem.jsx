@@ -11,6 +11,8 @@ import styles from "../../css/common/FeedItemAndDetail.module.css"; // css 적�
 import { FcApproval } from "react-icons/fc";
 import FeedVote from '../FeedForm/FeedVote';
 import axios_api from '../../../../lib/axios_api';
+import FormatDate from '../../util/FormatDate';
+import { WiTime2 } from "react-icons/wi";
 
 const FeedItem = ({ data, memberId }) => {
 
@@ -42,7 +44,8 @@ const FeedItem = ({ data, memberId }) => {
     const {goToMemberProfile, goToBuildingProfile, goToFeedDetail, goToDetailNotice} = navigate();
 
     // 데이터 처리
-    const writtenTimeReplace = data.writtenTime.replace('T', ' '); // 날짜 포멧팅
+    // const writtenTimeReplace = data.writtenTime.replace('T', ' '); // 날짜 포멧팅
+    const writtenTimeReplace = FormatDate(writtenTime);
     const feedCategoryName = FeedCategoryGetter(feedCategory); // 카테고리 변환
     const isNoticeCategory = feedCategory === 'NOTICE'; // 공지 카테고리에 대한 예외
     const isPollCategory = feedCategory === 'POLL'; // 투표 카테고리에 대한 예외
@@ -154,7 +157,7 @@ const FeedItem = ({ data, memberId }) => {
                         )}
 
                         <CardText>
-                            <small className={styles.textMuted}>{writtenTimeReplace}</small>
+                            <WiTime2 /> <small className={styles.textMuted}>{writtenTimeReplace}</small>
                         </CardText>
                     </div>
 

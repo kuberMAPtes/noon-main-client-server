@@ -1,16 +1,29 @@
-const FormatDate = () => {
-  const formatDateForMySQL = (date) => {
-    const padZero = (num) => num.toString().padStart(2, "0");
-    const year = date.getFullYear();
-    const month = padZero(date.getMonth() + 1);
-    const day = padZero(date.getDate());
-    const hours = padZero(date.getHours());
-    const minutes = padZero(date.getMinutes());
-    const seconds = padZero(date.getSeconds());
-    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-  };
+const FormatDate = (writtenTime) => {
+  const MINUTE = 60;
+  const NOW = MINUTE / 2;
+  const HOUR = MINUTE * 60;
+  const DAY = HOUR * 24;
+  const timestamp = new Date(writtenTime);
 
-  return formatDateForMySQL;
+  const periodInSeconds = (new Date() - timestamp) / 1000;
+  console.log(periodInSeconds);
+  let timeDisplay;
+
+  if (periodInSeconds < NOW) {
+    timeDisplay = `방금 전`;
+  } else if (periodInSeconds < MINUTE) {
+    timeDisplay = `${Math.round(periodInSeconds)}초 전`;
+  } else if (periodInSeconds < HOUR) {
+    timeDisplay = `${Math.round(periodInSeconds / MINUTE)}분 전`;
+  } else if (periodInSeconds < DAY) {
+    timeDisplay = `${Math.round(periodInSeconds / HOUR)}시간 전`;
+  } else {
+    timeDisplay = `${timestamp.getFullYear()}/${
+      timestamp.getMonth() + 1
+    }/${timestamp.getDate()}`;
+  }
+
+  return timeDisplay;
 };
 
 export default FormatDate;

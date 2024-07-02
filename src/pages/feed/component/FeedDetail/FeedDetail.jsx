@@ -14,6 +14,8 @@ import AttachmentGetter from '../../util/AttachmentGetter';
 import styles from  "../../css/common/FeedItemAndDetail.module.css"; // css 적용
 import FeedCategoryGetter from '../../util/FeedCategoryGetter';
 import FeedVote from '../FeedForm/FeedVote';
+import { WiTime2 } from 'react-icons/wi';
+import FormatDate from '../../util/FormatDate';
 
 const FeedDetail = ({ data, memberId }) => {
     // 데이터
@@ -60,7 +62,8 @@ const FeedDetail = ({ data, memberId }) => {
     const [bookmarked, setBookmarked] = useState(bookmark); // 북마크 여부
 
     // 데이터 처리
-    const writtenTimeReplace = data.writtenTime.replace('T', ' '); // 날짜 포멧팅
+    // const writtenTimeReplace = data.writtenTime.replace('T', ' '); // 날짜 포멧팅
+    const writtenTimeReplace = FormatDate(writtenTime);
     const feedCategoryName = FeedCategoryGetter(feedCategory); // 카테고리 변환
 
     // 네비게이션 관리
@@ -198,25 +201,20 @@ const FeedDetail = ({ data, memberId }) => {
             <div>
             <div className={styles.iconContainer}>
                 { memberId && memberId === writerId && (
-                    <div className={styles.iconLeft}>
+                    <div className={styles.feedDetailIconLeft}>
                         <span onClick={() => setFeedDeleteShow(true)}>
                             <MdDelete size='32'/> {/* 피드 삭제 : Modal 열기*/}
                         </span>
                         {/* 투표, 이벤트, 확성기는 수정 불가능 */}
-                        {( isPollCategory && isEventCategory && isMegaphoneCategory) ? (
+                        {( isPollCategory || isEventCategory || isMegaphoneCategory) ? (
+                            <span></span>
+                         ) : (
                             <span onClick={() => goToFeedForm(writerId, feedId)}>
                                 <MdFeed size='32'/> {/* 피드 수정 */}
                             </span>
-                         ) : (
-                            <span></span>
                          )}
                     </div>
                 )}
-                <div className={styles.iconRight}>
-                    <Button variant="secondary" onClick={()=>goToBuildingProfile(buildingId)}>
-                        해당 건물 프로필로 이동
-                    </Button>
-                </div>
             </div>
             <Card>
                 <CardBody>
@@ -226,6 +224,7 @@ const FeedDetail = ({ data, memberId }) => {
                             <Image src={writerProfile || 'https://via.placeholder.com/50'} roundedCircle width="50" height="50" className="mr-3" />
                             <div onClick={() => goToMemberProfile(writerId)} className={styles.headerContainer}>&nbsp; {writerNickname}</div>
                         </div>
+                        {/* 건물 이름 */}
                         <div onClick={() => goToBuildingProfile(buildingId)} className={styles.linkText}><FaBuilding /> {buildingName}</div>
                     </div>
 
@@ -233,17 +232,7 @@ const FeedDetail = ({ data, memberId }) => {
                     <div className={styles.iconContainer}>
                         <div className={styles.iconLeft}>
                             {/* 피드 좋아요 */}
-                            <span onClick={handleLikeClick}>
-                                {liked ? <FaHeart color="red" size='32'/> : <FaRegHeart size='32'/>} 
-                            </span> 
-
-                            {/* 피드 북마크 */}
-                            <span onClick={handleBookmarkClick}>
-                                {bookmarked ? <FaBookmark color="gold" size='32' /> : <FaRegBookmark size='32' />} 
-                            </span>
                         </div>
-                        {/* 피드 카테고리 */}
-                        <div className={styles.feedCategoryDetail}>{feedCategoryName}</div>
                     </div>
                     
                     {/* 제목 */}
@@ -262,19 +251,34 @@ const FeedDetail = ({ data, memberId }) => {
                                 ))}
                         </div>
                     )}
-                    {/* 작성 시간 */}
-                    <br/>
-                    <CardSubtitle>{writtenTimeReplace}</CardSubtitle>
+                    {/* 작성 시간 및 카테고리, 북마크 */}
+                    <div className={styles.iconContainer}>
+                        {/* 작성 시간 */}
+                        <div className="d-flex align-items-center">
+                            <WiTime2 />&nbsp; <CardSubtitle>{writtenTimeReplace}</CardSubtitle>
+                        </div>
+                        
+                        {/* 피드 카테고리 */}
+                        <div className={styles.iconRight}>
+                            <div className={styles.feedCategoryDetail}>
+                                {feedCategoryName}
+                            </div>
+                            {/* 피드 북마크 */}
+                            <span onClick={handleBookmarkClick}>
+                                    {bookmarked ? <FaBookmark color="gold" size='32' /> : <FaRegBookmark size='32' />} 
+                            </span>
+                        </div>
+                    </div>
 
                     {/* Body */}
                     <div className="feed-stats">
-                        <p onClick={handleShowLikedUsersClick} style={{ cursor: 'pointer' }}
-                        ><FaRegHeart size='20'/> &nbsp; {likedCount}</p> {/* 좋아요 수 */}
-                        <p><FaCommentAlt size='20'/> &nbsp; {commentList.length}</p> {/* 댓글 수 */}
-                        <p><FaRegEye size='20'/> &nbsp; {viewCnt}</p> {/* 조회수 */}
-                        <p><FaFireAlt size='20'/>&nbsp; {popularity}</p> {/* 인기도 */}
+                        <span onClick={handleLikeClick}>
+                                {liked ? <FaHeart color="red" size='32'/> : <FaRegHeart size='32'/>} &nbsp; {likedCount}
+                        </span>
+                        <p><FaCommentAlt size='32'/> &nbsp; {commentList.length}</p> {/* 댓글 수 */}
+                        <p><FaRegEye size='32'/> &nbsp; {viewCnt}</p> {/* 조회수 */}
+                        <p><FaFireAlt size='32'/>&nbsp; {popularity}</p> {/* 인기도 */}
                     </div>
-                    {showLikedUsers && <LikedUsersList feedId={feedId} />}
                 </CardBody>
             </Card>
 
@@ -315,7 +319,7 @@ const FeedDetail = ({ data, memberId }) => {
                                     <Image src={comment.memberProfile || 'https://via.placeholder.com/50'} roundedCircle width="50" height="50" className="mr-3" />
                                     <div>
                                         <strong onClick={() => goToMemberProfile(comment.memberId)}>&nbsp; {comment.memberNickname}</strong> &nbsp;
-                                        <span className="text-muted" style={{ fontSize: '0.9em' }}>{new Date(comment.writtenTime).toLocaleString()}</span>
+                                        <span className="text-muted" style={{ fontSize: '0.9em' }}>{FormatDate(comment.writtenTime)}</span>
                                         <div>&nbsp; {comment.commentText}</div>
                                     </div>
                                 </div>
@@ -348,7 +352,13 @@ const FeedDetail = ({ data, memberId }) => {
                     </Form>
                 </CardBody>
             </Card>
-
+            <br/>
+            <div className={styles.feedDetailIconLeft}>
+                <Button variant="secondary" onClick={handleShowLikedUsersClick}>
+                    좋아요를 누른 사람 목록
+                </Button>
+            </div>
+            {showLikedUsers && <LikedUsersList feedId={feedId} />}
             {/* Modal : FeedDelete*/}
             <CheckModal 
                 show={feedDeleteShow}

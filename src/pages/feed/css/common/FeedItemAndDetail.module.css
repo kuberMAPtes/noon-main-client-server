@@ -44,6 +44,18 @@
     align-items: center;
 }
 
+.feedDetailIconLeft {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+}
+
+.feedDetailIconRight {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
 .iconContainer span {
     margin-left: 10px; /* 왼쪽 여백 */
     cursor: pointer; /* 포인터 커서 */
