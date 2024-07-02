@@ -7,7 +7,7 @@ const useNavigator = () => {
   const navigate = useNavigate();
 
   const goToFeedDetail = useCallback(
-    async (memberId, feedId) => {
+    async (memberId, feedId, focusOnComments = false) => {
       let url = `/feed/viewCutUp/${feedId}`;
 
       // 조회수 증가
@@ -22,7 +22,11 @@ const useNavigator = () => {
         console.log(e);
       }
 
-      navigate(`/feed/detail?memberId=${memberId}&feedId=${feedId}`);
+      const targetUrl = focusOnComments
+        ? `/feed/detail?memberId=${memberId}&feedId=${feedId}#comments`
+        : `/feed/detail?memberId=${memberId}&feedId=${feedId}`;
+
+      navigate(targetUrl);
     },
     [navigate]
   );

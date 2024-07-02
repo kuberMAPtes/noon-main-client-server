@@ -117,7 +117,7 @@ const AppRoutes = () => {
             <Route path="loginForm" element={<GuestRoute><LoginForm /></GuestRoute>} />
             <Route path="kakaoNav/:memberId" element={<KakaoNav />} />
             <Route path="IdFormToUpdatePwd" element={<IdFormToUpdatePwd />} />
-            <Route path="updatePwd" element={<PrivateRoute><UpdatePwd /></PrivateRoute>} />
+            <Route path="updatePwd" element={<UpdatePwd />} />
             <Route path="updatePwdResult/:result" element={<PrivateRoute><UpdatePwdResult /></PrivateRoute>} />
             <Route path="getMember" element={<PrivateRoute><GetMember /></PrivateRoute>} />
             <Route path="getMemberId/:memberId" element={<GuestRoute><GetMemberId /></GuestRoute>} />

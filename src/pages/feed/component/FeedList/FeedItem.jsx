@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Image, Card, CardBody, CardImg, CardText } from 'react-bootstrap';
-import { FaHeart, FaRegHeart, FaBookmark, FaRegBookmark, FaBuilding } from 'react-icons/fa';
+import { FaHeart, FaRegHeart, FaBookmark, FaRegBookmark, FaBuilding, FaRegEye, FaCommentAlt } from 'react-icons/fa';
 import { toggleLike, toggleBookmark } from '../../axios/FeedAxios';
 import navigate from '../../util/Navigator'
 import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
@@ -11,6 +11,8 @@ import styles from "../../css/common/FeedItemAndDetail.module.css"; // css 적�
 import { FcApproval } from "react-icons/fc";
 import FeedVote from '../FeedForm/FeedVote';
 import axios_api from '../../../../lib/axios_api';
+import FormatDate from '../../util/FormatDate';
+import { WiTime2 } from "react-icons/wi";
 
 const FeedItem = ({ data, memberId }) => {
 
@@ -23,8 +25,11 @@ const FeedItem = ({ data, memberId }) => {
         writerId,
         writerNickname,
         writerProfile,
+        viewCnt,
         like,
+        likeCount,
         bookmark,
+        commentCount,
         feedCategory,
         mainActivated,
         writtenTime,        // 포멧팅 처리
@@ -34,11 +39,13 @@ const FeedItem = ({ data, memberId }) => {
     const [liked, setLiked] = useState(like);
     const [bookmarked, setBookmarked] = useState(bookmark);
     const [mainAttachment, setMainAttachment] = useState(null);
+    const [likedCount, setLikeCount] = useState(likeCount); // 좋아요 개수
 
     const {goToMemberProfile, goToBuildingProfile, goToFeedDetail, goToDetailNotice} = navigate();
 
     // 데이터 처리
-    const writtenTimeReplace = data.writtenTime.replace('T', ' '); // 날짜 포멧팅
+    // const writtenTimeReplace = data.writtenTime.replace('T', ' '); // 날짜 포멧팅
+    const writtenTimeReplace = FormatDate(writtenTime);
     const feedCategoryName = FeedCategoryGetter(feedCategory); // 카테고리 변환
     const isNoticeCategory = feedCategory === 'NOTICE'; // 공지 카테고리에 대한 예외
     const isPollCategory = feedCategory === 'POLL'; // 투표 카테고리에 대한 예외
@@ -49,6 +56,7 @@ const FeedItem = ({ data, memberId }) => {
 
     const handleLikeClick = () => {
         toggleLike(liked, setLiked, feedId, memberId);
+        setLikeCount(preCount => liked ? preCount - 1 : preCount + 1); // 좋아요 수는 변동이 바로 보이도록 변경
     }
     
     const handleBookmarkClick = () => {
@@ -94,18 +102,19 @@ const FeedItem = ({ data, memberId }) => {
                             <Image src={writerProfile || 'https://via.placeholder.com/50'} roundedCircle width="50" height="50" className="mr-3" />
                             <div onClick={() => goToMemberProfile(writerId)}> &nbsp; {writerNickname}</div>
                         </div>
-                        <div onClick={() => goToBuildingProfile(buildingId)} className={styles.linkText}><FaBuilding /> {buildingName}</div>
+                        <div className="d-flex align-items-center">
+                            {/* 빌딩 이름 */}
+                            <div onClick={() => goToBuildingProfile(buildingId)} className={styles.feedItemLinkText}><FaBuilding /> {buildingName}</div>
+                        </div>
                     </div>
                     
 
                     {/* Body- 1 */}
                     {/* 첨부파일을 보여준다. 공지일 때는 보여주지 않는다. */}
-                    {(mainAttachment && isNoticeCategory === false ) && (
-                        <br/>
-                    )}
-
                     {isNoticeCategory ? '' : (
-                        <div>
+                        <>
+                        <div onClick={() => goToFeedDetail(memberId, feedId)}>
+                            <br/>
                             {mainAttachment &&  mainAttachment.type === 'PHOTO' && (
                             <CardImg
                                 alt={feedId}
@@ -121,35 +130,21 @@ const FeedItem = ({ data, memberId }) => {
                                     </video>
                                 </div>
                             )}
+                        </div>
+                        <div>
                             {isPollCategory && (
                                 <FeedVote feedId={feedId} memberId={memberId} />
                             )}
                         </div>
+                        </>
                      )}
+                    {(mainAttachment && isNoticeCategory === false ) && (
+                        <br/>
+                    )}
 
-                    {/* Body- 2 */}
-                    {/* 좋아요, 북마크, 피드 카테고리를 추가한다. */}
-                    <div className={styles.iconContainer}>
-                        <div className={styles.iconLeft}>
-                            {/* 좋아요 */}
-                            <span onClick={handleLikeClick}>
-                                {liked ? <FaHeart color="red" size='24'/> : <FaRegHeart size='24'/>}
-                            </span>
-                            {/* 북마크 */}
-                            <span onClick={handleBookmarkClick}>
-                                {bookmarked ? <FaBookmark color="gold" size='24' /> : <FaRegBookmark size='24' />}
-                            </span>
-                        </div>
-
-                        <div className={styles.iconRight}>
-                            {/* 피드 카테고리 */}
-                            <div className={styles.feedCategory}>{feedCategoryName}</div>
-                        </div>
-                    </div>
-
-                    {/* footer */}
+                    {/* body - 2 */}
                     {/* 제목 : 공지라면 공지로 바로 리다이렉션한다.*/}
-                    <div onClick={() => goToDetailNotice(feedId)}>
+                    <div>
                         {isNoticeCategory ? (
                             <div className={styles.h2Like} onClick={() => goToDetailNotice(feedId)} style={{ cursor: 'pointer' }}>
                                 <FcApproval /> {title}
@@ -166,8 +161,37 @@ const FeedItem = ({ data, memberId }) => {
                         )}
 
                         <CardText>
-                            <small className={styles.textMuted}>{writtenTimeReplace}</small>
+                            <WiTime2 /> <small className={styles.textMuted}>{writtenTimeReplace}</small>
                         </CardText>
+                    </div>
+
+                    {/* footer */}
+                    {/* 좋아요, 북마크, 피드 카테고리를 추가한다. */}
+                    <hr className={styles.feedItemHr}/>
+                    <div className={styles.iconContainer}>
+                        <div className={styles.iconLeft}>
+                            {/* 좋아요 */}
+                            <span onClick={handleLikeClick}>
+                                {liked ? <FaHeart color="red" size='24'/> : <FaRegHeart size='24'/>} {likedCount}
+                            </span>
+                            {/* 댓글 개수 */}
+                            <span onClick={() => goToFeedDetail(memberId, feedId, true)}>
+                                <FaCommentAlt size='24'/> {commentCount}
+                            </span>
+                            {/* 조회수 */}
+                            <span>
+                                <FaRegEye size='24'/> {viewCnt}
+                            </span>
+                        </div>
+
+                        <div className={styles.iconRight}>
+                            {/* 피드 카테고리 */}
+                            <div className={styles.feedCategory}>{feedCategoryName}</div>
+                            {/* 북마크 */}
+                            <span onClick={handleBookmarkClick} className={styles.feedItemBookmarkIcon}>
+                                {bookmarked ? <FaBookmark color="gold" size='24' /> : <FaRegBookmark size='24' />}
+                            </span>
+                        </div>
                     </div>
                 </CardBody>
             </Card>

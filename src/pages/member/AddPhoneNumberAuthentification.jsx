@@ -160,8 +160,8 @@ const AddPhoneNumberAuthentification = () => {
   return (
     <ForegroundTemplate>
       <Container
-        className="mt-5"
-        style={{ padding: "0px", margin: "0px 0px 0px 32px", width: "100%" }}
+        className={`mt-5 ${styles.container}`}
+        
       >
         <Row
           className="justify-content-center"

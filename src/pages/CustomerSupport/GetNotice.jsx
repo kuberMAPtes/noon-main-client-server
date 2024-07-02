@@ -7,6 +7,8 @@ import messages from './metadata/messages';
 import { useSelector } from 'react-redux';
 import { Button, Card, CardHeader, CardBody, CardFooter, Row } from "reactstrap";
 import Header from '../../components/common/Header';
+import formatTime from '../CustomerSupport/util/FormatTime';
+
 
 const GetNotice = () => {
   const member = useSelector((state) => state.auth.member);
@@ -68,8 +70,12 @@ const GetNotice = () => {
     if (notice) {
       const imgs = document.querySelectorAll('.feed-content img');
       const videos = document.querySelectorAll('.feed-content video');
+      const screenWidth = window.innerWidth;
 
       imgs.forEach(img => {
+        if (img.clientWidth < screenWidth) {
+        img.style.width = '100%';
+        } 
         img.style.maxWidth = '100%';
         img.style.height = 'auto';
         img.style.display = 'block';
@@ -77,6 +83,9 @@ const GetNotice = () => {
       });
 
       videos.forEach(video => {
+        if (video.clientWidth < screenWidth) {
+          video.style.width = '100%';
+        }
         video.style.maxWidth = '100%';
         video.style.height = 'auto';
         video.style.display = 'block';
@@ -90,7 +99,7 @@ const GetNotice = () => {
     return <p>Loading...</p>;
   }
 
-    // 날짜 형식을 YYYY-MM-DD로 변환
+    // 날짜 형식을 YYYY-MM-DD로 변환 - Deprecated
     const formatDate = (dateString) => {
       const date = new Date(dateString);
       if (!isNaN(date.getTime())) {
@@ -114,7 +123,7 @@ const GetNotice = () => {
 
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
           <span style={{ color: 'gray', marginRight: '10px' }}>{notice.writerId}</span>
-          <span style={{ color: 'gray' }}>{formatDate(notice.writtenTime)}</span>
+          <span style={{ color: 'gray' }}>{formatTime(notice.writtenTime)}</span>
         </div>
         <Row className="row-margin-bottom feed-content">
         <div style={{ marginTop: '20px', lineHeight: '1.6' }} className="feed-content">

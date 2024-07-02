@@ -13,6 +13,7 @@ import "../../assets/css/module/search/Search.css";
 import { useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Spinner } from "reactstrap";
+import { GoMoveToTop } from "react-icons/go";
 
 
 const PARAM_KEY_SEARCH_MODE = "search-mode";
@@ -30,6 +31,8 @@ export default function Search() {
 
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+
+  const searchResultContainerRef = useRef(null);
 
   const loginMemberId = useSelector((state) => state.auth.member.memberId) || "member_2"; // TODO
 
@@ -54,28 +57,32 @@ export default function Search() {
       component = <FeedSearchResult
           key="feed-search-result"
           searchResult={searchResult}
-          infScrollTargetRef={lastFeedElementRef} />;
+          infScrollTargetRef={lastFeedElementRef}
+          searchResultContainerRef={searchResultContainerRef} />;
       searchFunction = searchFeed
       break;
     case modes.BUILDING:
       component = <BuildingSearchResult
           key="building-search-result"
           searchResult={searchResult}
-          infScrollTargetRef={lastFeedElementRef} />;
+          infScrollTargetRef={lastFeedElementRef}
+          searchResultContainerRef={searchResultContainerRef} />;
       searchFunction = searchBuilding
       break;
     case modes.CHATROOM:
       component = <ChatroomSearchResult
           key="chatroom-search-result"
           searchResult={searchResult}
-          infScrollTargetRef={lastFeedElementRef} />;
+          infScrollTargetRef={lastFeedElementRef}
+          searchResultContainerRef={searchResultContainerRef} />;
       searchFunction = searchChatroom
       break;
     case modes.MEMBER:
       component = <MemberSearchResult
           key="member-search-result"
           searchResult={searchResult}
-          infScrollTargetRef={lastFeedElementRef} />;
+          infScrollTargetRef={lastFeedElementRef}
+          searchResultContainerRef={searchResultContainerRef} />;
       searchFunction = searchMember
       break;
     default:
@@ -155,6 +162,15 @@ export default function Search() {
           <Spinner style={{ width: '3rem', height: '3rem' }} color="primary" />
         </div>
       )}
+      <GoMoveToTop
+          className="search-go-to-top-button"
+          onClick={() => {
+            searchResultContainerRef.current.scroll({
+              top: 0,
+              behavior: "smooth"
+            });
+          }}
+      />
     </div>
   );
 }

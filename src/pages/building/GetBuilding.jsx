@@ -12,7 +12,6 @@ const Building = () => {
       <Header title="건물 프로필"/>
       <BuildingInfo subscriptionData={subscriptionData} setSubscriptionData={setSubscriptionData} />
       <TabNavigation subscriptionData={subscriptionData} />
-      <Footer/>
     </div>
   );
 };

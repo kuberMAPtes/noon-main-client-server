@@ -1,19 +1,8 @@
 import { useEffect, useState } from "react";
-import "../../../assets/css/module/search/component/MemberSearchResult.css";
+import styles from "../../../assets/css/module/search/component/MemberSearchResult.module.css";
 import { useNavigate } from "react-router-dom";
 import useEncryptId from "../../member/hook/useEncryptId";
-
-const SAMPLE_DATA = [];
-
-for (let i = 0; i < 5; i++) {
-  SAMPLE_DATA.push({
-    profilePhotoUrl: `profilePhotoUrl-${i}`,
-    memberId: `memberId-${i}`,
-    nickname: `nickname-${i}`,
-    following: `following-${i}`,
-    followed: `followed-${i}`,
-  });
-}
+import { abbreviateLongString } from "../../../util/stringUtil";
 
 /**
  * @param {{
@@ -32,27 +21,34 @@ for (let i = 0; i < 5; i++) {
  *     }[]
  *   },
  *   infScrollTargetRef;
+ *   searchResultContainerRef;
  * }} props
  */
 export default function MemberSearchResult({
   searchResult,
   infScrollTargetRef,
+  searchResultContainerRef
 }) {
   return (
-    <div className="scroll list-container">
+    <div className="list-container" ref={searchResultContainerRef}>
       {searchResult &&
         searchResult.map((data, idx) => (
-          <MemberSearchResultItem
-            key={`member-data-${idx}`}
-            profilePhotoUrl={data.profilePhotoUrl}
-            memberId={data.memberId}
-            nickname={data.nickname}
-            following={data.following}
-            followed={data.followed}
-            infScrollTargetRef={
-              idx + 1 === searchResult.length ? infScrollTargetRef : null
-            }
-          />
+          <div
+              key={`search-item-${idx}`}
+              className="list-container-item"
+          >
+            <MemberSearchResultItem
+              profilePhotoUrl={data.profilePhotoUrl}
+              memberId={data.memberId}
+              nickname={data.nickname}
+              following={data.following}
+              follower={data.follower}
+              infScrollTargetRef={
+                idx + 1 === searchResult.length ? infScrollTargetRef : null
+              }
+            />
+            <hr className="search-item-divider" />
+          </div>
         ))}
     </div>
   );
@@ -84,17 +80,19 @@ function MemberSearchResultItem({
   return (
     <div
       ref={infScrollTargetRef}
-      className="member-item-container"
+      className={styles.memberItemContainer}
       onClick={() =>
         navigate(`/member/getMemberProfile/${encryptedData}/${ivData}`)
       }
     >
-      <img src={profilePhotoUrl} alt="Profile" />
-      <div className="member-name-container">
-        <div className="nickname">{nickname}</div>
-        <div className="member-id">{memberId}</div>
+      <div className={styles.memberSearchProfileContainer}>
+        <img className={styles.memberSearchProfilePhoto} src={profilePhotoUrl} alt="Profile" />
+        <div className={styles.memberNameContainer}>
+          <div className={styles.nickname}>{abbreviateLongString(nickname, 14)}</div>
+          <div className={styles.memberId}>{abbreviateLongString(memberId, 14)}</div>
+        </div>
       </div>
-      <div className="relationship-container">
+      <div className={styles.relationshipContainer}>
         {following && <div>내가 팔로우하는 회원</div>}
         {follower && <div>나를 팔로우하는 회원</div>}
       </div>

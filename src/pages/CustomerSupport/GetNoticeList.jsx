@@ -4,10 +4,10 @@ import axiosInstance from '../../lib/axiosInstance';
 import { Card, CardHeader, CardBody, Table, Row, Col, CardFooter } from 'reactstrap';
 import { useInView } from 'react-intersection-observer';
 import navigate from '../CustomerSupport/util/Navigator'
-
 import { useSelector } from 'react-redux';
 import '../building/css/tab-navigation.css';
 import Header from '../../components/common/Header';
+import formatTime from '../CustomerSupport/util/FormatTime';
 
 const GetNoticeList = () => {
   const [currentPage, setCurrentPage] = useState(0);
@@ -15,6 +15,7 @@ const GetNoticeList = () => {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const { goToNoticeDetail, goToAddNotice } = navigate();
+
 
   // 회원 아이디(실제 데이터. 리덕스 상태값)
   const member = useSelector((state) => state.auth.member);
@@ -71,6 +72,7 @@ const GetNoticeList = () => {
     return 'Invalid Date';
   };
 
+
   // 새로운 공지인지 확인 (테스트를 위해 1시간 기준. 추후 1일이나 7일 기준으로 변경)
   const isNew = (dateString) => {
     const now = new Date();
@@ -117,7 +119,7 @@ const GetNoticeList = () => {
                     </div>
 
                     <div style={{ color: 'gray', fontSize: '12px' }}>
-                      {formatDate(maxNotice.writtenTime)}
+                      {formatTime(maxNotice.writtenTime)}
                     </div>
                   </div>
 
@@ -159,7 +161,7 @@ const GetNoticeList = () => {
 
                   
                     <div style={{ color: 'gray', fontSize: '12px' }}>
-                      {formatDate(notice.writtenTime)}
+                      {formatTime(notice.writtenTime)}
                     </div>
 
                   </div>

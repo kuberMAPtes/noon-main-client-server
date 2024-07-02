@@ -8,6 +8,7 @@ import {
   googleLogin,
   Login,
 } from "../../pages/member/function/memberAxios";
+import { showToast } from "../../pages/member/function/ToastNotification";
 
 // 비동기 로그인 액션 정의
 export const login = createAsyncThunk(
@@ -79,9 +80,11 @@ export const login = createAsyncThunk(
           //alert("네비게이트메인페이지");
 
           if(loginData?.loginWay === "normal"){
+            showToast("success", "로그인 성공!");
             setIsNavigating(true);
             navigateRealMainPage(returnMember?.memberId, navigate);
           }else{
+            showToast("success", "로그인 성공!");
             navigateRealMainPage(returnMember?.memberId, navigate);
           }
 

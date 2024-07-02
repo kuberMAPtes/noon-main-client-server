@@ -98,7 +98,7 @@ const FeedBuildingListPage = () => {
 
     return (
         <div>
-            <FeedDisplayBoard buildingId={buildingId} />
+            {/* <FeedDisplayBoard buildingId={buildingId} /> */}
             <FeedPopularyRanking buildingId={buildingId} />
             <FeedCalendar memberId={memberId} buildingId={buildingId}/>
             <div>

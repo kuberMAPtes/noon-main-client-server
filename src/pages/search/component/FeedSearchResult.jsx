@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import "../../../assets/css/module/search/component/FeedSearchResult.css";
+import styles from "../../../assets/css/module/search/component/FeedSearchResult.module.css";
 
 const MINUTE = 60;
 const HOUR = MINUTE * 60;
@@ -23,30 +23,38 @@ const TEXT_MAX_LENGTH = 30;
  *     mainActivated: boolean;
  *   }[];
  *   infScrollTargetRef;
+ *   searchResultContainerRef;
  * }} props
  */
 export default function FeedSearchResult({
   searchResult,
-  infScrollTargetRef
+  infScrollTargetRef,
+  searchResultContainerRef
 }) {
   console.log(searchResult);
   return (
-    <div className="scroll list-container">
+    <div className="scroll list-container" ref={searchResultContainerRef}>
       {
         searchResult && searchResult.map((data, idx) => (
-          <FeedSearchResultItem
-              key={`feed-search-${idx}`}
-              feedId={data.feedId}
-              writer={{
-                nickname: data.writerNickname
-              }}
-              writtenTime={new Date(data.writtenTime)}
-              title={data.title}
-              text={data.feedText}
-              buildingName={data.buildingName}
-              thumbnailUrl={data.feedAttachementURL}
-              infScrollTargetRef={idx + 1 === searchResult.length ? infScrollTargetRef : null}
-          />
+          <div
+              key={`search-item-${idx}`}
+              className="list-container-item"
+          >
+            <FeedSearchResultItem
+                key={`feed-search-${idx}`}
+                feedId={data.feedId}
+                writer={{
+                  nickname: data.writerNickname
+                }}
+                writtenTime={new Date(data.writtenTime)}
+                title={data.title}
+                text={data.feedText}
+                buildingName={data.buildingName}
+                thumbnailUrl={data.feedAttachementURL}
+                infScrollTargetRef={idx + 1 === searchResult.length ? infScrollTargetRef : null}
+            />
+            <hr className="search-item-divider" />
+          </div>
         ))
       }
     </div>
@@ -89,9 +97,9 @@ function FeedSearchResultItem({
         onClick={() => navigate(`/feed/detail?feedId=${feedId}`)}
         ref={infScrollTargetRef}
     >
-      <div className="feed-info">
-        <div className="feed-metadata">
-          <div className="sub-info">
+      <div className={styles.feedInfo}>
+        <div className={styles.feedMetadata}>
+          <div className={styles.subInfo}>
             <div className="icon-title">
               <img src="./image/write.png" alt="write" />
               <div>{writer.nickname}</div>
@@ -103,7 +111,7 @@ function FeedSearchResultItem({
           </div>
           <div>{buildingName}</div>
         </div>
-        <div className="feed-content">
+        <div className={styles.feedContent}>
           <h4>{title}</h4>
           <p>
             {text.length > TEXT_MAX_LENGTH

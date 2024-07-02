@@ -52,10 +52,13 @@ h2 {
 }
 
 .formLabel {
-  color: white; /* 레이블 텍스트 색상을 하얗게 */
+  color: #0d0d0d; /* 레이블 텍스트 색상을 하얗게 */
+  font-weight: 900;
+  margin-left : 0.4rem;
+  margin-bottom: 1rem;
 }
 .btn, .linkButton {
-  background: linear-gradient(to right, #b8b8b8, #c3cef9); /* 버튼 배경을 그라데이션으로 설정 */
+  background: linear-gradient(to right, #0d0d0d, #0d0d0d); /* 버튼 배경을 그라데이션으로 설정 */
   border: none;
   padding: 10px 20px;
   font-size: 16px;
@@ -66,4 +69,16 @@ h2 {
 
 .btn:hover, .linkButton:hover {
   background: linear-gradient(to right, #7a5ca6, #7383db); /* 호버 시 배경색 */
+}
+.login{
+  width:60%;
+  height:50px;
+  text-align: center;
+  margin: 0% 3% 0% 0%;
+}
+.main{
+  width:29%;
+  height:50px;
+  padding: 0px 0px 0px 0px;
+  margin: 0px 4% 0px 4%;
 }
