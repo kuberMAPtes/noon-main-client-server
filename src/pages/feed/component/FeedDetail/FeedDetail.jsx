@@ -246,7 +246,7 @@ const FeedDetail = ({ data, memberId }) => {
                     { tags && tags.length > 0 && (
                         <div className="tags">
                             {tags.map((tag) => (
-                                    <Badge className='tag' key={tag.tagId} color="primary">
+                                    <Badge className={styles.tagBadge} key={tag.tagId} color="primary">
                                         {tag.tagText}
                                     </Badge>
                                 ))}
