@@ -5,7 +5,7 @@ import $ from "jquery";
 import wikiStyles from "../../../assets/css/module/building/wiki/GetBuildingWiki.module.css"
 import "../../../assets/css/module/building/wiki/GetBuildingWiki.css"
 import { FaPencil } from "react-icons/fa6";
-import { RiArrowGoBackFill } from "react-icons/ri";
+import { FaBuilding } from "react-icons/fa";
 import { Spinner } from "reactstrap";
 import Header from "../../../components/common/Header";
 
@@ -63,7 +63,7 @@ export default function GetBuildingWiki() {
               className={wikiStyles.btn}
               onClick={() => navigate(`/editBuildingWiki/${buildingId}`)}
           />
-          <RiArrowGoBackFill
+          <FaBuilding
               className={wikiStyles.btn}
               onClick={() => navigate(`/getBuildingProfile/${buildingId}`)}
           />
