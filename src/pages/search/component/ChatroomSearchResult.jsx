@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import styles from "../../../assets/css/module/search/component/ChatroomSearchResult.module.css";
 import { abbreviateLongString } from "../../../util/stringUtil";
+import { FaBuilding } from "react-icons/fa";
 
 /**
  * @param {{
@@ -86,15 +87,21 @@ function CharoomSearchResultItem({
         ref={infScrollTargetRef}
     >
       <div className={styles.info}>
-        <h3>{chatroomName}</h3>
+        <h3>{abbreviateLongString(chatroomName)}</h3>
         <div className="icon-title">
           <img src="./image/chat-participants.png" alt="chat participants" />
           <div>{participantCount}</div>
         </div>
       </div>
-      <div className={styles.info}>
-        <div>{buildingName}</div>
-        <div>{abbreviateLongString(roadAddr, 13)}</div>
+      <div className={`${styles.info} ${styles.metadata}`}>
+        <div className="icon-title">
+          <FaBuilding />
+          <div>{buildingName}</div>
+        </div>
+        <div className="icon-title">
+          <img src="/image/address.png" alt="address" />
+          <div>{abbreviateLongString(roadAddr, 13)}</div>
+        </div>
         <div>{chatroomCreatorId}</div>
       </div>
     </div>
