@@ -3,16 +3,21 @@
   border: 2px solid #ced4da;
   width: fit-content;
   background-color: #e9ecef;
-  padding: 24px 7%;
+  padding: 12px 7%;
   margin-left: auto;
   margin-right: 5vw;
   margin-bottom: 30px;
 }
 
-.toctitle h2 {
-  margin-top: 0px;
-  font-size: 40px;
-  margin-left: 0px;
+.toctitle {
+  margin: 0px;
+}
+
+#mw-toc-heading {
+  margin: 0px;
+  margin-top: 12px;
+  font-size: 36px;
+  padding: 0px;
 }
 
 .toc ul {
