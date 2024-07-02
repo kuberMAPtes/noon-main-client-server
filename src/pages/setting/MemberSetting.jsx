@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { setFooterEnbaled } from "../../redux/slices/footerEnabledSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Spinner } from "reactstrap";
+import Header from "../../components/common/Header";
 
 const PUBLIC_RANGES = [
   {
@@ -108,7 +109,7 @@ export default function MemberSetting() {
 
   return (
     <div>
-      <BasicNavbar />
+      <Header title="환경설정" />
       {
         loading ? (
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
@@ -116,17 +117,6 @@ export default function MemberSetting() {
           </div>
         ) : (
           <main className="container member-setting-container">
-            <div class="title-container">
-              <h1>환경설정</h1>
-              <RiArrowGoBackFill
-                  style={{
-                      width: "25px", height: "25px"
-                  }}
-                  onClick={() => {
-                    navigate(-1);
-                  }}
-              />
-            </div>
             <div className="setting-content-wrapper">
               {
                 COMPONENT_INFOS.map((data, idx) => (
