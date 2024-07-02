@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import "../../../assets/css/module/search/component/FeedSearchResult.css";
+import styles from "../../../assets/css/module/search/component/FeedSearchResult.module.css";
 
 const MINUTE = 60;
 const HOUR = MINUTE * 60;
@@ -95,9 +95,9 @@ function FeedSearchResultItem({
         onClick={() => navigate(`/feed/detail?feedId=${feedId}`)}
         ref={infScrollTargetRef}
     >
-      <div className="feed-info">
-        <div className="feed-metadata">
-          <div className="sub-info">
+      <div className={styles.feedInfo}>
+        <div className={styles.feedMetadata}>
+          <div className={styles.subInfo}>
             <div className="icon-title">
               <img src="./image/write.png" alt="write" />
               <div>{writer.nickname}</div>
@@ -109,7 +109,7 @@ function FeedSearchResultItem({
           </div>
           <div>{buildingName}</div>
         </div>
-        <div className="feed-content">
+        <div className={styles.feedContent}>
           <h4>{title}</h4>
           <p>
             {text.length > TEXT_MAX_LENGTH

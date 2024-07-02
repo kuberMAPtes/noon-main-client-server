@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import "../../../assets/css/module/search/component/ChatroomSearchResult.css";
+import styles from "../../../assets/css/module/search/component/ChatroomSearchResult.module.css";
+import { abbreviateLongString } from "../../../util/stringUtil";
 
 /**
  * @param {{
@@ -80,20 +81,20 @@ function CharoomSearchResultItem({
   const navigate = useNavigate();
   return (
     <div
-        className="item-container chatroom-item-container"
+        className={styles.chatroomItemContainer}
         onClick={() => navigate(`/chat/chatroom?chatroomID=${chatroomId}`)}
         ref={infScrollTargetRef}
     >
-      <div className="info">
+      <div className={styles.info}>
         <h3>{chatroomName}</h3>
         <div className="icon-title">
           <img src="./image/chat-participants.png" alt="chat participants" />
           <div>{participantCount}</div>
         </div>
       </div>
-      <div className="info">
+      <div className={styles.info}>
         <div>{buildingName}</div>
-        <div>{roadAddr}</div>
+        <div>{abbreviateLongString(roadAddr, 13)}</div>
         <div>{chatroomCreatorId}</div>
       </div>
     </div>

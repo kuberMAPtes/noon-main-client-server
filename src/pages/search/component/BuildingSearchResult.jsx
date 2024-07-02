@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import "../../../assets/css/module/search/component/BuildingSearchResult.css";
+import styles from "../../../assets/css/module/search/component/BuildingSearchResult.module.css";
 import { abbreviateLongString } from "../../../util/stringUtil";
 
 /**
@@ -65,7 +65,7 @@ function BuildingSearchResultItem({
   const navigate = useNavigate();
   return (
     <div
-        className="building-item-container item-container"
+        className={styles.buildingItemContainer}
         onClick={() => navigate(`/getBuildingProfile/${buildingId}`)}
         ref={infScrollTargetRef}
     >
