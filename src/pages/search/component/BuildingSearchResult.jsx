@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import "../../../assets/css/module/search/component/BuildingSearchResult.css";
+import { abbreviateLongString } from "../../../util/stringUtil";
 
 /**
  * @param {{
@@ -24,16 +25,22 @@ export default function BuildingSearchResult({
   return (
     <div className="scroll list-container">
       {
-        searchResult && searchResult.map((data, idx) =>
+        searchResult && searchResult.map((data, idx) => (
+          <div
+              key={`search-item-${idx}`}
+              className="list-container-item"
+          >
             <BuildingSearchResultItem
                 key={`building-item-${idx}`}
                 buildingId={data.buildingId}
                 buildingName={data.buildingName}
-                liveliestChatroomDto={data.liveliestChatroomDto}
                 roadAddr={data.roadAddr}
                 feedAiSummary={data.feedAiSummary}
                 infScrollTargetRef={idx + 1 === searchResult.length ? infScrollTargetRef : null}
-            />)
+            />
+            <hr className="search-item-divider" />
+          </div>
+        ))
       }
     </div>
   );
@@ -46,10 +53,6 @@ export default function BuildingSearchResult({
  *   buildingName: string;
  *   roadAddr: string;
  *   feedAiSummary: string;
- *   liveliestChatroomDto: {
- *     chatroomName: string;
- *     liveliness: string;
- *   }
  * }} props 
 */
 function BuildingSearchResultItem({
@@ -57,29 +60,20 @@ function BuildingSearchResultItem({
   buildingName,
   roadAddr,
   feedAiSummary,
-  liveliestChatroomDto,
   infScrollTargetRef
 }) {
   const navigate = useNavigate();
-  console.log(buildingName);
-  console.log(roadAddr);
-  console.log(feedAiSummary);
-  console.log(liveliestChatroomDto);
   return (
     <div
         className="building-item-container item-container"
         onClick={() => navigate(`/getBuildingProfile/${buildingId}`)}
         ref={infScrollTargetRef}
     >
-      <h3>{buildingName}</h3>
+      <h3>{abbreviateLongString(buildingName, 9)}</h3>
       <div>
         <div className="icon-title">
-          <img src="./image/chat.png" alt="chat" />
-          <div>{liveliestChatroomDto.chatroomName}</div>
-        </div>
-        <div className="icon-title">
           <img src="./image/address.png" alt="address" />
-          <div>{roadAddr}</div>
+          <div>{abbreviateLongString(roadAddr, 13)}</div>
         </div>
       </div>
     </div>

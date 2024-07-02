@@ -30,18 +30,24 @@ export default function ChatroomSearchResult({
     <div className="scroll list-container">
       {
         searchResult && searchResult.map((data, idx) => (
-          <CharoomSearchResultItem
-            key={`chatroom-item-${idx}`}
-            chatroomId={data.chatroomId}
-            chatroomName={data.chatroomName}
-            participantCount={data.participantCount}
-            buildingName={data.buildingName}
-            roadAddr={data.roadAddr}
-            chatroomCreatorId={data.chatroomCreatorId}
-            chatroomType={data.chatroomType}
-            chatroomMinTemp={data.chatroomMinTemp}
-            infScrollTargetRef={idx + 1 === searchResult.length ? infScrollTargetRef : null}
-          />
+          <div
+              key={`search-item-${idx}`}
+              className="list-container-item"
+          >
+            <CharoomSearchResultItem
+              key={`chatroom-item-${idx}`}
+              chatroomId={data.chatroomId}
+              chatroomName={data.chatroomName}
+              participantCount={data.participantCount}
+              buildingName={data.buildingName}
+              roadAddr={data.roadAddr}
+              chatroomCreatorId={data.chatroomCreatorId}
+              chatroomType={data.chatroomType}
+              chatroomMinTemp={data.chatroomMinTemp}
+              infScrollTargetRef={idx + 1 === searchResult.length ? infScrollTargetRef : null}
+            />
+            <hr className="search-item-divider" />
+          </div>
         ))
       }
     </div>

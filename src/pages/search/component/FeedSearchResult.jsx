@@ -34,19 +34,25 @@ export default function FeedSearchResult({
     <div className="scroll list-container">
       {
         searchResult && searchResult.map((data, idx) => (
-          <FeedSearchResultItem
-              key={`feed-search-${idx}`}
-              feedId={data.feedId}
-              writer={{
-                nickname: data.writerNickname
-              }}
-              writtenTime={new Date(data.writtenTime)}
-              title={data.title}
-              text={data.feedText}
-              buildingName={data.buildingName}
-              thumbnailUrl={data.feedAttachementURL}
-              infScrollTargetRef={idx + 1 === searchResult.length ? infScrollTargetRef : null}
-          />
+          <div
+              key={`search-item-${idx}`}
+              className="list-container-item"
+          >
+            <FeedSearchResultItem
+                key={`feed-search-${idx}`}
+                feedId={data.feedId}
+                writer={{
+                  nickname: data.writerNickname
+                }}
+                writtenTime={new Date(data.writtenTime)}
+                title={data.title}
+                text={data.feedText}
+                buildingName={data.buildingName}
+                thumbnailUrl={data.feedAttachementURL}
+                infScrollTargetRef={idx + 1 === searchResult.length ? infScrollTargetRef : null}
+            />
+            <hr className="search-item-divider" />
+          </div>
         ))
       }
     </div>
