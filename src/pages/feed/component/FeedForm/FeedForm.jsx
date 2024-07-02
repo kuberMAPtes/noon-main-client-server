@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Card, ListGroup, Badge } from 'react-bootstrap';
+import { Form, Button, Card, ListGroup, Badge, InputGroup } from 'react-bootstrap';
 import axios_api from '../../../../lib/axios_api';
 import CheckModal from '../Common/CheckModal';
 import navigator from '../../util/Navigator';
 import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css'; // 달력 전용 css
+import 'react-datepicker/dist/react-datepicker.css'; // 달력 전용 css;
 import styles from '../../css/FeedForm/FeedForm.module.css';
+import buttonStyles from '../../css/common/FeedButton.module.css';
 
 const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, onSave }) => {
     const [feedData, setFeedData] = useState({
@@ -219,15 +220,6 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
     }
 
     const handleCancel = () => {
-        // setFeedData({
-        //     title: '',
-        //     feedText: '',
-        //     tags: [],
-        //     category: 'GENERAL',
-        //     publicRange: 'PUBLIC',
-        //     attachments: []
-        // });
-
         backHistory(); // 뒤로가기
     };
 
@@ -282,149 +274,142 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
 
     return (
         <div className={styles.feedFormContainer}>
-            <Card className="mb-4">
-                <Card.Body>
-                    <Form onSubmit={handleSubmit}>
-                        <Form.Group controlId="feedTitle" className="mb-3">
-                            <Form.Label>제목</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="title"
-                                placeholder="제목을 입력하세요"
-                                value={feedData.title}
-                                onChange={handleChange}
-                                required
-                            />
-                        </Form.Group>
+            <Form onSubmit={handleSubmit}>
+                <Form.Group controlId="feedCategory" className="mb-3">
+                    <Form.Label>카테고리</Form.Label>
+                    <Form.Control
+                        as="select"
+                        name="category"
+                        value={feedData.category}
+                        onChange={handleChange}
+                        required
+                    >
+                        <option value="GENERAL">일반</option>
+                        <option value="COMPLIMENT">칭찬하기</option>
+                        <option value="QUESTION">Q&A</option>
+                        <option value="EVENT">이벤트</option>
+                        <option value="SHARE">나눔</option>
+                        <option value="HELP_REQUEST">도움 요청</option>
+                    </Form.Control>
+                </Form.Group>
 
-                        <Form.Group controlId="feedText" className="mb-3">
-                            <Form.Label>내용</Form.Label>
-                            <Form.Control
-                                as="textarea"
-                                name="feedText"
-                                rows={3}
-                                placeholder="내용을 입력하세요"
-                                value={feedData.feedText}
-                                onChange={handleChange}
-                                required
-                            />
-                        </Form.Group>
-                        <br/>
-                        <Form.Group controlId="attachments" className="mb-3">
-                            <Form.Label>첨부 파일</Form.Label>
-                            <Form.Control
-                                type="file"
-                                name="attachments"
-                                multiple
-                                onChange={handleFileChange}
-                            />
-                            <ListGroup className={styles.fileList}>
-                                {feedData.attachments.map((file, index) => (
-                                    <ListGroup.Item key={index} className="d-flex justify-content-between align-items-center">
-                                        {isUploadedFile(file) ? (
-                                            <div className={styles.filePreview}>
-                                                {isImageOrVideo(file) ? (
-                                                    <img src={file.fileUrl} alt={file.fileUrl} style={{ maxWidth: '50px', maxHeight: '50px', marginRight: '10px' }} />
-                                                ) : (
-                                                    <span>{file.fileUrl}</span>
-                                                )}
-                                                <span>{file.fileUrl}</span>
-                                            </div>
+                <Form.Group controlId="feedTitle" className="mb-3">
+                    <Form.Control
+                        type="text"
+                        name="title"
+                        placeholder="제목을 입력하세요"
+                        value={feedData.title}
+                        onChange={handleChange}
+                        required
+                    />
+                </Form.Group>
+                <Form.Group controlId="feedText" className="mb-3">
+                    <Form.Control
+                        as="textarea"
+                        name="feedText"
+                        rows={10}
+                        placeholder="내용을 입력하세요"
+                        value={feedData.feedText}
+                        onChange={handleChange}
+                        required
+                    />
+                </Form.Group>
+
+                {/* 태그 */}
+                <Form.Group controlId="feedTags" className="mb-3">
+                    <Form.Control
+                        type="text"
+                        value={tagInput}
+                        onChange={(e) => setTagInput(e.target.value)}
+                        placeholder="태그를 입력하세요"
+                        className={styles.tagInput}
+                    />
+                    <Button onClick={handleTagAdd} className={buttonStyles.fullWidthButton}>태그 추가</Button>
+                    <div className={styles.tagList}>
+                        {Array.isArray(feedData.updateTagList) && feedData.updateTagList.map((tag, index) => (
+                            <Badge key={index} className={`mr-2 ${styles.tagBadge}`}>
+                                {tag} <span className={styles.badgeClose} onClick={() => handleTagRemove(tag)}>×</span>
+                            </Badge>
+                        ))}
+                    </div>
+                </Form.Group>
+
+                <Form.Group controlId="attachments" className="mb-3">
+                    <Form.Control
+                        type="file"
+                        name="attachments"
+                        multiple
+                        onChange={handleFileChange}
+                    />
+                    <ListGroup className={styles.fileList}>
+                        {feedData.attachments.map((file, index) => (
+                            <ListGroup.Item key={index} className="d-flex justify-content-between align-items-center">
+                                {isUploadedFile(file) ? (
+                                    <div className={styles.filePreview}>
+                                        {isImageOrVideo(file) ? (
+                                            file.fileUrl && (<img src={file.fileUrl} alt={file.fileUrl} style={{ maxWidth: '50px', maxHeight: '50px', marginRight: '10px' }} />)
                                         ) : (
-                                            <div className={styles.filePreview}>
-                                                {isImageOrVideo(file) ? (
-                                                    <img src={URL.createObjectURL(file)} alt={file.name} style={{ maxWidth: '50px', maxHeight: '50px', marginRight: '10px' }} />
-                                                ) : (
-                                                    <span>{file.name}</span>
-                                                )}
-                                                <span>{file.name}</span>
-                                            </div>
+                                            <span>{file.fileUrl}</span>
                                         )}
-                                        <Button variant="danger" size="sm" onClick={() => handleFileRemove(index)}>삭제</Button>
-                                    </ListGroup.Item>
-                                ))}
-                            </ListGroup>
-                        </Form.Group>
+                                        <span>{file.fileUrl}</span>
+                                    </div>
+                                ) : (
+                                    <div className={styles.filePreview}>
+                                        {isImageOrVideo(file) ? (
+                                        <img src={URL.createObjectURL(file)} alt={file.name} style={{ maxWidth: '50px', maxHeight: '50px', marginRight: '10px' }} />
+                                        ) : (
+                                            <span>{file.name}</span>
+                                        )}
+                                        <span>{file.name}</span>
+                                    </div>
+                                )}
+                                <Button variant="danger" size="sm" onClick={() => handleFileRemove(index)}>삭제</Button>
+                            </ListGroup.Item>
+                        ))}
+                    </ListGroup>
+                </Form.Group>
 
-                        {/* 태그 추가 */}
-                        <Form.Group controlId="feedTags" className="mb-3">
-                            <Form.Label>태그</Form.Label>
-                            <div className={`d-flex align-items-center ${styles.tagInputContainer}`}>
-                                <Form.Control
-                                    type="text"
-                                    value={tagInput}
-                                    onChange={(e) => setTagInput(e.target.value)}
-                                    placeholder="태그를 입력하세요"
-                                />
-                                <Button onClick={handleTagAdd} className={styles.addButton}>추가</Button>
-                            </div>
-                            <div className={styles.tagList}>
-                                {Array.isArray(feedData.updateTagList) && feedData.updateTagList.map((tag, index) => (
-                                    <Badge key={index} pill variant="primary" className={`mr-2 ${styles.tagBadge}`}>
-                                        {tag} <span className={styles.badgeClose} onClick={() => handleTagRemove(tag)}>×</span>
-                                    </Badge>
-                                ))}
-                            </div>
-                            <br/>
-                        </Form.Group>
+                {feedData.category === 'EVENT' && (
+                <Form.Group controlId="eventDate" className="mb-3">
+                    <Form.Label>이벤트 날짜 : </Form.Label>
+                    <DatePicker
+                        selected={eventDate}
+                        onChange={handleDateChange}
+                        dateFormat="yyyy/MM/dd h:mm aa"
+                        showTimeSelect
+                        timeFormat="HH:mm"
+                        timeIntervals={30}
+                        className="form-control"
+                    />
+                </Form.Group>
+                ) }
 
-                        <Form.Group controlId="feedCategory" className="mb-3">
-                            <Form.Label>카테고리</Form.Label>
-                            <Form.Control
-                                as="select"
-                                name="category"
-                                value={feedData.category}
-                                onChange={handleChange}
-                                required
-                            >
-                                <option value="GENERAL">일반</option>
-                                <option value="COMPLIMENT">칭찬하기</option>
-                                <option value="QUESTION">Q&A</option>
-                                <option value="EVENT">이벤트</option>
-                                <option value="SHARE">나눔</option>
-                                <option value="HELP_REQUEST">도움 요청</option>
-                            </Form.Control>
-                        </Form.Group>
-                        {feedData.category === 'EVENT' && (
-                        <Form.Group controlId="eventDate" className="mb-3">
-                            <Form.Label>이벤트 날짜 : </Form.Label>
-                            <DatePicker
-                                selected={eventDate}
-                                onChange={handleDateChange}
-                                dateFormat="yyyy/MM/dd h:mm aa"
-                                showTimeSelect
-                                timeFormat="HH:mm"
-                                timeIntervals={30}
-                                className="form-control"
-                            />
-                        </Form.Group>
-                        )}
-                        <Form.Group controlId="feedPublicRange" className="mb-3">
-                            <Form.Label>공개 범위</Form.Label>
-                            <Form.Control
-                                as="select"
-                                name="publicRange"
-                                value={feedData.publicRange}
-                                onChange={handleChange}
-                                required
-                            >
-                                <option value="PUBLIC">전체 공개</option>
-                                <option value="FOLLOWER_ONLY">팔로워 공개</option>
-                                <option value="MUTUAL_ONLY">맞팔 공개</option>
-                                <option value="PRIVATE">비공개</option>
-                            </Form.Control>
-                        </Form.Group>
+                
 
-                        <Button variant="primary" type="submit" className="mr-2">
-                            저장
-                        </Button>
-                        &nbsp;&nbsp;
-                        <Button variant="secondary" onClick={handleCancel}>
-                            취소
-                        </Button>
-                    </Form>
-                </Card.Body>
-            </Card>
+                <Form.Group controlId="feedPublicRange" className="mb-3">
+                    <Form.Label>공개 범위</Form.Label>
+                    <Form.Control
+                        as="select"
+                        name="publicRange"
+                        value={feedData.publicRange}
+                        onChange={handleChange}
+                        required
+                    >
+                        <option value="PUBLIC">전체 공개</option>
+                        <option value="FOLLOWER_ONLY">팔로워 공개</option>
+                        <option value="MUTUAL_ONLY">맞팔 공개</option>
+                        <option value="PRIVATE">비공개</option>
+                    </Form.Control>
+                </Form.Group>
+
+                <Button className={buttonStyles.fullWidthButtonBlack} type="submit">
+                    저장
+                </Button>
+                &nbsp;&nbsp;
+                <Button className={buttonStyles.fullWidthButtonRed} onClick={handleCancel}>
+                    취소
+                </Button>
+            </Form>
 
             {/* Modal : addFeed*/}
             <CheckModal 

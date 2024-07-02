@@ -6,6 +6,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios_api from '../../../../lib/axios_api';
 import styles from '../../css/FeedList/FeedPopularyRanking.module.css';
+import { PiRanking } from "react-icons/pi";
 
 const FeedPopularyRanking = ({buildingId}) => {
     const {goToMemberProfile, goToFeedDetail} = useNavigator();
@@ -46,7 +47,7 @@ const FeedPopularyRanking = ({buildingId}) => {
     return (
         <div className={styles.rankingContainer}>
             <Row className="justify-content-center my-4">
-                <div className={styles.rankingTitle}>인기 피드</div>
+                <div className={styles.rankingTitle}><PiRanking/> 인기 피드</div>
             </Row>
             <ListGroup as="ol">
                 {ranking.map((feed, index) => (

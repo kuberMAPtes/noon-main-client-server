@@ -1,13 +1,11 @@
 import Footer from "../../components/common/Footer";
 
 import { useEffect, useState } from 'react';
-import { Button } from "react-bootstrap";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import FeedForm from "./component/FeedForm/FeedForm"
-import SlideUpModal from "./component/FeedForm/SlideUpModal";
-import BasicNavbar from "../../components/common/BasicNavbar";
+import FloatingButtons from "./component/FeedForm/FloatingButtons";
 import axios_api from "../../lib/axios_api";
 import Header from "../../components/common/Header";
 
@@ -17,7 +15,6 @@ import Header from "../../components/common/Header";
  */
 const FeedFormPage = () => {
     const [selectedFeed, setSelectedFeed] = useState(null);
-    const [showModal, setShowModal] = useState(false);
     const [searchParams] = useSearchParams();
 
     // 1. memberId
@@ -27,8 +24,6 @@ const FeedFormPage = () => {
 
     // 2. buildingId
     const buildingId = searchParams.get('buildingId');
-
-    console.log("FeedFormPage writerId : " + writerId, "buildingId : " + buildingId);
 
     // 3. feedid
     const params = useParams()
@@ -52,30 +47,18 @@ const FeedFormPage = () => {
 
     return (
         <div>
-            {/* <BasicNavbar /> */}
             {/* 피드를 새로 추가할 때만 생성 */}
             <Header title="일반 피드 만들기" />
-            {feedId ? '' : (
-                <div className="container">
-                    <Button variant="primary" onClick={() => setShowModal(true)}>
-                        피드 종류
-                    </Button>
-                    <SlideUpModal 
-                        show={showModal} 
-                        onHide={() => setShowModal(false)} 
-                    />
-                </div>
-            )}
-
+            
             <FeedForm
                 existingFeed={selectedFeed}
                 inputWriterId={writerId}
                 inputBuildingId={buildingId}
                 inputFeedId={feedId}
             />
-
             <div>
-            <Footer />
+            {!feedId && <FloatingButtons />}
+            {/* <Footer /> */}
             </div>
             <br/><br/><br/><br/>
         </div>

@@ -25,10 +25,12 @@
     margin-left: 10px;
 }
 
+/* 태그 관련 */
+
 .tagList {
     display: flex;
     flex-wrap: wrap;
-    margin-top: 5px;
+    margin-top: 10px;
 }
 
 .tagList .badge {
@@ -42,23 +44,23 @@
 }
 
 .tagInputContainer {
-    max-width: 300px; /* 원하는 너비로 설정 */
+    display: flex;
+    align-items: center;
 }
 
 .tagInput {
-    flex: 1; /* 텍스트 박스가 가능한 한 많은 공간을 차지하도록 설정 */
-    margin-right: 10px; /* 텍스트 박스와 버튼 사이 간격 설정 */
-}
-
-.addButton {
-    margin-left: 10px; /* 추가 버튼과 텍스트 박스 사이 간격 설정 */
-    width: 120px; /* 버튼의 너비를 120px로 설정 */
-    height: 40px; /* 버튼의 높이를 40px로 설정 */
+    margin-bottom: 10px;
 }
 
 .tagBadge {
+    display: inline-flex;
+    align-items: center;
     margin-bottom: 5px;
     cursor: pointer;
+    background-color: #9BAAF8 !important; /* 배지 색상 변경 */
+    font-size: 1.1em; 
+    padding: 0.5em 1em;
+    color: white;
 }
 
 .badgeClose {
