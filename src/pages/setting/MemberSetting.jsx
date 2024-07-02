@@ -157,30 +157,32 @@ export default function MemberSetting() {
                 }}
                 style={{ backgroundColor: "#030722" }}
             >변경사항 저장</button>
-            <button
-                className="btn--opinfo"
-                type="button"
-                onClick={() => {
-                  setOpInfoMode("termsAndPolicy");
-                  setOpInfoModalVisible(true);
-                }}
-                style={{
-                  color: "#030722",
-                  backgroundColor: "#FFFFFD"
-                }}
-            >약관 및 정책</button>
-            <button
-                className="btn--opinfo"
-                type="button"
-                onClick={() => {
-                  setOpInfoMode("termsOfUse");
-                  setOpInfoModalVisible(true);
-                }}
-                style={{
-                  color: "#030722",
-                  backgroundColor: "#FFFFFD"
-                }}
-            >이용규정</button>
+            <div className="opinfo--container--asdf">
+              <button
+                  className="btn--opinfo"
+                  type="button"
+                  onClick={() => {
+                    setOpInfoMode("termsAndPolicy");
+                    setOpInfoModalVisible(true);
+                  }}
+                  style={{
+                    color: "#030722",
+                    backgroundColor: "#FFFFFD"
+                  }}
+              >약관 및 정책</button>
+              <button
+                  className="btn--opinfo"
+                  type="button"
+                  onClick={() => {
+                    setOpInfoMode("termsOfUse");
+                    setOpInfoModalVisible(true);
+                  }}
+                  style={{
+                    color: "#030722",
+                    backgroundColor: "#FFFFFD"
+                  }}
+              >이용규정</button>
+            </div>
             <OpInfoModal
                 visible={opInfoModalVisible}
                 setVisible={setOpInfoModalVisible}
