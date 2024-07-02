@@ -44,6 +44,18 @@
     align-items: center;
 }
 
+.feedDetailIconLeft {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+}
+
+.feedDetailIconRight {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
 .iconContainer span {
     margin-left: 10px; /* 왼쪽 여백 */
     cursor: pointer; /* 포인터 커서 */
@@ -108,3 +120,24 @@
     line-height: 1.2; /* Default line-height for <h2> */
     color: inherit; /* Default color, inherits from parent */
 }
+
+.feedItemHr {
+    border: 0;
+    height: 1px;
+    background: #333;
+    background-image: linear-gradient(to right, #ccc, #333, #ccc);
+    margin: 5px 0;
+}
+
+.feedItemLinkText {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-right: 10px; /* 아이콘과 건물 이름 사이 간격 조정 */
+}
+
+.feedItemBookmarkIcon {
+    cursor: pointer;
+    margin-right: 10px; /* 아이콘과 건물 이름 사이 간격 조정 */
+}
+

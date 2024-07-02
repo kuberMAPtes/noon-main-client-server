@@ -93,7 +93,7 @@ const FeedCalendar = ({memberId, buildingId}) => {
       />
       {selectedDate && (
         <div className="event-list-container">
-          <h2>{formatSelectedDate(selectedDate)}</h2>
+          <div className='calender-title'>{formatSelectedDate(selectedDate)}</div>
           {eventList.length > 0 ? (
             <ListGroup>
               {eventList.map((event, index) => (
