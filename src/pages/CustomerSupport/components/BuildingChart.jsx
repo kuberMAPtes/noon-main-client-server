@@ -165,7 +165,6 @@ const BuildingChart = () => {
             </div>
           )}
         </CardBody>
-        <CardFooter>
           <ButtonGroup>
             <Button
               color="primary"
@@ -192,7 +191,6 @@ const BuildingChart = () => {
               채팅방 수
             </Button>
           </ButtonGroup>
-        </CardFooter>
       </Card>
     </div>
   );
