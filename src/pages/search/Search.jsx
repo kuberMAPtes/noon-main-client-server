@@ -114,27 +114,27 @@ export default function Search() {
   }, [page]);
 
   useEffect(() => {
-    search();
+    search(searchKeyword);
   }, [currentSearchMode]);
 
   function onSearchBtnClick() {
-    search();
+    search(searchKeyword);
   }
 
-  function search() {
-    if (!loading && searchKeyword && searchKeyword !== "") {
-      searchFunction(searchKeyword, 1, (data) => {
+  function search(text) {
+    if (!loading && text && text !== "") {
+      searchFunction(text, 1, (data) => {
         queryParams.set(PARAM_KEY_SEARCH_KEYWORD, searchKeyword);
-        setPage(1);
         setQueryParams(queryParams);
+        setPage(1);
         const newSearchResult = [...data];
         setSearchResult(newSearchResult);
         setLoading(false);
       }, loginMemberId);
-    } else if (searchKeyword === "") {
+    } else if (text === "") {
       queryParams.delete(PARAM_KEY_SEARCH_KEYWORD);
-      setPage(1);
       setQueryParams(queryParams);
+      setPage(1);
       setSearchResult([]);
       setLoading(false);
     }
@@ -154,7 +154,10 @@ export default function Search() {
 
   return (
     <div className="search-container">
-      <SearchBar typeCallback={(text) => setSearchKeyword(text)} searchCallback={onSearchBtnClick} />
+      <SearchBar typeCallback={(text) => {
+        setSearchKeyword(text);
+        search(text);
+      }} searchCallback={onSearchBtnClick} isSearchButtonEnabled={false} />
       <SearchModeTab currentSearchMode={currentSearchMode} onModeChange={onModeChange} />
       {component}
       {loading && (
