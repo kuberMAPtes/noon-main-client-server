@@ -8,6 +8,7 @@ import { Button } from "react-bootstrap";
 import { IoNewspaperOutline } from "react-icons/io5";
 import { IoPaperPlane } from "react-icons/io5";
 import Header from "../../../components/common/Header";
+import Swal from "sweetalert2";
 
 export default function EditBuildingWiki() {
   const { buildingId } = useParams();
@@ -86,7 +87,11 @@ export default function EditBuildingWiki() {
                     onClick={() => {
                       axios_api.post(`${BUILDING_WIKI_BASE_PATH}/editPage/${buildingId}`, content)
                           .then((response) => {
-                            alert("변경사항이 저장되었습니다.");
+                            Swal.fire({
+                              title: `${buildingName} 건물 위키 수정이 완료되었습니다.`,
+                              icon: "success",
+                              confirmButtonText: "OK"
+                            })
                             navigate(`/getBuildingWiki/${buildingId}`);
                           })
                           .catch((err) => {
