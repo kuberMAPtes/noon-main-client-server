@@ -65,7 +65,7 @@ export default function GetBuildingWiki() {
             onClick={() => navigate(`/getBuildingProfile/${buildingId}`)}
         />
       </div>
-      <h1>{buildingName}</h1>
+      <h1 className={wikiStyles.title}>{buildingName}</h1>
       <hr className={wikiStyles.contentSeparator} />
       {
         loading ? (
