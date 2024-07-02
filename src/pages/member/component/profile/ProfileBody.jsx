@@ -39,6 +39,7 @@ const ProfileBody = ({
   buildingSubscriptionCount,
   followerCount,
   followingCount,
+  feedSectionRef
 }) => {
   // const [dajungTemperature, setDajungTemperature] = useState("");
   const defaultPhotoUrl = `${process.env.PUBLIC_URL}/image/defaultMemberProfilePhoto.png`;
@@ -96,7 +97,9 @@ const ProfileBody = ({
 
   return (
     <Card style={{ position: "relative" }}>
-      <Card.Body style={{ border: "2px solid #91A7FF", borderRadius: "7px",padding:"0%",width:"100%",height:"100%" }}>
+      <Card.Body style={{ border: "2px solid #91A7FF", borderRadius: "7px",padding:"0%",width:"100%",height:"100%"}}
+        className="d-flex flex-column align-items-center"
+       >
           <div
             xs={2}
             className="d-flex justify-content-start"
@@ -176,11 +179,10 @@ const ProfileBody = ({
                 fromId={fromId}
               />
             </Col>
-            <Col xs={12} style={{fontWeight:900,fontSize:"13px"}}> <FaPen style={{ fontSize: "10px" }} />&nbsp;&nbsp;프로필 소개</Col>
+            <Col xs={12} style={{fontWeight:900,fontSize:"13px", marginTop:"20px"}}> <FaPen style={{ fontSize: "10px" }} />&nbsp;&nbsp;프로필 소개</Col>
             {toId===fromId ?
-            <Row style={{ minHeight: "20%" }}>
+            <Row style={{ minHeight: "20%"}}>
               {/* <Col xs={12} style={{border: "2px solid #91A7FF", borderRadius:"7px"}}>&nbsp;{profile.profileIntro}</Col> */}
-              <Form>
                 <ProfileIntroInput
                   profileIntro={profileIntro}
                   setProfileIntro={setProfileIntro}
@@ -197,13 +199,12 @@ const ProfileBody = ({
                   profile={profile}
                   setProfile={setProfile}
                 />
-              </Form>
             </Row>
             :
             <Row style={{ minHeight: "20%" }}>
               <Col
                 xs={12}
-                style={{ border: "2px solid #91A7FF", borderRadius: "7px" }}
+                style={{ border: "2px solid #91A7FF", borderRadius: "7px",padding:"0px",marginLeft:"15px" }}
               >
                 &nbsp;{profile.profileIntro}
               </Col>
@@ -217,11 +218,13 @@ const ProfileBody = ({
           </Col>
         </Row>
         <ProfileStats
+          fromId={fromId}
           toId={toId}
           feeds={profile.feedDtoList}
           buildingSubscriptionCount={buildingSubscriptionCount}
           followerCount={followerCount}
           followingCount={followingCount}
+          feedSectionRef={feedSectionRef}
         />
 
         <ProfileActions toId={toId} fromId={fromId} />

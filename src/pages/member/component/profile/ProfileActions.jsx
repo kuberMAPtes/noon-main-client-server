@@ -100,6 +100,7 @@ const ProfileActions = ({ toId, fromId }) => {
           <Col xs={6}>
             <div
               className={`${profile.circle} ${base.hoverStyle}`}
+              
               onClick={handleToggle}
             >
               <MdMoreHoriz size="2em" />
@@ -109,60 +110,100 @@ const ProfileActions = ({ toId, fromId }) => {
               환경설정
             </div>
           </Col>
+
+          {(toId!==fromId && showMenu) && (
+              <Row className={`${profile.absoluteRow}`} style={{width:"28%"}}>
+                <AnimatedDiv 
+                style={{ width: "100%" }}
+                onClick={() => navigate("/setting")}>
+                  <IoSettingsOutline />
+                  <span style={{ padding: "0px 5px 0px 2px" }}></span>환경설정
+                  <span style={{ padding: "0px 5px 0px 2px" }}></span>
+                </AnimatedDiv>
+                <AnimatedDiv
+                style={{ width: "100%" }}
+                onClick={() => navigate("/customerSupport")}>
+                  <RiCustomerServiceLine />
+                  <span style={{ padding: "0px 5px 0px 2px" }}></span>고객지원
+                  <span style={{ padding: "0px 5px 0px 2px" }}></span>
+                </AnimatedDiv>
+
+                {fromId !== toId && (
+                  <>
+                    <AnimatedDiv
+                      style={{ width: "100%" }}
+                      onClick={() =>
+                        navigate(`/customerSupport/addReport/${toId}`)
+                      }
+                    >
+                      <AiFillAlert />
+                      <span style={{ padding: "0px 5px 0px 2px" }}></span>신고하기
+                      <span style={{ padding: "0px 5px 0px 2px" }}></span>
+                    </AnimatedDiv>
+                  </>
+                )}
+              </Row>
+          )}
+          {(toId===fromId && showMenu) && (
+              <Row className={`${profile.myAbsoluteRow}`} style={{width:"28%"}}>
+                <AnimatedDiv 
+                style={{ width: "100%" }}
+                onClick={() => navigate("/setting")}>
+                  <IoSettingsOutline />
+                  <span style={{ padding: "0px 5px 0px 2px" }}></span>환경설정
+                  <span style={{ padding: "0px 5px 0px 2px" }}></span>
+                </AnimatedDiv>
+                <AnimatedDiv
+                style={{ width: "100%" }}
+                onClick={() => navigate("/customerSupport")}>
+                  <RiCustomerServiceLine />
+                  <span style={{ padding: "0px 5px 0px 2px" }}></span>고객지원
+                  <span style={{ padding: "0px 5px 0px 2px" }}></span>
+                </AnimatedDiv>
+
+                {fromId !== toId && (
+                  <>
+                    <AnimatedDiv
+                      style={{ width: "100%" }}
+                      onClick={() =>
+                        navigate(`/customerSupport/addReport/${toId}`)
+                      }
+                    >
+                      <AiFillAlert />
+                      <span style={{ padding: "0px 5px 0px 2px" }}></span>신고하기
+                      <span style={{ padding: "0px 5px 0px 2px" }}></span>
+                    </AnimatedDiv>
+                  </>
+                )}
+              </Row>
+          )}
         </Row>
       </Row>
-      <Row style={{ margin: "0px", padding: "0px" }}>
-        {showMenu && (
-          <Row style={{ margin: "0px", padding: "0px" }}>
-            <AnimatedDiv onClick={() => navigate("/setting")}>
-              <IoSettingsOutline />
-              <span style={{ paddingRight: "16%" }}></span>환경설정으로..
-              <span style={{ paddingRight: "14%" }}></span>
-            </AnimatedDiv>
-            <AnimatedDiv onClick={() => navigate("/customerSupport")}>
-              <RiCustomerServiceLine />
-              <span style={{ paddingRight: "20%" }}></span>고객지원
-              <span style={{ paddingRight: "20%" }}></span>
-            </AnimatedDiv>
-
-            {fromId !== toId && (
-              <>
-                <AnimatedDiv
-                  style={{ width: "100%" }}
-                  onClick={() => navigate(`/customerSupport/addReport/${toId}`)}
-                >
-                  <AiFillAlert />
-                  <span style={{ paddingRight: "20%" }}></span>신고하기
-                  <span style={{ paddingRight: "20%" }}></span>
-                </AnimatedDiv>
-              </>
-            )}
-          </Row>
-        )}
+      <Row style={{ margin: "0px", padding: "0px", width: "80%" }}>
         {toId !== fromId && (
           <Row style={{ margin: "0px", padding: "0px" }}>
             <Col xs={12} style={{ margin: "0px", padding: "0px" }}>
-                <NormalButton
-                  size="sm"
-                  style={{
-                    width: "100%",
-                    margin: "20px 0px 20px 0px",
-                    padding: "0px",
-                    textAlign: "left",
-                  }}
-                  onClick={handleChatModalShow}
-                >
-                  <span style={{ paddingRight: "20%" }}></span>
-                  <BsFillChatDotsFill />
-                  <span style={{ paddingLeft: "11%" }}>1대1채팅방 신청</span>
-                </NormalButton>
-                <ChatRequestModal 
-                  show={showChatModal} 
-                  handleClose={handleChatModalClose} 
-                  handleSubmit={handleChatModalSubmit}
-                  fromId={fromId}
-                  toId={toId}
-                />
+              <NormalButton
+                size="sm"
+                style={{
+                  width: "100%",
+                  margin: "10px 0px 10px 0px",
+                  padding: "0px",
+                  textAlign: "left",
+                }}
+                onClick={handleChatModalShow}
+              >
+                <span style={{ paddingRight: "20%" }}></span>
+                <BsFillChatDotsFill />
+                <span style={{ paddingLeft: "11%" }}>1대1채팅방 신청</span>
+              </NormalButton>
+              <ChatRequestModal
+                show={showChatModal}
+                handleClose={handleChatModalClose}
+                handleSubmit={handleChatModalSubmit}
+                fromId={fromId}
+                toId={toId}
+              />
             </Col>
           </Row>
         )}
@@ -174,7 +215,7 @@ const ProfileActions = ({ toId, fromId }) => {
                 <NormalButton
                   style={{
                     width: "100%",
-                    margin: "0px 0px 0px 0px",
+                    margin: "10px 0px 10px 0px",
                     padding: "0px",
                   }}
                   onClick={handleUpdatePhoneNumber}

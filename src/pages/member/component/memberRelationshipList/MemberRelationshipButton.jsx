@@ -53,7 +53,7 @@ const MemberRelationshipButton = ({
       <NormalButton
         size="sm"
         className={module.buttonColorMutual}
-        style={{ width: "100%", margin: "20px 0px 20px 0px", padding: "0px",textAlign:"left" }}
+        style={{ width: "100%", margin: "10px 0px 10px 0px", padding: "0px",textAlign:"left" }}
         onClick={() => memoHandleFollowCancelClickSimple(toId)}
       >
         <span style={{paddingRight:"20%"}}></span><FaUserPlus/><span style={{paddingLeft:"20%"}}>맞팔로우</span>
@@ -64,7 +64,7 @@ const MemberRelationshipButton = ({
       <NormalButton
         size="sm"
         variant="danger"
-        style={{ width: "100%", margin: "20px 0px 20px 0px", padding: "0px",textAlign:"left" }}
+        style={{ width: "100%", margin: "10px 0px 10px 0px", padding: "0px",textAlign:"left" }}
         onClick={() => memoHandleFollowCancelClickSimple(toId)}
       >
         <span style={{paddingRight:"20%"}}></span><FaUserPlus/><span style={{paddingLeft:"20%"}}>팔로우 취소</span>

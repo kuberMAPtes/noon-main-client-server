@@ -27,6 +27,7 @@ import useReadOnlyInput from "./hook/useReadOnlyInput";
 import NormalButton from "./component/NormalButton";
 import { navigateMainPage } from "../../util/mainPageUri";
 import useMainPage from "./hook/useMainPage";
+import Header from "../../components/common/Header";
 
 const GetMember = () => {
   // 각 필드의 상태와 유효성 메시지, 유효성 플래그 관리
@@ -52,36 +53,12 @@ const GetMember = () => {
   const nicknameInput = useReadOnlyInput(member.nickname);
   const idInput = useReadOnlyInput(member.memberId);
 
-  // const [zonecode, setZonecode] = useState("");
-  // const [detailedAddress, setDetailedAddress] = useState("");
-
   const hasNavigated = useRef(false);
 
-  // const fullAddress = address + " " + detailedAddress;
-  // const form = { nickname, memberId, pwd, fullAddress };
   const form = { nickname, memberId, pwd };
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   if (hasNavigated.current) return;
-
-  //   const encryptedData = Cookies.get("addMemberKey");
-  //   const ivData = Cookies.get("addMemberOtherKey");
-
-  //   if (encryptedData && ivData && Cookies.get("user-data")) {
-  //     const isVerified = decryptWithLv(encryptedData, ivData);
-  //     if (isVerified !== "success") {
-  //       hasNavigated.current = true;
-  //       alert()
-  //       navigate("/member/getAuthMain");
-  //     }
-  //   } else {
-  //     hasNavigated.current = true;
-  //     navigate("/member/getAuthMain");
-  //   }
-  // }, [navigate]);
 
   const handlePwdUpdateClick = () => {
     // alert("handleClick실행 :: "+isMemberIdValid);
@@ -91,41 +68,6 @@ const GetMember = () => {
       navigate("/member/addPhoneNumberAuthentification/" + "updatePwd");
     }
   };
-
-  // useEffect(() => {
-  //   if (location.state && location.state.zonecode && location.state.address) {
-  //     if (Object.keys(location.state.nickname).length === 0) {
-  //       location.state.nickname = "";
-  //     }
-
-  //     setZonecode(location.state.zonecode);
-  //     setAddress(location.state.address);
-  //     setMemberId(location.state.memberId);
-
-  //     setNickname(location.state.nickname);
-
-  //     setPwd(location.state.pwd);
-
-  //     handleNicknameChange(
-  //       { target: { value: location.state.nickname } },
-  //       setNickname,
-  //       setNicknameValidationMessage,
-  //       setIsNicknameValid
-  //     );
-  //     handleMemberIdChange(
-  //       { target: { value: location.state.memberId } },
-  //       setMemberId,
-  //       setMemberIdValidationMessage,
-  //       setIsMemberIdValid
-  //     );
-  //     handlePwdChange(
-  //       { target: { value: location.state.pwd } },
-  //       setPwd,
-  //       setPwdValidationMessage,
-  //       setIsPwdValid
-  //     );
-  //   }
-  // }, [location.state]);
 
   const handleClick = (memberId) => {
     if (memberId) {
@@ -137,6 +79,8 @@ const GetMember = () => {
   }
 
   return (
+    <>
+    <Header/>
     <Container
       className="mt-5"
       style={{
@@ -254,7 +198,7 @@ const GetMember = () => {
                 </Form.Text>
               )}
               <Form.Text>
-                비밀번호는 회원님의 개인정보 보호를 위하여<br/> 확인하실 수 없고, 재설정만 가능합니다.
+                비밀번호는 회원님의 개인정보 보호를 위해<br/> 확인하실 수 없고, 재설정만 가능합니다.
               </Form.Text>
             </Form.Group>
             <Form.Group>
@@ -283,6 +227,7 @@ const GetMember = () => {
         </Col>
       </Row>
     </Container>
+  </>
   );
 };
 

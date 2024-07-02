@@ -1,7 +1,8 @@
 import { encryptWithLv } from "./crypto";
 
-export const navigateRealMainPage = (memberId, navigate) => {
-  const navigateUri = `/map/${memberId}`;
+export const navigateRealMainPage = (navigate) => {
+  // const navigateUri = `/map/${memberId}`;
+  const navigateUri = `/map`;
   navigate(navigateUri);
 }
 // export const navigateMainPage = async (memberId, navigate) => {
