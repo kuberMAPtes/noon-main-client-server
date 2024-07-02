@@ -5,8 +5,9 @@ import $ from "jquery";
 import wikiStyles from "../../../assets/css/module/building/wiki/GetBuildingWiki.module.css"
 import "../../../assets/css/module/building/wiki/GetBuildingWiki.css"
 import { FaPencil } from "react-icons/fa6";
-import { RiArrowGoBackFill } from "react-icons/ri";
+import { FaBuilding } from "react-icons/fa";
 import { Spinner } from "reactstrap";
+import Header from "../../../components/common/Header";
 
 export const BUILDING_WIKI_BASE_PATH = "/buildingWiki";
 
@@ -23,7 +24,7 @@ export default function GetBuildingWiki() {
     function fetchPageHtml() {
       axios_api.get(`${BUILDING_WIKI_BASE_PATH}/getPage/${buildingId}`).then((response) => {
         const data = response.data;
-        setBuildingName(data.buildingName);
+        setBuildingName(!data.buildingName || data.buildingName === "" ? "이름 없음" : data.buildingName);
         console.log(wikiStyles.contentContainer);
         console.log(typeof(wikiStyles.contentContainer));
         const fetched =
@@ -54,30 +55,33 @@ export default function GetBuildingWiki() {
   }, [content]);
 
   return (
-    <div id="wiki-container" className={wikiStyles.container}>
-      <div className={wikiStyles.btnContainer}>
-        <FaPencil
-            className={wikiStyles.btn}
-            onClick={() => navigate(`/editBuildingWiki/${buildingId}`)}
-        />
-        <RiArrowGoBackFill
-            className={wikiStyles.btn}
-            onClick={() => navigate(`/getBuildingProfile/${buildingId}`)}
-        />
+    <>
+      <Header title="위키" />
+      <div id="wiki-container" className={wikiStyles.container}>
+        <div className={wikiStyles.btnContainer}>
+          <FaPencil
+              className={wikiStyles.btn}
+              onClick={() => navigate(`/editBuildingWiki/${buildingId}`)}
+          />
+          <FaBuilding
+              className={wikiStyles.btn}
+              onClick={() => navigate(`/getBuildingProfile/${buildingId}`)}
+          />
+        </div>
+        <h1 className={wikiStyles.title}>{buildingName}</h1>
+        <hr className={wikiStyles.contentSeparator} />
+        {
+          loading ? (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
+              <Spinner style={{ width: '3rem', height: '3rem' }} color="primary" />
+            </div>
+          ) : (
+            <>
+              
+            </>
+          )
+        }
       </div>
-      <h1>{buildingName}</h1>
-      <hr className={wikiStyles.contentSeparator} />
-      {
-        loading ? (
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
-            <Spinner style={{ width: '3rem', height: '3rem' }} color="primary" />
-          </div>
-        ) : (
-          <>
-            
-          </>
-        )
-      }
-    </div>
+    </>
   );
 }

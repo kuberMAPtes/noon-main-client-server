@@ -1,23 +1,24 @@
 .container {
   width: 100vw;
   padding: 0px 8vw;
-  margin-top: 5vh;
-  height: 82vh;
+  margin-top: 12px;
+  height: 76vh;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 8px;
   overflow-y: scroll;
   position: relative;
 }
 
-.container h1 {
-  font-size: 64px;
+.title {
+  font-size: 48px;
   margin-left: 24px;
   margin-bottom: 0px;
 }
 
 .contentSeparator {
-  border: 2px solid #030722;
+  border: 1px solid #030722;
+  margin-bottom: 24px;
 }
 
 .contentContainer h2,
@@ -29,7 +30,8 @@
   padding-left: 12px;
   margin-bottom: 1rem;
   padding-bottom: 6px;
-  border-bottom: 1px solid #030722;
+  border-bottom: 1px solid #adb5bd;
+  color: #000;
 }
 
 .contentContainer h2 {
@@ -53,12 +55,10 @@
 }
 
 .btnContainer {
-  position: absolute;
-  right: 10vw;
-  top: 12px;
   display: flex;
   flex-direction: row;
-  gap: 12px;
+  gap: 8px;
+  margin-left: 5%;
 }
 
 .btn {
