@@ -3,7 +3,7 @@
     border-radius: 8px; 
     padding: 10px 20px;
     box-sizing: border-box; 
-    background-color : #9BAAF8;
+    background-color : #9BAAF8 !important;
     border : #9BAAF8;
 }
 

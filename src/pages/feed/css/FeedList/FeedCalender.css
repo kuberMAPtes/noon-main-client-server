@@ -1,6 +1,6 @@
 .calendar-container {
     text-align: center; /* 달력을 화면 중앙에 정렬 */
-    max-width: 80%; /* 모바일에서 최대 80%까지 너비 제한 */
+    max-width: 100%; /* 모바일에서 최대 80%까지 너비 제한 */
     margin: 0 auto; /* 가운데 정렬 */
 }
 
@@ -9,7 +9,7 @@
 }
 
 .react-datepicker {
-    font-size: 1rem;
+    font-size: 1.2rem;
     margin: 10px 0; /* 달력 위아래의 간격 조정 */
     width: 100%; /* 너비 100%로 설정 */
 }
@@ -21,8 +21,8 @@
 .react-datepicker__day-name, 
 .react-datepicker__day, 
 .react-datepicker__time-name {
-    width: 30px; /* 날짜 셀의 너비 증가 */
-    line-height: 30px; /* 날짜 셀의 높이 증가 */
+    width: 40px; /* 날짜 셀의 너비 증가 */
+    line-height: 40px; /* 날짜 셀의 높이 증가 */
 }
   
 .react-datepicker__day--selected,

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Form, Card, Container, Badge } from 'react-bootstrap';
+import { Button, Form, Card, Badge } from 'react-bootstrap';
 import axios_api from '../../../../lib/axios_api';
 import CheckModal from '../Common/CheckModal';
 import navigator from '../../util/Navigator'
 import VotePreview from './VotePreview';
 import styles from '../../css/FeedForm/FeedForm.module.css';
+
 // import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
 
 const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, onSave }) => {

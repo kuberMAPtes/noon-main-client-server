@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Badge, Button, Card } from 'react-bootstrap';
 import axios_api from '../../../../lib/axios_api';
 import styles from '../../css/FeedForm/FeedVote.module.css';
+import buttonStyles from '../../css/common/FeedButton.module.css';
 
 /**
  * 실제 피드에서 사용하는 투표
@@ -84,7 +85,7 @@ const FeedVote = ({ feedId, memberId }) => {
                         <Badge bg="secondary">{votes[index] !== undefined ? votes[index] : 0}</Badge>
                     </div>
                 ))}
-                <Button variant="danger" className={styles.voteSubmitButton} onClick={handleVoteSubmit}>
+                <Button className={buttonStyles.fullWidthButton} onClick={handleVoteSubmit}>
                     투표
                 </Button>
             </Card.Body>
