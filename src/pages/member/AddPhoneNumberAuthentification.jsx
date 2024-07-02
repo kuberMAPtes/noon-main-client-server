@@ -25,6 +25,14 @@ import {
 import { validatePhoneNumber } from "./function/memberValidator";
 import { useDispatch, useSelector } from "react-redux";
 import { setFooterEnbaled } from "../../redux/slices/footerEnabledSlice";
+import { IoPhonePortraitOutline } from "react-icons/io5";
+import { FaPhone } from "react-icons/fa6";
+import { MdManageSearch } from "react-icons/md";
+import { FaLock, FaUnlock } from "react-icons/fa";
+import { FaPhoneVolume } from "react-icons/fa6";
+import Header from "../../components/common/Header";
+import NormalButton from "./component/NormalButton";
+import NormalButtonTwo from "./component/NormalButtonTwo";
 const AddPhoneNumberAuthentification = () => {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -158,34 +166,37 @@ const AddPhoneNumberAuthentification = () => {
   };
 
   return (
+    <>
+    <Header/>
     <ForegroundTemplate>
       <Container
-        className={`mt-5 ${styles.container}`}
-        
+        style={{marginTop:"100px",marginLeft:"35px",marginRight:"0px"}}
       >
         <Row
           className="justify-content-center"
           style={{ padding: "0px", width: "100%" }}
         >
           <Col md={6} style={{ padding: "0px", width: "100%" }}>
-            <h2 className="mb-4">
-              휴대폰 인증
+          <h2 className="mb-4" style={{ color: 'initial' }}>
+            <MdManageSearch style={{fontSize:"40px"}}/>휴대폰 인증
               <span className="inline-text" style={{ fontSize: "15px" }}>
                 {toUrl === "addMember" && "(회원가입)"}
                 {toUrl === "getMemberId" && "(아이디 찾기)"}
+                {toUrl === "updatePhoneNumber" && <br/>}
                 {toUrl === "updatePwd" && "(비밀번호 찾기)"}
                 {toUrl === "updatePhoneNumber" && "(휴대폰 번호 등록 및 변경)"}
               </span>
             </h2>
-            <Form style={{ width: "100%" }}>
-              <Form.Group controlId="formPhoneNumber" style={{ width: "80%" }}>
+            <Form style={{ width: "100%", marginTop:"20%" }}>
+              <Form.Group controlId="formPhoneNumber" style={{ width: "100%" }}>
                 <Form.Label
                   className={styles.labelBold}
-                  style={{ width: "80%" }}
+                  style={{ width: "100%" , color: !certificationRequested ? '#0D0D0D' : "#91a7FF"}}
                 >
-                  휴대폰 번호
+                  
+                  {certificationRequested ? <FaPhoneVolume /> : <FaPhone/>}&nbsp;&nbsp;휴대폰 번호
                 </Form.Label>
-                <div className="d-flex" style={{ width: "100%" }}>
+                <div className="d-flex" style={{ width: "100%",marginTop:"5%" }}>
                   <input
                     type="text"
                     placeholder="010-1234-5678"
@@ -207,8 +218,7 @@ const AddPhoneNumberAuthentification = () => {
                     disabled={verifiedState === "success"}
                   />
                   &emsp;&emsp;&emsp;
-                  <Button
-                    variant="outline-secondary"
+                  <NormalButtonTwo
                     onClick={() =>
                       handleSendClick(
                         phoneNumber,
@@ -218,13 +228,13 @@ const AddPhoneNumberAuthentification = () => {
                         setIsRunning
                       )
                     }
-                    style={{ width: "30%" }}
+                    style={{ width: "35%", height:"80%",marginTop:"3%",fontSize:"14px",padding:"8px 6px 8px 6px" }}
                     disabled={
                       !isPhoneNumberValid || verifiedState === "success"
                     }
                   >
                     {certificationRequested ? "재전송" : "전송"}
-                  </Button>
+                  </NormalButtonTwo>
                 </div>
                 {phoneNumberValidationMessage && (
                   <Form.Text className="text-danger">
@@ -232,7 +242,7 @@ const AddPhoneNumberAuthentification = () => {
                   </Form.Text>
                 )}
                 {isPhoneNumberValid && (
-                  <Form.Text className="text-success">
+                  <Form.Text style={{color:"#91a7FF"}}>
                     {toUrl === "addMember" &&
                       "회원가입을 하기 위해 메세지를 보냅니다."}
                     {toUrl === "getMemberId" &&
@@ -245,14 +255,17 @@ const AddPhoneNumberAuthentification = () => {
                 )}
               </Form.Group>
               <Form.Group controlId="formAuthNumber" className="mt-4">
-                <Form.Label className={styles.labelBold}>인증번호</Form.Label>
+                <Form.Label
+                className={styles.labelBold}
+                style={{color: verifiedState==="success" ? "#91a7FF" : '#0D0D0D'}}
+                >{verifiedState==="success" ? <FaUnlock/> : <FaLock />}&nbsp;&nbsp;인증번호</Form.Label>
                 {certificationRequested && (
                   <div
                     className={`d-flex ${styles.timerText}`}
-                    style={{ width: "80%" }}
+                    style={{ width: "100%" }}
                   >
                     <input
-                      style={{ width: "80%" }}
+                      style={{ width: "74%" }}
                       type="text"
                       placeholder="1234"
                       value={authNumber}
@@ -263,9 +276,17 @@ const AddPhoneNumberAuthentification = () => {
                     />
                     &emsp;&emsp;
                     {timeLeft !== 0 ? (
-                      <span className="text-muted">{formatTime(timeLeft)}</span>
+                      <span className="text-muted"
+                      style={{ textAlign:"center",display:"inline-block",width: "35%", height:"80%",marginTop:"3%",fontSize:"14px",padding:"8px 6px 8px 6px" }}
+                      disabled={
+                        !isPhoneNumberValid || verifiedState === "success"
+                      }>{formatTime(timeLeft)}</span>
                     ) : (
-                      <span className="text-muted" style={{ width: "35%" }}>
+                      <span className="text-muted"
+                      style={{ textAlign:"center",display:"inline-block",width: "35%", height:"80%",marginTop:"3%",fontSize:"11px",padding:"8px 6px 8px 6px",color:"#ff6b6b" }}
+                      disabled={
+                        !isPhoneNumberValid || verifiedState === "success"
+                      }>
                         인증번호 만료
                       </span>
                     )}
@@ -276,6 +297,7 @@ const AddPhoneNumberAuthentification = () => {
             {verifiedState === "success" && toUrl === "addMember" && (
               <div>
                 <h5>본인인증 완료</h5>
+                <br/>
                 <Button
                   variant="info"
                   type="button"
@@ -341,15 +363,16 @@ const AddPhoneNumberAuthentification = () => {
             )}
             {verifiedState === "fail" && (
               <div>
-                <h6>본인인증 실패</h6>
                 <h5>실패 횟수 {failCount}</h5>
-                <span>20회 이상 실패 할 시 재전송을 하셔야합니다.</span>
+                <h6>본인인증 실패</h6>
+                <span style={{fontSize:"13px"}}>20회 이상 실패 할 시 재전송을 하셔야합니다.</span>
               </div>
             )}
           </Col>
         </Row>
       </Container>
     </ForegroundTemplate>
+    </>
   );
 };
 

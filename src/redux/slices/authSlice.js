@@ -82,10 +82,10 @@ export const login = createAsyncThunk(
           if(loginData?.loginWay === "normal"){
             showToast("success", "로그인 성공!");
             setIsNavigating(true);
-            navigateRealMainPage(returnMember?.memberId, navigate);
+            navigateRealMainPage(navigate);
           }else{
             showToast("success", "로그인 성공!");
-            navigateRealMainPage(returnMember?.memberId, navigate);
+            navigateRealMainPage(navigate);
           }
 
 

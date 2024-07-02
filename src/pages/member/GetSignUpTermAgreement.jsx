@@ -14,6 +14,11 @@ import ForegroundTemplate from "../../components/common/ForegroundTemplate";
 import useFooterToggle from "../../components/hook/useFooterToggle";
 import { useDispatch } from "react-redux";
 import { setFooterEnbaled } from "../../redux/slices/footerEnabledSlice";
+import Header from "../../components/common/Header";
+import { TbArrowBigRight } from "react-icons/tb";
+import NormalButtonTwo from "./component/NormalButtonTwo";
+import NormalButton from "./component/NormalButton";
+import { IoDocumentText } from "react-icons/io5";
 const GetSignUpTermAgreement = () => {
   useFooterToggle();
   const [agreed, setAgreed] = useState(false);
@@ -59,89 +64,96 @@ const GetSignUpTermAgreement = () => {
   });
 
   return (
-    <ForegroundTemplate>
-      <Container className={styles["fullscreen-container"]}
-      {...handlers}
-      style={{width:"100%",margin:"0px", padding:"0px"}}
-      >
-        <Row className="justify-content-center">
-          <Col md={8}>
-            <Card style={{ position: "relative" }}>
-              <Card.Body style={{padding:"30px 0px 80px 0px"}}>
-                <h1 className="mb-4">회원가입 약관 동의</h1>
+    <>
+      <Header />
+      <ForegroundTemplate>
+        <Container
+          className={styles["fullscreen-container"]}
+          {...handlers}
+          style={{ width: "100%", margin: "60px 0px 0px 0px", padding: "0px" }}
+        >
+          <Row className="justify-content-center" style={{margin:"0px", padding:"0px"}}>
+            <Col md={8} style={{padding: "0px"}}>
+              <Card style={{ position: "relative" }}>
+                <Card.Body style={{ padding: "30px 0px 80px 0px",margin:"10px 0px 10px 0px" }}>
+                  <h1 className="mb-4" style={{display:"inline-block",margin:"0px 15px 0px 15px"}}><IoDocumentText />회원가입 약관 동의</h1>
 
-                <Card>
-                  <Card.Body>
-                    <Card.Title>{terms[currentCard].title}</Card.Title>
-                    <Card.Text style={{ whiteSpace: "pre-wrap" }}>
-                      {terms[currentCard].content}
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-                <div className="text-center mt-3">
-                  {currentCard > 0 && (
-                    <FaArrowLeft
-                      size={30}
-                      className="me-3"
-                      onClick={() => setCurrentCard(currentCard - 1)}
-                      style={{ cursor: "pointer" }}
-                    />
-                  )}
-                  {currentCard < terms.length - 1 && (
-                    <FaArrowRight
-                      size={30}
-                      onClick={() => setCurrentCard(currentCard + 1)}
-                      style={{ cursor: "pointer" }}
-                    />
-                  )}
-                  <div className="mt-2">
-                    {currentCard + 1} / {terms.length}
+                  <Card style={{margin: "0px 15px 0px 15px"}}>
+                    <Card.Body>
+                      <Card.Title>{terms[currentCard].title}</Card.Title>
+                      <Card.Text style={{ whiteSpace: "pre-wrap" }}>
+                        {terms[currentCard].content}
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
+                  <div className="text-center mt-3">
+                    {currentCard > 0 && (
+                      <FaArrowLeft
+                        size={30}
+                        className="me-3"
+                        onClick={() => setCurrentCard(currentCard - 1)}
+                        style={{ cursor: "pointer" }}
+                      />
+                    )}
+                    {currentCard < terms.length - 1 && (
+                      <TbArrowBigRight
+                        size={30}
+                        onClick={() => setCurrentCard(currentCard + 1)}
+                        style={{ cursor: "pointer" }}
+                      />
+                    )}
+                    <div className="mt-2">
+                      {currentCard + 1} / {terms.length}
+                    </div>
                   </div>
-                </div>
-                {currentCard === terms.length - 1 && (
-                  <Form className="mt-4">
-                    <Form.Check
-                      type="checkbox"
-                      id="agree"
-                      label="모든 약관에 동의합니다."
-                      checked={agreed}
-                      onChange={handleCheckboxChange}
-                    />
-                    <Button
-                      variant="primary"
-                      className="mt-3"
-                      onClick={handleAgree}
-                      disabled={!agreed}
-                    >
-                      동의하고 계속하기
-                    </Button>
-                  </Form>
-                )}
-                {currentCard === 0 && (
-                  <Form className="mt-4">
-                    <Form.Check
-                      type="checkbox"
-                      id="agree"
-                      label="모든 약관에 동의합니다."
-                      checked={agreed}
-                      onChange={handleCheckboxChange}
-                    />
-                    <Button
-                      variant="primary"
-                      className="mt-3"
-                      onClick={handleAgree}
-                      disabled={!agreed}
-                    >
-                      동의하고 계속하기
-                    </Button>
-                  </Form>
-                )}
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
-    </ForegroundTemplate>
+                  {currentCard === terms.length - 1 && (
+                    <Form className="mt-4">
+                      <Form.Check
+                        type="checkbox"
+                        id="agree"
+                        label="모든 약관에 동의합니다."
+                        checked={agreed}
+                        onChange={handleCheckboxChange}
+                      />
+                      <Button
+                        variant="primary"
+                        className="mt-3"
+                        onClick={handleAgree}
+                        disabled={!agreed}
+                      >
+                        동의하고 계속하기
+                      </Button>
+                    </Form>
+                  )}
+                  {currentCard === 0 && (
+                    <Form className="mt-4">
+                      <Form.Check
+                        type="checkbox"
+                        id="agree"
+                        label="모든 약관에 동의합니다."
+                        checked={agreed}
+                        style={{display:"inline-block",margin:"0px 15px 0px 15px"}}
+                        onChange={handleCheckboxChange}
+                      />
+                      <br/>
+                      <br/>
+                      <NormalButton
+                        className="mt-3"
+                        onClick={handleAgree}
+                        disabled={!agreed}
+                        style={{display:"inline-block",margin:"0px 15px 0px 15px",padding:"",opacity:"0.6"}}
+                      >
+                        동의하고 계속하기
+                      </NormalButton>
+                    </Form>
+                  )}
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
+      </ForegroundTemplate>
+    </>
   );
 };
 

@@ -37,17 +37,17 @@
 }
 .circle-profile-icon {
     font-size: 2.5rem;
-    margin-left: 11px; /* Add margin-left to slightly move the icon to the right */
-    margin-bottom: 5px
+    /* margin-left: 11px;  */
+    /* margin-bottom: 5px */
 }
 .circle-map-icon {
     font-size: 2.5rem;
-    margin-left: 2px; /* Add margin-left to slightly move the icon to the right */
+    /* margin-left: 2px;  */
     margin-bottom: 9px
 }
 .circle-icon {
     font-size: 2.5rem;
-    margin-left: 2px; /* Add margin-left to slightly move the icon to the right */
+    /* margin-left: 2px; */
     margin-bottom: 3px
 }
 .fixedMargin {
@@ -56,4 +56,17 @@
 .profilePhoto {
   width: 64px !important;
   height: 64px !important;
+}
+.absoluteRow {
+  position: absolute;
+  top: 56.5%; /* 부모 요소의 아래에 위치 */
+  left: 71.5%;
+  width: 100px; /* 원하는 너비 설정 */
+  background-color: white; /* 배경색 설정 */
+  z-index: 1000; /* 다른 요소 위에 표시 */
+  margin: 0;
+  padding: 0;
+}
+.relativeCol{
+  position:relative;
 }

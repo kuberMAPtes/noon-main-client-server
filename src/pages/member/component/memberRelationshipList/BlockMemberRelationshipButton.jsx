@@ -56,7 +56,7 @@ const BlockMemberRelationshipButton = ({
         <NormalButton
           size="sm"
           className={module.buttonColorMutual}
-          style={{ width: "100%",margin:"20px 0px 20px 0px",padding:"0px",textAlign:"left" }}
+          style={{ width: "100%",margin:"10px 0px 10px 0px",padding:"0px",textAlign:"left" }}
           onClick={()=>memoHandleBlockCancelClickSimple(toId)}
         >
           <span style={{paddingRight:"20%"}}></span><MdOutlineReportGmailerrorred/><span style={{paddingLeft:"20%"}}>차단해제</span>
@@ -66,7 +66,7 @@ const BlockMemberRelationshipButton = ({
     blockMemberRelationshipButton = (
         <NormalButton
           size="sm"
-          style={{ width: "100%",margin:"20px 0px 20px 0px",padding:"0px", textAlign:"left" }}
+          style={{ width: "100%",margin:"10px 0px 10px 0px",padding:"0px", textAlign:"left" }}
           onClick={()=>memoHandleBlockClickSimple(toId)}
         >
           <span style={{paddingRight:"20%"}}></span><MdOutlineReportGmailerrorred/><span style={{paddingLeft:"20%"}}>차단하기</span>
