@@ -112,7 +112,7 @@ const FeedItem = ({ data, memberId }) => {
                     {/* Body- 1 */}
                     {/* 첨부파일을 보여준다. 공지일 때는 보여주지 않는다. */}
                     {isNoticeCategory ? '' : (
-                        <div>
+                        <div onClick={() => goToFeedDetail(memberId, feedId)}>
                             <br/>
                             {mainAttachment &&  mainAttachment.type === 'PHOTO' && (
                             <CardImg
@@ -140,7 +140,7 @@ const FeedItem = ({ data, memberId }) => {
 
                     {/* body - 2 */}
                     {/* 제목 : 공지라면 공지로 바로 리다이렉션한다.*/}
-                    <div onClick={() => goToDetailNotice(feedId)}>
+                    <div>
                         {isNoticeCategory ? (
                             <div className={styles.h2Like} onClick={() => goToDetailNotice(feedId)} style={{ cursor: 'pointer' }}>
                                 <FcApproval /> {title}

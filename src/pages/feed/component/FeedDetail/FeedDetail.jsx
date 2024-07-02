@@ -11,7 +11,8 @@ import navigator from '../../util/Navigator';
 import CheckModal from '../Common/CheckModal';
 import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
 import AttachmentGetter from '../../util/AttachmentGetter';
-import styles from  "../../css/common/FeedItemAndDetail.module.css"; // css 적용
+import styles from  "../../css/common/FeedItemAndDetail.module.css";
+import buttonStyles from  "../../css/common/FeedButton.module.css";
 import FeedCategoryGetter from '../../util/FeedCategoryGetter';
 import FeedVote from '../FeedForm/FeedVote';
 import { WiTime2 } from 'react-icons/wi';
@@ -346,7 +347,7 @@ const FeedDetail = ({ data, memberId }) => {
                                 className="form-control"
                             />
                         </Form.Group>
-                        <Button type="submit" className="btn btn-primary mt-2">
+                        <Button type="submit" className={buttonStyles.fullWidthButton}>
                             추가
                         </Button>
                     </Form>
@@ -354,7 +355,7 @@ const FeedDetail = ({ data, memberId }) => {
             </Card>
             <br/>
             <div className={styles.feedDetailIconLeft}>
-                <Button variant="secondary" onClick={handleShowLikedUsersClick}>
+                <Button variant="secondary" className={buttonStyles.fullWidthButtonRed} onClick={handleShowLikedUsersClick}>
                     좋아요를 누른 사람 목록
                 </Button>
             </div>
