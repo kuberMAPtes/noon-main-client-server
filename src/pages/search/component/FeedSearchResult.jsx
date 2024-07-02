@@ -23,15 +23,17 @@ const TEXT_MAX_LENGTH = 30;
  *     mainActivated: boolean;
  *   }[];
  *   infScrollTargetRef;
+ *   searchResultContainerRef;
  * }} props
  */
 export default function FeedSearchResult({
   searchResult,
-  infScrollTargetRef
+  infScrollTargetRef,
+  searchResultContainerRef
 }) {
   console.log(searchResult);
   return (
-    <div className="scroll list-container">
+    <div className="scroll list-container" ref={searchResultContainerRef}>
       {
         searchResult && searchResult.map((data, idx) => (
           <div

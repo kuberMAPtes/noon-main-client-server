@@ -14,16 +14,18 @@ import { abbreviateLongString } from "../../../util/stringUtil";
  *       liveliness: string;
  *     }
  *   }[],
- *   infScrollTargetRef
+ *   infScrollTargetRef,
+ *   searchResultContainerRef
  * }} props
  */
 export default function BuildingSearchResult({
   searchResult,
-  infScrollTargetRef
+  infScrollTargetRef,
+  searchResultContainerRef
 }) {
 
   return (
-    <div className="scroll list-container">
+    <div className="scroll list-container" ref={searchResultContainerRef}>
       {
         searchResult && searchResult.map((data, idx) => (
           <div

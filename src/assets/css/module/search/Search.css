@@ -29,3 +29,14 @@
 .search-item-divider {
   margin: 10px;
 }
+
+.search-go-to-top-button {
+  position: fixed;
+  right: 10vw;
+  bottom: 13vh;
+  width: 48px;
+  height: 48px;
+  background-color: #9BAAF8;
+  border-radius: 50px;
+  padding: 8px;
+}

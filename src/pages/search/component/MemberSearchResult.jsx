@@ -4,18 +4,6 @@ import { useNavigate } from "react-router-dom";
 import useEncryptId from "../../member/hook/useEncryptId";
 import { abbreviateLongString } from "../../../util/stringUtil";
 
-const SAMPLE_DATA = [];
-
-for (let i = 0; i < 5; i++) {
-  SAMPLE_DATA.push({
-    profilePhotoUrl: `profilePhotoUrl-${i}`,
-    memberId: `memberId-${i}`,
-    nickname: `nickname-${i}`,
-    following: `following-${i}`,
-    followed: `followed-${i}`,
-  });
-}
-
 /**
  * @param {{
  *   searchResult: {
@@ -33,14 +21,16 @@ for (let i = 0; i < 5; i++) {
  *     }[]
  *   },
  *   infScrollTargetRef;
+ *   searchResultContainerRef;
  * }} props
  */
 export default function MemberSearchResult({
   searchResult,
   infScrollTargetRef,
+  searchResultContainerRef
 }) {
   return (
-    <div className="list-container">
+    <div className="list-container" ref={searchResultContainerRef}>
       {searchResult &&
         searchResult.map((data, idx) => (
           <div

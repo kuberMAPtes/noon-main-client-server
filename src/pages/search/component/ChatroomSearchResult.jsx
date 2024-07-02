@@ -21,15 +21,17 @@ import { FaBuilding } from "react-icons/fa";
  *     }[]
  *   };
  *   infScrollTargetRef;
+ *   searchResultContainerRef;
  * }} props
  */
 export default function ChatroomSearchResult({
   searchResult,
-  infScrollTargetRef
+  infScrollTargetRef,
+  searchResultContainerRef
 }) {
   console.log(searchResult);
   return (
-    <div className="scroll list-container">
+    <div className="scroll list-container" ref={searchResultContainerRef}>
       {
         searchResult && searchResult.map((data, idx) => (
           <div
