@@ -156,17 +156,18 @@ const Chatroom = () => {
     });
 
     // 실시간 소켓룸 및 실시간 접속자 정보 받아오기
-    socket.emit('live_socketRoomInfo', roomInfo, (socketRoom) =>{
+    socket.emit('live_socketRoomInfo', roomInfo, (liveusers) =>{
 
-      const socket = socketRef.current;
-      console.log("🌹생성된방?", socketRoom);
+      console.log("🌹실시간 유저?", liveusers);
+      setLiveParticipants(liveusers);
 
-      // 채팅방 입장하며 해당 채팅방에 있는 실시간 member Id들을 조회 
-      socket.emit("enter_room", socketRoom, (liveusers) => {
+    });
 
-        console.log("🌹채팅방 실시간 접속자 정보", liveusers);
-        setLiveParticipants(liveusers);
-      });
+    // 채팅방 입장하며 해당 채팅방에 있는 실시간 member Id들을 조회 
+    socket.emit("enter_room", roomInfo.chatroomName, (data) => {
+
+      console.log("🌹채팅방 입장", data);
+
     });
  
     // 입장과 동시에 채팅읽음처리

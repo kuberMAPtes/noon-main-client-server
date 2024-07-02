@@ -16,7 +16,7 @@
   }
 
   .liveIndicator {
-    width: 10px;
+    width: 5px;
     background-color: rgb(95, 235, 95);
     border-radius: 50%;
     margin-left: 5px;
