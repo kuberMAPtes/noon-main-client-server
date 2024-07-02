@@ -7,6 +7,7 @@ import "../../../assets/css/module/building/wiki/GetBuildingWiki.css"
 import { FaPencil } from "react-icons/fa6";
 import { RiArrowGoBackFill } from "react-icons/ri";
 import { Spinner } from "reactstrap";
+import Header from "../../../components/common/Header";
 
 export const BUILDING_WIKI_BASE_PATH = "/buildingWiki";
 
@@ -54,30 +55,33 @@ export default function GetBuildingWiki() {
   }, [content]);
 
   return (
-    <div id="wiki-container" className={wikiStyles.container}>
-      <div className={wikiStyles.btnContainer}>
-        <FaPencil
-            className={wikiStyles.btn}
-            onClick={() => navigate(`/editBuildingWiki/${buildingId}`)}
-        />
-        <RiArrowGoBackFill
-            className={wikiStyles.btn}
-            onClick={() => navigate(`/getBuildingProfile/${buildingId}`)}
-        />
+    <>
+      <Header title="위키" />
+      <div id="wiki-container" className={wikiStyles.container}>
+        <div className={wikiStyles.btnContainer}>
+          <FaPencil
+              className={wikiStyles.btn}
+              onClick={() => navigate(`/editBuildingWiki/${buildingId}`)}
+          />
+          <RiArrowGoBackFill
+              className={wikiStyles.btn}
+              onClick={() => navigate(`/getBuildingProfile/${buildingId}`)}
+          />
+        </div>
+        <h1 className={wikiStyles.title}>{buildingName}</h1>
+        <hr className={wikiStyles.contentSeparator} />
+        {
+          loading ? (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
+              <Spinner style={{ width: '3rem', height: '3rem' }} color="primary" />
+            </div>
+          ) : (
+            <>
+              
+            </>
+          )
+        }
       </div>
-      <h1 className={wikiStyles.title}>{buildingName}</h1>
-      <hr className={wikiStyles.contentSeparator} />
-      {
-        loading ? (
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
-            <Spinner style={{ width: '3rem', height: '3rem' }} color="primary" />
-          </div>
-        ) : (
-          <>
-            
-          </>
-        )
-      }
-    </div>
+    </>
   );
 }
