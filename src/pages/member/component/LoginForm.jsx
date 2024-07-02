@@ -154,28 +154,31 @@ const LoginForm = () => {
                   className={styles.formControl}
                 />
               </Form.Group>
-              <Button
-                variant="primary"
-                type="button"
-                onClick={handleLoginClick}
-                className={`mt-3 w-100 ${styles.btn} ${styles2.typicalButtonColor}`}
-              >
+              <Row
+                style={{marginTop: "14%", height:"50px"}}>
+                <Button
+                  variant="secondary"
+                  className={`${styles.linkButton} ${styles.main}`}
+                  onClick={handleLinkClick}
+                >
+                  메인으로..
+                </Button>
+                <Button
+                  variant="primary"
+                  type="button"
+                  onClick={handleLoginClick}
+                  className={`${styles.btn} ${styles.login}`}
+                >
                 로그인
-              </Button>
+                </Button>
+              </Row>
               {(validationError) && (
                 <Alert variant="danger" className="mt-3">
                   {renderLoginError(validationError, loginError)}
                 </Alert>
               )}
             </Form>
-              <Button
-                variant="secondary"
-                className={`${styles.linkButton} me-2`}
-                onClick={handleLinkClick}
-                style={{marginTop: "16px"}}
-              >
-                메인으로..
-              </Button>
+
           </Col>
         </Row>
       </Container>

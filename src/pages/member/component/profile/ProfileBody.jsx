@@ -26,7 +26,7 @@ import ProfilePhotoInput from "../ProfilePhotoInput";
 import { updateProfilePhotoUrl } from "../../function/memberAxios";
 import ProfileIntroInput from "../ProfileIntroInput";
 import DajungScore from "./DajungScore";
-
+import { FaPen } from "react-icons/fa6";
 //4가지 파라미터 다 WAS에서 받아야함
 //> setProfile등등..필요
 //> 상위컴포넌트의 커스텀 훅에서 하고 여기서는 받아쓰자.
@@ -96,21 +96,22 @@ const ProfileBody = ({
 
   return (
     <Card style={{ position: "relative" }}>
-      <Card.Body style={{ border: "2px solid #91A7FF", borderRadius: "7px" }}>
-        <Row className="mb-3 align-items-center">
-          <Col
+      <Card.Body style={{ border: "2px solid #91A7FF", borderRadius: "7px",padding:"0%",width:"100%",height:"100%" }}>
+          <div
             xs={2}
             className="d-flex justify-content-start"
             style={{ position: "absolute", left: 0, top: 0, padding: 0 }}
           >
             <LogoutForm />
-          </Col>
+          </div>
 
+        <Row className="mb-3 align-items-start" style={{margin:"0%"}}>
+          <Row style={{width:"30%", height: "30%", margin:"0%",padding:"10% 0% 0% 0%"}}>
           {toId !== fromId ? (
             <Col
               xs={12}
               className="d-flex flex-column align-items-center"
-              style={{ margin: "0px" }}
+              style={{ margin: "0px",padding:"0%" }}
             >
               <Image
                 src={profile.profilePhotoUrl || defaultPhotoUrl}
@@ -124,7 +125,7 @@ const ProfileBody = ({
             <Col
               xs={12}
               className="d-flex flex-column align-items-center"
-              style={{ margin: "0px" }}
+              style={{ margin: "0px",padding:"0%" }}
             >
               <ProfilePhotoInput
                 profile={profile}
@@ -133,7 +134,6 @@ const ProfileBody = ({
               />
             </Col>
           )}
-
           <Col xs={12}>
             <Card.Title>
               {toId === fromId ? (
@@ -165,16 +165,18 @@ const ProfileBody = ({
               )}
             </Card.Title>
           </Col>
-          <Col xs={12}>
-            <DajungScore
-              profile={profile}
-              setProfile={setProfile}
-              toId={toId}
-              fromId={fromId}
-            />
-            <Row>
-              <Col xs={12}>프로필 소개</Col>
-            </Row>
+          </Row>
+
+          <Row style={{width:"70%",height: "30%", margin:"0%",padding:"13% 0% 0% 0%"}}>
+            <Col xs={12}>
+              <DajungScore
+                profile={profile}
+                setProfile={setProfile}
+                toId={toId}
+                fromId={fromId}
+              />
+            </Col>
+            <Col xs={12} style={{fontWeight:900,fontSize:"13px"}}> <FaPen style={{ fontSize: "10px" }} />&nbsp;&nbsp;프로필 소개</Col>
             {toId===fromId ?
             <Row style={{ minHeight: "20%" }}>
               {/* <Col xs={12} style={{border: "2px solid #91A7FF", borderRadius:"7px"}}>&nbsp;{profile.profileIntro}</Col> */}
@@ -207,7 +209,9 @@ const ProfileBody = ({
               </Col>
             </Row>
             }
-          </Col>
+          </Row>
+            
+
           <Col xs={12}>
             <hr style={{ border: "1px solid #91A7FF" }} />
           </Col>

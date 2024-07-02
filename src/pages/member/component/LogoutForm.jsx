@@ -8,6 +8,7 @@ import { clearAllCookies } from '../function/memberFunc';
 import { signOut } from 'firebase/auth';
 import { auth } from '../../../firebase';
 import NormalButton from './NormalButton';
+import { showToast } from '../function/ToastNotification';
 
 
 const LogoutForm = () => {
@@ -19,16 +20,17 @@ const LogoutForm = () => {
     try {
       try {
         await signOut(auth);
-        
         console.log("Firebase auth 로그아웃 완료");
-        // alert("로그아웃 완료");
       } catch (error) {
         console.error("로그아웃 중 오류 발생:", error);
       }
-      
+
       await dispatch(logout(navigate));
+      showToast("success", "로그아웃 완료되었습니다.");
+      
     } catch (error) {
       console.error('Logout failed', error);
+      showToast("error", "로그아웃에 실패했습니다.");
     } finally {
       navigate("/member/getAuthMain");
     }
@@ -41,7 +43,7 @@ const LogoutForm = () => {
 //     if(!authorization) navigate('/member/getAuthMain');
 //   },[authorization,navigate]);
 
-  return <NormalButton onClick={handleLogout} style={{height:"20%", width:"100%",padding:"0px"}}>Logout</NormalButton>;
+  return <NormalButton onClick={handleLogout} style={{height:"16%", width:"60px",margin:"0px",padding:"0px",fontSize:"13px"}}>Logout</NormalButton>;
 };
 
 export default LogoutForm;

@@ -1,43 +1,67 @@
-.loginPage {
-    margin-top: 50px;
-  }
-  
-  .backButton {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-  }
-  
-  .logo {
-    margin-bottom: 20px;
-  }
-  
-  .loginButton {
-    width: 100%;
-    margin-bottom: 10px;
-  }
-  .customButton {
-    background-color: #91a7ff !important;
-    border-color: #91a7ff !important;
-    color: white !important;
-  }
-  .customButton:hover {
-    background-color: #759aff !important;
-    border-color: #759aff !important;
+
+
+.container{
+  padding:0% !important;
+  width: 100% !important;
 }
-  .recentLoginText {
-    margin: 10px 0;
-  }
-  
-  .emailLogin {
-    display: block;
-    margin: 20px 0;
-  }
-  
-  .welcomeBanner {
-    background-color: #f8f9fa;
-    padding: 20px;
-    border-radius: 10px;
-    margin-top: 20px;
-  }
-  
+.loginButtons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh; /* Full height to center vertically */
+  margin: 25% 0% 0% 0% !important;
+}
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px; /* Optional: Adjust the spacing below the logo */
+}
+.loginPage {
+  margin-top: 50px;
+}
+
+.backButton {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+
+.loginButton {
+  width: 100%;
+  margin-bottom: 10px;
+}
+.customButton {
+  background-color: #91a7ff !important;
+  border-color: #91a7ff !important;
+  color: white !important;
+}
+.customButton:hover {
+  background-color: #759aff !important;
+  border-color: #759aff !important;
+}
+.recentLoginText {
+  margin: 10px 0;
+}
+
+.emailLogin {
+  display: block;
+  margin: 20px 0;
+}
+
+.welcomeBanner {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+.textRight {
+  text-align: right;
+}
+
+.rightAlignLink {
+  font-size: 0.9rem;
+  float: right;
+}

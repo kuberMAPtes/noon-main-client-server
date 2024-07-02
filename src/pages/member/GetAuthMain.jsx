@@ -91,13 +91,7 @@ const GetAuthMain = () => {
 
   return (
     <ForegroundTemplate>
-      <Container className={`mt-5 ${styles.container}`}>
-        <Row className="justify-content-center">
-          <Col md={8} lg={6} className="text-center">
-            <LoginButtons onLoginClick={handleLoginClick} onGoogleLoginClick={handleGoogleLoginClick} />
-          </Col>
-        </Row>
-      </Container>
+      <LoginButtons onLoginClick={handleLoginClick} onGoogleLoginClick={handleGoogleLoginClick} />
     </ForegroundTemplate>
   );
 };
