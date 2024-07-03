@@ -249,8 +249,8 @@ const BuildingInfo = ({ subscriptionData, setSubscriptionData }) => {
                         }}
                       >
                         <img
-                          src={subscriber.profilePhotoUrl || '/image/defaultMemberProfilePhoto.png'}
-                          alt={subscriber.nickname}
+                          src={subscriber.member.profilePhotoUrl || '/image/defaultMemberProfilePhoto.png'}
+                          alt={subscriber.member.nickname}
                           style={{
                             borderRadius: '50%',
                             width: '50px',
