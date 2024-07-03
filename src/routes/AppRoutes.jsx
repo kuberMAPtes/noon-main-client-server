@@ -34,7 +34,7 @@ import PrivateRoute from "./PrivateRoute";
 import KakaoNav from "../pages/member/KakaoNav";
 import Search from "../pages/search/Search";
 import GuestRoute from './GuestRoute';
-import B from '../pages/member/function/test/B';
+// import B from '../pages/member/function/test/B';
 
 import GetBuilding from '../pages/building/GetBuilding';
 import GetCustomerSupport from '../pages/CustomerSupport/GetCustomerSupport';
@@ -105,7 +105,7 @@ const AppRoutes = () => {
         <Routes location={location}>
           {/* <Route path="/" element={<Navigate to="/member/getAuthMain" />} /> */}
           <Route path="/" element={<Navigate to="/member/getAuthMain" />} />
-          <Route path="/b" element={<B />}></Route>
+          {/* <Route path="/b" element={<B />}></Route> */}
           <Route path="/testComponent" element={<TestComponent />}></Route>
           <Route path="/member">
             <Route path="getAuthMain" element={<GuestRoute><GetAuthMain /></GuestRoute>} />
