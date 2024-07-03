@@ -292,7 +292,11 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                         <option value="HELP_REQUEST">도움 요청</option>
                     </Form.Control>
                 </Form.Group>
-
+                <div className={styles.noticeBox}>
+                    <span className={styles.noticeBoxText}>
+                        카테고리를 선택해 피드의 목적을 강조할 수 있습니다.
+                    </span>
+                </div>
                 <Form.Group controlId="feedTitle" className="mb-3">
                     <Form.Control
                         type="text"
@@ -368,7 +372,12 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                         ))}
                     </ListGroup>
                 </Form.Group>
-
+                <div className={styles.noticeBox}>
+                    <span className={styles.noticeBoxText}>
+                        파일은 사진과 동영상을 여러 개 넣을 수 있습니다. <br/>
+                        하나의 파일 당 최대 100MB로 제한됩니다.
+                    </span>
+                </div>
                 {feedData.category === 'EVENT' && (
                 <Form.Group controlId="eventDate" className="mb-3">
                     <Form.Label>이벤트 날짜 : </Form.Label>

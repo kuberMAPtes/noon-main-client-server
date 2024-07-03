@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { Button, Form, Card, Container } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import axios_api from '../../../../lib/axios_api';
 import CheckModal from '../Common/CheckModal';
 import navigator from '../../util/Navigator'
-import { Label } from 'reactstrap';
 import styles from '../../css/FeedForm/FeedForm.module.css';
 // import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
 import buttonStyles from '../../css/common/FeedButton.module.css';
+import { IoWarning } from 'react-icons/io5';
+import { AiFillSound  } from "react-icons/ai";
 
 const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, onSave }) => {
     const [feedData, setFeedData] = useState({
@@ -152,10 +153,14 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
     return (
         <div className={styles.feedFormContainer}>
             <Form onSubmit={handleSubmit}>
-                <Label>확성기로 하고 싶은 말을 작성하세요!</Label>
+                <div className={styles.noticeBox}>
+                    <span className={styles.noticeBoxText}>
+                        <IoWarning/> 확성기는 생성 후 수정이 되지 않습니다.
+                    </span>
+                </div>
+                <div className={styles.feedFormTitle}><AiFillSound/> 확성기로 하고 싶은 말을 작성하세요!</div>
                 {/* 내용 */}
                 <Form.Group controlId="feedText" className="mb-3">
-                    <Form.Label>내용</Form.Label>
                     <Form.Control
                         as="textarea"
                         name="feedText"
