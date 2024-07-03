@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axiosInstance from '../../../lib/axiosInstance';
+import '../../feed/css/common/FeedNotFound.css';
+
 import {
   Card,
   CardHeader,
@@ -32,7 +34,7 @@ const ChatroomList = () => {
   };
 
   const handleChatroom = async (chatroomID) => {
-    navigate('../../chat/chatroom?chatroomID='+chatroomID)
+    navigate('../../chat/chatroom?chatroomID=' + chatroomID);
   }
 
   useEffect(() => {
@@ -40,18 +42,22 @@ const ChatroomList = () => {
   }, [buildingId]);
 
   return (
-    <div className="chatroom-list">
+    <div className="chatroom-list" style={{ marginBottom: '100px' }}>
 
-      <Card style={{marginBottom:'100px'}}>
-        <CardHeader>
-          채팅방 목록
-        </CardHeader>
-        <CardBody>
+      {chatroomList && chatroomList.length > 0 ? (
+        <>
+          <div className='chatroom-title' style={{
+            textAlign: 'center',
+            marginBottom: '10px',
+            fontSize: '24px',
+            fontWeight: 'bold',
+            color: 'inherit'
+          }}>
+            <i className="fa-solid fa-comments" /> 채팅방 목록
+          </div>
 
-
-        {chatroomList && chatroomList.length > 0 ? (
-          chatroomList.map((chatroom) => (
-            <Card key={chatroom.chatroomID}>
+          {chatroomList.map((chatroom) => (
+            <Card key={chatroom.chatroomID} style={{ marginTop: '20px' }}>
               <CardBody>
                 <Table responsive>
                   <tbody>
@@ -63,15 +69,17 @@ const ChatroomList = () => {
                 </Table>
               </CardBody>
             </Card>
-          ))
-        ) : (
-            <div colSpan="2" style={{ textAlign: 'center', fontSize: '20px', padding: '20px'}}>
-              <h3><FcAbout/> 아직 채팅방이 존재하지 않습니다!</h3> <br/>첫 번째 채팅방을 만들어보세요!
-            </div>
-        )}
+          ))}
+        </>
+      ) : (
 
-        </CardBody>
-      </Card>
+        <div className="not-found-container">
+          <h1 className='not-found-title'><FcAbout /> </h1>
+          <h1 className="not-found-title">채팅방이 없습니다!</h1>
+          <p className="not-found-message">새로운 채팅방을 만들어보세요 :D</p>
+        </div>
+
+      )}
 
     </div>
   );
