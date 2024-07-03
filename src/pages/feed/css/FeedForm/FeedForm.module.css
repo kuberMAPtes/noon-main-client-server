@@ -99,3 +99,22 @@
     text-align: center; /* 중앙 정렬 */
     margin: 20px 0; /* 상하 여백 */
 }
+
+.feedFormSubTitle {
+    font-size: 1.2rem; /* 글씨 크기 */
+    text-align: center; /* 중앙 정렬 */
+    margin: 10px 0; /* 상하 여백 */
+}
+
+/* DatePicker 스타일 */
+.datePickerWrapper {
+    display: flex;
+    gap: 10px; /* 요소 사이의 간격 */
+}
+
+.datePickerInput {
+    width: 100%;
+}
+
+/* text-align: center;
+width: 100%; */

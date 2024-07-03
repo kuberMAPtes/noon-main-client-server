@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Card, ListGroup, Badge, InputGroup } from 'react-bootstrap';
+import { Form, Button, ListGroup, Badge } from 'react-bootstrap';
 import axios_api from '../../../../lib/axios_api';
 import CheckModal from '../Common/CheckModal';
 import navigator from '../../util/Navigator';
@@ -7,6 +7,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css'; // 달력 전용 css;
 import styles from '../../css/FeedForm/FeedForm.module.css';
 import buttonStyles from '../../css/common/FeedButton.module.css';
+import { FaRegCalendarCheck } from "react-icons/fa";
 
 const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, onSave }) => {
     const [feedData, setFeedData] = useState({
@@ -294,7 +295,8 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                 </Form.Group>
                 <div className={styles.noticeBox}>
                     <span className={styles.noticeBoxText}>
-                        카테고리를 선택해 피드의 목적을 강조할 수 있습니다.
+                        카테고리를 선택해 피드의 목적을 강조할 수 있습니다.<br/>
+                        이벤트 피드는 생성 후 수정이 되지 않습니다.
                     </span>
                 </div>
                 <Form.Group controlId="feedTitle" className="mb-3">
@@ -380,16 +382,34 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                 </div>
                 {feedData.category === 'EVENT' && (
                 <Form.Group controlId="eventDate" className="mb-3">
-                    <Form.Label>이벤트 날짜 : </Form.Label>
-                    <DatePicker
-                        selected={eventDate}
-                        onChange={handleDateChange}
-                        dateFormat="yyyy/MM/dd h:mm aa"
-                        showTimeSelect
-                        timeFormat="HH:mm"
-                        timeIntervals={30}
-                        className="form-control"
-                    />
+                    <div className={styles.feedFormSubTitle}><FaRegCalendarCheck/> 특별한 날을 선택해주세요</div>
+                    <div className={styles.datePickerWrapper}>
+                        {/* <DatePicker
+                            selected={eventDate}
+                            onChange={handleDateChange}
+                            dateFormat="yyyy/MM/dd h:mm aa"
+                            showTimeSelect
+                            timeFormat="HH:mm"
+                            timeIntervals={30}
+                            className={`form-control ${styles.datePickerInput}`}
+                        /> */}
+                        <DatePicker
+                            selected={eventDate}
+                            onChange={handleDateChange}
+                            dateFormat="yyyy/MM/dd"
+                            className={`form-control ${styles.datePickerInput}`}
+                        />
+                        <DatePicker
+                            selected={eventDate}
+                            onChange={handleDateChange}
+                            showTimeSelect
+                            showTimeSelectOnly
+                            timeIntervals={30}
+                            timeCaption="Time"
+                            dateFormat="h:mm aa"
+                            className={`form-control ${styles.datePickerInput}`}
+                        />
+                    </div>
                 </Form.Group>
                 ) }
 
