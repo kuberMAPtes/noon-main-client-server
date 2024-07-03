@@ -27,6 +27,8 @@ import {
   FaUserPlus,
 } from "react-icons/fa";
 import useFooterToggle from "../../components/hook/useFooterToggle";
+import Header from "../../components/common/Header";
+import ProgressBar from "./component/ProgressBar";
 
 const AddMember = () => {
   useFooterToggle();
@@ -117,7 +119,10 @@ const AddMember = () => {
   // }, [location.state]);
 
   return (
-    <Container className="mt-5">
+    <>
+    <Header title={"개인정보 입력"}/>
+      <ProgressBar currentStep={3}/>
+    <Container className="mt-2">
       <Row className="justify-content-center">
         <Col xs={12} md={8} lg={6}>
           <h1
@@ -326,6 +331,7 @@ const AddMember = () => {
         </Col>
       </Row>
     </Container>
+    </>
   );
 };
 

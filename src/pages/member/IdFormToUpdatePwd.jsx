@@ -9,6 +9,7 @@ import styles from "../../assets/css/module/member/base.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { setFooterEnbaled } from "../../redux/slices/footerEnabledSlice";
 import useFooterToggle from "../../components/hook/useFooterToggle";
+import Header from "../../components/common/Header";
 const IdFormToUpdatePwd = () => {
   
   const [memberId, setMemberId] = useState("");
@@ -18,6 +19,7 @@ const IdFormToUpdatePwd = () => {
     useState("");
 
   const navigate = useNavigate();
+  const [isNavigating, setIsNavigating] = useState(false);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -29,6 +31,7 @@ const IdFormToUpdatePwd = () => {
 
   const handleClick = () => {
     // alert("handleClick실행 :: "+isMemberIdValid);
+    setIsNavigating(true);
     if (isMemberIdValid) {
       //휴대폰번호로 네비게이션
       sessionStorage.setItem("w", memberId); // 세션 스토리지에 memberId 저장
@@ -38,8 +41,14 @@ const IdFormToUpdatePwd = () => {
     }
   };
 
+  if(isNavigating){
+    return null;
+  }
+
   return (
-    <Container>
+    <>
+    <Header title={"비밀번호 재설정"}/>
+    <Container style={{marginTop:"60px"}}>
       <strong style={{ fontSize: "24px" }}>
         <TbUserSearch />
         &nbsp;&nbsp;&nbsp;비밀번호 재설정
@@ -76,6 +85,7 @@ const IdFormToUpdatePwd = () => {
         </Button>
       </Form>
     </Container>
+    </>
   );
 };
 

@@ -26,11 +26,11 @@ const LogoutForm = () => {
       }
 
       await dispatch(logout(navigate));
-      showToast("success", "로그아웃 완료되었습니다.");
+      showToast("success", "로그아웃 성공!");
       
     } catch (error) {
       console.error('Logout failed', error);
-      showToast("error", "로그아웃에 실패했습니다.");
+      showToast("error", "로그아웃 실패!");
     } finally {
       navigate("/member/getAuthMain");
     }

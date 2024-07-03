@@ -69,7 +69,17 @@
 }
 .myAbsoluteRow {
   position: absolute;
-  top: 83.5%; /* 부모 요소의 아래에 위치 */
+  top: 80.5%; /* 부모 요소의 아래에 위치 */
+  left: 71.5%;
+  width: 100px; /* 원하는 너비 설정 */
+  background-color: white; /* 배경색 설정 */
+  z-index: 1000; /* 다른 요소 위에 표시 */
+  margin: 0;
+  padding: 0;
+}
+.myAbsoluteRowTwo {
+  position: absolute;
+  top: 64%; /* 부모 요소의 아래에 위치 */
   left: 71.5%;
   width: 100px; /* 원하는 너비 설정 */
   background-color: white; /* 배경색 설정 */

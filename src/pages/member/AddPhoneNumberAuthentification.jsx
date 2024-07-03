@@ -33,6 +33,8 @@ import { FaPhoneVolume } from "react-icons/fa6";
 import Header from "../../components/common/Header";
 import NormalButton from "./component/NormalButton";
 import NormalButtonTwo from "./component/NormalButtonTwo";
+import ProgressBar from "./component/ProgressBar";
+import { showToast } from "./function/ToastNotification";
 const AddPhoneNumberAuthentification = () => {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -113,7 +115,10 @@ const AddPhoneNumberAuthentification = () => {
         const secretIv = ivData;
         // alert("휴대폰 번호 등록에 성공했습니다.");
         //리로드 해야 전화번호 바뀐게 프로필에 제대로 반영이 된다.
-        window.location.href = `/member/getMemberProfile/${secretId}/${secretIv}`;
+        showToast("success", "휴대폰 번호 등록 성공!");
+        setTimeout(() => {
+          window.location.href = `/member/getMemberProfile/${secretId}/${secretIv}`;
+        }, 1200); // 1000 밀리초 = 1초
       } else {
         // alert("휴대폰 번호 등록에 실패했습니다.");
       }
@@ -167,10 +172,10 @@ const AddPhoneNumberAuthentification = () => {
 
   return (
     <>
-    <Header/>
-    <ForegroundTemplate>
+    <Header title={"휴대폰 인증"}/>
+    {toUrl === "addMember" && <ProgressBar currentStep={2}/>}
       <Container
-        style={{marginTop:"100px",marginLeft:"35px",marginRight:"0px"}}
+        style={{marginTop:"40px",marginLeft:"35px",marginRight:"0px"}}
       >
         <Row
           className="justify-content-center"
@@ -371,7 +376,6 @@ const AddPhoneNumberAuthentification = () => {
           </Col>
         </Row>
       </Container>
-    </ForegroundTemplate>
     </>
   );
 };

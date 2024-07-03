@@ -1,0 +1,62 @@
+.progressContainer {
+  display: flex;
+  justify-content: center; /* 중앙에 배치 */
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 0; /* 패딩 제거 */
+  width: 100%;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  outline: none; /* outline 제거 */
+}
+
+.stepNumber {
+  background-color: #e0e0e0;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: white;
+  outline: none; /* outline 제거 */
+}
+
+.stepLabel {
+  margin-top: 5px;
+  font-size: 14px;
+  color: #000; /* 기본 글씨 색상 */
+}
+
+.progressLine {
+  width: 50px;
+  height: 4px;
+  background-color: #e0e0e0;
+  margin: 0 10px;
+}
+
+.active .stepNumber {
+  background-color: #91a7ff;
+}
+
+.active .stepLabel {
+  color: #91a7ff;
+}
+
+.active .progressLine {
+  background-color: #91a7ff;
+}
+
+.completed .stepNumber {
+  background-color: #91a7ff;
+}
+
+.completed .stepLabel {
+  color: #91a7ff;
+}

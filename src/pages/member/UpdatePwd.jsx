@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import useFooterToggle from "../../components/hook/useFooterToggle";
 import { useDispatch } from "react-redux";
 import { setFooterEnbaled } from "../../redux/slices/footerEnabledSlice";
+import Header from "../../components/common/Header";
 
 const UpdatePwd = () => {
   const [pwd, setPwd] = useState("");
@@ -48,13 +49,15 @@ const UpdatePwd = () => {
   };
 
   return (
+    <>
+    <Header title={"비밀번호 재설정"}/>
     <Container
       className="flex-column align-items-center justify-content-center"
       style={{
         minHeight: "100vh",
         maxWidth: "600px",
         margin: "0 auto",
-        paddingTop: "100px",
+        paddingTop: "40px",
       }}
     >
       <h2 className="mb-4">비밀번호 재설정</h2>
@@ -101,6 +104,7 @@ const UpdatePwd = () => {
         확인
       </Button>
     </Container>
+    </>
   );
 };
 

@@ -10,7 +10,6 @@ import {
 } from "./function/terms"; // 약관 내용 파일 가져오기
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import styles from "../../assets/css/module/member/GetSignUpTermAgreement.module.css";
-import ForegroundTemplate from "../../components/common/ForegroundTemplate";
 import useFooterToggle from "../../components/hook/useFooterToggle";
 import { useDispatch } from "react-redux";
 import { setFooterEnbaled } from "../../redux/slices/footerEnabledSlice";
@@ -19,6 +18,7 @@ import { TbArrowBigRight } from "react-icons/tb";
 import NormalButtonTwo from "./component/NormalButtonTwo";
 import NormalButton from "./component/NormalButton";
 import { IoDocumentText } from "react-icons/io5";
+import ProgressBar from "./component/ProgressBar";
 const GetSignUpTermAgreement = () => {
   useFooterToggle();
   const [agreed, setAgreed] = useState(false);
@@ -65,17 +65,17 @@ const GetSignUpTermAgreement = () => {
 
   return (
     <>
-      <Header />
-      <ForegroundTemplate>
+      <Header title={"회원가입 약관 동의"} />
+      <ProgressBar currentStep={1}/>
         <Container
           className={styles["fullscreen-container"]}
           {...handlers}
-          style={{ width: "100%", margin: "60px 0px 0px 0px", padding: "0px" }}
+          style={{ width: "100%", margin: "0px 0px 0px 0px", padding: "0px" }}
         >
           <Row className="justify-content-center" style={{margin:"0px", padding:"0px"}}>
             <Col md={8} style={{padding: "0px"}}>
-              <Card style={{ position: "relative" }}>
-                <Card.Body style={{ padding: "30px 0px 80px 0px",margin:"10px 0px 10px 0px" }}>
+              <Card style={{ position: "relative",border:'none' }}>
+                <Card.Body style={{ padding: "0px 0px 80px 0px",margin:"0px 0px 10px 0px" }}>
                   <h1 className="mb-4" style={{display:"inline-block",margin:"0px 15px 0px 15px"}}><IoDocumentText />회원가입 약관 동의</h1>
 
                   <Card style={{margin: "0px 15px 0px 15px"}}>
@@ -113,16 +113,19 @@ const GetSignUpTermAgreement = () => {
                         id="agree"
                         label="모든 약관에 동의합니다."
                         checked={agreed}
+                        style={{display:"inline-block",margin:"0px 15px 0px 15px"}}
                         onChange={handleCheckboxChange}
                       />
-                      <Button
-                        variant="primary"
+                      <br/>
+                      <br/>
+                      <NormalButton
                         className="mt-3"
                         onClick={handleAgree}
                         disabled={!agreed}
+                        style={{display:"inline-block",margin:"0px 15px 0px 15px",padding:"",opacity: agreed ? "1" : "0.6"}}
                       >
                         동의하고 계속하기
-                      </Button>
+                      </NormalButton>
                     </Form>
                   )}
                   {currentCard === 0 && (
@@ -152,7 +155,6 @@ const GetSignUpTermAgreement = () => {
             </Col>
           </Row>
         </Container>
-      </ForegroundTemplate>
     </>
   );
 };
