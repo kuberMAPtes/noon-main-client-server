@@ -19,6 +19,9 @@
     border-radius: 50%;
     border: 3px solid #91A7FF;
     margin: 0 auto 10px auto;
+    text-decoration: none; /* 링크 밑줄 제거 */
+    color: inherit; /* 부모 요소의 글자 색상 상속 */
+    cursor: default; /* 기본 커서 사용 */
 }
 .moreCircle {
     display: flex;
