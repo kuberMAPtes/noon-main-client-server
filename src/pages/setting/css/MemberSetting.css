@@ -2,7 +2,6 @@
   width: 80%;
   display: flex;
   flex-direction: column;
-  margin-top: 24px;
 }
 
 .title-container {
@@ -49,13 +48,19 @@
 
 .setting-content {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   gap: 6px;
   margin-left: 16px;
 }
 
 .setting-content * {
   margin: 0px;
+}
+
+.setting-content h3 {
+  font-size: 14px;
 }
 
 .btn--apply-setting {
