@@ -214,7 +214,7 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
             <Form onSubmit={handleSubmit}>
                 <div className={styles.noticeBox}>
                     <span className={styles.noticeBoxText}>
-                        <IoWarning/> 투표 게시판은 생성 후 수정이 되지 않습니다.
+                        <IoWarning/> 투표 피드는 생성 후 수정이 되지 않습니다.
                     </span>
                 </div>
                 {/* 제목 */}
