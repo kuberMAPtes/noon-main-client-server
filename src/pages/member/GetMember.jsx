@@ -80,7 +80,7 @@ const GetMember = () => {
 
   return (
     <>
-    <Header/>
+    <Header title={"개인정보 보기"}/>
     <Container
       className="mt-5"
       style={{

@@ -227,7 +227,7 @@ const ProfileBody = ({
           feedSectionRef={feedSectionRef}
         />
 
-        <ProfileActions toId={toId} fromId={fromId} />
+        <ProfileActions toId={toId} fromId={fromId}/>
       </Card.Body>
     </Card>
   );

@@ -87,9 +87,10 @@ export const login = createAsyncThunk(
             showToast("success", "로그인 성공!");
             navigateRealMainPage(navigate);
           }
-
-
         }
+        showToast("success", "로그인 성공!");
+        console.log("returnMember" + JSON.stringify(returnMember));
+        // alert("returnMember" + JSON.stringify(returnMember));
         return { member: returnMember, authorization: true };
       }
       //잘못된경우

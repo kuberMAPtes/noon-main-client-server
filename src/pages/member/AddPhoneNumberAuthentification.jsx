@@ -33,6 +33,7 @@ import { FaPhoneVolume } from "react-icons/fa6";
 import Header from "../../components/common/Header";
 import NormalButton from "./component/NormalButton";
 import NormalButtonTwo from "./component/NormalButtonTwo";
+import ProgressBar from "./component/ProgressBar";
 const AddPhoneNumberAuthentification = () => {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -167,10 +168,10 @@ const AddPhoneNumberAuthentification = () => {
 
   return (
     <>
-    <Header/>
-    <ForegroundTemplate>
+    <Header title={"휴대폰 인증"}/>
+    {toUrl === "addMember" && <ProgressBar currentStep={2}/>}
       <Container
-        style={{marginTop:"100px",marginLeft:"35px",marginRight:"0px"}}
+        style={{marginTop:"40px",marginLeft:"35px",marginRight:"0px"}}
       >
         <Row
           className="justify-content-center"
@@ -371,7 +372,6 @@ const AddPhoneNumberAuthentification = () => {
           </Col>
         </Row>
       </Container>
-    </ForegroundTemplate>
     </>
   );
 };

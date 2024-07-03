@@ -37,8 +37,7 @@ const GetMemberProfile = () => {
 
   return (
     <>
-    <Header
-    title={fromId===toId ? "내 프로필" : `${profile.nickname}님의 프로필`}/>
+    <Header title={fromId===toId ? "내 프로필" : `${profile.nickname}님의 프로필`}/>
     <Container
       fluid
       className={`${module.container} d-flex flex-column justify-content-start align-items-center pt-6`}

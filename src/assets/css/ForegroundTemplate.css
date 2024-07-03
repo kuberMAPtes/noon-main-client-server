@@ -4,6 +4,6 @@
     height: 100%;
     top: 0;
     left: 0;
-    z-index: 2; /* Foreground는 Background보다 높은 z-index */
+    z-index: 1; /* Foreground는 Background보다 높은 z-index */
   }
   

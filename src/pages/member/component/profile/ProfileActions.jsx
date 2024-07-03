@@ -8,7 +8,7 @@ import {
 } from "react-icons/fa";
 import { MdMoreHoriz } from "react-icons/md";
 import AnimatedDiv from "../AnimatedDiv";
-import profile from "../../../../assets/css/module/member/GetMemberProfile.module.css";
+import profileModule from "../../../../assets/css/module/member/GetMemberProfile.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import base from "../../../../assets/css/module/member/base.module.css";
 import NormalButton from "../NormalButton";
@@ -22,7 +22,7 @@ import { RiCustomerServiceLine } from "react-icons/ri";
 import { AiFillAlert } from "react-icons/ai";
 import {chatRequest} from "../../../Chat/function/axios_api";
 import ChatRequestModal from "./ChatRequestModal";
-const ProfileActions = ({ toId, fromId }) => {
+const ProfileActions = ({ toId, fromId}) => {
   const [showMenu, setShowMenu] = React.useState(false);
   const member = useSelector((state) => state.auth.member);
   const { encryptedData, ivData } = useEncryptId(member?.memberId);
@@ -71,10 +71,10 @@ const ProfileActions = ({ toId, fromId }) => {
         <Row style={{ padding: "0px", margin: "0px" }}>
           <Col xs={6}>
             <div
-              className={`${profile.memberCircle} ${base.hoverStyle}`}
+              className={`${profileModule.memberCircle} ${base.hoverStyle}`}
               onClick={() => navigate("/member/getMember")}
             >
-              <div className={profile["circle-profile-icon"]}>
+              <div className={profileModule["circle-profile-icon"]}>
                 <FaUserCheck />
               </div>
             </div>
@@ -99,7 +99,7 @@ const ProfileActions = ({ toId, fromId }) => {
           </Col> */}
           <Col xs={6}>
             <div
-              className={`${profile.circle} ${base.hoverStyle}`}
+              className={`${profileModule.circle} ${base.hoverStyle}`}
               
               onClick={handleToggle}
             >
@@ -111,41 +111,15 @@ const ProfileActions = ({ toId, fromId }) => {
             </div>
           </Col>
 
-          {(toId!==fromId && showMenu) && (
-              <Row className={`${profile.absoluteRow}`} style={{width:"28%"}}>
-                <AnimatedDiv 
-                style={{ width: "100%" }}
-                onClick={() => navigate("/setting")}>
-                  <IoSettingsOutline />
-                  <span style={{ padding: "0px 5px 0px 2px" }}></span>환경설정
-                  <span style={{ padding: "0px 5px 0px 2px" }}></span>
-                </AnimatedDiv>
-                <AnimatedDiv
-                style={{ width: "100%" }}
-                onClick={() => navigate("/customerSupport")}>
-                  <RiCustomerServiceLine />
-                  <span style={{ padding: "0px 5px 0px 2px" }}></span>고객지원
-                  <span style={{ padding: "0px 5px 0px 2px" }}></span>
-                </AnimatedDiv>
-
-                {fromId !== toId && (
-                  <>
-                    <AnimatedDiv
-                      style={{ width: "100%" }}
-                      onClick={() =>
-                        navigate(`/customerSupport/addReport/${toId}`)
-                      }
-                    >
-                      <AiFillAlert />
-                      <span style={{ padding: "0px 5px 0px 2px" }}></span>신고하기
-                      <span style={{ padding: "0px 5px 0px 2px" }}></span>
-                    </AnimatedDiv>
-                  </>
-                )}
-              </Row>
-          )}
-          {(toId===fromId && showMenu) && (
-              <Row className={`${profile.myAbsoluteRow}`} style={{width:"28%"}}>
+          {(showMenu) && (
+              <Row className={
+                toId !== fromId
+                  ? profileModule.absoluteRow
+                  : member?.phoneNumber && member?.phoneNumber.includes('X')
+                  ? profileModule.myAbsoluteRowTwo
+                  : profileModule.myAbsoluteRow
+              }
+               style={{width:"28%"}}>
                 <AnimatedDiv 
                 style={{ width: "100%" }}
                 onClick={() => navigate("/setting")}>

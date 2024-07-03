@@ -1,4 +1,5 @@
 import { login } from "../../../redux/slices/authSlice";
+import { navigateRealMainPage } from "../../../util/mainPageUri";
 import {
   addMember,
   checkMemberId,
@@ -235,7 +236,7 @@ export const addMemberSubmit = async (
     loginWay: "signUp",
   };
 
-  const { member } = await dispatch(login({ loginData, navigate }));
+  const { member } = (await dispatch(login({ loginData, navigate }))).payload;
   //alert("멤버 info 쿠키"+member, info, Cookies.get("AuthToken"));
   console.log("info:", info);
   // console.log("Cookies.get(AuthToken):", Cookies.get("AuthToken"));
@@ -247,7 +248,7 @@ export const addMemberSubmit = async (
     Cookies.remove("addMemberKey"); // 쿠키 삭제 휴대폰인증할때 받은 회원가입 권한 무효화
     Cookies.remove("user-data"); //휴대폰 번호
     //alert("회원가입이 완료되었습니다.");
-    navigate("/member/addMemberResult");
+    navigateRealMainPage(navigate);
   } else {
     //alert("오류가 발생하였습니다.");
   }
