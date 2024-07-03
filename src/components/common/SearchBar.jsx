@@ -11,7 +11,7 @@ export const PARAM_KEY_SEARCH_KEYWORD = "search-keyword";
  * }} prop
  * @returns JSX.Element
  */
-export default function SearchBar({typeCallback, searchCallback, isSearchButtonEnabled = true}) {
+export default function SearchBar({typeCallback, searchCallback, className, isSearchButtonEnabled = true}) {
   const [queryParams, setQueryParams] = useSearchParams();
 
   const searchKeywordInputRef = useRef(null);
@@ -24,7 +24,7 @@ export default function SearchBar({typeCallback, searchCallback, isSearchButtonE
   }, []);
 
   return (
-    <InputGroup className="mb-3 search-bar-container">
+    <InputGroup className={`mb-3 ${className}`}>
       <Form.Control
           onChange={(e) => typeCallback(e.target.value)}
           ref={searchKeywordInputRef}

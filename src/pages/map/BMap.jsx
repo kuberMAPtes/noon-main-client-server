@@ -262,6 +262,7 @@ export default function BMap() {
         <SearchBar
             typeCallback={(text) => setPlaceSearchKeyword(text)}
             searchCallback={() => searchPlaceList(placeSearchKeyword, onSearchPlace, queryParams, setQueryParams, setLoading, setPlacesSearchResultExists)}
+            className={mapStyles.searchBarContainer}
           />
         <button
             type="button"

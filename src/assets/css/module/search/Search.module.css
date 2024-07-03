@@ -1,0 +1,22 @@
+.searchContainer {
+  display: flex;
+  flex-direction: column;
+  height: 85vh;
+  width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.searchBarContainer {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 12px;
+  margin-bottom: 0;
+}
+
+.searchBarContainer button {
+  margin: 0;
+  background-color: #9BAAF8;
+  border: none;
+}
