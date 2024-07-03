@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Image, Card, CardBody, CardImg, CardText } from 'react-bootstrap';
-import { FaHeart, FaRegHeart, FaBookmark, FaRegBookmark, FaBuilding, FaRegEye, FaCommentAlt } from 'react-icons/fa';
+import { FaHeart, FaRegHeart, FaBookmark, FaRegBookmark, FaBuilding, FaRegEye, FaCommentAlt, FaUserCheck } from 'react-icons/fa';
 import { toggleLike, toggleBookmark } from '../../axios/FeedAxios';
 import navigate from '../../util/Navigator'
 import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
@@ -34,6 +34,7 @@ const FeedItem = ({ data, memberId }) => {
         mainActivated,
         writtenTime,        // 포멧팅 처리
         feedAttachmentId,
+        recommendMember
     } = data;
 
     const [liked, setLiked] = useState(like);
@@ -92,6 +93,11 @@ const FeedItem = ({ data, memberId }) => {
 
     return (
         <div className={styles.feedItemContainer}>
+            {recommendMember && (
+                <div className={styles.recommendMember}>
+                    <FaUserCheck color="blue" size='20' /> {recommendMember} 님이 좋아하는 피드입니다.
+                </div>
+            )}
             <Card className={(isNoticeCategory ? styles.feedItemNotionColor : '') 
                 + (isEventCategory ? styles.feedItemEventColor : '')
                 + (isMegaphoneCategory ? styles.feedItemMegaphoneColor : '')}>
