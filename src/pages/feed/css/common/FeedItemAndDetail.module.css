@@ -160,3 +160,26 @@
     font-size: 13px;
     color: #888; /* 부드러운 회색 텍스트 색상 */
 }
+
+.tagBadge {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 5px;
+    cursor: pointer;
+    background-color: #9BAAF8 !important; /* 배지 색상 변경 */
+    font-size: 0.9em; 
+    padding: 0.5em 1em;
+    color: white;
+}
+
+.recommendMember {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #9BAAF8;
+    display: flex;
+    align-items: center;
+}
+
+.recommendMember svg {
+    margin-right: 5px;
+}

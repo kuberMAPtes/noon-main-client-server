@@ -6,7 +6,7 @@ import navigator from '../../util/Navigator'
 import VotePreview from './VotePreview';
 import styles from '../../css/FeedForm/FeedForm.module.css';
 import buttonStyles from '../../css/common/FeedButton.module.css';
-
+import { IoWarning } from "react-icons/io5";
 // import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
 
 const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, onSave }) => {
@@ -212,6 +212,11 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
     return (
         <div className={styles.feedFormContainer}>
             <Form onSubmit={handleSubmit}>
+                <div className={styles.noticeBox}>
+                    <span className={styles.noticeBoxText}>
+                        <IoWarning/> 투표 게시판은 생성 후 수정이 되지 않습니다.
+                    </span>
+                </div>
                 {/* 제목 */}
                 <Form.Group controlId="feedTitle" className="mb-3">
                     <Form.Control
@@ -274,6 +279,12 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
                 </Form.Group>
                 <hr/>
                 {/* 투표 생성*/}
+                <div className={styles.noticeBox}>
+                    <span className={styles.noticeBoxText}>
+                        투표를 생성해서 다양한 사람들의 의견을 들어보세요! <br/>
+                        투표 옵션을 추가하여 다양한 선택지를 만들 수 있습니다.
+                    </span>
+                </div>
                 <Form.Group className="mb-3">
                     <Form.Label>투표 질문</Form.Label>
                     <Form.Control
