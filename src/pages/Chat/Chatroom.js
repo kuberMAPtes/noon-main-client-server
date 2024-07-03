@@ -23,8 +23,11 @@ const Chatroom = () => {
   const member = useSelector((state) => state.auth.member);
   const authorization = useSelector((state) => state.auth.authorization);
   const memberID = member.memberId
-  const chatroomMemberRole = roomInfo.chatroomCreatorId === memberID ? 'OWNER' : 'MEMBER';
-
+  
+  const chatroomMemberRole = roomInfo.chatroomCreator && roomInfo.chatroomCreator.memberId
+  ? (roomInfo.chatroomCreator.memberId === memberID ? 'OWNER' : 'MEMBER')
+  : 'MEMBER';
+  
   console.log("member", member)
   console.log("authorization", authorization);
 
@@ -397,7 +400,9 @@ const Chatroom = () => {
               <h2>채팅방 이름: {roomInfo.chatroomName}</h2>
               {/* <p><strong>채팅방 ID:</strong> {roomInfo.chatroomID}</p> */}
               <p><strong>건물 ID:</strong> {roomInfo.buildingId}</p>
-              {(roomInfo.chatroomMinTemp && <p><strong>다정온도 제한:</strong> {roomInfo.chatroomMinTemp}°  C</p>)}
+              {roomInfo.chatroomMinTemp !== null && (
+                <p><strong>다정온도 제한:</strong> {roomInfo.chatroomMinTemp}°  C</p>
+              )}
               {/* <p><strong>방장:</strong> {roomInfo.chatroomCreator}</p> */}
               <p><strong>채팅방 종류:</strong> {roomInfo.chatroomType}</p>
               {/* {roomInfo.chatroomType === 'PRIVATE_CHATTING' && (

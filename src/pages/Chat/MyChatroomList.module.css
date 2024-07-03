@@ -2,7 +2,7 @@
 .app {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 92vh;
   font-family: 'Helvetica Neue', Arial, sans-serif;
   background-color: #FFFFFD;
   padding: 10px;

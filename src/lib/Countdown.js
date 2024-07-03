@@ -59,7 +59,7 @@ const Countdown = () => {
 
   return (
     <div className={styles.countdownContainer}>
-      <h1 className={styles.title}>그룹채팅방 남은 폭파시간까지..</h1>
+      <h1 className={styles.title}>채팅방 남은 폭파시간까지..</h1>
       <div className={styles.countdown}>
         {/* <div>
           <span>{String(timeLeft.days).padStart(2, '0')}</span>

@@ -107,7 +107,7 @@ const MyChatroomList = () => {
                     <div key={chatroom.chatroomID} className={`${module.chatroom} ${chatroom.famous === 1 ? module.hotChatroom : ''}`}>
                         <div className={module.chatroomInfo}>
                             <p className={module.chatroomName}>{chatroom.chatroomName} ({chatroom.chatroomEntrancesSize}) {chatroom.famous === 1 && <span className={module.hotLabel}>Hot</span>}</p>
-                            <p className={module.chatroomStatus}>방장 : {chatroom.chatroomCreator.nickname} ({chatroom.chatroomMinTemp} 도 이상만)</p>
+                            {chatroom.chatroomType === "GROUP_CHATTING" && (<p className={module.chatroomStatus}>방장 : {chatroom.chatroomCreator.nickname} ({chatroom.chatroomMinTemp} 도 이상만)</p>)}
                         </div>
                         {/* {chatroom.chatroomType === 'PRIVATE_CHATTING' && (
                             <img className ={module.profileImage} src={chatroom.chatroomCreator.profilePhotoUrl ? chatroom.chatroomCreator.profilePhotoUrl : `${process.env.PUBLIC_URL}/image/defaultMemberProfilePhoto.png`} alt="Profile" />

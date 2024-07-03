@@ -181,7 +181,7 @@
   /* 채팅 전체 컨테이너 */
   .chatContainer {
     width: 100%;
-    height: 94vh; /* Viewport height 사용 */
+    height: 100vh; /* Viewport height 사용 */
     border: 1px solid #ccc;
     border-radius: 10px;
     overflow: hidden;
