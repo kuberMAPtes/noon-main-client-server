@@ -66,3 +66,20 @@
   top: 8%;
   left: 12px;
 }
+
+.searchBarContainer {
+  z-index: 95;
+  position: absolute;
+  top: 1%;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+}
+
+.searchBarContainer button {
+  margin: 0;
+  background-color: #9BAAF8;
+  border: none;
+}

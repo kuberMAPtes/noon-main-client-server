@@ -117,7 +117,7 @@ export default function MemberSetting() {
             <Spinner style={{ width: '3rem', height: '3rem' }} color="primary" />
           </div>
         ) : (
-          <main className="container member-setting-container">
+          <main className="container member-setting-container" style={{ marginTop: "24px" }}>
             <div className="setting-content-wrapper">
               {
                 COMPONENT_INFOS.map((data, idx) => (

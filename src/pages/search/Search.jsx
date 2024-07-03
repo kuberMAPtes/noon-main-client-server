@@ -10,11 +10,10 @@ import searchBuilding from "./axios/searchBuilding";
 import searchChatroom from "./axios/searchChatroom";
 import searchMember from "./axios/searchMember";
 import "../../assets/css/module/search/Search.css";
+import styles from "../../assets/css/module/search/Search.module.css";
 import { useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Spinner } from "reactstrap";
-import { GoMoveToTop } from "react-icons/go";
-
 
 const PARAM_KEY_SEARCH_MODE = "search-mode";
 
@@ -153,11 +152,11 @@ export default function Search() {
   }
 
   return (
-    <div className="search-container">
+    <div className={styles.searchContainer}>
       <SearchBar typeCallback={(text) => {
         setSearchKeyword(text);
         search(text);
-      }} searchCallback={onSearchBtnClick} isSearchButtonEnabled={false} />
+      }} searchCallback={onSearchBtnClick} isSearchButtonEnabled={false} className={styles.searchBarContainer} />
       <SearchModeTab currentSearchMode={currentSearchMode} onModeChange={onModeChange} />
       {component}
       {loading && (
