@@ -23,13 +23,14 @@ const FeedCalendar = ({memberId, buildingId}) => {
 
         // 데이터 필터링 및 맵핑
         eventData.forEach(event => {
-            const dateKey = event.eventDate.split('T')[0];
+          const [dateKey, timeKey] = event.eventDate.split('T');
             if (!eventMap[dateKey]) {
               eventMap[dateKey] = [];
             }
             eventMap[dateKey].push({
               title: event.title,
               feedId: event.feedId,
+              time: timeKey.slice(0, 5)
             });
         });
 
@@ -99,7 +100,7 @@ const FeedCalendar = ({memberId, buildingId}) => {
             <ListGroup>
               {eventList.map((event, index) => (
                 <ListGroup.Item key={index} action onClick={() => handleEventClick(event.feedId)}>
-                  {event.title}
+                  {event.time} - {event.title}
                 </ListGroup.Item>
               ))}
             </ListGroup>
