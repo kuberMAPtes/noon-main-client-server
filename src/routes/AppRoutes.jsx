@@ -171,7 +171,6 @@ const AppRoutes = () => {
             <Route path="megaphoneForm" element={<FeedMegaphoneForm />} /> {/* 확성기 피드 수정 */}
             <Route path="chart" element={<FeedChartPage />} />
             <Route path="main" element={<FeedListHomePage />}/>
-            <Route path="" element={<FeedPages />} />
           </Route>
         </Routes>
       </CSSTransition>
