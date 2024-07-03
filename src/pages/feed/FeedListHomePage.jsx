@@ -122,7 +122,7 @@ const FeedListHomePage = () => {
                     ))}
                 </div>
                 {loading && <p>Loading...</p>}
-                <Footer />
+                {/* <Footer /> */}
             </div>
         </div>
     );

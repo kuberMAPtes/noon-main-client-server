@@ -30,7 +30,6 @@ axios_api.interceptors.response.use((response) => {
                 refreshingAvailabe = true;
                 return axios_api.request(originalRequestConfig);
             } catch (err) {
-                alert("로그인이 필요합니다.");
                 window.location.href = "/member/getAuthMain";
                 refreshingAvailabe = true;
                 return Promise.reject(error);

@@ -276,7 +276,7 @@ const FeedDetail = ({ data, memberId }) => {
                         <span onClick={handleLikeClick}>
                                 {liked ? <FaHeart color="red" size='32'/> : <FaRegHeart size='32'/>} &nbsp; {likedCount}
                         </span>
-                        <p><FaCommentAlt size='32'/> &nbsp; {commentList.length}</p> {/* 댓글 수 */}
+                        <p><FaCommentAlt size='32'/> &nbsp; {commentList.length}</p>  {/* 댓글 수 */}
                         <p><FaRegEye size='32'/> &nbsp; {viewCnt}</p> {/* 조회수 */}
                         <p><FaFireAlt size='32'/>&nbsp; {popularity}</p> {/* 인기도 */}
                     </div>

@@ -6,10 +6,10 @@ import FeedNotFound from './component/FeedNotFound';
 import Loading from './component/FeedList/FeedLoading';
 
 import Footer from '../../components/common/Footer';
-import BasicNavbar from '../../components/common/BasicNavbar';
 import FeedDisplayBoard from './component/FeedList/FeedDisplayBoard';
 
-import './css/FeedList.css';
+// import './css/FeedList.css';
+import lineStyles from './css/common/FeedLine.module.css'
 import axios_api from '../../lib/axios_api';
 import FeedPopularyRanking from './component/FeedList/FeedPopularyRanking';
 import { useSelector } from 'react-redux';
@@ -61,11 +61,6 @@ const FeedBuildingListPage = () => {
     useEffect(() => {
         fetchData(fetchUrl, page);
     }, [page, fetchUrl]);
-
-    // // 처음에만 실행
-    // useEffect(() => {
-    //     rankingData();
-    // }, []);
     
     // 무한스크롤 구현 (IntersectionObserver)
     const lastFeedElementRef = useCallback((node) => {
@@ -99,8 +94,10 @@ const FeedBuildingListPage = () => {
     return (
         <div>
             {/* <FeedDisplayBoard buildingId={buildingId} /> */}
-            <FeedPopularyRanking buildingId={buildingId} />
             <FeedCalendar memberId={memberId} buildingId={buildingId}/>
+            <hr className={lineStyles.calenderHr}/>
+            <FeedPopularyRanking buildingId={buildingId} />
+            <hr className={lineStyles.calenderHr}/>
             <div>
                 <div className="row">
                     {feeds.map((feed, index) => (

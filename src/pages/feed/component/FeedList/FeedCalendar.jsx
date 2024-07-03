@@ -5,6 +5,7 @@ import '../../css/FeedList/FeedCalender.css';
 import navigator from '../../util/Navigator';
 import axios_api from '../../../../lib/axios_api';
 import { ListGroup } from 'react-bootstrap';
+import { FaRegCalendarCheck } from "react-icons/fa";
 
 const FeedCalendar = ({memberId, buildingId}) => {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -84,7 +85,7 @@ const FeedCalendar = ({memberId, buildingId}) => {
 
   return (
     <div className='calendar-container'>
-      <div className='calender-title'>이벤트</div>
+      <div className='calender-title'><FaRegCalendarCheck/> 이벤트</div>
       <DatePicker
         selected={selectedDate}
         onChange={handleDateChange}

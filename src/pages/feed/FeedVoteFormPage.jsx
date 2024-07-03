@@ -1,13 +1,11 @@
 import Footer from "../../components/common/Footer";
 
 import { useEffect, useState } from 'react';
-import { Button } from "react-bootstrap";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import FeedVoteForm from "./component/FeedForm/FeedVoteForm";
-import SlideUpModal from "./component/FeedForm/SlideUpModal";
-import BasicNavbar from "../../components/common/BasicNavbar";
+import FloatingButtons from "./component/FeedForm/FloatingButtons";
 import axios_api from "../../lib/axios_api";
 import Header from "../../components/common/Header";
 
@@ -52,13 +50,6 @@ const FeedFormPage = () => {
         <div>
             {/* <BasicNavbar /> */}
             <Header title="투표 피드 만들기" />
-            <div className="container">
-                <Button variant="primary" onClick={() => setShowModal(true)}>
-                    피드 종류
-                </Button>
-                <SlideUpModal show={showModal} onHide={() => setShowModal(false)} />
-            </div>
-
             <FeedVoteForm
                 existingFeed={selectedFeed}
                 inputWriterId={writerId}
@@ -66,7 +57,8 @@ const FeedFormPage = () => {
                 inputFeedId={feedId}
             />
             <div>
-            <Footer />
+            {!feedId && <FloatingButtons />}
+            {/* <Footer /> */}
             </div>
             <br/><br/><br/><br/>
         </div>

@@ -1,7 +1,7 @@
 import { Modal } from "react-bootstrap";
 import { termsAndPolicy } from "../constants/termsAndPolicy";
 import { termsOfUse } from "../constants/termsOfUse";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "../css/OpInfoModal.css";
 
 const operationInfoText = {
@@ -38,9 +38,18 @@ function OpInfoContent({mode}) {
 
   const contentSlice = contentChunk[page].split("\n").map((c) => c.trim());
 
+  const opInfoModalContainerRef = useRef(null);
+
+  useEffect(() => {
+    opInfoModalContainerRef.current.scroll({
+      top: 0,
+      behavior: "smooth"
+    });
+  }, [page])
+
   console.log(contentSlice);
   return (
-    <>
+    <div className="opinfo-modal-container" ref={opInfoModalContainerRef}>
       {
         contentSlice.map((c, idx) => <p key={`op-${idx}`}>{c}</p>)
       }
@@ -57,6 +66,6 @@ function OpInfoContent({mode}) {
           }
         }}>이후</button>
       </div>
-    </>
+    </div>
   )
 }

@@ -6,6 +6,7 @@ import navigator from '../../util/Navigator'
 import { Label } from 'reactstrap';
 import styles from '../../css/FeedForm/FeedForm.module.css';
 // import renderFeedTextWithLink from '../../util/renderFeedTextWithLink';
+import buttonStyles from '../../css/common/FeedButton.module.css';
 
 const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, onSave }) => {
     const [feedData, setFeedData] = useState({
@@ -150,33 +151,29 @@ const FeedVoteForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedI
 
     return (
         <div className={styles.feedFormContainer}>
-            <Card>
-                <Card.Body>
-                    <Form onSubmit={handleSubmit}>
-                        <Label>확성기로 하고 싶은 말을 작성하세요!</Label>
-                        {/* 내용 */}
-                        <Form.Group controlId="feedText" className="mb-3">
-                            <Form.Label>내용</Form.Label>
-                            <Form.Control
-                                as="textarea"
-                                name="feedText"
-                                rows={3}
-                                placeholder="내용을 입력하세요"
-                                value={feedData.feedText}
-                                onChange={handleChange}
-                                required
-                            />
-                        </Form.Group>
-                        <Button variant="primary" type="submit" className="mr-2">
-                            저장
-                        </Button>
-                        &nbsp;&nbsp;
-                        <Button variant="secondary" onClick={handleCancel}>
-                            취소
-                        </Button>
-                    </Form>
-                </Card.Body>
-            </Card>
+            <Form onSubmit={handleSubmit}>
+                <Label>확성기로 하고 싶은 말을 작성하세요!</Label>
+                {/* 내용 */}
+                <Form.Group controlId="feedText" className="mb-3">
+                    <Form.Label>내용</Form.Label>
+                    <Form.Control
+                        as="textarea"
+                        name="feedText"
+                        rows={3}
+                        placeholder="내용을 입력하세요"
+                        value={feedData.feedText}
+                        onChange={handleChange}
+                        required
+                    />
+                </Form.Group>
+                <Button className={buttonStyles.fullWidthButtonBlack} type="submit">
+                    저장
+                </Button>
+                &nbsp;&nbsp;
+                <Button className={buttonStyles.fullWidthButtonRed} onClick={handleCancel}>
+                    취소
+                </Button>
+            </Form>
 
             {/* Modal : addFeed*/}
             <CheckModal 

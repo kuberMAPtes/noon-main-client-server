@@ -3,10 +3,14 @@
 .feedCategory {
     border: 1px solid #ccc; /* 구분선 */
     border-radius: 4px; /* 둥근 모서리 */
-    padding: 5px 10px; /* 패딩 */
+    padding: 2px 5px; /* 패딩 */
     background-color: #f8f9fa; /* 배경색 */
     font-weight: bold; /* 텍스트 굵게 */
-    color: black !important; /* 중요도 설정 */
+    width: 85px; /* 너비 설정 */
+    display: flex; /* Flex 정렬 */
+    justify-content: center; /* 가운데 정렬 */
+    align-items: center; /* 가운데 정렬 */
+    font-size: 15px;
 }
 
 .feedCategoryDetail {
@@ -141,3 +145,18 @@
     margin-right: 10px; /* 아이콘과 건물 이름 사이 간격 조정 */
 }
 
+.feedText {
+    font-size: 16px;
+    line-height: 1.5;
+    cursor: pointer; /* 클릭 가능한 요소로 설정 */
+    color: #333; /* 기본 텍스트 색상 */
+}
+
+/* .feedText:hover {
+    text-decoration: underline;
+} */
+
+.textMuted {
+    font-size: 13px;
+    color: #888; /* 부드러운 회색 텍스트 색상 */
+}

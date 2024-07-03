@@ -160,9 +160,15 @@ const FeedItem = ({ data, memberId }) => {
                             <p className={styles.feedText} onClick={() => goToFeedDetail(memberId, feedId)}>{renderFeedText(feedText)}</p>
                         )}
 
-                        <CardText>
-                            <WiTime2 /> <small className={styles.textMuted}>{writtenTimeReplace}</small>
-                        </CardText>
+                        <div className={styles.iconContainer}>
+                            {/* 작성 시간 */}
+                            <CardText>
+                                <WiTime2 /> <small className={styles.textMuted}>{writtenTimeReplace}</small>
+                            </CardText>
+
+                            {/* 피드 카테고리 */}
+                            <div className={styles.feedCategory}>{feedCategoryName}</div>
+                        </div>
                     </div>
 
                     {/* footer */}
@@ -172,21 +178,19 @@ const FeedItem = ({ data, memberId }) => {
                         <div className={styles.iconLeft}>
                             {/* 좋아요 */}
                             <span onClick={handleLikeClick}>
-                                {liked ? <FaHeart color="red" size='24'/> : <FaRegHeart size='24'/>} {likedCount}
+                                {liked ? <FaHeart color="red" size='26'/> : <FaRegHeart size='24'/>} {likedCount} &nbsp;
                             </span>
                             {/* 댓글 개수 */}
                             <span onClick={() => goToFeedDetail(memberId, feedId, true)}>
-                                <FaCommentAlt size='24'/> {commentCount}
+                                <FaCommentAlt size='26'/> {commentCount} &nbsp;
                             </span>
                             {/* 조회수 */}
                             <span>
-                                <FaRegEye size='24'/> {viewCnt}
+                                <FaRegEye size='26'/> {viewCnt}
                             </span>
                         </div>
 
                         <div className={styles.iconRight}>
-                            {/* 피드 카테고리 */}
-                            <div className={styles.feedCategory}>{feedCategoryName}</div>
                             {/* 북마크 */}
                             <span onClick={handleBookmarkClick} className={styles.feedItemBookmarkIcon}>
                                 {bookmarked ? <FaBookmark color="gold" size='24' /> : <FaRegBookmark size='24' />}

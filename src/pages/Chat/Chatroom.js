@@ -85,11 +85,13 @@ const Chatroom = () => {
       // 채팅방 정보(roomInfo) 없으면 요청 후 useEffect 종료
       getChatroom(chatroomID)
       .then(data => {
-        //chatEntranceInfo 에 memberID 가 없으면 ParticiPants 에 등록하기
+
+        //유저가 채팅방에 입장할 때 chatEntranceInfo 에 memberID 가 없으면 ParticiPants 에 등록하기
         const chatEntrancesInfo = data.ChatEntrancesInfo;
         const chatEntranceChecked = chatEntrancesInfo.find(entrance => entrance.chatroomMember.memberId === memberID);
         
-       if(!chatEntranceChecked){
+        //단 1:1채팅방에는 채팅수락시 이미 chatEntrance가 서버상에 등록되므로 생략
+       if(!chatEntranceChecked && data.ChatroomInfo.chatroomType==="GROUP_CHATTING"){
         console.log(chatEntrancesInfo , " <= 여기에 멤버아이디 ", memberID, " 가 없으므로 chackEntranceChecked 를 추가하려고합니다 => ",chatEntranceChecked )
  
           addChatEntrance(chatroomID, memberID)
@@ -140,7 +142,7 @@ const Chatroom = () => {
       messageHistory.forEach( history => {
         const { sender, chatMsg, time, type, readMembers } = history;
 
-        previousMessages.push({ type: sender == memberID ? 'mine' : 'other' , sender : sender, text : chatMsg , timestamp : time, readMembers : readMembers });
+        previousMessages.push({ type: sender === memberID ? 'mine' : 'other' , sender : sender, text : chatMsg , timestamp : time, readMembers : readMembers });
       });
   
       // 불러오기 완료 메세지 추가
@@ -325,6 +327,45 @@ const Chatroom = () => {
     };
   }, []);
 
+
+  /* 몽고dB 채팅메세지에 memberId 만 딸랑 집어넣었는데 DB 뒤엎기 싫어서 이러고 있음 */
+
+  // 채팅메세지 작성자를 participant 과 매핑해서 닉네임 받아오기
+  function particiPantToMsgSenderNickName(sender){
+    const matchedParticipant = participants.find(p => p.chatroomMember.memberId === sender);
+
+    // 공지메세지에는 msg.sender 가 없어서 예외처리
+    if (matchedParticipant && matchedParticipant.chatroomMember) {
+      const { nickname } = matchedParticipant.chatroomMember;
+      
+      return (
+        <div className={module.sender}>
+          <span> {nickname} </span>
+        </div>      
+      );
+    } else {
+      // Handle case where participant or chatroomMember is not found
+      return null; // or return a placeholder image or handle the case as needed
+    }
+  }
+
+  // 채팅메세지 작성자를 participant 과 매핑해서 닉네임 받아오기
+  function particiPantToMsgImgeUrl(sender){
+    const matchedParticipant = participants.find(p => p.chatroomMember.memberId === sender);
+
+    // 공지메세지에는 msg.sender 가 없어서 예외처리
+    if (matchedParticipant && matchedParticipant.chatroomMember) {
+      const { profilePhotoUrl } = matchedParticipant.chatroomMember;
+      
+      return (
+          <img className={module.profileImage} src={profilePhotoUrl ? profilePhotoUrl : `${process.env.PUBLIC_URL}/image/defaultMemberProfilePhoto.png`} alt="Profile"></img>
+      );
+    } else {
+      // Handle case where participant or chatroomMember is not found
+      return null; // or return a placeholder image or handle the case as needed
+    }
+  }
+  
   // 이전 페이지에서 넘어와서 redux 데이터를 받는다면? 
   if (!roomInfo) {
     setTimeout(() => window.location.reload(), 1000);
@@ -341,76 +382,83 @@ const Chatroom = () => {
       </button>
 
       <button onClick={() => setShowSidebar(!showSidebar)} className={module.sidebarButton}>
-        {showSidebar ? 'Hide Sidebar' : 'Show Sidebar ⏩'}
+        {showSidebar ? 'Hide Sidebar ⏩' : 'Show Sidebar ⏩'}
       </button>
 
       {showSidebar && (
-      <div className={module.sidebarChat}>
+      <div className={`${module.sidebarChat} ${showSidebar ? module.show : ''}`}>
 
         <br/><br/><br/>
-       
-        <p> 로그인 유저 : {memberID} ({chatroomMemberRole}) </p>
+        <div className={module.container}>
+          <p> 로그인 유저 : {memberID} ({chatroomMemberRole}) </p>
 
-        <br/>
-        <div>
-          <h2>채팅방 이름: {roomInfo.chatroomName}</h2>
-          <p><strong>채팅방 ID:</strong> {roomInfo.chatroomID}</p>
-          <p><strong>건물 ID:</strong> {roomInfo.buildingId}</p>
-          <p><strong>다정온도 제한:</strong> {roomInfo.chatroomMinTemp}°C</p>
-          <p><strong>방장:</strong> {roomInfo.chatroomCreatorId}</p>
-          <p><strong>채팅방 종류:</strong> {roomInfo.chatroomType}</p>
-        </div> 
+          <div className={module.chatroomInfo}>
+            <div>
+              <h2>채팅방 이름: {roomInfo.chatroomName}</h2>
+              {/* <p><strong>채팅방 ID:</strong> {roomInfo.chatroomID}</p> */}
+              <p><strong>건물 ID:</strong> {roomInfo.buildingId}</p>
+              {(roomInfo.chatroomMinTemp && <p><strong>다정온도 제한:</strong> {roomInfo.chatroomMinTemp}°  C</p>)}
+              {/* <p><strong>방장:</strong> {roomInfo.chatroomCreator}</p> */}
+              <p><strong>채팅방 종류:</strong> {roomInfo.chatroomType}</p>
+              {/* {roomInfo.chatroomType === 'PRIVATE_CHATTING' && (
+                <img className={module.profileImage} src={roomInfo.chatroomCreator.profilePhotoUrl} alt="Profile" />
+              )} */}
+            </div> 
+          </div>
 
-        <br/>
-        <div>
-          <h2>채팅 참여자 목록 ({participants.length})</h2>
-          {console.log("파티시팬트", participants)}
-          {console.log("룸인포", roomInfo)}
-          {console.log("라이브 파티시팬트", liveParticipants)}
-          {participants.map((participant, index) => (
-            <div key={index}>
-              <p>
-                <strong>memberID:</strong>{' '} &nbsp;
-                <span onClick={() => { 
-                  setShowModal(true);
-                  setSelectedParticipant(participant.chatroomMember);
-                  }} 
-                  className={module.clickable} 
-                > 
-                  {participant.chatroomMember.nickname} ({participant.chatroomMember.memberId})
-                </span>  &nbsp;
-                ({participant.chatroomMemberType }) 
-                <CustomModal
-                  kickRoom = {kickRoom}
-                  showModal = {showModal} // showModal on off 정보
-                  setShowModal = {setShowModal} // show Modal on off 함수
-                  setParticipants = {setParticipants}
-                  roomInfoUpdate={setRoomInfo}  // 강퇴후 채팅방 정보를 업데이트하기 위한 함수
-                  currentChatroomID={roomInfo.chatroomID} // 채팅방ID
-                  loginMemberRole={chatroomMemberRole}  // 채팅방에서 로그인유저의 권한
-                  targetMember={selectedParticipant} // 클릭한 회원
-                  loginMemberID = {memberID}
-                />
-                {liveParticipants.includes(participant.chatroomMember.memberId) && (
-                  <span className={module.liveIndicator}>🟢</span>
-                )}
-              </p>
-            
-            </div>
-          ))}
-        </div>
+          <div className={module.chatroomParticipantList}>
+            <h2>채팅 참여자 목록 ({participants.length})</h2>
+            {console.log("파티시팬트", participants)}
+            {console.log("룸인포", roomInfo)}
+            {console.log("라이브 파티시팬트", liveParticipants)}
+            {participants.map((participant, index) => (
+              <div key={index} className={module.participant}>
+                <p>
+                  {/* <strong>memberID:</strong>{' '} &nbsp; */}
+                  <img className={module.profileImage} src={participant.chatroomMember.profilePhotoUrl ? participant.chatroomMember.profilePhotoUrl : `${process.env.PUBLIC_URL}/image/defaultMemberProfilePhoto.png`} alt="Profile"/>
+                  <span onClick={() => { 
+                    setShowModal(true);
+                    setSelectedParticipant(participant.chatroomMember);
+                    }} 
+                    className={module.clickable} 
+                  > 
+                    {participant.chatroomMember.nickname} 
+                    {/* ({participant.chatroomMember.memberId}) */}
+                  </span>  &nbsp;
+                  ({participant.chatroomMemberType}) 
+                  <CustomModal
+                    kickRoom = {kickRoom}
+                    showModal = {showModal} // showModal on off 정보
+                    setShowModal = {setShowModal} // show Modal on off 함수
+                    setParticipants = {setParticipants}
+                    roomInfoUpdate={setRoomInfo}  // 강퇴후 채팅방 정보를 업데이트하기 위한 함수
+                    currentChatroomID={roomInfo.chatroomID} // 채팅방ID
+                    loginMemberRole={chatroomMemberRole}  // 채팅방에서 로그인유저의 권한
+                    targetMember={selectedParticipant} // 클릭한 회원
+                    loginMemberID = {memberID}
+                  />
+                  {liveParticipants.includes(participant.chatroomMember.memberId) && (
+                    <span className={module.liveIndicator}>🟢</span>
+                  )}
+                  {participant.chatroomMember.memberId === memberID && (
+                    <span className={module.myLabel}>Me</span>
+                  )}
+                </p>
+              
+              </div>
+            ))}
+          </div>
 
-        <br/>
-        {/* <div>
-          <h2>실시간 채팅 참여자 목록 ({liveParticipants.length})</h2>
-          {liveParticipants.map((liveParticipant, index) => (
-            <div key={index}>
-              <p><strong> socketID:</strong> {liveParticipant}</p>
-            </div>
-          ))}
-        </div>         */}
-        <button onClick={leaveRoomForever} className={module.leaveButton}>채팅방 나가기</button>
-
+          {/* <div>
+            <h2>실시간 채팅 참여자 목록 ({liveParticipants.length})</h2>
+            {liveParticipants.map((liveParticipant, index) => (
+              <div key={index}>
+                <p><strong> socketID:</strong> {liveParticipant}</p>
+              </div>
+            ))}
+          </div>         */}
+          <button onClick={leaveRoomForever} className={module.leaveButton}>채팅방 나가기</button>
+          </div>
       </div>
       )}
 
@@ -419,20 +467,19 @@ const Chatroom = () => {
         {receivedMessage.map((msg, index) => (
           <div key={index} className={`${module.chatMessage} ${msg.type === 'mine' ? module.question : msg.type === 'other' ? module.response : module.notice}`}>
             {msg.type === 'other' && msg.sender && (
-                <div className={module.sender}>
-                  <span>{msg.sender}</span>
-                </div>
-              )}
+               particiPantToMsgSenderNickName(msg.sender)
+            )}
             <div className={module.messageContent} style={{ justifyContent: msg.type === 'mine' ? 'flex-end' : 'flex-start' }}>
               {msg.type === 'mine' && (
                 <span className={module.unreadCount}>
-                  {participants.length - msg.readMembers.length} unread
+                  {participants.length - msg.readMembers.length} 
                 </span>
               )}
+              {particiPantToMsgImgeUrl(msg.sender)}
               <div className={module.messageText}>{msg.text}</div>
               {msg.type === 'other' && (
                 <span className={module.unreadCount}>
-                  {participants.length - msg.readMembers.length} unread
+                  {participants.length - msg.readMembers.length} 
                 </span>
               )}
             </div>

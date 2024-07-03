@@ -95,27 +95,33 @@ const MyChatroomList = () => {
 
     return (
         <div className={module.app}>
+            <Countdown/>
             <div className={module.header}>
                 <h1> {member.nickname}'s room</h1>
-                <p>(userId : {memberID}) </p>
+                <img className ={module.profileImage} src={member.profilePhotoUrl ? member.profilePhotoUrl : `${process.env.PUBLIC_URL}/image/defaultMemberProfilePhoto.png`} alt="blank"></img>
                 <p>내 다정온도 : {member.dajungScore}도 </p>
                 <button onClick={getChatApplyList} className={module.normalButton}>새 대화신청 보기</button>
             </div>
-            <Countdown/>
             <div className={module.chatroomList}>
                 {chatrooms.map(chatroom => (
-                    <div key={chatroom.chatroomID} className={module.chatroom}>
+                    <div key={chatroom.chatroomID} className={`${module.chatroom} ${chatroom.famous === 1 ? module.hotChatroom : ''}`}>
                         <div className={module.chatroomInfo}>
-                            <p className={module.chatroomName}>{chatroom.chatroomName} ({chatroom.chatroomEntrancesSize}) {chatroom.famous === 1 ? <span className={`${module.sparkle}`}>🔥</span> : ''}</p>
-                            <p className={module.chatroomStatus}>방장 : {chatroom.chatroomCreator.memberId} ({chatroom.chatroomMinTemp} 도 이상만)</p>
-                            <p>안읽은메세지수 : {chatroom.unreadMessage} </p>
+                            <p className={module.chatroomName}>{chatroom.chatroomName} ({chatroom.chatroomEntrancesSize}) {chatroom.famous === 1 && <span className={module.hotLabel}>Hot</span>}</p>
+                            <p className={module.chatroomStatus}>방장 : {chatroom.chatroomCreator.nickname} ({chatroom.chatroomMinTemp} 도 이상만)</p>
                         </div>
+                        {/* {chatroom.chatroomType === 'PRIVATE_CHATTING' && (
+                            <img className ={module.profileImage} src={chatroom.chatroomCreator.profilePhotoUrl ? chatroom.chatroomCreator.profilePhotoUrl : `${process.env.PUBLIC_URL}/image/defaultMemberProfilePhoto.png`} alt="Profile" />
+                        )} */}
                         <button
                             onClick={() => enterChatroom(chatroom.chatroomID)}
                             className={chatroom.unreadMessage !== 0 ? module.activeButton : module.normalButton}
                         >
+                        {chatroom.unreadMessage !== 0 && (
+                            <span className={module.unreadBadge}>{chatroom.unreadMessage}</span>
+                        )}
                             입장하기
                         </button>
+
                     </div>
                 ))}
             </div>

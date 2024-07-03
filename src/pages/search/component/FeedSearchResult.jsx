@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import styles from "../../../assets/css/module/search/component/FeedSearchResult.module.css";
+import { abbreviateLongString } from "../../../util/stringUtil";
 
 const MINUTE = 60;
 const HOUR = MINUTE * 60;
@@ -114,9 +115,7 @@ function FeedSearchResultItem({
         <div className={styles.feedContent}>
           <h4>{title}</h4>
           <p>
-            {text.length > TEXT_MAX_LENGTH
-              ? `${text.substring(0, TEXT_MAX_LENGTH)}...`
-              : text}
+            {abbreviateLongString(text, TEXT_MAX_LENGTH)}
           </p>
         </div>
       </div>
