@@ -86,7 +86,16 @@ function MemberSearchResultItem({
       }
     >
       <div className={styles.memberSearchProfileContainer}>
-        <img className={styles.memberSearchProfilePhoto} src={profilePhotoUrl} alt="Profile" />
+        <img
+            className={styles.memberSearchProfilePhoto}
+            src={profilePhotoUrl || "/image/defaultMemberProfilePhoto.png"}
+            alt="Profile"
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = "/image/defaultMemberProfilePhoto.png";
+              console.log(e);
+            }}
+        />
         <div className={styles.memberNameContainer}>
           <div className={styles.nickname}>{abbreviateLongString(nickname, 14)}</div>
           <div className={styles.memberId}>{abbreviateLongString(memberId, 14)}</div>
