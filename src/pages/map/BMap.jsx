@@ -484,11 +484,14 @@ async function fetchSubscriptions(memberId, navigate, setWantBuildingProfileModa
         return;
       }
       buildingMarkersCache.add(buildingId);
-      if (buildingSubscriptionMarkers.has(buildingId)) {
+      if (buildingSubscriptionMarkers.has(buildingId)
+          && d.building.profileActivated
+          && !buildingSubscriptionMarkers.get(buildingId).profileActivated) {
         return;
       }
       const contentHtml = getSubscriptionMarkerHtml(d.subscriptionProvider.nickname, d.building.buildingName, d.building.profileActivated);
       const buildingMarker = addMarker(contentHtml, d.building.latitude, d.building.longitude);
+      buildingMarker.profileActivated = d.building.profileActivated;
       naver.maps.Event.addListener(buildingMarker, "click", () => {
         if (d.building.profileActivated) {
           navigate(`/getBuildingProfile/${buildingId}`);

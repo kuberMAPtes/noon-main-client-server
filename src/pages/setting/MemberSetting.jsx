@@ -37,7 +37,7 @@ export default function MemberSetting() {
   const [memberProfilePublicRange, setMemberProfilePublicRange] =
     useState("PUBLIC");
   const [allFeedPublicRange, setAllFeedPublicRange] = useState("PUBLIC");
-  const [receivingAllNotification, setReceivingAllNotification] =
+  const [receivingAllNotificationAllowed, setReceivingAllNotificationAllowed] =
     useState(true);
   const [buildingSubscriptionPublicRange, setBuildingSubscriptionPublicRange] =
     useState("PUBLIC");
@@ -46,6 +46,8 @@ export default function MemberSetting() {
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
+
+  console.log(receivingAllNotificationAllowed);
 
   const memberId = useSelector((state) => state.auth.member.memberId);
 
@@ -58,7 +60,7 @@ export default function MemberSetting() {
       setBuildingSubscriptionPublicRange(
         setting.buildingSubscriptionPublicRange
       );
-      setReceivingAllNotification(setting.receivingAllNotificationAllowed);
+      setReceivingAllNotificationAllowed(setting.receivingAllNotificationAllowed);
       setLoading(false);
     });
     dispatch(setFooterEnbaled(false));
@@ -96,8 +98,8 @@ export default function MemberSetting() {
           title: "수신하지 않음",
         },
       ],
-      currentSelected: receivingAllNotification + "",
-      callback: (id) => setReceivingAllNotification(id !== "false"),
+      currentSelected: receivingAllNotificationAllowed + "",
+      callback: (id) => setReceivingAllNotificationAllowed(id !== "false"),
     },
     {
       type: "BUILDING_SUBSCRIPTION",
@@ -141,7 +143,7 @@ export default function MemberSetting() {
                     memberProfilePublicRange,
                     allFeedPublicRange,
                     buildingSubscriptionPublicRange,
-                    receivingAllNotification
+                    receivingAllNotificationAllowed
                   }).then((response) => {
                     if (is2xxStatus(response.status)) {
                       Swal.fire({
