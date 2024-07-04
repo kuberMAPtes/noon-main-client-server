@@ -2,9 +2,14 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useNavigate } from 'react-router-dom';
 
-const Header = ({ title }) => {
+const Header = ({ title,setIsSafeNavigation }) => {
   const navigate = useNavigate();
   const goBack = () => {
+    
+    if (typeof setIsSafeNavigation === 'function') {
+      setIsSafeNavigation(true);
+    }
+
     navigate(-1);
   };
 

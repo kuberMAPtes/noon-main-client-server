@@ -11,7 +11,7 @@ import NormalButton from './NormalButton';
 import { showToast } from '../function/ToastNotification';
 
 
-const LogoutForm = () => {
+const LogoutForm = ({setIsSafeNavigation}) => {
   const dispatch = useDispatch();
 //   const authorization = useSelector((state) => state.auth.authorization);
   const navigate = useNavigate();
@@ -26,6 +26,7 @@ const LogoutForm = () => {
       }
 
       await dispatch(logout(navigate));
+      setIsSafeNavigation(true);
       showToast("success", "로그아웃 성공!");
       
     } catch (error) {

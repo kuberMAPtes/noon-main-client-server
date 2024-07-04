@@ -39,7 +39,8 @@ const ProfileBody = ({
   buildingSubscriptionCount,
   followerCount,
   followingCount,
-  feedSectionRef
+  feedSectionRef,
+  setIsSafeNavigation
 }) => {
   // const [dajungTemperature, setDajungTemperature] = useState("");
   const defaultPhotoUrl = `${process.env.PUBLIC_URL}/image/defaultMemberProfilePhoto.png`;
@@ -105,7 +106,9 @@ const ProfileBody = ({
             className="d-flex justify-content-start"
             style={{ position: "absolute", left: 0, top: 0, padding: 0 }}
           >
-            <LogoutForm />
+            <LogoutForm
+              setIsSafeNavigation={setIsSafeNavigation}
+            />
           </div>
 
         <Row className="mb-3 align-items-start" style={{margin:"0%"}}>
@@ -161,6 +164,7 @@ const ProfileBody = ({
                     fontSize: "15px",
                     fontWeight: "bold",
                     textAlign: "center",
+                    marginTop:"30%",
                   }}
                 >
                   {profile.nickname}
@@ -227,7 +231,10 @@ const ProfileBody = ({
           feedSectionRef={feedSectionRef}
         />
 
-        <ProfileActions toId={toId} fromId={fromId}/>
+        <ProfileActions
+        toId={toId}
+        fromId={fromId}
+        setIsSafeNavigation={setIsSafeNavigation}/>
       </Card.Body>
     </Card>
   );
