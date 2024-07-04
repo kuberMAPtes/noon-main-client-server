@@ -28,6 +28,7 @@ import NormalButton from "./component/NormalButton";
 import { navigateMainPage } from "../../util/mainPageUri";
 import useMainPage from "./hook/useMainPage";
 import Header from "../../components/common/Header";
+import { encryptWithLv } from "../../util/crypto";
 
 const GetMember = () => {
   // 각 필드의 상태와 유효성 메시지, 유효성 플래그 관리
@@ -63,8 +64,10 @@ const GetMember = () => {
   const handlePwdUpdateClick = () => {
     // alert("handleClick실행 :: "+isMemberIdValid);
     //휴대폰번호로 네비게이션
-    if (member.memberId) {
-      sessionStorage.setItem("w", memberId); // 세션 스토리지에 memberId 저장
+    if (member?.memberId) {
+      const {encryptedData,ivData} = encryptWithLv(member?.memberId);
+      sessionStorage.setItem("encryptedDataUpdate",encryptedData); // 세션 스토리지에 memberId 저장
+      sessionStorage.setItem("ivDataUpdate",ivData)
       navigate("/member/addPhoneNumberAuthentification/" + "updatePwd");
     }
   };

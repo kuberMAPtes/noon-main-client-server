@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setFooterEnbaled } from "../../redux/slices/footerEnabledSlice";
 import useFooterToggle from "../../components/hook/useFooterToggle";
 import Header from "../../components/common/Header";
+import { encryptWithLv } from "../../util/crypto";
 const IdFormToUpdatePwd = () => {
   
   const [memberId, setMemberId] = useState("");
@@ -33,8 +34,9 @@ const IdFormToUpdatePwd = () => {
     // alert("handleClick실행 :: "+isMemberIdValid);
     setIsNavigating(true);
     if (isMemberIdValid) {
-      //휴대폰번호로 네비게이션
-      sessionStorage.setItem("w", memberId); // 세션 스토리지에 memberId 저장
+      const {encryptedData,ivData} = encryptWithLv(memberId);
+      sessionStorage.setItem("encryptedDataUpdate",encryptedData); // 세션 스토리지에 memberId 저장
+      sessionStorage.setItem("ivDataUpdate",ivData)
       navigate("/member/addPhoneNumberAuthentification/" + "updatePwd");
     } else {
       //alert("입력하신 아이디를 찾을 수 없습니다.");

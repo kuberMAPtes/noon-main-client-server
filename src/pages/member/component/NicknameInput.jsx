@@ -46,7 +46,10 @@ const NicknameInput = ({
   }, [nickname]);
 
   return (
-    <Form.Group controlId="formNickname" className="mb-3">
+    <Form.Group
+    controlId="formNickname"
+    style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}
+    >
       <Form.Label
         style={{
           border: isNicknameValid && "#91a7ff",
@@ -79,6 +82,9 @@ const NicknameInput = ({
           padding: "0px",
           resize: "none", // 사용자에 의한 크기 조절 비활성화
           overflow: "hidden", // 스크롤 바 숨기기
+          outline: "none", // 포커스 시 테두리 제거
+          border: 'none',
+          width:"100%",
         }}
         onKeyDown={handleNicknameKeyDown}
         required

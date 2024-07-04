@@ -11,6 +11,7 @@ import useFooterToggle from "../../components/hook/useFooterToggle";
 import { useDispatch } from "react-redux";
 import { setFooterEnbaled } from "../../redux/slices/footerEnabledSlice";
 import Header from "../../components/common/Header";
+import { decryptWithLv } from "../../util/crypto";
 
 const UpdatePwd = () => {
   const [pwd, setPwd] = useState("");
@@ -32,11 +33,17 @@ const UpdatePwd = () => {
   const handleClick = async () => {
     if (isPwdValid && isPwdConfirmValid) {
       let result = "fail";
-      //alert("세션스토리지확인"+sessionStorage.getItem("w"));
-      const response = await updatePwd(sessionStorage.getItem("w"), pwd);
+      //alert("세션스토리지확인"+sessionStorage.getItem("encryptedDataUpdate"));
+      const encryptedData = sessionStorage.getItem("encryptedDataUpdate")
+      const ivData = sessionStorage.getItem("ivDataUpdate")
+      const memberId = decryptWithLv(encryptedData,ivData);
+      // console.log("memberId",memberId+"pwd"+pwd+"encryptedData"+encryptedData+"ivData"+ivData);
+      // alert("encryptedDataUpdate"+encryptedData+"ivData"+ivData+"memberId"+ memberId);
+      const response = await updatePwd(memberId, pwd);
 
       if (response) {
-        sessionStorage.removeItem("w");
+        sessionStorage.removeItem("encryptedDataUpdate");
+        sessionStorage.removeItem("ivDataUpdate");
         //alert("비밀번호 변경 성공");
         result = "success";
         navigate(`/member/updatePwdResult/${result}`);

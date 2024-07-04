@@ -35,18 +35,27 @@ const GetMemberProfile = () => {
   // const lastFeedElementRef = UseProfileInfiniteScroll(hasMore, setPage);
   const feedSectionRef = useRef(null);
 
+  const [isSafeNavigation,setIsSafeNavigation] = useState(false);//true로 바꿔야 뷰가 깨끗하게 네비게이션함.
+
+  if(isSafeNavigation){
+    return null;
+  }
+
   return (
     <>
-    <Header title={fromId===toId ? "내 프로필" : `${profile.nickname}님의 프로필`}/>
+    <Header
+    title={fromId===toId ? "내 프로필" : `${profile.nickname}님의 프로필`}
+    setIsSafeNavigation={setIsSafeNavigation}/>
     <Container
       fluid
       className={`${module.container} d-flex flex-column justify-content-start align-items-center pt-6`}
       style={{
         flexWrap: "no",
         paddingTop: "30px",
+        paddingBottom:"30px",
         margin: "0px",
         maxWidth: "100%",
-        height: "85vh",
+        height: "100%",
       }}
     >
       <Row
@@ -67,6 +76,7 @@ const GetMemberProfile = () => {
                 followerCount={followerCount}
                 followingCount={followingCount}
                 feedSectionRef={feedSectionRef}
+                setIsSafeNavigation={setIsSafeNavigation}
               />
             </Col>
             {/* <Col xs={12} sm={12} md={12} lg={12}>
@@ -79,7 +89,7 @@ const GetMemberProfile = () => {
           </>
         ) : (
           <>
-            <Col xs={12} sm={12} md={12} lg={12}>
+            <Col xs={12} sm={12} md={12} lg={12} style={{marginBottom:"10px"}}>
               <ProfileBody
                 toId={toId}
                 fromId={fromId}
@@ -90,9 +100,10 @@ const GetMemberProfile = () => {
                 followerCount={followerCount}
                 followingCount={followingCount}
                 feedSectionRef={feedSectionRef}
+                setIsSafeNavigation={setIsSafeNavigation}
               />
             </Col>
-            <Col xs={12} sm={12} md={12} lg={12}>
+            <Col xs={12} sm={12} md={12} lg={12} style={{marginBottom:"40px"}}>
               {/* <ProfileFeedList
             toId={toId}
             feeds={feeds}
