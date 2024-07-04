@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import io from 'socket.io-client';
 import module from './Chatroom.module.css'; // 스타일 파일을 import 합니다
-import { getChatroom, addChatEntrance, kickChatroom } from '../Chat/function/axios_api'
+import { getChatroom, addChatEntrance, kickChatroom } from './function/axios_api'
 import { useSelector, useDispatch } from 'react-redux';
 import { setFooterEnbaled } from '../../redux/slices/footerEnabledSlice'
 import { Link } from 'react-router-dom';
@@ -200,13 +200,20 @@ const Chatroom = () => {
     })
     
     // 채팅 메세지 수신 
-    socket.on('specific_chat', (message) => {
-      console.log("표시할 메세지 =>", message);
-      setReceivedMessage((prevMessages) => [...prevMessages, message]);
+    socket.on('specific_chat', async (message) => {
+ 
+      // 내 아디이를 읽음목록에 추가
+      if (!message.readMembers.includes(memberID)) {
+        message.readMembers.push(memberID);
+      }
+      
+      console.log("표시할 메세지(읽음후) =>", message);
 
       // 수신했으면 읽은거로 처리
-      socket.emit('message_read', memberID, roomInfo, (data) =>{
-        console.log("🟥⚪메세지 읽었습니다 결과는 ", data)
+      await socket.emit('message_read', memberID, roomInfo, async (data) =>{
+  
+        await setReceivedMessage((prevMessages) => [...prevMessages, message]);
+        console.log("🟥⚪메세지 읽고 내꺼에 저장 결과는 ", data)
       })
 
       setReRedering(prev => !prev)
@@ -477,14 +484,14 @@ const Chatroom = () => {
             <div className={module.messageContent} style={{ justifyContent: msg.type === 'mine' ? 'flex-end' : 'flex-start' }}>
               {msg.type === 'mine' && (
                 <span className={module.unreadCount}>
-                  {participants.length - msg.readMembers.length} 
+                  {(participants.length - msg.readMembers.length) > 0 ? (participants.length - msg.readMembers.length) : 0} 
                 </span>
               )}
               {particiPantToMsgImgeUrl(msg.sender)}
               <div className={module.messageText}>{msg.text}</div>
               {msg.type === 'other' && (
                 <span className={module.unreadCount}>
-                  {participants.length - msg.readMembers.length} 
+                  {(participants.length - msg.readMembers.length) > 0 ? (participants.length - msg.readMembers.length) : 0} 
                 </span>
               )}
             </div>
