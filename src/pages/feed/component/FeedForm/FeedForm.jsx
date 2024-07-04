@@ -8,6 +8,8 @@ import 'react-datepicker/dist/react-datepicker.css'; // 달력 전용 css;
 import styles from '../../css/FeedForm/FeedForm.module.css';
 import buttonStyles from '../../css/common/FeedButton.module.css';
 import { FaRegCalendarCheck } from "react-icons/fa";
+import { MdTipsAndUpdates } from "react-icons/md";
+import { IoWarning } from 'react-icons/io5';
 
 const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, onSave }) => {
     const [feedData, setFeedData] = useState({
@@ -295,8 +297,7 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                 </Form.Group>
                 <div className={styles.noticeBox}>
                     <span className={styles.noticeBoxText}>
-                        카테고리를 선택해 피드의 목적을 강조할 수 있습니다.<br/>
-                        이벤트 피드는 생성 후 수정이 되지 않습니다.
+                        <IoWarning/> 이벤트 피드는 생성 후 수정이 되지 않습니다.
                     </span>
                 </div>
                 <Form.Group controlId="feedTitle" className="mb-3">
@@ -320,7 +321,11 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                         required
                     />
                 </Form.Group>
-
+                <div className={styles.noticeBox}>
+                    <span className={styles.noticeBoxText}>
+                        <MdTipsAndUpdates/> '@member'처럼 원하는 회원 아이디를 태그할 수 있습니다.
+                    </span>
+                </div>
                 {/* 태그 */}
                 <Form.Group controlId="feedTags" className="mb-3">
                     <Form.Control
@@ -381,18 +386,9 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                     </span>
                 </div>
                 {feedData.category === 'EVENT' && (
-                <Form.Group controlId="eventDate" className="mb-3">
-                    <div className={styles.feedFormSubTitle}><FaRegCalendarCheck/> 특별한 날을 선택해주세요</div>
-                    <div className={styles.datePickerWrapper}>
-                        {/* <DatePicker
-                            selected={eventDate}
-                            onChange={handleDateChange}
-                            dateFormat="yyyy/MM/dd h:mm aa"
-                            showTimeSelect
-                            timeFormat="HH:mm"
-                            timeIntervals={30}
-                            className={`form-control ${styles.datePickerInput}`}
-                        /> */}
+                    <Form.Group controlId="eventDate" className="mb-3">
+                        <div className={styles.feedFormSubTitle}><FaRegCalendarCheck/> 특별한 날을 선택해주세요</div>
+                        <div className={styles.datePickerWrapper}>
                         <DatePicker
                             selected={eventDate}
                             onChange={handleDateChange}
@@ -409,8 +405,8 @@ const FeedForm = ({ existingFeed, inputWriterId, inputBuildingId, inputFeedId, o
                             dateFormat="h:mm aa"
                             className={`form-control ${styles.datePickerInput}`}
                         />
-                    </div>
-                </Form.Group>
+                        </div>
+                    </Form.Group>
                 ) }
 
                 

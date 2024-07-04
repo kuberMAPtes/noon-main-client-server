@@ -6,7 +6,6 @@ const FormatDate = (writtenTime) => {
   const timestamp = new Date(writtenTime);
 
   const periodInSeconds = (new Date() - timestamp) / 1000;
-  console.log(periodInSeconds);
   let timeDisplay;
 
   if (periodInSeconds < NOW) {

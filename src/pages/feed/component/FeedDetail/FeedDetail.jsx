@@ -140,6 +140,7 @@ const FeedDetail = ({ data, memberId }) => {
 
             newCommentEntity.commentId = response.data.commentId;
             newCommentEntity.memberNickname = response.data.memberNickname;
+            newCommentEntity.memberProfile = response.data.memberProfile;
         } catch (e) {
             console.log(e);
         }
