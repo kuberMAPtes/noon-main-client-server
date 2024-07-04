@@ -110,7 +110,7 @@ const FeedItem = ({ data, memberId }) => {
                         </div>
                         <div className="d-flex align-items-center">
                             {/* 빌딩 이름 */}
-                            <div onClick={() => goToBuildingProfile(buildingId)} className={styles.feedItemLinkText}><FaBuilding /> {buildingName}</div>
+                            <div onClick={() => goToBuildingProfile(buildingId)} className={styles.feedItemLinkText}><FaBuilding />&nbsp;{buildingName}</div>
                         </div>
                     </div>
                     

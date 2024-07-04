@@ -6,7 +6,7 @@ import FeedNotFound from './component/FeedNotFound';
 import Loading from './component/FeedList/FeedLoading';
 
 import Footer from '../../components/common/Footer';
-import FeedDisplayBoard from './component/FeedList/FeedDisplayBoard';
+// import FeedDisplayBoard from './component/FeedList/FeedDisplayBoard';
 
 // import './css/FeedList.css';
 import lineStyles from './css/common/FeedLine.module.css'

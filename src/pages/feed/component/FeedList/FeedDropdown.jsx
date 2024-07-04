@@ -24,7 +24,6 @@ const FeedDropdown = ({ onSelect }) => {
             default:
                 temp = '/feed/getFeedListByMember';
         }
-
         onSelect(temp);
     }
 
