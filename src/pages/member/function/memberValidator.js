@@ -1,3 +1,4 @@
+import debounce from 'lodash.debounce';
 // src/utils/memberValidator.js
 
 const PHONE_NUMBER_PATTERN = /^01(?:0|1|[6-9])-(?:\d{3}|\d{4})-\d{4}$/;
@@ -49,6 +50,22 @@ export const validateLoginForm = (memberId, pwd) => {
 };
 //존재하면 안되는 것들. 회원가입 전 조회시 아이디가 있으면 NO checkFunction에 따라 다름. checkMemberId
 //존재해야하는 것들. 조회시 아이디가 있으면 YES getMemberById
+
+// 디바운스된 checkFunction을 만듭니다.
+const debouncedCheckFunction = debounce(async (input, checkFunction, validationMessageSetter, validitySetter, successMessage, failureMessage) => {
+  const response = await checkFunction(input);
+  if (response.info === true || response === true) {
+    validationMessageSetter(successMessage);
+    validitySetter(true);
+  } else if (response.message) {
+    validationMessageSetter(response.message);
+    validitySetter(false);
+  } else {
+    validationMessageSetter(failureMessage);
+    validitySetter(false);
+  }
+}, 10); // 10ms
+
 export const handleChange = async (
   e,
   setState,
@@ -63,28 +80,8 @@ export const handleChange = async (
   setState(input);
 
   if (validateFunction(input)) {
-    //형식검사는 필수`
     if (checkFunction) {
-      //당연히 있어야함 axios함수
-      const response = await checkFunction(input);
-      //alert(response);
-      if (response.info === true) {
-        //조건만족
-        validationMessageSetter(successMessage);
-        validitySetter(true);
-      }else if(response === true){
-        //조건만족
-        validationMessageSetter(successMessage);
-        validitySetter(true);
-      }
-       else if (response.message) {
-        //조건실패
-        validationMessageSetter(response.message);
-        validitySetter(false);
-      } else {
-        validationMessageSetter(failureMessage);
-        validitySetter(false);
-      }
+      debouncedCheckFunction(input, checkFunction, validationMessageSetter, validitySetter, successMessage, failureMessage);
     } else {
       validationMessageSetter(successMessage);
       validitySetter(true);

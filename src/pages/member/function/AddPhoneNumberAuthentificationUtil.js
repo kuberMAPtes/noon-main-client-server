@@ -1,4 +1,4 @@
-import { encryptWithLv } from "../../../util/crypto";
+import { decryptWithLv, encryptWithLv } from "../../../util/crypto";
 import {
   checkPhoneNumber,
   checkPhoneNumberAndMemberId,
@@ -71,7 +71,14 @@ export const handlePhoneNumberChange = async (
         }
       }
     } else if (toUrl === "updatePwd") {
-      const memberId = sessionStorage.getItem("w");
+      const encryptedData = sessionStorage.getItem("encryptedDataUpdate");
+      const ivData = sessionStorage.getItem("ivDataUpdate");
+      const memberId = decryptWithLv(encryptedData, ivData);
+
+      // console.log("비번변경수행 ::"+encryptedData+"수행 :: "+ivData+" 수행 :: " + memberId);
+      // alert("비번변경수행 ::"+encryptedData+"수행 :: "+ivData+" 수행 :: " + memberId);
+
+
       const response = await checkPhoneNumberAndMemberId(
         memberId,
         formattedPhoneNumber

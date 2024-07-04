@@ -8,7 +8,8 @@ export const sendAuthentificationNumber = async (phoneNumber) => {
     const response = await axiosInstance.get(`/member/sendAuthentificationNumber`, {
         params: { phoneNumber },
     });
-    // const response = { data: { info: 1234 } }; //이거랑 위에 주석 하고 위에 주석 풀자
+    // const response = { data: { info: 1234 } }; 
+    //위에 주석 풀고 그 위에 주석하기
     console.log("sendAuthentificationNumber 응답:", response.data);
     return response.data;
   } catch (error) {
@@ -35,7 +36,8 @@ export const confirmAuthentificationNumber = async (
     // if (authentificationNumber === "1234") {
     //   return { info: true };
     // }
-    // const response = { data: { info: false } }; //이거랑 위에 주석 하고 위에 주석 풀자
+    // const response = { data: { info: false } };
+    //이거랑 위에 주석 하고 위에 주석 풀자
     console.log("confirmAuthentificationNumber 응답:", response.data);
 
     return response.data;

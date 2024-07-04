@@ -6,7 +6,7 @@ import { getChatroom , getMyChatrooms } from '../Chat/function/axios_api'
 import { setChatroomData } from '../../store/store';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import Countdown from '../../lib/Countdown'
+import Countdown from './function/Countdown'
 
 const MyChatroomList = () => {
     const member = useSelector((state) => state.auth.member);
@@ -50,9 +50,9 @@ const MyChatroomList = () => {
         const url = `${process.env.REACT_APP_NODE_SERVER_URL}/node/messageUnreadAndActiverooms`;
 
         try {
-            const response = await axios.post(url, {
+            const response = await axios.get(url, {
                 chatrooms: chatrooms,
-                memberID: memberID
+                memberID: memberID 
             });
 
             return response.data;

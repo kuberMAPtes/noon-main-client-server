@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from './Countdown.module.css';
-import { chatroomDeleteTime } from '../pages/Chat/function/axios_api';
+import { chatroomDeleteTime } from './axios_api';
 
 const Countdown = () => {
   const [timeLeft, setTimeLeft] = useState({

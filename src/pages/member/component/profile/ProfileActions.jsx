@@ -22,7 +22,7 @@ import { RiCustomerServiceLine } from "react-icons/ri";
 import { AiFillAlert } from "react-icons/ai";
 import {chatRequest} from "../../../Chat/function/axios_api";
 import ChatRequestModal from "./ChatRequestModal";
-const ProfileActions = ({ toId, fromId}) => {
+const ProfileActions = ({ toId, fromId,setIsSafeNavigation}) => {
   const [showMenu, setShowMenu] = React.useState(false);
   const member = useSelector((state) => state.auth.member);
   const { encryptedData, ivData } = useEncryptId(member?.memberId);
@@ -122,14 +122,19 @@ const ProfileActions = ({ toId, fromId}) => {
                style={{width:"28%"}}>
                 <AnimatedDiv 
                 style={{ width: "100%" }}
-                onClick={() => navigate("/setting")}>
+                onClick={() => {
+                  setIsSafeNavigation(true);
+                  navigate("/setting")}}>
                   <IoSettingsOutline />
                   <span style={{ padding: "0px 5px 0px 2px" }}></span>환경설정
                   <span style={{ padding: "0px 5px 0px 2px" }}></span>
                 </AnimatedDiv>
                 <AnimatedDiv
                 style={{ width: "100%" }}
-                onClick={() => navigate("/customerSupport")}>
+                onClick={() => {
+                  setIsSafeNavigation(true);
+                  navigate("/customerSupport");
+                  }}>
                   <RiCustomerServiceLine />
                   <span style={{ padding: "0px 5px 0px 2px" }}></span>고객지원
                   <span style={{ padding: "0px 5px 0px 2px" }}></span>

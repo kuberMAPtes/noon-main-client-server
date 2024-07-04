@@ -5,7 +5,7 @@ import "../../assets/css/module/member/base.module.css";
 import {motion} from "framer-motion";
 import styles from "../../assets/css/module/member/base.module.css";
 import useFooterToggle from "../../components/hook/useFooterToggle";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setFooterEnbaled } from "../../redux/slices/footerEnabledSlice";
 const UpdatePwdResult = () => {
   const dispatch = useDispatch();
@@ -17,6 +17,7 @@ const UpdatePwdResult = () => {
   });
   const { result } = useParams();
   const navigate = useNavigate();
+  const member = useSelector((state)=>state.auth.member);
 
   return (
     <Container
@@ -32,6 +33,7 @@ const UpdatePwdResult = () => {
           {result === "fail" && (
             <h1 className="mb-4">비밀번호 변경에 실패하셨습니다.</h1>
           )}
+          {(!member || !member?.memberId) && (
               <div className="mt-4">
                 <motion.div
                   initial={{ opacity: 0 }}
@@ -49,6 +51,7 @@ const UpdatePwdResult = () => {
                   </Link>
                 </motion.div>
               </div>
+          )}
           
         </Col>
       </Row>
