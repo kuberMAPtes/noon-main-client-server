@@ -9,7 +9,7 @@ import useMainPage from '../../member/hook/useMainPage';
 import Swal from 'sweetalert2';
 
 const WantBuildingProfile = ({ isOpen, onClose, applicationData }) => {
-  const activationThreshold = 2;
+  const activationThreshold = 5;
   const navigate = useNavigate();
   const [applicantList, setApplicantList] = useState([]);
   const [subscribe, setSubscribe] = useState(false);
