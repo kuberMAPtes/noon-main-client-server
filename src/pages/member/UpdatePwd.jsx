@@ -83,7 +83,10 @@ const UpdatePwd = () => {
         pwdConfirmValidationMessage={pwdConfirmValidationMessage}
         setConfirmValidationMessage={setPwdConfirmValidationMessage}
         handlePwdChangeFunction={(e) =>
-          handlePwdChange(e, setPwd, setPwdValidationMessage, setIsPwdValid)
+          handlePwdChange(e, setPwd, setPwdValidationMessage, setIsPwdValid, pwd,
+            pwdConfirm,
+            setPwdConfirmValidationMessage,
+            setIsPwdConfirmValid)
         }
         handlePwdConfirmChangeFunction={(e) =>
           handlePwdConfirmChange(

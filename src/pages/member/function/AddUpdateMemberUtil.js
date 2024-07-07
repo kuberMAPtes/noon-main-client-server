@@ -169,7 +169,11 @@ export const handlePwdChange = (
   e,
   setPwd,
   setPwdValidationMessage,
-  setIsPwdValid
+  setIsPwdValid,
+  pwd,
+  pwdConfirm,
+  setPwdConfirmValidationMessage,
+  setIsPwdConfirmValid
 ) => {
   handleChange(
     e,
@@ -181,6 +185,17 @@ export const handlePwdChange = (
     "",
     "비밀번호는 8~16자의 영문자와 숫자를 포함합니다. 3번 이상 연속된 문자열은 불가합니다."
   );
+  console.log("pwd:", e.target.value + "   pwdConfirm:", pwdConfirm);
+
+  if (e.target.value === pwdConfirm) {
+    //pwd와 같은지만 보면 댐
+    setPwdConfirmValidationMessage("");
+    setIsPwdConfirmValid(true);
+  } else {
+    setPwdConfirmValidationMessage("위의 비밀번호와 일치하지 않습니다.");
+    setIsPwdConfirmValid(false);
+  }
+
 };
 export const handlePwdConfirmChange = (
   e,

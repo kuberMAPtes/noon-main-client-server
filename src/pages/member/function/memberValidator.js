@@ -31,7 +31,7 @@ export const containsSequentialPattern = (pwd) => {
 
 export const validateLoginForm = (memberId, pwd) => {
   if (!validateMemberId(memberId)) {
-    return "유효하지 않은 회원 ID입니다. 6-64자의 영문자, 숫자, 또는 _@를 포함해야 합니다.";
+    return "유효하지 않은 회원 ID입니다. 6-16자의 영문자, 숫자, 또는 _@를 포함해야 합니다.";
   }
 
   if (!validatePwd(pwd)) {

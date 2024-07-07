@@ -7,6 +7,7 @@ import styles from "../../assets/css/module/member/base.module.css";
 import useFooterToggle from "../../components/hook/useFooterToggle";
 import { useDispatch, useSelector } from "react-redux";
 import { setFooterEnbaled } from "../../redux/slices/footerEnabledSlice";
+import Header from "../../components/common/Header";
 const UpdatePwdResult = () => {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -20,6 +21,8 @@ const UpdatePwdResult = () => {
   const member = useSelector((state)=>state.auth.member);
 
   return (
+    <>
+    <Header title={"비밀번호 변경 결과"} />
     <Container
       fluid
       className="flex-column align-items-center justify-content-center text-center"
@@ -52,10 +55,30 @@ const UpdatePwdResult = () => {
                 </motion.div>
               </div>
           )}
+          {(member && member?.memberId) && (
+              <div className="mt-4">
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: [0, 1, 0] }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                >
+                  <Link to="/map">
+                    <Button className={styles.typicalButtonColor}>
+                      <strong>이동하기</strong>
+                    </Button>
+                  </Link>
+                </motion.div>
+              </div>
+          )}
           
         </Col>
       </Row>
     </Container>
+    </>
   );
 };
 

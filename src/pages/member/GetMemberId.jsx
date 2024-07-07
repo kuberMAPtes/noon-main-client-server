@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import useFooterToggle from "../../components/hook/useFooterToggle";
 import { useDispatch } from "react-redux";
 import { setFooterEnbaled } from "../../redux/slices/footerEnabledSlice";
+import Header from "../../components/common/Header";
 const GetMemberId = () => {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -17,8 +18,10 @@ const GetMemberId = () => {
   const { memberId } = useParams();
 
   return (
-    <Container className="d-flex align-items-center justify-content-center min-vh-100">
-      <Row className="w-100">
+    <>
+    <Header title={"아이디 찾기"} />
+    <Container className="d-flex align-items-top justify-content-center min-vh-100">
+      <Row className="w-100" style={{marginTop:"200px"}}>
         <Col xs={12} md={8} lg={6} className="mx-auto">
           <Card className="text-center">
             <Card.Body>
@@ -56,6 +59,7 @@ const GetMemberId = () => {
         </Col>
       </Row>
     </Container>
+    </>
   );
 };
 

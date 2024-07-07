@@ -50,7 +50,7 @@ const MyChatroomList = () => {
         const url = `${process.env.REACT_APP_NODE_SERVER_URL}/node/messageUnreadAndActiverooms`;
 
         try {
-            const response = await axios.get(url, {
+            const response = await axios.post(url, {
                 chatrooms: chatrooms,
                 memberID: memberID 
             });
