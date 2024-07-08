@@ -9,7 +9,7 @@ export const sendAuthentificationNumber = async (phoneNumber) => {
         params: { phoneNumber },
     });
     // const response = { data: { info: 1234 } }; 
-    //위에 주석 풀고 그 위에 주석하기
+    // 위에 주석 풀고 그 위에 주석하기
     console.log("sendAuthentificationNumber 응답:", response.data);
     return response.data;
   } catch (error) {
@@ -34,7 +34,7 @@ export const confirmAuthentificationNumber = async (
         params: { phoneNumber, authNumber },
     });
     // if (authentificationNumber === "1234") {
-    //   return { info: true };
+      // return { info: true };
     // }
     // const response = { data: { info: false } };
     //이거랑 위에 주석 하고 위에 주석 풀자

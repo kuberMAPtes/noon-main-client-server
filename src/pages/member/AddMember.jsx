@@ -191,7 +191,7 @@ const AddMember = () => {
                 placeholder="계정을 입력하세요"
                 name="memberId"
                 value={memberId}
-                maxLength={24}
+                maxLength={16}
                 onChange={(e) =>
                   handleMemberIdChange(
                     e,

@@ -128,7 +128,7 @@ const LoginForm = () => {
                 <Form.Control
                   placeholder="아이디"
                   minLength={6}
-                  maxLength={40}
+                  maxLength={16}
                   type="text"
                   value={memberId}
                   onChange={(e) => setMemberId(e.target.value)}

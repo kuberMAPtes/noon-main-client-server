@@ -40,7 +40,10 @@ const PwdInput = ({
           name="pwd"
           maxLength={16}
           value={pwd}
-          onChange={(e) => handlePwdChangeFunction(e, setPwd, setPwdValidationMessage, setIsPwdValid)}
+          onChange={(e) => handlePwdChangeFunction(e, setPwd, setPwdValidationMessage, setIsPwdValid, pwd,
+            pwdConfirm,
+            setPwdConfirmValidationMessage,
+            setIsPwdConfirmValid)}
           onKeyDown={handleKeyDown}
           required
           isInvalid={!!pwdValidationMessage}
