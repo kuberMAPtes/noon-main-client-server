@@ -36,9 +36,9 @@ const BuildingChart = () => {
     const chatResponse = cSelected.includes(3) ? await fetchChartData("CHAT") : [];
 
 
-    const newLabels = subscriberResponse.length ? subscriberResponse.map(item => item.buildingId) :
-                      feedResponse.length ? feedResponse.map(item => item.buildingId) :
-                      chatResponse.length ? chatResponse.map(item => item.buildingId) : [];
+    const newLabels = subscriberResponse.length ? subscriberResponse.map(item => item.buildingName.substring(0, 15)) :
+                      feedResponse.length ? feedResponse.map(item => item.buildingName.substring(0,15)) :
+                      chatResponse.length ? chatResponse.map(item => item.buildingName.substring(0, 15)) : [];
     setChartData({
       labels: newLabels,
       datasets: [
