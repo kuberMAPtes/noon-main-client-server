@@ -189,7 +189,7 @@ const AddPhoneNumberAuthentification = () => {
                 {toUrl === "getMemberId" && "(아이디 찾기)"}
                 {toUrl === "updatePhoneNumber" && <br/>}
                 {toUrl === "updatePwd" && "(비밀번호 찾기)"}
-                {toUrl === "updatePhoneNumber" && "(휴대폰 번호 등록 및 변경)"}
+                {toUrl === "updatePhoneNumber" && "(휴대폰 번호 등록)"}
               </span>
             </h2>
             <Form style={{ width: "100%", marginTop:"20%" }}>
@@ -201,6 +201,9 @@ const AddPhoneNumberAuthentification = () => {
                   
                   {certificationRequested ? <FaPhoneVolume /> : <FaPhone/>}&nbsp;&nbsp;휴대폰 번호
                 </Form.Label>
+                <h6>
+              {toUrl === "updatePhoneNumber" && "(하나의 휴대폰만 등록 가능하기 때문에 일반 회원가입 시 휴대폰 등록을 할 수 없습니다.)"}
+              </h6>
                 <div className="d-flex" style={{ width: "100%",marginTop:"5%" }}>
                   <input
                     type="text"
