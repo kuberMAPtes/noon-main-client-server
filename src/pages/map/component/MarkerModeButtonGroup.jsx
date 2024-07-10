@@ -10,14 +10,14 @@ export const MARKER_MODES = {
 const buttonInfos = [
   {
     markerMode: MARKER_MODES.DISPLAY_BUILDING_NAME,
-    title: "건물명"
+    title: "인기 건물"
   }, {
     markerMode: MARKER_MODES.DISPLAY_LIVELIEST_CHATROOM,
     title: "활발한 채팅방"
   },
   {
     markerMode: MARKER_MODES.DISPLAY_NONE,
-    title: "X"
+    title: "마커 숨기기"
   }
 ]
 
