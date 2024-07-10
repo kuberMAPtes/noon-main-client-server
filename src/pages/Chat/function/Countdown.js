@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styles from './Countdown.module.css';
 import { chatroomDeleteTime } from './axios_api';
+import { showToast } from '../../member/function/ToastNotification';
 
 const Countdown = () => {
   const [timeLeft, setTimeLeft] = useState({
@@ -46,7 +47,7 @@ const Countdown = () => {
         const newTime = prev - 1000;
         if (newTime <= 0) {
           clearInterval(timer); // 인터벌 중지
-          alert('Time is up! Refreshing the page...');
+          showToast("success","채팅방이 폭파되었습니다.");
           window.location.reload();
         }
         return newTime;
