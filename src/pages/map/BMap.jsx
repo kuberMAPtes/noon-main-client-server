@@ -16,6 +16,7 @@ import MarkerModeButtonGroup, { MARKER_MODES } from "./component/MarkerModeButto
 import { Spinner } from "reactstrap";
 import { MdCancel } from "react-icons/md";
 import { Button } from "react-bootstrap";
+import { showToast } from "../member/function/ToastNotification";
 
 const naver = window.naver;
 
@@ -221,6 +222,7 @@ export default function BMap() {
                     const toId = member;
                     console.log("fromId=" + fromId);
                     console.log("toId=", toId);
+                    showToast("success", "구독 건물을 합칠게요!");
                     axios_api.post("/buildingProfile/addSubscriptionFromSomeone", {
                       fromMember: {
                         memberId: fromId
