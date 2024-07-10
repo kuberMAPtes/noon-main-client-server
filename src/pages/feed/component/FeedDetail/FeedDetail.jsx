@@ -94,17 +94,29 @@ const FeedDetail = ({ data, memberId }) => {
         const fetchAttachments = async () => {
             const urls = await Promise.all(
                 attachments.map(async (attachment) => {
+                  // alert("attachment::"+JSON.stringify(attachment)); // URL을 콘솔에 출력
+                  // console.log("attachment::"+JSON.stringify(attachment)); // URL을 콘솔에 출력
                     if(attachment.blurredFileUrl != null) {
                         const url = { type: "image", url: attachment.blurredFileUrl };
                         return { attachmentId : attachment.attachmentId, url }; // 블러 사진 적용 : url 그대로 가져오기
                     } else {
-                        const url = await AttachmentGetter(attachment.attachmentId);
+                        let url = await AttachmentGetter(attachment.attachmentId);
+                        // alert("url::"+JSON.stringify(url)); // URL을 콘솔에 출력
+                        // console.log("url::"+JSON.stringify(url)); // URL을 콘솔에 출력
+                        if(url === null) {
+
+                          url = { type: "image", url: attachment.fileUrl};
+
+                            return { attachmentId: attachment.attachmentId, url };
+                        }
                         return { attachmentId: attachment.attachmentId, url };
                     }
                     // const url = await AttachmentGetter(attachment.attachmentId);
                     // return { attachmentId: attachment.attachmentId, url };
                 })
             );
+            // alert("urls::"+JSON.stringify(urls)); // URL을 콘솔에 출력
+            // console.log("urls::"+JSON.stringify(urls)); // URL을 콘솔에 출력
             setAttachmentUrls(urls.filter(urlObj => urlObj.url)); // 유효한 URL만 설정
         };
 
@@ -288,23 +300,27 @@ const FeedDetail = ({ data, memberId }) => {
             { !isPollCategory ? (
                 <Card>
                     <CardBody>
-                    {attachmentUrls.map((attachmentUrl, index) => (
-                        <div key={index}>
-                        {attachmentUrl.url.type === "image" && (
-                            <img
-                                src={attachmentUrl.url.url}
-                                alt={`Attachment ${attachmentUrl.attachmentId}`}
-                                className={styles.responsiveMaxImg}
-                            />
-                        )}
-                        {attachmentUrl.url.type === "video" && (
-                            <video controls className={styles.responsiveVideo}>
-                                <source src={attachmentUrl.url.url} type="video/mp4" />
-                                Your browser does not support the video tag.
-                            </video>
-                        )}
-                        </div>
-                    ))}
+                    {attachmentUrls.map((attachmentUrl, index) => {
+                        // console.log("attachment보자::"+JSON.stringify(attachmentUrl)); // URL을 콘솔에 출력
+                        // alert("attachment보자::"+JSON.stringify(attachmentUrl)); // URL을 콘솔에 출력
+                        return (
+                            <div key={index}>
+                                {attachmentUrl.url.type === "image" && (
+                                    <img
+                                        src={attachmentUrl.url.url}
+                                        alt={`Attachment ${attachmentUrl.attachmentId}`}
+                                        className={styles.responsiveMaxImg}
+                                    />
+                                )}
+                                {attachmentUrl.url.type === "video" && (
+                                    <video controls className={styles.responsiveVideo}>
+                                        <source src={attachmentUrl.url.url} type="video/mp4" />
+                                        Your browser does not support the video tag.
+                                    </video>
+                                )}
+                            </div>
+                        );
+                    })}
                     </CardBody>
                 </Card>
                 ) : (
